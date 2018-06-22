@@ -42,3 +42,4 @@ yarn-error.log
 # System Files
 .DS_Store
 Thumbs.db
+/src/assets/js/ckeditor/4.9.2/samples
