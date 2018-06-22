@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "start": "ng serve --port 4201 --proxy-config proxy.conf.json",
+    "build:bh": "ng build --prod --build-optimizer --bh /dist/",
+  },
+  "dependencies": {
+    "@auth0/angular-jwt": "^2.0.0",
+    "blueimp-md5": "^2.10.0",
+    "sweetalert2": "^7.22.2",
+    "ng2-ckeditor": "^1.2.1",
+  },
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "jstree": "^3.3.5",
+  }
+}
