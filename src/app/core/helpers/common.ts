@@ -2,7 +2,7 @@
  * 判断类型
  * @param {*} o
  */
-const typeCheck = function(o) {
+const typeCheck = function (o) {
   const s = Object.prototype.toString.call(o);
   return s
     .match(/\[object (.*?)\]/)[1]
@@ -10,7 +10,8 @@ const typeCheck = function(o) {
     .trim();
 };
 
-const isTypeCheck = function(typeName, obj) {
+const isTypeCheck = function (typeName, obj) {
+  // console.log(typeName);
   return (
     typeName
       .toLowerCase()
@@ -20,39 +21,39 @@ const isTypeCheck = function(typeName, obj) {
 };
 
 export function isNull(obj) {
-  return isTypeCheck(isNull.name, obj);
+  return isTypeCheck('isNull', obj);
 }
 
 export function isUndefined(obj) {
-  return isTypeCheck(isUndefined.name, obj);
+  return isTypeCheck('isUndefined', obj);
 }
 
 export function isObject(obj) {
-  return isTypeCheck(isObject.name, obj);
+  return isTypeCheck('isObject', obj);
 }
 
 export function isArray(obj) {
-  return isTypeCheck(isArray.name, obj);
+  return isTypeCheck('isArray', obj);
 }
 
 export function isString(obj) {
-  return isTypeCheck(isString.name, obj);
+  return isTypeCheck('isString', obj);
 }
 
 export function isNumber(obj) {
-  return isTypeCheck(isNumber.name, obj);
+  return isTypeCheck('isNumber', obj);
 }
 
 export function isBoolean(obj) {
-  return isTypeCheck(isBoolean.name, obj);
+  return isTypeCheck('isBoolean', obj);
 }
 
 export function isFunction(obj) {
-  return isTypeCheck(isFunction.name, obj);
+  return isTypeCheck('isFunction', obj);
 }
 
 export function isRegExp(obj) {
-  return isTypeCheck(isRegExp.name, obj);
+  return isTypeCheck('isRegExp', obj);
 }
 
 export function IsEmpty(obj) {

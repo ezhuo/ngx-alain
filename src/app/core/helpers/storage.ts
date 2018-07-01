@@ -21,6 +21,10 @@ export default class Storage {
     }
 
     set(key, value) {
+        // window['aaa'] = window['aaa'] || {};
+        // window['aaa'][key] = value;
+        // window['common'] = common;
+        // console.log(value);
         if (common.isObject(value) || common.isArray(value)) {
             return this.$cache.setItem(this.getKey(key), JSON.stringify(value));
         } else {
