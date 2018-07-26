@@ -17,6 +17,9 @@
     ],
     "baseUrl": "src/",
     "paths": {
+      "@delon/*": [
+        "./delon/*"
+      ],
       "@shared": [
         "app/shared"
       ],

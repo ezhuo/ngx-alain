@@ -13,7 +13,7 @@ const routes: Routes = [
   // 全屏布局
   {
     path: 'data-v',
-    loadChildren: './routes/ngalain/data-v/data-v.module#DataVModule'
+    loadChildren: './routes/admin/ngalain/data-v/data-v.module#DataVModule'
   },
   // passport
   {
@@ -23,7 +23,7 @@ const routes: Routes = [
   // exception
   {
     path: 'exception',
-    loadChildren: './layout/exception/exception.module#ExceptionModule',
+    loadChildren: './layout/exception/exception.module#LayoutExceptionModule',
   },
   { path: '', redirectTo: 'app', pathMatch: 'full' },
   { path: '**', redirectTo: 'app' },

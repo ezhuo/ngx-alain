@@ -2,6 +2,9 @@ import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { SettingsService } from '@delon/theme';
 import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
+import { UserService } from '@core/data/users.service';
+import { TokenService } from '@core/data/token.service';
+import { ConfigService } from '@core/data/config.service';
 
 @Component({
   selector: 'header-user',
@@ -12,9 +15,8 @@ import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
       {{settings.user.name}}
     </div>
     <div nz-menu class="width-sm">
-      <div nz-menu-item [nzDisabled]="true"><i class="anticon anticon-user mr-sm"></i>个人中心</div>
-      <div nz-menu-item [nzDisabled]="true"><i class="anticon anticon-setting mr-sm"></i>设置</div>
-      <li nz-menu-divider></li>
+      <div nz-menu-item><i class="anticon anticon-user mr-sm"></i>个人中心</div>
+      <div nz-menu-item><i class="anticon anticon-lock mr-sm"></i>修改密码</div>
       <div nz-menu-item (click)="logout()"><i class="anticon anticon-setting mr-sm"></i>退出登录</div>
     </div>
   </nz-dropdown>
@@ -24,11 +26,13 @@ export class HeaderUserComponent {
   constructor(
     public settings: SettingsService,
     private router: Router,
-    @Inject(DA_SERVICE_TOKEN) private tokenService: ITokenService,
-  ) {}
+    private tokenSrv: TokenService,
+    private configSrv: ConfigService
+  ) { }
 
   logout() {
-    this.tokenService.clear();
-    this.router.navigateByUrl(this.tokenService.login_url);
+    this.tokenSrv.token_destory();
+    this.router.navigateByUrl(this.configSrv.router.login);
   }
+
 }

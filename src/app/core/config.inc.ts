@@ -1,15 +1,19 @@
 import { App, Menu } from '@delon/theme';
 
+export const app_debug = false;
+
 export const app: App = {
-  key: 'zs',
-  name: 'ezhuo',
-  description: 'hello app',
+  name: '智慧党建云平台',
+  short: '智慧党建',
+  description: '智慧党建云平台',
+  key: 'dangjian',
   year: 2018
 };
 
 export const api = {
   base: 'api',
   upload: '/api/file/upload',
+  show: '/file/show',
   down: '/uploads/',
   canton: 'canton/selectselectselect' // 获取区域的默认URL
 };
@@ -24,15 +28,20 @@ export const canton = {
 };
 
 /**
+* 富文本编辑器
+*/
+export const editor = assetsHelper.getCkeditorConfig();
+
+/**
  *默认定义
  */
 export const define = {
 
   // 用户默认图片
-  user_images: 'assets/images/default/no-user.png',
+  user_images: './assets/images/default/no-user.png',
 
   // 默认用户的图片
-  user_cut_images: 'assets/images/user/default_user.png',
+  user_cut_images: './assets/images/user/default_user.png',
 
   // table page size
   table_page_size: 10
@@ -43,7 +52,8 @@ export const define = {
  *路由配置
  */
 export const router = {
-  home: '/app/dashboard',
+  home: '/app/admin',
+  admin: '/app/admin',
   login: '/passport/login',
   lock: '/passport/lock'
 };

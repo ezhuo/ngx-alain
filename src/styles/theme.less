@@ -1,19 +1,32 @@
 // 可以通过 http://ng-alain.com/theme 生成相应的参数代码
-.nav {
-    >li.nav-submenu-open {
+@header-bg: #C10000;
+@aside-nav-selected-text-color : #fff;
+@aside-nav-text-hover-color : #C10000;
+
+@icon-url : "/assets/vendor/font/iconfont/3.x/iconfont";
+
+// ng-zorro
+@table-padding-vertical: 12px;
+@table-padding-horizontal: 12px;
+
+.ad-nav {
+    >li.ad-nav__open {
         // Selected
-        &.nav-item-selected {
+        &.ad-nav__selected {
             >a {
-                background-color: #e6f7ff;
+                background-color: #C10000;
             }
         }
     }
-    >li:not(.nav-submenu-open) {
+    >li:not(.ad-nav__open) {
         // Selected
-        &.nav-item-selected {
+        &.ad-nav__selected {
             >a {
-                background-color: #e6f7ff;
+                background-color: #C10000;
             }
         }
+    }
+    >li.ad-nav__selected>a:hover {
+        color: #fff;
     }
 }

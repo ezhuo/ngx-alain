@@ -1,0 +1,22 @@
+<com-home-breadcrumb [current]='pageParams?.title'></com-home-breadcrumb>
+<div class="container boxcontent">
+  <div nz-row>
+    <div nz-col nzSpan="24" class="col-left">
+      <div nz-row class="left">
+        <div nz-col class="info">
+          <nz-list [nzDataSource]="data" [nzRenderItem]="item" [nzItemLayout]="'horizontal'">
+            <ng-template #item let-item>
+              <nz-list-item>
+                <nz-list-item-meta [nzTitle]="nzTitle" nzAvatar="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" nzDescription="Ant Design, a design language for background applications, is refined by Ant UED Team">
+                  <ng-template #nzTitle>
+                    <a [routerLink]="['../info' , item.id]">{{item.title}}</a>
+                  </ng-template>
+                </nz-list-item-meta>
+              </nz-list-item>
+            </ng-template>
+          </nz-list>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

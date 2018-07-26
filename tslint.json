@@ -90,7 +90,7 @@
       "always"
     ],
     "triple-equals": [
-      true,
+      false,
       "allow-null-check"
     ],
     "typedef-whitespace": [
@@ -115,15 +115,15 @@
       "check-type"
     ],
     "directive-selector": [
-      true,
+      false,
       "attribute",
-      ["app" , "ez", "dt", "passport", "exception", "layout", "header"],
+      ["app" , "ez", "dt", "passport", "exception", "layout", "header","home"],
       "camelCase"
     ],
     "component-selector": [
-      true,
+      false,
       "element",
-      ["app", "ez", "com" , "passport", "exception", "layout", "header"],
+      ["app", "ez", "com" , "passport", "exception", "layout", "header","home"],
       "kebab-case"
     ],
     "use-input-property-decorator": true,

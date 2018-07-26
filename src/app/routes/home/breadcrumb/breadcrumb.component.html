@@ -1,0 +1,18 @@
+<div class="container">
+  <div nz-row>
+    <div nz-col nzSpan="24">
+      <i class="anticon anticon-home"></i>
+      <span>所在位置：&nbsp;&nbsp;</span>
+      <nz-breadcrumb [nzSeparator]="'>'">
+        <nz-breadcrumb-item>
+          <a routerLink='/home/index'>
+            <span>{{configSrv.app.short}}</span>
+          </a>
+        </nz-breadcrumb-item>
+        <nz-breadcrumb-item>
+          {{current}}
+        </nz-breadcrumb-item>
+      </nz-breadcrumb>
+    </div>
+  </div>
+</div>

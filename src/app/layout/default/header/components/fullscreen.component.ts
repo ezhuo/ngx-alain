@@ -4,8 +4,10 @@ import * as screenfull from 'screenfull';
 @Component({
   selector: 'header-fullscreen',
   template: `
-    <i class="anticon anticon-{{status ? 'shrink' : 'arrows-alt'}}"></i>
-    {{(status ? 'fullscreen-exit' : 'fullscreen') }}
+    <div class="item d-flex align-items-center px-sm ant-dropdown-trigger">
+      <i class="anticon anticon-{{status ? 'shrink' : 'arrows-alt'}}"></i>
+      &nbsp;{{(status ? '退出全屏' : '全屏') }}&nbsp;
+    </div>
   `,
   host: {
     '[class.d-block]': 'true',

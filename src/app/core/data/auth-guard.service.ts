@@ -8,8 +8,8 @@ import {
   CanLoad,
   Route
 } from '@angular/router';
-import { AuthService } from './auth.service';
-import { StateService } from './state.service';
+import { AuthService } from '@core/data/auth.service';
+import { ConfigService } from '@core/data/config.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
@@ -23,8 +23,8 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
     return this.injector.get(Router);
   }
 
-  get stateService() {
-    return this.injector.get(StateService);
+  get configSrv() {
+    return this.injector.get(ConfigService);
   }
 
   canActivate(
@@ -48,7 +48,7 @@ export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
   private checkLogin(route: any): boolean {
     const bool = this.authService.checkAuth();
     if (!bool) {
-      this.router.navigate([this.stateService.config.router.login]);
+      this.router.navigate([this.configSrv.router.login]);
     }
     return bool;
   }

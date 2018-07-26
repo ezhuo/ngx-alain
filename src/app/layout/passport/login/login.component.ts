@@ -15,7 +15,7 @@ import { StartupService } from '@core/startup/startup.service';
 import { AuthService } from '@core/data/auth.service';
 import { StateService } from '@core/data/state.service';
 import { NoticeService } from '@core/utils/notice.service';
-import { finalize, catchError } from 'rxjs/operators';
+import { ConfigService } from '@core/data/config.service';
 
 @Component({
   selector: 'app-passport-login',
@@ -36,6 +36,7 @@ export class UserLoginComponent implements OnDestroy {
     private modalSrv: NzModalService,
     private settingsService: SettingsService,
     private socialService: SocialService,
+    private configSrv: ConfigService,
     private stateSrv: StateService,
     private authSrv: AuthService,
     private noticeSrv: NoticeService,
@@ -110,8 +111,6 @@ export class UserLoginComponent implements OnDestroy {
       this.captcha.updateValueAndValidity();
       if (this.mobile.invalid || this.captcha.invalid) return;
     }
-    // mock http
-
 
     if (this.type === 0) {
       this.reuseTabService.clear();
@@ -120,11 +119,10 @@ export class UserLoginComponent implements OnDestroy {
         .doLogin(this.form.value)
         .subscribe(
           data => {
-            console.log('login.component:', data);
+            if (this.configSrv.app_debug) console.log('login.component:', data);
             this.error = '';
             this.noticeSrv.notice_success('登录成功！');
             setTimeout(() => {
-              console.log('login....');
               return this.goHome();
             }, 0);
           },
@@ -135,8 +133,7 @@ export class UserLoginComponent implements OnDestroy {
             }
             return this.error = `账户或密码错误`;
           }
-        )
-        ;
+        );
     }
     // setTimeout(() => {
     //   this.loading = false;
@@ -213,7 +210,7 @@ export class UserLoginComponent implements OnDestroy {
   }
 
   goHome() {
-    return this.router.navigate([this.stateSrv.config.router.home]);
+    return this.router.navigate([this.configSrv.config.router.home]);
   }
 
   // endregion

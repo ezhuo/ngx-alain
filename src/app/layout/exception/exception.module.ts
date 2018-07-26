@@ -1,5 +1,6 @@
-import { SharedModule } from '@shared/shared.module';
 import { NgModule } from '@angular/core';
+
+import { SharedModule } from '@shared/shared.module';
 import { ExceptionRoutingModule, routedComponents } from './exception-routing.module';
 
 @NgModule({
@@ -8,4 +9,4 @@ import { ExceptionRoutingModule, routedComponents } from './exception-routing.mo
     exports: [],
     providers: []
 })
-export class ExceptionModule { }
+export class LayoutExceptionModule { }

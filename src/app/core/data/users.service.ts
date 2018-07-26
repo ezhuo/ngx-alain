@@ -1,10 +1,9 @@
-
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { User } from '@delon/theme';
-import { define } from '../config.inc';
-import * as helper from '../helpers';
+import { define, app_debug } from '@core/config.inc';
 import { SettingsService } from '@delon/theme';
+import * as helper from '@core/helpers';
 
 @Injectable()
 export class UserService {
@@ -22,7 +21,7 @@ export class UserService {
     this.__userInfo = dd;
     if (dd) {
       const pic = helper.parseJSON(dd.images) || [];
-      if (pic && pic.length > 0) {
+      if (pic && pic.length > 1000) {
         this.__userInfo.avatar = pic[0].path;
       } else {
         this.__userInfo.avatar = define.user_images;
@@ -35,7 +34,7 @@ export class UserService {
       // 用户信息：包括姓名、头像、邮箱地址
       this.settingsService.setUser(this.__user);
     }
-    console.log(this.__userInfo);
+    if (app_debug) console.log(this.__userInfo);
   }
 
   get userInfo() {

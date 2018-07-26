@@ -6,9 +6,7 @@ import { ParentModalComponent } from '@routes/parent/parent.modal.component';
 
 import { DtTreeDirective } from '@theme/directives/tree.directives';
 
-import { EzSimpleTableModule } from '@theme/component/simple-table';
-
-const MODULES = [EzSimpleTableModule];
+const MODULES = [];
 
 const DIRECTIVES = [
     DtTreeDirective

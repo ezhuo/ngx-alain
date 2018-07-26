@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
-import { AuthInterceptor } from './http.interceptor';
-import { HttpService } from './http.service';
+import { AuthInterceptor } from '@core/net/http.interceptor';
+import { HttpService } from '@core/net/http.service';
 
 const SERVICES = [{
     provide: HTTP_INTERCEPTORS,

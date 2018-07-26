@@ -1,0 +1,46 @@
+<div class='home-index'>
+  <div nz-row>
+    <div nz-col nzSpan="24">
+      <nz-carousel nzAutoPlay>
+        <div *ngFor="let index of array">
+          <img nz-carousel-content src="./assets/images/home/slide/{{index}}" />
+        </div>
+      </nz-carousel>
+    </div>
+  </div>
+
+  <div class="container boxcontent">
+    <div nz-row nzGutter="16">
+      <div nz-col nzSpan="6">
+        <div class="item">
+          <b class="icon_01"></b>
+          <h2>网上党支部</h2>
+          <p>提供党员学习材料</p>
+        </div>
+      </div>
+      <div nz-col nzSpan="6">
+        <div class="item">
+          <b class="icon_02"></b>
+          <h2>两学一做</h2>
+          <p>党员学习教育专题</p>
+        </div>
+      </div>
+      <div nz-col nzSpan="6">
+        <div class="item">
+          <b class="icon_03"></b>
+          <h2>网上调查</h2>
+          <p>党组织对党员进行问卷调查</p>
+        </div>
+      </div>
+      <div nz-col nzSpan="6">
+        <div class="item">
+          <b class="icon_04"></b>
+          <h2>党规党章</h2>
+          <p>中国共产党党规党章</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>

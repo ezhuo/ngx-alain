@@ -1,9 +1,8 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
-import { NoticeService } from './notice.service';
-import { ModalService } from './modal.service';
-import { SweetAlertService } from './sweetalert2.service';
+import { NoticeService } from '@core/utils/notice.service';
+import { ModalService } from '@core/utils/modal.service';
+import { SweetAlertService } from '@core/utils/sweetalert2.service';
 
 
 const SERVICES = [

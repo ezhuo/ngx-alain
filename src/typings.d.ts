@@ -5,3 +5,5 @@
 declare var md5: any;
 
 declare var $: any;
+
+declare var assetsHelper : any;

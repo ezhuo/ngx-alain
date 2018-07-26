@@ -2,12 +2,12 @@ import {
   NgModule, Optional, SkipSelf, ModuleWithProviders,
   LOCALE_ID, APP_INITIALIZER
 } from '@angular/core';
-import { UtilsModule } from './utils/utils.module';
-import { DataModule } from './data/data.module';
-import { NetModule } from './net/net.module';
-import { throwIfAlreadyLoaded } from './module-import-guard';
+import { UtilsModule } from '@core/utils/utils.module';
+import { DataModule } from '@core/data/data.module';
+import { NetModule } from '@core/net/net.module';
+import { throwIfAlreadyLoaded } from '@core/module-import-guard';
 
-import { StartupService } from './startup/startup.service';
+import { StartupService } from '@core/startup/startup.service';
 
 // 中文设置
 import '@core/i18n/zh_CN';

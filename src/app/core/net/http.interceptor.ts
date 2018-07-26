@@ -1,4 +1,4 @@
-import { NoticeService } from '../utils/notice.service';
+import { NoticeService } from '@core/utils/notice.service';
 import { Injectable, Injector } from '@angular/core';
 import {
   HttpSentEvent,
@@ -13,13 +13,13 @@ import {
   HttpResponse
 } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { TokenService } from '../data/token.service';
-import { UserService } from '../data/users.service';
-import { SweetAlertService } from '../utils/sweetalert2.service';
+import { TokenService } from '@core/data/token.service';
+import { UserService } from '@core/data/users.service';
+import { SweetAlertService } from '@core/utils/sweetalert2.service';
 import { Observable, of, throwError } from 'rxjs';
 import { mergeMap, catchError } from 'rxjs/operators';
-import * as configInc from '../config.inc';
-import * as helper from '../helpers';
+import * as configInc from '@core/config.inc';
+import * as helper from '@core/helpers';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -69,7 +69,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
     return next.handle(authReq).pipe(
       mergeMap((event: any) => {
-        console.log('http.interceptor:', event);
+        if (configInc.app_debug) console.log('http.interceptor:', event);
         // 允许统一对请求错误处理，这是因为一个请求若是业务上错误的情况下其HTTP请求的状态是200的情况下需要
         if (event instanceof HttpResponse && [200, 201, 202, 203, 204, 205, 206].indexOf(event.status) > -1)
           return this.httpResponseSuccess(authReq, event);
@@ -193,8 +193,7 @@ export class AuthInterceptor implements HttpInterceptor {
     } catch (e) {
       console.error(e);
     }
-
-    console.log(err);
+    if (configInc.app_debug) console.log(err);
     return throwError(Object.assign(err, { message2: $message }));
   }
 }

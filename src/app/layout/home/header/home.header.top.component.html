@@ -1,0 +1,39 @@
+<div class="container header-top">
+  <div class="logo">
+    <a [routerLink]="['/']">
+      欢迎访问{{configSrv.config.app.name}}
+    </a>
+  </div>
+  <div class="top-nav-wrap">
+    <ul class="top-nav">
+      <li>
+        <!-- <div class="item" (click)="toggleCollapsedSidebar()">
+          <i class="anticon anticon-menu-{{settings.layout.collapsed ? 'unfold' : 'fold'}}"></i>
+        </div> -->
+      </li>
+    </ul>
+
+    <ul class="top-nav">
+      <!-- Notify -->
+      <li>
+        <header-notify></header-notify>
+      </li>
+      <li>
+        <header-fullscreen></header-fullscreen>
+      </li>
+      <li class="hidden-xs">
+        <home-header-user></home-header-user>
+      </li>
+      <li class="hidden-xs">
+        <div class="item" [routerLink]="['/app/admin']">
+          <i class="anticon anticon-home"></i> &nbsp;我的空间&nbsp;
+        </div>
+      </li>
+      <li class="hidden-xs">
+        <div class="item" (click)="logout()">
+          <i class="anticon anticon-logout"></i> &nbsp;注销系统&nbsp;
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>

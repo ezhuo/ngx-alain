@@ -1,7 +1,7 @@
 import { TestBed, TestModuleMetadata } from '@angular/core/testing';
 import { setUpTestBed } from '@testing/common.spec';
 
-import { HeaderComponent } from './header.component';
+import { HeaderComponent } from '@layout/default/header/header.component';
 
 describe('Layout: Header', () => {
   setUpTestBed(<TestModuleMetadata>{

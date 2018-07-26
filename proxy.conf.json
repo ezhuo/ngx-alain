@@ -6,11 +6,18 @@
       "^/api": ""
     }
   },
-  "/pgapi": {
-    "target": "http://127.0.0.1:3022/api/sys/pc/v1",
+  "/file/upload": {
+    "target": "http://127.0.0.1:8090/api/file/upload",
     "secure": false,
     "pathRewrite": {
-      "^/pgapi": ""
+      "^/file/upload": ""
+    }
+  },
+  "/file/show": {
+    "target": "http://127.0.0.1:8090/uploads",
+    "secure": false,
+    "pathRewrite": {
+      "^/file/show": ""
     }
   }
 }

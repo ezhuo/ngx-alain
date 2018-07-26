@@ -17,9 +17,9 @@ import { SharedModule } from '@shared/shared.module';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { I18NService } from '@core/i18n/i18n.service';
-import { I18nHttpLoaderFactory } from '../app/app.module';
+import { I18nHttpLoaderFactory } from 'app/app.module';
 
-import { DelonModule } from '../app/delon.module';
+import { DelonModule } from 'app/delon.module';
 
 const resetTestingModule = TestBed.resetTestingModule,
   preventAngularFromResetting = () =>

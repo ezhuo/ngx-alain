@@ -1,12 +1,19 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserService } from './users.service';
-import { StateService } from './state.service';
+import { UserService } from '@core/data/users.service';
+import { StateService } from '@core/data/state.service';
 
-import { AuthService } from './auth.service';
-import { TokenService } from './token.service';
+import { AuthService } from '@core/data/auth.service';
+import { TokenService } from '@core/data/token.service';
+import { ConfigService } from '@core/data/config.service';
 
-const SERVICES = [UserService, StateService, AuthService, TokenService];
+const SERVICES = [
+  UserService,
+  StateService,
+  AuthService,
+  TokenService,
+  ConfigService
+];
 
 @NgModule({
   imports: [CommonModule],

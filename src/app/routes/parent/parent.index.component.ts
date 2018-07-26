@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject, Injector, Optional } from '@angular/core';
+import { Component, OnInit, OnDestroy, Injector } from '@angular/core';
 import { BaseComponent } from '@theme/parent/base.component';
 
 @Component({
@@ -13,11 +13,17 @@ export class ParentIndexComponent extends BaseComponent implements OnInit, OnDes
   }
 
   ngOnInit() {
-    console.log('parent-nginit');
   }
 
   ngOnDestroy() {
-    console.log('parent-ngOnDestroy');
   }
+
+  // 表格参数
+  tableParams: any = {
+    ps: 10,
+  };
+
+  tableUrl = '';
+
 
 }

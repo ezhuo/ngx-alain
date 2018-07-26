@@ -1,19 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
-import { NoticeService } from '../utils/notice.service';
-import { http, menus } from '../config.inc';
-import Storage from '../helpers/storage';
+import { NoticeService } from '@core/utils/notice.service';
+import { http, menus, app_debug } from '@core/config.inc';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { UserService } from './users.service';
-import * as helper from '@helpers';
+import { UserService } from '@core/data/users.service';
 import { MenuService, SettingsService, Menu } from '@delon/theme';
+import * as helper from '@core/helpers';
 
 @Injectable()
 export class TokenService {
   protected __token = '';
   protected __isAuth: Boolean = false;
-  protected __local = Storage.local();
-  protected __session = Storage.session();
+  protected __local = helper.storageLocal;
+  protected __session = helper.storageSession;
   protected jwtHelper: JwtHelperService = new JwtHelperService();
   protected __menu: Menu[];
 
@@ -85,7 +84,7 @@ export class TokenService {
       !helper.IsEmpty(this.userService.userInfo);
 
     if (this.__isAuth) {
-      console.log('isAuth');
+      if (app_debug) console.log('isAuth');
       this.menu_reload(); // 加载菜单
     }
 

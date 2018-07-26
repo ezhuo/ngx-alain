@@ -1,11 +1,9 @@
 
 import { Injectable, Injector } from '@angular/core';
-import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { zip } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { MenuService, SettingsService, TitleService } from '@delon/theme';
-import { StateService } from '../data/state.service';
+import { ConfigService } from '@core/data/config.service';
 
 /**
  * 用于应用启动时
@@ -22,8 +20,8 @@ export class StartupService {
         private injector: Injector) { }
 
 
-    get stateService() {
-        return this.injector.get(StateService);
+    get configSrv() {
+        return this.injector.get(ConfigService);
     }
 
     load(): Promise<any> {
@@ -42,15 +40,20 @@ export class StartupService {
 
             function app(appData: any = {}) {
                 // application data
-                const res: any = appData.app || self.stateService.config.app;
+                const res: any = appData.app || self.configSrv.app;
                 // 应用信息：包括站点名、描述、年份
                 self.settingService.setApp(res);
                 // 设置页面标题的后缀
                 self.titleService.suffix = res.name;
+                if (res.name != self.configSrv.app.name) {
+                    self.configSrv.app.name = res.name;
+                    self.configSrv.app.short = res.short;
+                    self.configSrv.app.description = res.description;
+                }
 
                 // 初始化菜单
                 self.menuService.clear();
-                self.menuService.add(self.stateService.config.menus);
+                self.menuService.add(self.configSrv.menus);
             }
 
             function error(err) {
@@ -62,9 +65,6 @@ export class StartupService {
             }
 
         });
-
-
-
     }
 
 

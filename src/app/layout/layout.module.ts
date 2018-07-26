@@ -1,42 +1,18 @@
 import { NgModule } from '@angular/core';
-import { SharedModule } from '@shared/shared.module';
+import { LayoutHomeModule } from '@layout/home/home.module';
+import { LayoutDefaultModule } from '@layout/default/default.module';
+import { LayoutFullScreenModule } from '@layout/fullscreen/fullscreen.module';
 
-import { LayoutDefaultComponent } from './default/default.component';
-import { LayoutFullScreenComponent } from './fullscreen/fullscreen.component';
-import { HeaderComponent } from './default/header/header.component';
-import { SidebarComponent } from './default/sidebar/sidebar.component';
-import { HeaderSearchComponent } from './default/header/components/search.component';
-import { HeaderNotifyComponent } from './default/header/components/notify.component';
-import { HeaderTaskComponent } from './default/header/components/task.component';
-import { HeaderIconComponent } from './default/header/components/icon.component';
-import { HeaderFullScreenComponent } from './default/header/components/fullscreen.component';
-import { HeaderStorageComponent } from './default/header/components/storage.component';
-import { HeaderUserComponent } from './default/header/components/user.component';
-
-const COMPONENTS = [
-  LayoutDefaultComponent,
-  LayoutFullScreenComponent,
-  HeaderComponent,
-  SidebarComponent,
+const MODULE = [
+  LayoutHomeModule,
+  LayoutDefaultModule,
+  LayoutFullScreenModule
 ];
-
-const HEADERCOMPONENTS = [
-  HeaderSearchComponent,
-  HeaderNotifyComponent,
-  HeaderTaskComponent,
-  HeaderIconComponent,
-  HeaderFullScreenComponent,
-  HeaderStorageComponent,
-  HeaderUserComponent,
-];
-
-// passport
-const PASSPORT = [];
 
 @NgModule({
-  imports: [SharedModule],
+  imports: [...MODULE],
   providers: [],
-  declarations: [...COMPONENTS, ...HEADERCOMPONENTS, ...PASSPORT],
-  exports: [...COMPONENTS, ...PASSPORT],
+  declarations: [],
+  exports: [...MODULE],
 })
 export class LayoutModule { }

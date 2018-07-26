@@ -1,4 +1,4 @@
-> 基于 ng-alain ng-zorro
+> 基于 ng-alain 1.1.5 ng-zorro
 
 ```
 

@@ -10,7 +10,7 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import * as parse from 'date-fns/parse';
-import { api } from '../config.inc';
+import { api, app_debug } from '@core/config.inc';
 
 /**
  * 封装HttpClient，主要解决：
@@ -464,15 +464,17 @@ export class HttpService {
     if (options) {
       if (options.params) options.params = this.parseParams(options.params);
     }
-    if (!url.includes('./') && !url.includes('mock/')) {
+    const findIdx = ['mock/', 'assets/'].findIndex((value) => {
+      return url.includes(value);
+    });
+    if (findIdx === -1) {
       url = this.SERVER_URL + url;
-    }
-    if (url.includes('/mock/')) {
+    } else if (url.includes('/mock/')) {
       url = url.replace('/mock/', '/');
     }
     return this.http.request(method, url, options).pipe(
       tap((res) => {
-        console.log('http.service:', res);
+        if (app_debug) console.log('http.service:', res);
         this.end();
       }),
       catchError(res => {
