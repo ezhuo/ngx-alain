@@ -5,9 +5,9 @@ import { filter } from 'rxjs/operators';
 
 import { MenuService } from '@delon/theme';
 
-import { ReuseTabService } from '@delon/abc/reuse-tab/reuse-tab.service';
-import { ReuseTabStrategy } from '@delon/abc/reuse-tab/reuse-tab.strategy';
-import { ReuseTabMatchMode, ReuseTitle } from '@delon/abc/reuse-tab/interface';
+import { ReuseTabService } from './reuse-tab.service';
+import { ReuseTabStrategy } from './reuse-tab.strategy';
+import { ReuseTabMatchMode, ReuseTitle } from './interface';
 
 const TITLE = `标题`;
 let reuse: boolean = true;

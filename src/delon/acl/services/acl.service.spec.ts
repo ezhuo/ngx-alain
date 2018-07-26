@@ -1,5 +1,5 @@
-import { ACLService } from '@delon/acl/services/acl.service';
-import { ACLType } from '@delon/acl/services/acl.type';
+import { ACLService } from './acl.service';
+import { ACLType } from './acl.type';
 
 describe('acl: service', () => {
   const ADMIN = 'admin';

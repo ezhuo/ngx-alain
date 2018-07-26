@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ControlWidget } from '@delon/form/src/widget';
-import { getData, toBool } from '@delon/form/src/utils';
-import { SFSchemaEnum } from '@delon/form/src/schema';
+import { ControlWidget } from '../../widget';
+import { getData, toBool } from '../../utils';
+import { SFSchemaEnum } from '../../schema';
 
 @Component({
   selector: 'sf-cascader',

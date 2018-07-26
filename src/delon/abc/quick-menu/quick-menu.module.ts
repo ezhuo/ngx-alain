@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { QuickMenuComponent } from '@delon/abc/quick-menu/quick-menu.component';
+import { QuickMenuComponent } from './quick-menu.component';
 
 const COMPONENTS = [QuickMenuComponent];
 

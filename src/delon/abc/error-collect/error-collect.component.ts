@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { toNumber } from '@delon/util';
-import { AdErrorCollectConfig } from '@delon/abc/error-collect/error-collect.config';
+import { AdErrorCollectConfig } from './error-collect.config';
 
 /**
  * 错误消息采集器

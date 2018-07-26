@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NzTreeNode } from 'ng-zorro-antd';
-import { DelonUtilConfig } from '@delon/util/src/util.config';
-import { ArrayConfig } from '@delon/util/src/array/array.config';
+import { DelonUtilConfig } from '../util.config';
+import { ArrayConfig } from './array.config';
 
 @Injectable({ providedIn: 'root' })
 export class ArrayService {

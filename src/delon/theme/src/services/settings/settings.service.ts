@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { App, Layout, User } from '@delon/theme/src/services/settings/interface';
+import { App, Layout, User } from './interface';
 
 const LAYOUT_KEY = 'layout';
 const USER_KEY = 'user';

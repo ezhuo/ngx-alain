@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 
-import { SidebarNavComponent } from '@delon/abc/sidebar-nav/sidebar-nav.component';
+import { SidebarNavComponent } from './sidebar-nav.component';
 
 @NgModule({
   imports: [CommonModule, RouterModule, NgZorroAntdModule],

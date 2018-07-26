@@ -33,16 +33,16 @@ import {
   SimpleTableData,
   SimpleTableBadge,
   SimpleTableTag,
-} from '@delon/abc/simple-table/interface';
-import { AdSimpleTableModule } from '@delon/abc/simple-table/simple-table.module';
-import { SimpleTableComponent } from '@delon/abc/simple-table/simple-table.component';
+} from './interface';
+import { AdSimpleTableModule } from './simple-table.module';
+import { SimpleTableComponent } from './simple-table.component';
 import {
   AlainI18NServiceFake,
   AlainI18NService,
-} from '@delon/theme/src/services/i18n/i18n';
+} from '../../theme/src/services/i18n/i18n';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { dispatchDropDown } from '@delon/testing';
-import { SimpleTableExport } from '@delon/abc/simple-table/simple-table-export';
+import { dispatchDropDown } from '../../testing';
+import { SimpleTableExport } from './simple-table-export';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Router } from '@angular/router';
 

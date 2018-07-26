@@ -7,7 +7,7 @@ import {
   DA_XLSX_CONFIG,
   XlsxConfig,
   XlsxExportSheet,
-} from '@delon/abc/xlsx/interface';
+} from './interface';
 
 declare var XLSX: any;
 

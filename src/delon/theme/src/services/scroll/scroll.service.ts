@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { WINDOW } from '@delon/theme/src/win_tokens';
+import { WINDOW } from '../../win_tokens';
 
 @Injectable({ providedIn: 'root' })
 export class ScrollService {

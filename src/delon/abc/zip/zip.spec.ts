@@ -6,7 +6,7 @@ import { Component, DebugElement } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import * as fs from 'file-saver';
 
-import { AdZipModule, ZipService, ZipConfig } from '@delon/abc/zip';
+import { AdZipModule, ZipService, ZipConfig } from './index';
 
 let isErrorRequest = false;
 let isClassZIP = false;

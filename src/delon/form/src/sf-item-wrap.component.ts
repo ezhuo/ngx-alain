@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { SFSchema } from '@delon/form/src/schema';
-import { SFUISchemaItem } from '@delon/form/src/schema/ui';
+import { SFSchema } from './schema/index';
+import { SFUISchemaItem } from './schema/ui';
 
 @Component({
   selector: 'sf-item-wrap',

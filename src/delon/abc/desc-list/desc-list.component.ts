@@ -12,8 +12,8 @@ import {
   SimpleChange,
 } from '@angular/core';
 import { toNumber } from '@delon/util';
-import { DescListItemComponent } from '@delon/abc/desc-list/desc-list-item.component';
-import { AdDescListConfig } from '@delon/abc/desc-list/desc-list.config';
+import { DescListItemComponent } from './desc-list-item.component';
+import { AdDescListConfig } from './desc-list.config';
 
 @Component({
   selector: 'desc-list',

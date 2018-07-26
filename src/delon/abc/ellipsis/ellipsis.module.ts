@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { EllipsisComponent } from '@delon/abc/ellipsis/ellipsis.component';
+import { EllipsisComponent } from './ellipsis.component';
 
 const COMPONENTS = [EllipsisComponent];
 

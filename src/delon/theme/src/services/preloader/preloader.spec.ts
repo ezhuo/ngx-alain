@@ -1,4 +1,4 @@
-import { preloaderFinished } from '@delon/theme/src/services/preloader/preloader';
+import { preloaderFinished } from './preloader';
 
 describe('theme: preloader', () => {
   let cached: any = {};

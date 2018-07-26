@@ -6,14 +6,14 @@ import {
   ChangeDetectorRef,
 } from '@angular/core';
 import { filter } from 'rxjs/operators';
-import { di } from '@delon/form/src/utils';
-import { FormProperty } from '@delon/form/src/model/form.property';
-import { ArrayProperty } from '@delon/form/src/model/array.property';
-import { ObjectProperty } from '@delon/form/src/model/object.property';
-import { SFSchema } from '@delon/form/src/schema';
-import { SFUISchemaItem } from '@delon/form/src/schema/ui';
-import { ErrorData } from '@delon/form/src/errors';
-import { SFComponent } from '@delon/form/src/sf.component';
+import { di } from './utils';
+import { FormProperty } from './model/form.property';
+import { ArrayProperty } from './model/array.property';
+import { ObjectProperty } from './model/object.property';
+import { SFSchema } from './schema';
+import { SFUISchemaItem } from './schema/ui';
+import { ErrorData } from './errors';
+import { SFComponent } from './sf.component';
 
 export abstract class Widget<T extends FormProperty> implements AfterViewInit {
   formProperty: T;

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ObjectLayoutWidget } from '@delon/form/src/widget';
-import { SFGridSchema } from '@delon/form/src/schema/ui';
-import { FormProperty } from '@delon/form/src/model/form.property';
+import { ObjectLayoutWidget } from '../../widget';
+import { SFGridSchema } from '../../schema/ui';
+import { FormProperty } from '../../model/form.property';
 
 @Component({
   selector: 'sf-object',

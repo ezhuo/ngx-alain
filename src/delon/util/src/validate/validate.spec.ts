@@ -1,6 +1,6 @@
 import { FormControl } from '@angular/forms';
-import { isNum, isInt, isDecimal, isIdCard, isMobile } from '@delon/util/src/validate/validate';
-import { _Validators } from '@delon/util/src/validate/validators';
+import { isNum, isInt, isDecimal, isIdCard, isMobile } from './validate';
+import { _Validators } from './validators';
 
 describe('utils: validate', () => {
   it('#isNum', () => {

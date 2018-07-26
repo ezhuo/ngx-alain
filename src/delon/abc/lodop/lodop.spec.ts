@@ -6,10 +6,10 @@ import { tap, delay, filter, flatMap } from 'rxjs/operators';
 
 import { LazyService } from '@delon/util';
 
-import { LodopService } from '@delon/abc/lodop/lodop.service';
-import { AdLodopConfig } from '@delon/abc/lodop/lodop.config';
-import { AdLodopModule } from '@delon/abc/lodop/lodop.module';
-import { Lodop } from '@delon/abc/lodop/interface';
+import { LodopService } from './lodop.service';
+import { AdLodopConfig } from './lodop.config';
+import { AdLodopModule } from './lodop.module';
+import { Lodop } from './interface';
 
 const cog: AdLodopConfig = {
   license: '',

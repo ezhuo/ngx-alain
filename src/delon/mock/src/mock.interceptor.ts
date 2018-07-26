@@ -14,10 +14,10 @@ import {
 import { Observable, Observer, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 
-import { DelonMockConfig } from '@delon/mock/mock.config';
-import { MockService } from '@delon/mock/src/mock.service';
-import { MockStatusError } from '@delon/mock/src/status.error';
-import { MockRequest } from '@delon/mock/src/interface';
+import { DelonMockConfig } from '../mock.config';
+import { MockService } from './mock.service';
+import { MockStatusError } from './status.error';
+import { MockRequest } from './interface';
 
 @Injectable()
 export class MockInterceptor implements HttpInterceptor {

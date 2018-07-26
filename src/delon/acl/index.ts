@@ -1,1 +1,1 @@
-export * from '@delon/acl/public_api';
+export * from './public_api';

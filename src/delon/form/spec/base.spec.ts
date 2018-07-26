@@ -9,13 +9,13 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
 import { deepGet, deepCopy } from '@delon/util';
 
-import { SFSchema } from '@delon/form/src/schema';
-import { SFUISchema } from '@delon/form/src/schema/ui';
-import { SFButton } from '@delon/form/src/interface';
-import { ErrorData } from '@delon/form/src/errors';
-import { DelonFormModule } from '@delon/form/src/module';
-import { SFComponent } from '@delon/form/src/sf.component';
-import { dispatchFakeEvent, typeInElement } from '@delon/testing';
+import { SFSchema } from '../src/schema';
+import { SFUISchema } from '../src/schema/ui';
+import { SFButton } from '../src/interface';
+import { ErrorData } from '../src/errors';
+import { DelonFormModule } from '../src/module';
+import { SFComponent } from '../src/sf.component';
+import { dispatchFakeEvent, typeInElement } from '../../testing';
 
 export const SCHEMA = {
   user: <SFSchema>{

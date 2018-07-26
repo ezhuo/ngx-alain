@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { ControlWidget } from '@delon/form/src/widget';
-import { SFSchemaEnum } from '@delon/form/src/schema';
-import { getData } from '@delon/form/src/utils';
+import { ControlWidget } from '../../widget';
+import { SFSchemaEnum } from '../../schema';
+import { getData } from '../../utils';
 
 @Component({
   selector: 'sf-tag',

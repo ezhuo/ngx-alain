@@ -1,5 +1,5 @@
 import { Component, Input, QueryList, ContentChildren } from '@angular/core';
-import { AvatarListItemComponent } from '@delon/abc/avatar-list/avatar-list-item.component';
+import { AvatarListItemComponent } from './avatar-list-item.component';
 
 @Component({
   selector: 'avatar-list',

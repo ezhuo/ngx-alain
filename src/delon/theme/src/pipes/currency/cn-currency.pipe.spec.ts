@@ -1,11 +1,11 @@
-import { CNCurrencyPipe } from '@delon/theme/src/pipes/currency/cn-currency.pipe';
+import { CNCurrencyPipe } from './cn-currency.pipe';
 import { registerLocaleData } from '@angular/common';
 import localeZhHans from '@angular/common/locales/zh-Hans';
 import { Component } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { AlainThemeModule } from '@delon/theme/src/theme.module';
+import { AlainThemeModule } from '../../theme.module';
 
 registerLocaleData(localeZhHans);
 

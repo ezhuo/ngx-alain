@@ -2,7 +2,7 @@ import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { Component, DebugElement, ViewChild } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import * as addSeconds from 'date-fns/add_seconds';
-import { AdCountDownModule } from '@delon/abc/count-down/count-down.module';
+import { AdCountDownModule } from './count-down.module';
 
 describe('abc: count-down', () => {
   let fixture: ComponentFixture<TestComponent>;

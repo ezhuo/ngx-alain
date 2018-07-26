@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ArrayLayoutWidget } from '@delon/form/src/widget';
+import { ArrayLayoutWidget } from '../../widget';
 
 @Component({
   selector: 'sf-array',

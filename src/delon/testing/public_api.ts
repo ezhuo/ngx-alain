@@ -6,8 +6,8 @@
  * found in the LICENSE file at https://angular.io/license
  */
 
-export * from '@delon/testing/dispatch-events';
-export * from '@delon/testing/event-objects';
-export * from '@delon/testing/type-in-element';
-export * from '@delon/testing/mock-ng-zone';
-export * from '@delon/testing/zorro';
+export * from './dispatch-events';
+export * from './event-objects';
+export * from './type-in-element';
+export * from './mock-ng-zone';
+export * from './zorro';

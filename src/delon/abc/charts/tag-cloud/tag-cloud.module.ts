@@ -2,7 +2,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 
-import { G2TagCloudComponent } from '@delon/abc/charts/tag-cloud/tag-cloud.component';
+import { G2TagCloudComponent } from './tag-cloud.component';
 
 const COMPONENTS = [G2TagCloudComponent];
 

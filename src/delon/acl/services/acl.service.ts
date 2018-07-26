@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { ACLType, ACLCanType } from '@delon/acl/services/acl.type';
+import { ACLType, ACLCanType } from './acl.type';
 
 /**
  * 访问控制服务

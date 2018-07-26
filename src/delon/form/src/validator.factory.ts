@@ -1,7 +1,7 @@
 import { Inject, Optional } from '@angular/core';
-import { DelonFormConfig } from '@delon/form/src/config';
-import { ErrorData } from '@delon/form/src/errors';
-import { SFSchema } from '@delon/form/src/schema';
+import { DelonFormConfig } from './config';
+import { ErrorData } from './errors';
+import { SFSchema } from './schema';
 
 declare var Ajv: any;
 

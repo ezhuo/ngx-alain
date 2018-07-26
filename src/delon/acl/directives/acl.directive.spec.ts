@@ -6,8 +6,8 @@ import {
   tick,
 } from '@angular/core/testing';
 import { Component, DebugElement } from '@angular/core';
-import { DelonACLModule } from '@delon/acl';
-import { ACLService } from '@delon/acl/services/acl.service';
+import { DelonACLModule } from '../index';
+import { ACLService } from './../services/acl.service';
 import { By } from '@angular/platform-browser';
 
 const CLS = 'acl__hide';

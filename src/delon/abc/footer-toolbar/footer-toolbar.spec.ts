@@ -2,8 +2,8 @@ import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { AdFooterToolbarModule } from '@delon/abc/footer-toolbar/footer-toolbar.module';
-import { AdErrorCollectModule } from '@delon/abc/error-collect/error-collect.module';
+import { AdFooterToolbarModule } from './footer-toolbar.module';
+import { AdErrorCollectModule } from '../error-collect/error-collect.module';
 
 describe('abc: footer-toolbar', () => {
   let fixture: ComponentFixture<TestComponent>;

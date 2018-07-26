@@ -3,9 +3,9 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-import { AdNoticeIconModule } from '@delon/abc/notice-icon/notice-icon.module';
-import { NoticeIconComponent } from '@delon/abc/notice-icon/notice-icon.component';
-import { NoticeItem } from '@delon/abc/notice-icon/interface';
+import { AdNoticeIconModule } from './notice-icon.module';
+import { NoticeIconComponent } from './notice-icon.component';
+import { NoticeItem } from './interface';
 
 describe('abc: notice-icon', () => {
   let fixture: ComponentFixture<TestComponent>;

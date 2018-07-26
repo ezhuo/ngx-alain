@@ -1,6 +1,6 @@
 import { Directive, HostListener, Input } from '@angular/core';
-import { XlsxService } from '@delon/abc/xlsx/xlsx.service';
-import { XlsxExportOptions } from '@delon/abc/xlsx/interface';
+import { XlsxService } from './xlsx.service';
+import { XlsxExportOptions } from './interface';
 
 @Directive({ selector: '[xlsx]' })
 export class XlsxDirective {

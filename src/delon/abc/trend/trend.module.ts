@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TrendComponent } from '@delon/abc/trend/trend.component';
+import { TrendComponent } from './trend.component';
 
 const COMPONENTS = [TrendComponent];
 

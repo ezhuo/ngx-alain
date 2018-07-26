@@ -10,12 +10,12 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Router, DefaultUrlSerializer } from '@angular/router';
 import { _HttpClient } from '@delon/theme';
 
-import { DelonAuthModule } from '@delon/auth/auth.module';
-import { DelonAuthConfig } from '@delon/auth/auth.config';
-import { SimpleTokenModel } from '@delon/auth/token/simple/simple.model';
-import { ITokenModel, DA_SERVICE_TOKEN, ITokenService } from '@delon/auth/token/interface';
-import { SimpleInterceptor } from '@delon/auth/token/simple/simple.interceptor';
-import { WINDOW } from '@delon/auth/win_tokens';
+import { DelonAuthModule } from '../auth.module';
+import { DelonAuthConfig } from '../auth.config';
+import { SimpleTokenModel } from './simple/simple.model';
+import { ITokenModel, DA_SERVICE_TOKEN, ITokenService } from './interface';
+import { SimpleInterceptor } from './simple/simple.interceptor';
+import { WINDOW } from '../win_tokens';
 
 function genModel<T extends ITokenModel>(
   modelType: { new (): T },

@@ -7,8 +7,8 @@ import {
 } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
-import { DelonThemeConfig } from '@delon/theme/src/theme.config';
-import { HttpClientConfig } from '@delon/theme/src/services/http/http.config';
+import { DelonThemeConfig } from '../../theme.config';
+import { HttpClientConfig } from './http.config';
 
 /**
  * 封装HttpClient，主要解决：

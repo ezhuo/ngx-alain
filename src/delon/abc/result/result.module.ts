@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ResultComponent } from '@delon/abc/result/result.component';
+import { ResultComponent } from './result.component';
 
 const COMPONENTS = [ResultComponent];
 

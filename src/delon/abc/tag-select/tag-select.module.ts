@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TagSelectComponent } from '@delon/abc/tag-select/tag-select.component';
+import { TagSelectComponent } from './tag-select.component';
 
 const COMPONENTS = [TagSelectComponent];
 

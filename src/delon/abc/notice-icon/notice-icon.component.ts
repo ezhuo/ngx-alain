@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { toNumber, toBoolean } from '@delon/util';
 
-import { NoticeItem } from '@delon/abc/notice-icon/interface';
+import { NoticeItem } from './interface';
 
 @Component({
   selector: 'notice-icon',

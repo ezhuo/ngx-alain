@@ -1,1 +1,1 @@
-export * from '@delon/abc/error-collect/public_api';
+export * from './public_api';

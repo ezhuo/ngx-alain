@@ -1,5 +1,5 @@
 import { Directive, HostListener } from '@angular/core';
-import { FullContentComponent } from '@delon/abc/full-content/full-content.component';
+import { FullContentComponent } from './full-content.component';
 
 @Directive({
   selector: '[full-toggle]',

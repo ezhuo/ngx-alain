@@ -2,7 +2,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 
-import { G2TimelineComponent } from '@delon/abc/charts/timeline/timeline.component';
+import { G2TimelineComponent } from './timeline.component';
 
 const COMPONENTS = [G2TimelineComponent];
 

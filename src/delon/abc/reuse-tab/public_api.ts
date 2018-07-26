@@ -1,11 +1,11 @@
-export { ReuseTabComponent } from '@delon/abc/reuse-tab/reuse-tab.component';
-export { ReuseTabService } from '@delon/abc/reuse-tab/reuse-tab.service';
-export { ReuseTabStrategy } from '@delon/abc/reuse-tab/reuse-tab.strategy';
-export { AdReuseTabModule } from '@delon/abc/reuse-tab/reuse-tab.module';
+export { ReuseTabComponent } from './reuse-tab.component';
+export { ReuseTabService } from './reuse-tab.service';
+export { ReuseTabStrategy } from './reuse-tab.strategy';
+export { AdReuseTabModule } from './reuse-tab.module';
 export {
   ReuseTabMatchMode,
   ReuseTabCached,
   ReuseTabNotify,
   ReuseItem,
   ReuseContextI18n,
-} from '@delon/abc/reuse-tab/interface';
+} from './interface';

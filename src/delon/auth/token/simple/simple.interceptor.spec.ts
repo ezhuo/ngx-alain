@@ -9,11 +9,11 @@ import {
 } from '@angular/common/http/testing';
 import { Router, DefaultUrlSerializer } from '@angular/router';
 
-import { DelonAuthConfig } from '@delon/auth/auth.config';
-import { DelonAuthModule } from '@delon/auth/auth.module';
-import { DA_SERVICE_TOKEN, ITokenService, ITokenModel } from '@delon/auth/token/interface';
-import { SimpleInterceptor } from '@delon/auth/token/simple/simple.interceptor';
-import { SimpleTokenModel } from '@delon/auth/token/simple/simple.model';
+import { DelonAuthConfig } from '../../auth.config';
+import { DelonAuthModule } from '../../auth.module';
+import { DA_SERVICE_TOKEN, ITokenService, ITokenModel } from '../interface';
+import { SimpleInterceptor } from './simple.interceptor';
+import { SimpleTokenModel } from './simple.model';
 
 function genModel(token: string = `123`) {
   const model = new SimpleTokenModel();

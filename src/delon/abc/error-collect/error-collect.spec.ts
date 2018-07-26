@@ -21,8 +21,8 @@ import {
 
 import { NzFormModule, NzInputModule } from 'ng-zorro-antd';
 
-import { AdErrorCollectModule } from '@delon/abc/error-collect/error-collect.module';
-import { ErrorCollectComponent } from '@delon/abc/error-collect/error-collect.component';
+import { AdErrorCollectModule } from './error-collect.module';
+import { ErrorCollectComponent } from './error-collect.component';
 
 describe('abc: error-collect', () => {
   let fixture: ComponentFixture<TestComponent>;

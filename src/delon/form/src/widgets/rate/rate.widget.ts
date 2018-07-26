@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ControlWidget } from '@delon/form/src/widget';
-import { toBool } from '@delon/form/src/utils';
+import { ControlWidget } from '../../widget';
+import { toBool } from '../../utils';
 
 @Component({
   selector: 'sf-rate',

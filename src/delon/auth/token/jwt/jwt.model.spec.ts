@@ -1,5 +1,5 @@
-import { urlBase64Decode } from '@delon/auth/token/jwt/jwt.helper';
-import { JWTTokenModel } from '@delon/auth/token/jwt/jwt.model';
+import { urlBase64Decode } from './jwt.helper';
+import { JWTTokenModel } from './jwt.model';
 
 describe('auth: jwt.model', () => {
   const model = new JWTTokenModel();

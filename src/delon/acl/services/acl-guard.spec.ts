@@ -3,11 +3,11 @@ import { Injector } from '@angular/core';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
-import { ACLGuard } from '@delon/acl/services/acl-guard';
-import { ACLService } from '@delon/acl/services/acl.service';
-import { ACLType } from '@delon/acl/services/acl.type';
-import { DelonACLConfig } from '@delon/acl/acl.config';
-import { DelonACLModule } from '@delon/acl/acl.module';
+import { ACLGuard } from './acl-guard';
+import { ACLService } from './acl.service';
+import { ACLType } from './acl.type';
+import { DelonACLConfig } from '../acl.config';
+import { DelonACLModule } from '../acl.module';
 
 describe('acl: guard', () => {
   let injector: Injector;

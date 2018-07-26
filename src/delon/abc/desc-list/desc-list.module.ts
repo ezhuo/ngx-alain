@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { ObserversModule } from '@angular/cdk/observers';
 
-import { DescListComponent } from '@delon/abc/desc-list/desc-list.component';
-import { DescListItemComponent } from '@delon/abc/desc-list/desc-list-item.component';
-import { AdDescListConfig } from '@delon/abc/desc-list/desc-list.config';
+import { DescListComponent } from './desc-list.component';
+import { DescListItemComponent } from './desc-list-item.component';
+import { AdDescListConfig } from './desc-list.config';
 
 const COMPONENTS = [DescListComponent, DescListItemComponent];
 

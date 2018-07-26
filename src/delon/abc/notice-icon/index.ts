@@ -1,1 +1,1 @@
-export * from '@delon/abc/notice-icon/public_api';
+export * from './public_api';

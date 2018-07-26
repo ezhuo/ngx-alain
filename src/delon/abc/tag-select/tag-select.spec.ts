@@ -2,8 +2,8 @@ import { Component, DebugElement, TemplateRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { AdTagSelectModule } from '@delon/abc/tag-select/tag-select.module';
-import { TagSelectComponent } from '@delon/abc/tag-select/tag-select.component';
+import { AdTagSelectModule } from './tag-select.module';
+import { TagSelectComponent } from './tag-select.component';
 
 describe('abc: tag-select', () => {
   let fixture: ComponentFixture<TestComponent>;

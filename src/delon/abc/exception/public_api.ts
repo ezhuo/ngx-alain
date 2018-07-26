@@ -1,2 +1,2 @@
-export { ExceptionComponent } from '@delon/abc/exception/exception.component';
-export { AdExceptionModule } from '@delon/abc/exception/exception.module';
+export { ExceptionComponent } from './exception.component';
+export { AdExceptionModule } from './exception.module';

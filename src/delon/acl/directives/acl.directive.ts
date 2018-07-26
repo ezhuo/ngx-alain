@@ -6,8 +6,8 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { ACLService } from '@delon/acl/services/acl.service';
-import { ACLCanType } from '@delon/acl/services/acl.type';
+import { ACLService } from '../services/acl.service';
+import { ACLCanType } from '../services/acl.type';
 
 @Directive({
   selector: '[acl]',

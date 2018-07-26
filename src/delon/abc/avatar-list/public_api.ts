@@ -1,3 +1,3 @@
-export { AvatarListItemComponent } from '@delon/abc/avatar-list/avatar-list-item.component';
-export { AvatarListComponent } from '@delon/abc/avatar-list/avatar-list.component';
-export { AdAvatarListModule } from '@delon/abc/avatar-list/avatar-list.module';
+export { AvatarListItemComponent } from './avatar-list-item.component';
+export { AvatarListComponent } from './avatar-list.component';
+export { AdAvatarListModule } from './avatar-list.module';

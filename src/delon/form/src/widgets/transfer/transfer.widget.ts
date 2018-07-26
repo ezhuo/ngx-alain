@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ControlWidget } from '@delon/form/src/widget';
-import { getData } from '@delon/form/src/utils';
-import { SFSchemaEnum } from '@delon/form/src/schema';
+import { ControlWidget } from '../../widget';
+import { getData } from '../../utils';
+import { SFSchemaEnum } from '../../schema';
 
 @Component({
   selector: 'sf-transfer',

@@ -1,5 +1,5 @@
 import { RouteReuseStrategy, ActivatedRouteSnapshot } from '@angular/router';
-import { ReuseTabService } from '@delon/abc/reuse-tab/reuse-tab.service';
+import { ReuseTabService } from './reuse-tab.service';
 
 export class ReuseTabStrategy implements RouteReuseStrategy {
   constructor(private srv: ReuseTabService) {}

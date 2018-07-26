@@ -10,11 +10,11 @@ import { filter } from 'rxjs/operators';
 
 import { AlainThemeModule } from '@delon/theme';
 
-import { DelonCacheModule } from '@delon/cache/cache.module';
-import { DC_STORE_STORAGE_TOKEN, ICacheStore, ICache } from '@delon/cache/src/interface';
-import { CacheService } from '@delon/cache/src/cache.service';
-import { LocalStorageCacheService } from '@delon/cache/src/local-storage-cache.service';
-import { DelonCacheConfig } from '@delon/cache/cache.config';
+import { DelonCacheModule } from '../cache.module';
+import { DC_STORE_STORAGE_TOKEN, ICacheStore, ICache } from './interface';
+import { CacheService } from './cache.service';
+import { LocalStorageCacheService } from './local-storage-cache.service';
+import { DelonCacheConfig } from '../cache.config';
 
 describe('cache: service', () => {
   let injector: Injector;

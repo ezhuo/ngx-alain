@@ -10,10 +10,10 @@ import {
   TestFormComponent,
   SFPage,
   SCHEMA,
-} from '@delon/form/spec/base.spec';
-import { SFSchema, SFSchemaEnum } from '@delon/form/src/schema';
-import { SFUISchemaItem, SFUISchema } from '@delon/form/src/schema/ui';
-import { AutoCompleteWidget, EMAILSUFFIX } from '@delon/form/src/widgets/autocomplete/autocomplete.widget';
+} from '../../../spec/base.spec';
+import { SFSchema, SFSchemaEnum } from '../../../src/schema/index';
+import { SFUISchemaItem, SFUISchema } from '../../../src/schema/ui';
+import { AutoCompleteWidget, EMAILSUFFIX } from './autocomplete.widget';
 
 describe('form: widget: autocomplete', () => {
   let fixture: ComponentFixture<TestFormComponent>;

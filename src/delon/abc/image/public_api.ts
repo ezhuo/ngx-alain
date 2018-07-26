@@ -1,3 +1,3 @@
-export { ImageDirective } from '@delon/abc/image/image.directive';
-export { AdImageConfig } from '@delon/abc/image/image.config';
-export { AdImageModule } from '@delon/abc/image/image.module';
+export { ImageDirective } from './image.directive';
+export { AdImageConfig } from './image.config';
+export { AdImageModule } from './image.module';

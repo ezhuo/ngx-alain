@@ -1,6 +1,6 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { Component, DebugElement } from '@angular/core';
-import { AdDescListModule } from '@delon/abc/desc-list/desc-list.module';
+import { AdDescListModule } from './desc-list.module';
 import { By } from '@angular/platform-browser';
 
 describe('abc: desc-list', () => {

@@ -9,11 +9,11 @@ import {
   OnDestroy,
   SimpleChanges,
 } from '@angular/core';
-import { FormProperty } from '@delon/form/src/model/form.property';
-import { Widget } from '@delon/form/src/widget';
-import { WidgetFactory } from '@delon/form/src/widget.factory';
-import { TerminatorService } from '@delon/form/src/terminator.service';
-import { SFUISchemaItem } from '@delon/form/src/schema/ui';
+import { FormProperty } from './model/form.property';
+import { Widget } from './widget';
+import { WidgetFactory } from './widget.factory';
+import { TerminatorService } from './terminator.service';
+import { SFUISchemaItem } from './schema/ui';
 
 let nextUniqueId = 0;
 

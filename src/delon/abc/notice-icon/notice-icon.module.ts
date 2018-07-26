@@ -1,8 +1,8 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { NoticeIconComponent } from '@delon/abc/notice-icon/notice-icon.component';
-import { NoticeIconTabComponent } from '@delon/abc/notice-icon/notice-icon-tab.component';
+import { NoticeIconComponent } from './notice-icon.component';
+import { NoticeIconTabComponent } from './notice-icon-tab.component';
 
 const COMPONENTS = [NoticeIconComponent];
 

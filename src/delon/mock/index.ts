@@ -1,1 +1,1 @@
-export * from '@delon/mock/public_api';
+export * from './public_api';

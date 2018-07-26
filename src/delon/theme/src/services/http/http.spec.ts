@@ -8,9 +8,9 @@ import { TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { deepCopy } from '@delon/util';
 import { HttpClient } from '@angular/common/http';
 
-import { _HttpClient } from '@delon/theme/src/services/http/http.client';
-import { HttpClientConfig } from '@delon/theme/src/services/http/http.config';
-import { DelonThemeConfig } from '@delon/theme/src/theme.config';
+import { _HttpClient } from './http.client';
+import { HttpClientConfig } from './http.config';
+import { DelonThemeConfig } from '../../theme.config';
 
 describe('theme: http.client', () => {
   let injector: Injector;

@@ -1,4 +1,4 @@
-import { FormProperty } from '@delon/form/src/model/form.property';
+import { FormProperty } from './form.property';
 
 export abstract class AtomicProperty extends FormProperty {
   abstract fallbackValue(): any;

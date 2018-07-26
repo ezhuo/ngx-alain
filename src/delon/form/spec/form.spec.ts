@@ -1,8 +1,8 @@
 import { DebugElement } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
-import { builder, TestFormComponent, SFPage, SCHEMA } from '@delon/form/spec/base.spec';
-import { SFSchema } from '@delon/form/src/schema';
-import { SFUISchemaItem, SFUISchema } from '@delon/form/src/schema/ui';
+import { builder, TestFormComponent, SFPage, SCHEMA } from './base.spec';
+import { SFSchema } from '../src/schema/index';
+import { SFUISchemaItem, SFUISchema } from '../src/schema/ui';
 import { deepCopy } from '@delon/util';
 
 describe('form: component', () => {

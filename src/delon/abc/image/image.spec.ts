@@ -2,7 +2,7 @@ import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { AdImageModule } from '@delon/abc/image/image.module';
+import { AdImageModule } from './image.module';
 
 describe('abc: _src', () => {
   let fixture: ComponentFixture<TestComponent>;

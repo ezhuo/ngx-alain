@@ -4,8 +4,8 @@ import { share } from 'rxjs/operators';
 
 import { ACLService } from '@delon/acl';
 
-import { ALAIN_I18N_TOKEN, AlainI18NService } from '@delon/theme/src/services/i18n/i18n';
-import { Menu } from '@delon/theme/src/services/menu/interface';
+import { ALAIN_I18N_TOKEN, AlainI18NService } from '../i18n/i18n';
+import { Menu } from './interface';
 
 @Injectable({ providedIn: 'root' })
 export class MenuService implements OnDestroy {

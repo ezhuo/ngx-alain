@@ -1,14 +1,14 @@
-import { DelonFormConfig } from '@delon/form/src/config';
-import { SchemaValidatorFactory } from '@delon/form/src/validator.factory';
-import { PropertyGroup, FormProperty } from '@delon/form/src/model/form.property';
-import { NumberProperty } from '@delon/form/src/model/number.property';
-import { StringProperty } from '@delon/form/src/model/string.property';
-import { BooleanProperty } from '@delon/form/src/model/boolean.property';
-import { ArrayProperty } from '@delon/form/src/model/array.property';
-import { ObjectProperty } from '@delon/form/src/model/object.property';
-import { SFSchema } from '@delon/form/src/schema';
-import { SFUISchema, SFUISchemaItem } from '@delon/form/src/schema/ui';
-import { retrieveSchema } from '@delon/form/src/utils';
+import { DelonFormConfig } from '../config';
+import { SchemaValidatorFactory } from '../validator.factory';
+import { PropertyGroup, FormProperty } from './form.property';
+import { NumberProperty } from './number.property';
+import { StringProperty } from './string.property';
+import { BooleanProperty } from './boolean.property';
+import { ArrayProperty } from './array.property';
+import { ObjectProperty } from './object.property';
+import { SFSchema } from '../schema';
+import { SFUISchema, SFUISchemaItem } from '../schema/ui';
+import { retrieveSchema } from '../utils';
 
 export class FormPropertyFactory {
   constructor(

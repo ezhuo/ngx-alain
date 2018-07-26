@@ -1,5 +1,5 @@
 import { en_US } from 'ng-zorro-antd';
-import { AlainI18NServiceFake } from '@delon/theme/src/services/i18n/i18n';
+import { AlainI18NServiceFake } from './i18n';
 
 describe('theme: i18n', () => {
   const i18n = new AlainI18NServiceFake();

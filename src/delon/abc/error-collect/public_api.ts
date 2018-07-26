@@ -1,2 +1,2 @@
-export { ErrorCollectComponent } from '@delon/abc/error-collect/error-collect.component';
-export { AdErrorCollectModule } from '@delon/abc/error-collect/error-collect.module';
+export { ErrorCollectComponent } from './error-collect.component';
+export { AdErrorCollectModule } from './error-collect.module';

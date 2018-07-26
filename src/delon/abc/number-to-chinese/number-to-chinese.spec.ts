@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { numberToChinese } from '@delon/abc/number-to-chinese/number-to-chinese';
-import { AdNumberToChineseModule } from '@delon/abc/number-to-chinese/number-to-chinese.module';
+import { numberToChinese } from './number-to-chinese';
+import { AdNumberToChineseModule } from './number-to-chinese.module';
 
 describe('abc: number-to-chinese', () => {
   describe('[service]', () => {

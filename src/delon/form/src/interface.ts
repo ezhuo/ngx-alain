@@ -1,4 +1,4 @@
-import { SFRenderSchema, SFHorizontalLayoutSchema } from '@delon/form/src/schema/ui';
+import { SFRenderSchema, SFHorizontalLayoutSchema } from './schema/ui';
 
 export interface SFButton {
   /** 提交按钮文本，默认：`提交` */

@@ -1,7 +1,7 @@
 import { Directive, HostListener, Input } from '@angular/core';
 
-import { ReuseTabContextService } from '@delon/abc/reuse-tab/reuse-tab-context.service';
-import { ReuseItem } from '@delon/abc/reuse-tab/interface';
+import { ReuseTabContextService } from './reuse-tab-context.service';
+import { ReuseItem } from './interface';
 
 @Directive({
   selector: '[context-menu]',

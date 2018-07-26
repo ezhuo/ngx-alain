@@ -1,5 +1,5 @@
 import { ActivatedRouteSnapshot } from '@angular/router';
-import { ReuseTabContextComponent } from '@delon/abc/reuse-tab/reuse-tab-context.component';
+import { ReuseTabContextComponent } from './reuse-tab-context.component';
 
 /**
  * 复用匹配模式

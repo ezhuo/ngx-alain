@@ -15,22 +15,22 @@ import {
 import { toBoolean } from '@delon/util';
 import { deepCopy } from '@delon/util';
 
-import { DelonFormConfig } from '@delon/form/src/config';
-import { di, retrieveSchema, FORMATMAPS, resolveIf } from '@delon/form/src/utils';
-import { TerminatorService } from '@delon/form/src/terminator.service';
-import { SFSchema } from '@delon/form/src/schema';
+import { DelonFormConfig } from './config';
+import { di, retrieveSchema, FORMATMAPS, resolveIf } from './utils';
+import { TerminatorService } from './terminator.service';
+import { SFSchema } from './schema/index';
 import {
   SFUISchema,
   SFUISchemaItem,
   SFRenderSchema,
   SFUISchemaItemRun,
-} from '@delon/form/src/schema/ui';
-import { FormProperty } from '@delon/form/src/model/form.property';
-import { FormPropertyFactory } from '@delon/form/src/model/form.property.factory';
-import { SchemaValidatorFactory } from '@delon/form/src/validator.factory';
-import { WidgetFactory } from '@delon/form/src/widget.factory';
-import { SFButton } from '@delon/form/src/interface';
-import { ErrorData } from '@delon/form/src/errors';
+} from './schema/ui';
+import { FormProperty } from './model/form.property';
+import { FormPropertyFactory } from './model/form.property.factory';
+import { SchemaValidatorFactory } from './validator.factory';
+import { WidgetFactory } from './widget.factory';
+import { SFButton } from './interface';
+import { ErrorData } from './errors';
 
 export function useFactory(
   schemaValidatorFactory: any,

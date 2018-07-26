@@ -22,7 +22,7 @@ import { filter, debounceTime } from 'rxjs/operators';
 import { toNumber, toBoolean } from '@delon/util';
 import { ALAIN_I18N_TOKEN, AlainI18NService } from '@delon/theme';
 
-import { ReuseTabService } from '@delon/abc/reuse-tab/reuse-tab.service';
+import { ReuseTabService } from './reuse-tab.service';
 import {
   ReuseTabCached,
   ReuseTabNotify,
@@ -31,8 +31,8 @@ import {
   ReuseContextI18n,
   ReuseContextCloseEvent,
   ReuseTitle,
-} from '@delon/abc/reuse-tab/interface';
-import { ReuseTabContextService } from '@delon/abc/reuse-tab/reuse-tab-context.service';
+} from './interface';
+import { ReuseTabContextService } from './reuse-tab-context.service';
 
 @Component({
   selector: 'reuse-tab',

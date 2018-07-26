@@ -1,1 +1,1 @@
-export * from '@delon/abc/ellipsis/public_api';
+export * from './public_api';

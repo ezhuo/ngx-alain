@@ -7,7 +7,7 @@ import {
   ITokenModel,
   ITokenService,
   DA_SERVICE_TOKEN,
-} from '@delon/auth/token/interface';
+} from '../token/interface';
 
 const OPENTYPE = '_delonAuthSocialType';
 const HREFCALLBACK = '_delonAuthSocialCallbackByHref';

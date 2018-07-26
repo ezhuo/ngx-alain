@@ -1,4 +1,4 @@
-import { isEmpty, toBoolean, toNumber } from '@delon/util/src/other/check';
+import { isEmpty, toBoolean, toNumber } from './check';
 
 describe('#isEmpty', () => {
   it('should empty when only spaces', () => {

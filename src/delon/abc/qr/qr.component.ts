@@ -9,8 +9,8 @@ import {
   Output,
   EventEmitter,
 } from '@angular/core';
-import { QRService } from '@delon/abc/qr/qr.service';
-import { AdQRConfig } from '@delon/abc/qr/qr.config';
+import { QRService } from './qr.service';
+import { AdQRConfig } from './qr.config';
 
 @Component({
   selector: 'qr',

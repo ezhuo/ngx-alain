@@ -6,7 +6,7 @@ import {
   Input,
 } from '@angular/core';
 import { toNumber } from '@delon/util';
-import { AdSHFConfig } from '@delon/abc/simple-html-form/config';
+import { AdSHFConfig } from './config';
 
 @Directive({
   selector: 'shf-wrap, [shf-wrap]',

@@ -19,10 +19,10 @@ import {
 } from '@delon/theme';
 import { DelonACLModule } from '@delon/acl';
 
-import { AdPageHeaderModule } from '@delon/abc/page-header/page-header.module';
-import { PageHeaderComponent } from '@delon/abc/page-header/page-header.component';
-import { AdPageHeaderConfig } from '@delon/abc/page-header/page-header.config';
-import { ReuseTabService } from '@delon/abc/reuse-tab/reuse-tab.service';
+import { AdPageHeaderModule } from './page-header.module';
+import { PageHeaderComponent } from './page-header.component';
+import { AdPageHeaderConfig } from './page-header.config';
+import { ReuseTabService } from '../reuse-tab/reuse-tab.service';
 
 describe('abc: page-header', () => {
   let injector: Injector;

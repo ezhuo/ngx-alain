@@ -1,4 +1,4 @@
-import { deepGet, deepCopy, copy } from '@delon/util/src/other/other';
+import { deepGet, deepCopy, copy } from './other';
 
 describe('abc: utils', () => {
   describe('#deepGet', () => {

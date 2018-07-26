@@ -8,8 +8,8 @@ import {
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { AdG2BarModule } from '@delon/abc/charts/bar/bar.module';
-import { G2BarComponent } from '@delon/abc/charts/bar/bar.component';
+import { AdG2BarModule } from './bar.module';
+import { G2BarComponent } from './bar.component';
 
 xdescribe('abc: bar', () => {
   let fixture: ComponentFixture<TestComponent>;

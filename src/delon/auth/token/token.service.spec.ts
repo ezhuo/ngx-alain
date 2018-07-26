@@ -1,11 +1,11 @@
 import { Injector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { DelonAuthConfig } from '@delon/auth/auth.config';
-import { DA_STORE_TOKEN } from '@delon/auth/store/interface';
-import { LocalStorageStore } from '@delon/auth/store/local-storage.service';
-import { TokenService } from '@delon/auth/token/token.service';
-import { DA_SERVICE_TOKEN, ITokenModel, ITokenService } from '@delon/auth/token/interface';
-import { JWTTokenModel } from '@delon/auth/token/jwt/jwt.model';
+import { DelonAuthConfig } from '../auth.config';
+import { DA_STORE_TOKEN } from '../store/interface';
+import { LocalStorageStore } from '../store/local-storage.service';
+import { TokenService } from './token.service';
+import { DA_SERVICE_TOKEN, ITokenModel, ITokenService } from './interface';
+import { JWTTokenModel } from './jwt/jwt.model';
 
 describe('auth: token.service', () => {
   let injector: Injector;

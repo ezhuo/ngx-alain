@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { ControlWidget } from '@delon/form/src/widget';
-import { getData } from '@delon/form/src/utils';
+import { ControlWidget } from '../../widget';
+import { getData } from '../../utils';
 
 @Component({
   selector: 'sf-radio',

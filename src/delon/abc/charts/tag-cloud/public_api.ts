@@ -1,2 +1,2 @@
-export { G2TagCloudComponent } from '@delon/abc/charts/tag-cloud/tag-cloud.component';
-export { AdG2TagCloudModule } from '@delon/abc/charts/tag-cloud/tag-cloud.module';
+export { G2TagCloudComponent } from './tag-cloud.component';
+export { AdG2TagCloudModule } from './tag-cloud.module';

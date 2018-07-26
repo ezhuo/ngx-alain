@@ -25,12 +25,12 @@ import {
 
 import { MenuService, ALAIN_I18N_TOKEN } from '@delon/theme';
 
-import { AdReuseTabModule } from '@delon/abc/reuse-tab/reuse-tab.module';
-import { ReuseTabComponent } from '@delon/abc/reuse-tab/reuse-tab.component';
-import { ReuseTabMatchMode } from '@delon/abc/reuse-tab/interface';
-import { ReuseTabService } from '@delon/abc/reuse-tab/reuse-tab.service';
-import { ReuseTabStrategy } from '@delon/abc/reuse-tab/reuse-tab.strategy';
-import { AlainI18NServiceFake } from '@delon/theme/src/services/i18n/i18n';
+import { AdReuseTabModule } from './reuse-tab.module';
+import { ReuseTabComponent } from './reuse-tab.component';
+import { ReuseTabMatchMode } from './interface';
+import { ReuseTabService } from './reuse-tab.service';
+import { ReuseTabStrategy } from './reuse-tab.strategy';
+import { AlainI18NServiceFake } from '../../theme/src/services/i18n/i18n';
 
 let i18nResult = 'zh';
 class MockI18NServiceFake extends AlainI18NServiceFake {

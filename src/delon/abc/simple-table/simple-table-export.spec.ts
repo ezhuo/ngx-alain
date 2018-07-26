@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { Injector } from '@angular/core';
-import { XlsxService } from '@delon/abc/xlsx/xlsx.service';
-import { XlsxExportOptions } from '@delon/abc/xlsx/interface';
-import { SimpleTableExport } from '@delon/abc/simple-table/simple-table-export';
-import { STExportOptions, SimpleTableColumn } from '@delon/abc/simple-table/interface';
+import { XlsxService } from '../xlsx/xlsx.service';
+import { XlsxExportOptions } from '../xlsx/interface';
+import { SimpleTableExport } from './simple-table-export';
+import { STExportOptions, SimpleTableColumn } from './interface';
 
 class MockXlsxService {
   export(options: XlsxExportOptions) {

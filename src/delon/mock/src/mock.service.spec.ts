@@ -1,11 +1,11 @@
 import { Injector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import * as Mock from 'mockjs';
-import { MockService } from '@delon/mock/src/mock.service';
-import { MockStatusError } from '@delon/mock/src/status.error';
-import { DelonMockConfig } from '@delon/mock/mock.config';
-import { DelonMockModule } from '@delon/mock';
-import { MockRequest } from '@delon/mock/src/interface';
+import { MockService } from './mock.service';
+import { MockStatusError } from './status.error';
+import { DelonMockConfig } from '../mock.config';
+import { DelonMockModule } from '../index';
+import { MockRequest } from './interface';
 
 const DATA = {
   USERS: {

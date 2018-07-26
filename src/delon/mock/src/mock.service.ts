@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { DelonMockConfig } from '@delon/mock/mock.config';
-import { MockCachedRule, MockRule } from '@delon/mock/src/interface';
+import { DelonMockConfig } from '../mock.config';
+import { MockCachedRule, MockRule } from './interface';
 
 @Injectable()
 export class MockService implements OnDestroy {

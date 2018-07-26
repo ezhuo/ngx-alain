@@ -1,6 +1,6 @@
-import { SFRenderSchema, SFUISchemaItem } from '@delon/form/src/schema/ui';
-import { ERRORSDEFAULT } from '@delon/form/src/errors';
-import { SFButton } from '@delon/form/src/interface';
+import { SFRenderSchema, SFUISchemaItem } from './schema/ui';
+import { ERRORSDEFAULT } from './errors';
+import { SFButton } from './interface';
 
 export class DelonFormConfig {
   /**

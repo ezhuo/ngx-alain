@@ -2,10 +2,10 @@ import { Injectable, Injector } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpRequest } from '@angular/common/http';
 
-import { DelonAuthConfig } from '@delon/auth/auth.config';
-import { SimpleTokenModel } from '@delon/auth/token/simple/simple.model';
-import { BaseInterceptor } from '@delon/auth/token/base.interceptor';
-import { DA_SERVICE_TOKEN } from '@delon/auth/token/interface';
+import { DelonAuthConfig } from '../../auth.config';
+import { SimpleTokenModel } from './simple.model';
+import { BaseInterceptor } from '../base.interceptor';
+import { DA_SERVICE_TOKEN } from '../interface';
 
 @Injectable()
 export class SimpleInterceptor extends BaseInterceptor {

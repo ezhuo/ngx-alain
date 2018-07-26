@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { G2GaugeComponent } from '@delon/abc/charts/gauge/gauge.component';
+import { G2GaugeComponent } from './gauge.component';
 
 const COMPONENTS = [G2GaugeComponent];
 

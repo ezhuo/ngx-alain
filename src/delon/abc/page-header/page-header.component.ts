@@ -22,9 +22,9 @@ import {
   Menu,
   TitleService,
 } from '@delon/theme';
-import { ReuseTabService } from '@delon/abc/reuse-tab/reuse-tab.service';
+import { ReuseTabService } from '../reuse-tab/reuse-tab.service';
 
-import { AdPageHeaderConfig } from '@delon/abc/page-header/page-header.config';
+import { AdPageHeaderConfig } from './page-header.config';
 import { Subscription } from 'rxjs';
 
 @Component({

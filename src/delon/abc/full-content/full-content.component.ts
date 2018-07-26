@@ -19,7 +19,7 @@ import { DOCUMENT } from '@angular/common';
 import { toBoolean, toNumber } from '@delon/util';
 import { Subscription, fromEvent } from 'rxjs';
 import { debounceTime, filter } from 'rxjs/operators';
-import { FullContentService } from '@delon/abc/full-content/full-content.service';
+import { FullContentService } from './full-content.service';
 import { Router, ActivationStart, ActivationEnd } from '@angular/router';
 
 const cls = `ad-full-content-wrap`;

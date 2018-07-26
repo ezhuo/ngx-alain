@@ -11,12 +11,12 @@ import {
 } from '@angular/common/http';
 import { RouterTestingModule } from '@angular/router/testing';
 import * as Mock from 'mockjs';
-import { MockService } from '@delon/mock/src/mock.service';
-import { MockStatusError } from '@delon/mock/src/status.error';
-import { DelonMockConfig } from '@delon/mock/mock.config';
-import { MockInterceptor } from '@delon/mock/src/mock.interceptor';
-import { MockRequest } from '@delon/mock/src/interface';
-import { DelonMockModule } from '@delon/mock/mock.module';
+import { MockService } from './mock.service';
+import { MockStatusError } from './status.error';
+import { DelonMockConfig } from '../mock.config';
+import { MockInterceptor } from './mock.interceptor';
+import { MockRequest } from './interface';
+import { DelonMockModule } from '../mock.module';
 
 const DATA = {
   USERS: {

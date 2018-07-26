@@ -11,7 +11,7 @@ import {
   XlsxService,
   XlsxConfig,
   XlsxExportOptions,
-} from '@delon/abc/xlsx';
+} from './index';
 
 class MockLazyService {
   load() {

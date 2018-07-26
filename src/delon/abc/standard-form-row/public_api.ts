@@ -1,2 +1,2 @@
-export { StandardFormRowComponent } from '@delon/abc/standard-form-row/standard-form-row.component';
-export { AdStandardFormRowModule } from '@delon/abc/standard-form-row/standard-form-row.module';
+export { StandardFormRowComponent } from './standard-form-row.component';
+export { AdStandardFormRowModule } from './standard-form-row.module';

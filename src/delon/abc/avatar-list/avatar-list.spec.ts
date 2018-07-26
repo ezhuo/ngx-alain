@@ -1,6 +1,6 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { Component, DebugElement } from '@angular/core';
-import { AdAvatarListModule } from '@delon/abc/avatar-list/avatar-list.module';
+import { AdAvatarListModule } from './avatar-list.module';
 import { By } from '@angular/platform-browser';
 
 describe('abc: avatar-list', () => {

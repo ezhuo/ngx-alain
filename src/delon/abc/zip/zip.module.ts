@@ -2,8 +2,8 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DelonUtilModule } from '@delon/util';
 
-import { ZipService } from '@delon/abc/zip/zip.service';
-import { ZipConfig, DA_ZIP_CONFIG } from '@delon/abc/zip/interface';
+import { ZipService } from './zip.service';
+import { ZipConfig, DA_ZIP_CONFIG } from './interface';
 
 @NgModule({
   imports: [CommonModule, DelonUtilModule],

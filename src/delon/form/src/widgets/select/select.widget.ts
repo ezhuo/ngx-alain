@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ControlWidget } from '@delon/form/src/widget';
-import { SFSchemaEnum } from '@delon/form/src/schema';
-import { getData, toBool } from '@delon/form/src/utils';
+import { ControlWidget } from '../../widget';
+import { SFSchemaEnum } from '../../schema';
+import { getData, toBool } from '../../utils';
 
 @Component({
   selector: 'sf-select',

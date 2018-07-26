@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ControlWidget } from '@delon/form/src/widget';
+import { ControlWidget } from '../../widget';
 
 @Component({
   selector: 'sf-string',

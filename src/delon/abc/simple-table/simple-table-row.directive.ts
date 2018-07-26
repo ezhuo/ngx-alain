@@ -1,5 +1,5 @@
 import { Directive, Input, TemplateRef, OnInit } from '@angular/core';
-import { SimpleTableComponent } from '@delon/abc/simple-table/simple-table.component';
+import { SimpleTableComponent } from './simple-table.component';
 
 @Directive({
   selector: '[st-row]',

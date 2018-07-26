@@ -9,7 +9,7 @@ import {
   SimpleChange,
 } from '@angular/core';
 import { deepCopy } from '@delon/util';
-import { AdImageConfig } from '@delon/abc/image/image.config';
+import { AdImageConfig } from './image.config';
 
 /**
  * img标签

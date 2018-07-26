@@ -1,1 +1,1 @@
-export * from '@delon/abc/page-header/public_api';
+export * from './public_api';

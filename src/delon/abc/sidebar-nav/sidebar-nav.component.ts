@@ -18,7 +18,7 @@ import { Subscription } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { MenuService, SettingsService, Menu } from '@delon/theme';
 
-import { Nav } from '@delon/abc/sidebar-nav/interface';
+import { Nav } from './interface';
 
 const SHOWCLS = 'ad-nav__floating-show';
 const FLOATINGCLS = 'ad-nav__floating';

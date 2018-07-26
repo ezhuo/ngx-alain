@@ -22,9 +22,9 @@ import {
 import { APP_BASE_HREF } from '@angular/common';
 import { of, BehaviorSubject } from 'rxjs';
 
-import { AdFullContentModule } from '@delon/abc/full-content/full-content.module';
-import { FullContentComponent } from '@delon/abc/full-content/full-content.component';
-import { FullContentService } from '@delon/abc/full-content/full-content.service';
+import { AdFullContentModule } from './full-content.module';
+import { FullContentComponent } from './full-content.component';
+import { FullContentService } from './full-content.service';
 
 describe('abc: full-content', () => {
   let injector: Injector;

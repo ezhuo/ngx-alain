@@ -1,4 +1,4 @@
-import { NumberToChineseOptions } from '@delon/abc/number-to-chinese/interface';
+import { NumberToChineseOptions } from './interface';
 
 export function numberToChinese(
   value: number | string,

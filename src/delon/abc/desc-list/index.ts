@@ -1,1 +1,1 @@
-export * from '@delon/abc/desc-list/public_api';
+export * from './public_api';

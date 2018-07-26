@@ -6,11 +6,11 @@ import { ACLService } from '@delon/acl';
 import {
   ALAIN_I18N_TOKEN,
   AlainI18NServiceFake,
-} from '@delon/theme/src/services/i18n/i18n';
+} from '../i18n/i18n';
 import { deepCopy } from '@delon/util';
 
-import { Menu } from '@delon/theme/src/services/menu/interface';
-import { MenuService } from '@delon/theme/src/services/menu/menu.service';
+import { Menu } from './interface';
+import { MenuService } from './menu.service';
 
 class MockACLService {
   can(val: string) {

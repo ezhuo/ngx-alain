@@ -1,8 +1,8 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { deepGet } from '@delon/util';
 import { UploadFile, UploadChangeParam, NzModalService } from 'ng-zorro-antd';
-import { ControlWidget } from '@delon/form/src/widget';
-import { getData, toBool } from '@delon/form/src/utils';
+import { ControlWidget } from '../../widget';
+import { getData, toBool } from '../../utils';
 
 @Component({
   selector: 'sf-upload',

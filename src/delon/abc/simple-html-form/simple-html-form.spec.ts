@@ -7,9 +7,9 @@ import {
 } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { AdSHFModule } from '@delon/abc/simple-html-form/module';
+import { AdSHFModule } from './module';
 import { FormsModule } from '@angular/forms';
-import { SHFItemComponent } from '@delon/abc/simple-html-form/item.component';
+import { SHFItemComponent } from './item.component';
 
 describe('abc: standard-form-row', () => {
   let fixture: ComponentFixture<TestComponent>;

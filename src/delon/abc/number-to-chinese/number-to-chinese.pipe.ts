@@ -1,5 +1,5 @@
 import { PipeTransform, Pipe } from '@angular/core';
-import { numberToChinese } from '@delon/abc/number-to-chinese/number-to-chinese';
+import { numberToChinese } from './number-to-chinese';
 
 @Pipe({ name: 'n2c' })
 export class NumberToChinesePipe implements PipeTransform {

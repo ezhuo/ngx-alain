@@ -1,1 +1,1 @@
-export * from '@delon/abc/sidebar-nav/public_api';
+export * from './public_api';

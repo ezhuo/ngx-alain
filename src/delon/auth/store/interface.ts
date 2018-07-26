@@ -1,5 +1,5 @@
 import { InjectionToken } from '@angular/core';
-import { ITokenModel } from '@delon/auth/token/interface';
+import { ITokenModel } from '../token/interface';
 
 export const DA_STORE_TOKEN = new InjectionToken<IStore>('AUTH_STORE_TOKEN');
 

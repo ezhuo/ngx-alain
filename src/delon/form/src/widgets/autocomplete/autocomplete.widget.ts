@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { startWith, map, flatMap, debounceTime } from 'rxjs/operators';
-import { ControlWidget } from '@delon/form/src/widget';
-import { SFSchemaEnum } from '@delon/form/src/schema';
-import { getCopyEnum, getEnum, toBool } from '@delon/form/src/utils';
+import { ControlWidget } from '../../widget';
+import { SFSchemaEnum } from '../../schema';
+import { getCopyEnum, getEnum, toBool } from '../../utils';
 
 export const EMAILSUFFIX = [
   'qq.com',

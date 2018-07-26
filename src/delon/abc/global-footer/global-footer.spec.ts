@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { APP_BASE_HREF } from '@angular/common';
 
-import { AdGlobalFooterModule } from '@delon/abc/global-footer/global-footer.module';
+import { AdGlobalFooterModule } from './global-footer.module';
 
 describe('abc: global-footer', () => {
   let fixture: ComponentFixture<TestComponent>;

@@ -9,9 +9,9 @@ import {
   TestFormComponent,
   SFPage,
   SCHEMA,
-} from '@delon/form/spec/base.spec';
-import { SFSchema, SFSchemaEnum } from '@delon/form/src/schema';
-import { SFUISchemaItem, SFUISchema } from '@delon/form/src/schema/ui';
+} from '../../../spec/base.spec';
+import { SFSchema, SFSchemaEnum } from '../../../src/schema/index';
+import { SFUISchemaItem, SFUISchema } from '../../../src/schema/ui';
 
 describe('form: widget: number', () => {
   let fixture: ComponentFixture<TestFormComponent>;

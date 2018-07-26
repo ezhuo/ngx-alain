@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
-import { ControlWidget } from '@delon/form/src/widget';
-import { getData, getEnum } from '@delon/form/src/utils';
-import { SFSchemaEnum, SFSchemaEnumType } from '@delon/form/src/schema';
-import { FormProperty, PropertyGroup } from '@delon/form/src/model/form.property';
+import { ControlWidget } from '../../widget';
+import { getData, getEnum } from '../../utils';
+import { SFSchemaEnum, SFSchemaEnumType } from '../../schema';
+import { FormProperty, PropertyGroup } from '../../model/form.property';
 import { NzMentionComponent } from 'ng-zorro-antd';
 
 @Component({

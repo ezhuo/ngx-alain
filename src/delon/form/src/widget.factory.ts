@@ -4,7 +4,7 @@ import {
   ViewContainerRef,
   ComponentRef,
 } from '@angular/core';
-import { Widget } from '@delon/form/src/widget';
+import { Widget } from './widget';
 
 export class WidgetRegistry {
   private widgets: { [type: string]: any } = {};

@@ -10,7 +10,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import * as fs from 'file-saver';
 import { _HttpClient } from '@delon/theme';
 
-import { AdDownFileModule } from '@delon/abc/down-file/down-file.module';
+import { AdDownFileModule } from './down-file.module';
 
 function genFile(ext: string, isRealFile = true): Blob {
   const blob = new Blob([

@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { G2MiniAreaComponent } from '@delon/abc/charts/mini-area/mini-area.component';
+import { G2MiniAreaComponent } from './mini-area.component';
 
 const COMPONENTS = [G2MiniAreaComponent];
 

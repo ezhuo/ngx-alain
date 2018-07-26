@@ -2,8 +2,8 @@ import { Component, DebugElement, TemplateRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { AdTrendModule } from '@delon/abc/trend/trend.module';
-import { TrendComponent } from '@delon/abc/trend/trend.component';
+import { AdTrendModule } from './trend.module';
+import { TrendComponent } from './trend.component';
 
 describe('abc: trend', () => {
   let fixture: ComponentFixture<TestComponent>;

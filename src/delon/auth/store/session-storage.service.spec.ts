@@ -1,5 +1,5 @@
-import { SessionStorageStore } from '@delon/auth/store/session-storage.service';
-import { ITokenModel } from '@delon/auth/token/interface';
+import { SessionStorageStore } from './session-storage.service';
+import { ITokenModel } from '../token/interface';
 
 describe('auth: session-storage', () => {
   const store = new SessionStorageStore();

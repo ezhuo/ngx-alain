@@ -1,4 +1,4 @@
-import { ICacheStore, ICache } from '@delon/cache/src/interface';
+import { ICacheStore, ICache } from './interface';
 
 export class LocalStorageCacheService implements ICacheStore {
   get(key: string): ICache {

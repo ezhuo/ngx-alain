@@ -2,7 +2,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CountdownModule } from 'ngx-countdown';
 
-import { CountDownComponent } from '@delon/abc/count-down/count-down.component';
+import { CountDownComponent } from './count-down.component';
 
 const COMPONENTS = [CountDownComponent];
 

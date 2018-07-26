@@ -8,8 +8,8 @@ import {
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { AdQuickMenuModule } from '@delon/abc/quick-menu/quick-menu.module';
-import { QuickMenuComponent } from '@delon/abc/quick-menu/quick-menu.component';
+import { AdQuickMenuModule } from './quick-menu.module';
+import { QuickMenuComponent } from './quick-menu.component';
 
 describe('abc: quick-menu', () => {
   let injector: Injector;

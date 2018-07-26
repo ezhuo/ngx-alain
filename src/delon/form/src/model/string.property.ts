@@ -1,4 +1,4 @@
-import { AtomicProperty } from '@delon/form/src/model/atomic.property';
+import { AtomicProperty } from './atomic.property';
 
 export class StringProperty extends AtomicProperty {
   fallbackValue() {

@@ -2,7 +2,7 @@ import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { saveAs } from 'file-saver';
 import { LazyService, LazyResult } from '@delon/util';
-import { ZipConfig, DA_ZIP_CONFIG, ZipSaveOptions } from '@delon/abc/zip/interface';
+import { ZipConfig, DA_ZIP_CONFIG, ZipSaveOptions } from './interface';
 
 declare var JSZip: any;
 

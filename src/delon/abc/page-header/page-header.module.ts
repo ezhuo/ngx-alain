@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { DelonUtilModule } from '@delon/util';
 
-import { PageHeaderComponent } from '@delon/abc/page-header/page-header.component';
-import { AdPageHeaderConfig } from '@delon/abc/page-header/page-header.config';
+import { PageHeaderComponent } from './page-header.component';
+import { AdPageHeaderConfig } from './page-header.config';
 
 const COMPONENTS = [PageHeaderComponent];
 

@@ -12,9 +12,9 @@ import { APP_BASE_HREF, DOCUMENT } from '@angular/common';
 import { AlainThemeModule, MenuService, SettingsService } from '@delon/theme';
 import { deepCopy } from '@delon/util';
 
-import { AdSidebarNavModule } from '@delon/abc/sidebar-nav/sidebar-nav.module';
-import { SidebarNavComponent } from '@delon/abc/sidebar-nav/sidebar-nav.component';
-import { Nav } from '@delon/abc/sidebar-nav/interface';
+import { AdSidebarNavModule } from './sidebar-nav.module';
+import { SidebarNavComponent } from './sidebar-nav.component';
+import { Nav } from './interface';
 import { RouterTestingModule } from '@angular/router/testing';
 
 const floatingShowCls = '.ad-nav__floating-show';

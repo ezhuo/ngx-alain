@@ -1,1 +1,1 @@
-export * from '@delon/abc/reuse-tab/public_api';
+export * from './public_api';

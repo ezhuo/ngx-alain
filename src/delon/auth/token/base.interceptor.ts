@@ -16,9 +16,9 @@ import { Observable, Observer } from 'rxjs';
 
 import { _HttpClient } from '@delon/theme';
 
-import { ITokenModel } from '@delon/auth/token/interface';
-import { DelonAuthConfig } from '@delon/auth/auth.config';
-import { WINDOW } from '@delon/auth/win_tokens';
+import { ITokenModel } from './interface';
+import { DelonAuthConfig } from '../auth.config';
+import { WINDOW } from '../win_tokens';
 
 export abstract class BaseInterceptor implements HttpInterceptor {
   constructor(@Optional() protected injector: Injector) {}

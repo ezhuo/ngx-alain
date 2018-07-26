@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DelonUtilModule } from '@delon/util';
 
-import { SimpleTableComponent } from '@delon/abc/simple-table/simple-table.component';
-import { SimpleTableRowDirective } from '@delon/abc/simple-table/simple-table-row.directive';
-import { AdSimpleTableConfig } from '@delon/abc/simple-table/simple-table.config';
+import { SimpleTableComponent } from './simple-table.component';
+import { SimpleTableRowDirective } from './simple-table-row.directive';
+import { AdSimpleTableConfig } from './simple-table.config';
 
 const COMPONENTS = [SimpleTableComponent, SimpleTableRowDirective];
 

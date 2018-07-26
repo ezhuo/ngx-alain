@@ -1,1 +1,1 @@
-export * from '@delon/abc/simple-table/public_api';
+export * from './public_api';

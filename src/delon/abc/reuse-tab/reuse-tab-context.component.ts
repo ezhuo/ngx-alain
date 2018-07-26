@@ -7,8 +7,8 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 
-import { ReuseContextI18n, ReuseContextCloseEvent } from '@delon/abc/reuse-tab/interface';
-import { ReuseTabContextService } from '@delon/abc/reuse-tab/reuse-tab-context.service';
+import { ReuseContextI18n, ReuseContextCloseEvent } from './interface';
+import { ReuseTabContextService } from './reuse-tab-context.service';
 
 @Component({
   selector: 'reuse-tab-context',

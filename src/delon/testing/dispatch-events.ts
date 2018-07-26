@@ -11,7 +11,7 @@ import {
   createKeyboardEvent,
   createMouseEvent,
   createTouchEvent
-} from '@delon/testing/event-objects';
+} from './event-objects';
 
 /** Utility to dispatch any event on a Node. */
 export function dispatchEvent(node: Node | Window, event: Event): Event {

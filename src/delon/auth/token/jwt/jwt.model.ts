@@ -1,5 +1,5 @@
-import { ITokenModel } from '@delon/auth/token/interface';
-import { urlBase64Decode } from '@delon/auth/token/jwt/jwt.helper';
+import { ITokenModel } from '../interface';
+import { urlBase64Decode } from './jwt.helper';
 
 export class JWTTokenModel implements ITokenModel {
   [key: string]: any;

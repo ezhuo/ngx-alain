@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { NzTreeNode } from 'ng-zorro-antd';
-import { ArrayService } from '@delon/util/src/array/array.service';
-import { deepCopy } from '@delon/util/src/other/other';
-import { DelonUtilModule } from '@delon/util/util.module';
-import { DelonUtilConfig } from '@delon/util/src/util.config';
+import { ArrayService } from './array.service';
+import { deepCopy } from '../other/other';
+import { DelonUtilModule } from '../../util.module';
+import { DelonUtilConfig } from '../util.config';
 
 const MOCK_ARR: any[] = [
   { id: 1, pid: 0, name: 'name1', other: 'value1', halfChecked: true },

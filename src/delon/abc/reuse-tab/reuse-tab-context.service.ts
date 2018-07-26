@@ -11,8 +11,8 @@ import {
   ReuseContextEvent,
   ReuseContextI18n,
   ReuseContextCloseEvent,
-} from '@delon/abc/reuse-tab/interface';
-import { ReuseTabContextMenuComponent } from '@delon/abc/reuse-tab/reuse-tab-context-menu.component';
+} from './interface';
+import { ReuseTabContextMenuComponent } from './reuse-tab-context-menu.component';
 
 @Injectable()
 export class ReuseTabContextService {

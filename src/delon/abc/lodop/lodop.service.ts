@@ -3,8 +3,8 @@ import { Observable, of, Subject, Observer } from 'rxjs';
 
 import { LazyService } from '@delon/util';
 
-import { Lodop, LodopResult, LodopPrintResult } from '@delon/abc/lodop/interface';
-import { AdLodopConfig } from '@delon/abc/lodop/lodop.config';
+import { Lodop, LodopResult, LodopPrintResult } from './interface';
+import { AdLodopConfig } from './lodop.config';
 
 // TODO: zone
 @Injectable()

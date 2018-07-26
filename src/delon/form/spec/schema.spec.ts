@@ -1,10 +1,10 @@
 import { DebugElement } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 import { deepCopy } from '@delon/util';
-import { builder, TestFormComponent, SFPage, SCHEMA } from '@delon/form/spec/base.spec';
-import { SFSchema } from '@delon/form/src/schema';
-import { SFUISchemaItem, SFUISchema } from '@delon/form/src/schema/ui';
-import { ObjectProperty } from '@delon/form/src/model/object.property';
+import { builder, TestFormComponent, SFPage, SCHEMA } from './base.spec';
+import { SFSchema } from '../src/schema/index';
+import { SFUISchemaItem, SFUISchema } from '../src/schema/ui';
+import { ObjectProperty } from '../src/model/object.property';
 
 describe('form: schema', () => {
   let fixture: ComponentFixture<TestFormComponent>;

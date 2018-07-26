@@ -2,8 +2,8 @@ import { Injector, Component, NgModule } from '@angular/core';
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { NzModalService, NzModalRef, NgZorroAntdModule } from 'ng-zorro-antd';
-import { ModalHelper } from '@delon/theme/src/services/modal/modal.helper';
-import { AlainThemeModule } from '@delon/theme/src/theme.module';
+import { ModalHelper } from './modal.helper';
+import { AlainThemeModule } from '../../theme.module';
 
 describe('theme: ModalHelper', () => {
   let injector: Injector;

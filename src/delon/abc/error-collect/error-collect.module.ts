@@ -1,8 +1,8 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ErrorCollectComponent } from '@delon/abc/error-collect/error-collect.component';
-import { AdErrorCollectConfig } from '@delon/abc/error-collect/error-collect.config';
+import { ErrorCollectComponent } from './error-collect.component';
+import { AdErrorCollectConfig } from './error-collect.config';
 
 const COMPONENTS = [ErrorCollectComponent];
 

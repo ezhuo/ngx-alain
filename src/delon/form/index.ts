@@ -1,1 +1,1 @@
-export * from '@delon/form/public_api';
+export * from './public_api';

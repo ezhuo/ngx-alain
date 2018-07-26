@@ -1,3 +1,3 @@
-export { ZipService } from '@delon/abc/zip/zip.service';
-export { AdZipModule } from '@delon/abc/zip/zip.module';
-export * from '@delon/abc/zip/interface';
+export { ZipService } from './zip.service';
+export { AdZipModule } from './zip.module';
+export * from './interface';

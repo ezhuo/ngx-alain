@@ -1,4 +1,4 @@
-import { AdQRConfig } from '@delon/abc/qr/qr.config';
+import { AdQRConfig } from './qr.config';
 import { Injectable } from '@angular/core';
 
 declare var QRious: any;

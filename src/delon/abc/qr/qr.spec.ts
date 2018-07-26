@@ -8,9 +8,9 @@ import {
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { AdQRModule } from '@delon/abc/qr/qr.module';
-import { QRComponent } from '@delon/abc/qr/qr.component';
-import { QRService } from '@delon/abc/qr/qr.service';
+import { AdQRModule } from './qr.module';
+import { QRComponent } from './qr.component';
+import { QRService } from './qr.service';
 
 describe('abc: qr', () => {
   let injector: Injector;

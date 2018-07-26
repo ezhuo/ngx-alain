@@ -7,7 +7,7 @@ import {
   ReuseTabMatchMode,
   ReuseTabNotify,
   ReuseTitle,
-} from '@delon/abc/reuse-tab/interface';
+} from './interface';
 
 /**
  * 路由复用类，提供复用所需要一些基本接口

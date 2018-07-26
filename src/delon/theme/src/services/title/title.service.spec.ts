@@ -3,12 +3,12 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Title, DOCUMENT } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 
-import { MenuService } from '@delon/theme/src/services/menu/menu.service';
-import { Menu } from '@delon/theme/src/services/menu/interface';
-import { AlainI18NService, AlainI18NServiceFake } from '@delon/theme/src/services/i18n/i18n';
-import { TitleService } from '@delon/theme/src/services/title/title.service';
-import { AlainThemeModule } from '@delon/theme/src/theme.module';
-import { ALAIN_I18N_TOKEN } from '@delon/theme/src/services/i18n/i18n';
+import { MenuService } from '../menu/menu.service';
+import { Menu } from '../menu/interface';
+import { AlainI18NService, AlainI18NServiceFake } from '../i18n/i18n';
+import { TitleService } from './title.service';
+import { AlainThemeModule } from '../../theme.module';
+import { ALAIN_I18N_TOKEN } from '../i18n/i18n';
 
 describe('Service: Title', () => {
   let getPathByUrlData: any;

@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { G2BarComponent } from '@delon/abc/charts/bar/bar.component';
+import { G2BarComponent } from './bar.component';
 
 const COMPONENTS = [G2BarComponent];
 

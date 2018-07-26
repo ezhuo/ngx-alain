@@ -1,9 +1,9 @@
 import { Injectable, Inject } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { share } from 'rxjs/operators';
-import { ITokenService, ITokenModel } from '@delon/auth/token/interface';
-import { DA_STORE_TOKEN, IStore } from '@delon/auth/store/interface';
-import { DelonAuthConfig } from '@delon/auth/auth.config';
+import { ITokenService, ITokenModel } from './interface';
+import { DA_STORE_TOKEN, IStore } from '../store/interface';
+import { DelonAuthConfig } from '../auth.config';
 
 @Injectable()
 export class TokenService implements ITokenService {

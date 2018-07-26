@@ -1,4 +1,4 @@
-import { SFUISchemaItem } from '@delon/form/src/schema/ui';
+import { SFUISchemaItem } from './ui';
 
 export interface SFSchemaDefinition {
   [key: string]: SFSchema;

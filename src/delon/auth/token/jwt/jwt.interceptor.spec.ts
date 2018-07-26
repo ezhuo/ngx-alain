@@ -10,11 +10,11 @@ import {
 import { of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 
-import { DelonAuthModule } from '@delon/auth/auth.module';
-import { DelonAuthConfig } from '@delon/auth/auth.config';
-import { DA_SERVICE_TOKEN } from '@delon/auth/token/interface';
-import { JWTInterceptor } from '@delon/auth/token/jwt/jwt.interceptor';
-import { JWTTokenModel } from '@delon/auth/token/jwt/jwt.model';
+import { DelonAuthModule } from '../../auth.module';
+import { DelonAuthConfig } from '../../auth.config';
+import { DA_SERVICE_TOKEN } from '../interface';
+import { JWTInterceptor } from './jwt.interceptor';
+import { JWTTokenModel } from './jwt.model';
 
 function genModel(
   token: string = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwibmFtZSI6ImNpcGNoayIsImFkbWluIjp0cnVlLCJleHAiOjQ2NzA0MDk2MDB9.IINuMTwqwCQP63fSQ-ZPgOEaE8lilrUceUX9Wy47PBk`,

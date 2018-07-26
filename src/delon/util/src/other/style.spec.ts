@@ -1,4 +1,4 @@
-import { updateHostClass } from '@delon/util/src/other/style';
+import { updateHostClass } from './style';
 
 describe('util: style', () => {
   let page: PageObject;

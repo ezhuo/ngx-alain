@@ -1,1 +1,1 @@
-export * from '@delon/form/src/form';
+export * from './src/form';

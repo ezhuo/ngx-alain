@@ -1,4 +1,4 @@
-import { yuan, format } from '@delon/util/src/string/string';
+import { yuan, format } from './string';
 
 describe('util: string', () => {
   describe('#format', () => {

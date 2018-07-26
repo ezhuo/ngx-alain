@@ -1,5 +1,5 @@
-import { IStore } from '@delon/auth/store/interface';
-import { ITokenModel } from '@delon/auth/token/interface';
+import { IStore } from './interface';
+import { ITokenModel } from '../token/interface';
 
 export class SessionStorageStore implements IStore {
   get(key: string): ITokenModel {

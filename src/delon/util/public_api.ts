@@ -1,18 +1,18 @@
-export * from '@delon/util/src/string/string';
+export * from './src/string/string';
 
-export * from '@delon/util/src/time/time';
+export * from './src/time/time';
 
-export * from '@delon/util/src/lazy/lazy.service';
+export * from './src/lazy/lazy.service';
 
-export * from '@delon/util/src/validate/validate';
-export { _Validators } from '@delon/util/src/validate/validators';
+export * from './src/validate/validate';
+export { _Validators } from './src/validate/validators';
 
-export * from '@delon/util/src/other/check';
-export * from '@delon/util/src/other/other';
-export * from '@delon/util/src/other/style';
+export * from './src/other/check';
+export * from './src/other/other';
+export * from './src/other/style';
 
-export * from '@delon/util/src/array/array.config';
-export * from '@delon/util/src/array/array.service';
+export * from './src/array/array.config';
+export * from './src/array/array.service';
 
-export * from '@delon/util/src/util.config';
-export * from '@delon/util/util.module';
+export * from './src/util.config';
+export * from './util.module';

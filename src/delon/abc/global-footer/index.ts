@@ -1,1 +1,1 @@
-export * from '@delon/abc/global-footer/public_api';
+export * from './public_api';

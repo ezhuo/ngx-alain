@@ -1,1 +1,1 @@
-export * from '@delon/abc/qr/public_api';
+export * from './public_api';

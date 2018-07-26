@@ -1,2 +1,2 @@
-export { NumberInfoComponent } from '@delon/abc/number-info/number-info.component';
-export { AdNumberInfoModule } from '@delon/abc/number-info/number-info.module';
+export { NumberInfoComponent } from './number-info.component';
+export { AdNumberInfoModule } from './number-info.module';

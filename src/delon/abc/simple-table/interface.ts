@@ -1,4 +1,4 @@
-import { SimpleTableComponent } from '@delon/abc/simple-table/simple-table.component';
+import { SimpleTableComponent } from './simple-table.component';
 import { ModalHelperOptions } from '@delon/theme';
 
 export type CompareFn = ((a: any, b: any) => number);

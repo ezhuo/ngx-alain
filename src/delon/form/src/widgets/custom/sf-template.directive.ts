@@ -1,5 +1,5 @@
 import { Directive, Input, TemplateRef, OnInit } from '@angular/core';
-import { SFComponent } from '@delon/form/src/sf.component';
+import { SFComponent } from '../../sf.component';
 
 @Directive({
   selector: '[sf-template]',

@@ -10,8 +10,8 @@ import { Title } from '@angular/platform-browser';
 import { DOCUMENT } from '@angular/common';
 import { Subscription } from 'rxjs';
 
-import { MenuService } from '@delon/theme/src/services/menu/menu.service';
-import { ALAIN_I18N_TOKEN, AlainI18NService } from '@delon/theme/src/services/i18n/i18n';
+import { MenuService } from '../menu/menu.service';
+import { ALAIN_I18N_TOKEN, AlainI18NService } from '../i18n/i18n';
 
 /**
  * 设置标题

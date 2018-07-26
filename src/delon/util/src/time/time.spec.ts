@@ -1,4 +1,4 @@
-import { getTimeDistance } from '@delon/util/src/time/time';
+import { getTimeDistance } from './time';
 import * as format from 'date-fns/format';
 
 describe('util: time', () => {

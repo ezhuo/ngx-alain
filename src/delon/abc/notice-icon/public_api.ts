@@ -1,3 +1,3 @@
-export { NoticeIconComponent } from '@delon/abc/notice-icon/notice-icon.component';
-export * from '@delon/abc/notice-icon/interface';
-export { AdNoticeIconModule } from '@delon/abc/notice-icon/notice-icon.module';
+export { NoticeIconComponent } from './notice-icon.component';
+export * from './interface';
+export { AdNoticeIconModule } from './notice-icon.module';

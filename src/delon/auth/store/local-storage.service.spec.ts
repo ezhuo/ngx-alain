@@ -1,5 +1,5 @@
-import { LocalStorageStore } from '@delon/auth/store/local-storage.service';
-import { ITokenModel } from '@delon/auth/token/interface';
+import { LocalStorageStore } from './local-storage.service';
+import { ITokenModel } from '../token/interface';
 
 describe('auth: local-storage', () => {
   const store = new LocalStorageStore();

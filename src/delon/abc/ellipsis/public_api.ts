@@ -1,2 +1,2 @@
-export { EllipsisComponent } from '@delon/abc/ellipsis/ellipsis.component';
-export { AdEllipsisModule } from '@delon/abc/ellipsis/ellipsis.module';
+export { EllipsisComponent } from './ellipsis.component';
+export { AdEllipsisModule } from './ellipsis.module';

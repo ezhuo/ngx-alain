@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 
-import { ExceptionComponent } from '@delon/abc/exception/exception.component';
+import { ExceptionComponent } from './exception.component';
 
 const COMPONENTS = [ExceptionComponent];
 

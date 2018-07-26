@@ -10,15 +10,15 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Router, DefaultUrlSerializer } from '@angular/router';
 import { DOCUMENT } from '@angular/platform-browser';
 
-import { DelonAuthConfig } from '@delon/auth/auth.config';
-import { SimpleTokenModel } from '@delon/auth/token/simple/simple.model';
+import { DelonAuthConfig } from '../auth.config';
+import { SimpleTokenModel } from '../token/simple/simple.model';
 import {
   DA_SERVICE_TOKEN,
   ITokenService,
   ITokenModel,
-} from '@delon/auth/token/interface';
-import { SocialService } from '@delon/auth/social/social.service';
-import { DelonAuthModule } from '@delon/auth/auth.module';
+} from '../token/interface';
+import { SocialService } from './social.service';
+import { DelonAuthModule } from '../auth.module';
 
 const mockRouter = {
   url: '',

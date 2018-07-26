@@ -1,7 +1,7 @@
 import { TestBed, async, inject } from '@angular/core/testing';
 
-import { SettingsService } from '@delon/theme/src/services/settings/settings.service';
-import { App, User } from '@delon/theme/src/services/settings/interface';
+import { SettingsService } from '../settings/settings.service';
+import { App, User } from './interface';
 
 describe('Service: Settings', () => {
   let srv: SettingsService;

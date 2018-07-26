@@ -1,2 +1,2 @@
-export { TrendComponent } from '@delon/abc/trend/trend.component';
-export { AdTrendModule } from '@delon/abc/trend/trend.module';
+export { TrendComponent } from './trend.component';
+export { AdTrendModule } from './trend.module';

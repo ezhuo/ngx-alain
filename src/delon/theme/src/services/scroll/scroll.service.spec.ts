@@ -1,8 +1,8 @@
 import { ReflectiveInjector } from '@angular/core';
 import { DOCUMENT } from '@angular/platform-browser';
 
-import { ScrollService } from '@delon/theme/src/services/scroll/scroll.service';
-import { WINDOW } from '@delon/theme/src/win_tokens';
+import { ScrollService } from './scroll.service';
+import { WINDOW } from '../../win_tokens';
 
 describe('Service: Scroll', () => {
   const topOfPageElem = {} as Element;

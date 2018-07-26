@@ -1,1 +1,1 @@
-export * from '@delon/abc/image/public_api';
+export * from './public_api';

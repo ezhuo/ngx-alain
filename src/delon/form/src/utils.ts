@@ -1,8 +1,8 @@
 import { Observable, of } from 'rxjs';
 import { map, takeWhile } from 'rxjs/operators';
 import { deepCopy } from '@delon/util';
-import { SFUISchema, SFUISchemaItem, SFUISchemaItemRun } from '@delon/form/src/schema/ui';
-import { SFSchema, SFSchemaDefinition, SFSchemaEnum } from '@delon/form/src/schema';
+import { SFUISchema, SFUISchemaItem, SFUISchemaItemRun } from './schema/ui';
+import { SFSchema, SFSchemaDefinition, SFSchemaEnum } from './schema';
 
 export const FORMATMAPS = {
   'date-time': {

@@ -1,10 +1,10 @@
-import { PropertyGroup } from '@delon/form/src/model/form.property';
-import { FormPropertyFactory } from '@delon/form/src/model/form.property.factory';
-import { SchemaValidatorFactory } from '@delon/form/src/validator.factory';
-import { DelonFormConfig } from '@delon/form/src/config';
-import { ErrorData } from '@delon/form/src/errors';
-import { SFUISchema, SFUISchemaItem } from '@delon/form/src/schema/ui';
-import { orderProperties } from '@delon/form/src/utils';
+import { PropertyGroup } from './form.property';
+import { FormPropertyFactory } from './form.property.factory';
+import { SchemaValidatorFactory } from '../validator.factory';
+import { DelonFormConfig } from '../config';
+import { ErrorData } from '../errors';
+import { SFUISchema, SFUISchemaItem } from '../schema/ui';
+import { orderProperties } from '../utils';
 
 export class ObjectProperty extends PropertyGroup {
   private _propertiesId: string[] = [];

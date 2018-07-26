@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { FormProperty, PropertyGroup } from '@delon/form/src/model/form.property';
+import { FormProperty, PropertyGroup } from './model/form.property';
 
 export const ERRORSDEFAULT = {
   'false schema':         `布尔模式出错`,

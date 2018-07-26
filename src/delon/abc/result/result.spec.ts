@@ -2,8 +2,8 @@ import { Component, DebugElement, TemplateRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { AdResultModule } from '@delon/abc/result/result.module';
-import { ResultComponent } from '@delon/abc/result/result.component';
+import { AdResultModule } from './result.module';
+import { ResultComponent } from './result.component';
 
 describe('abc: result', () => {
     let fixture: ComponentFixture<TestComponent>;

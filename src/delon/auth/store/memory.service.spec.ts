@@ -1,5 +1,5 @@
-import { MemoryStore } from '@delon/auth/store/memory.service';
-import { ITokenModel } from '@delon/auth/token/interface';
+import { MemoryStore } from './memory.service';
+import { ITokenModel } from '../token/interface';
 
 describe('auth: memory', () => {
   const store = new MemoryStore();

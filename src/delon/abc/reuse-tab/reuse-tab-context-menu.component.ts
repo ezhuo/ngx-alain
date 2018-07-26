@@ -11,7 +11,7 @@ import {
   ReuseContextCloseEvent,
   ReuseItem,
   CloseType,
-} from '@delon/abc/reuse-tab/interface';
+} from './interface';
 
 @Component({
   selector: 'reuse-tab-context-menu',

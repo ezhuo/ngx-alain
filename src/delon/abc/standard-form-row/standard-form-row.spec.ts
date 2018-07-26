@@ -2,8 +2,8 @@ import { Component, DebugElement, TemplateRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { AdStandardFormRowModule } from '@delon/abc/standard-form-row/standard-form-row.module';
-import { StandardFormRowComponent } from '@delon/abc/standard-form-row/standard-form-row.component';
+import { AdStandardFormRowModule } from './standard-form-row.module';
+import { StandardFormRowComponent } from './standard-form-row.component';
 
 describe('abc: standard-form-row', () => {
   let fixture: ComponentFixture<TestComponent>;

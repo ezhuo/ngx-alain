@@ -1,4 +1,4 @@
-import { deepGet } from '@delon/util/src/other/other';
+import { deepGet } from '../other/other';
 
 /**
  * 字符串格式化

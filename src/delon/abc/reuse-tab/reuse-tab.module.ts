@@ -2,10 +2,10 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
-import { ReuseTabComponent } from '@delon/abc/reuse-tab/reuse-tab.component';
-import { ReuseTabContextComponent } from '@delon/abc/reuse-tab/reuse-tab-context.component';
-import { ReuseTabContextDirective } from '@delon/abc/reuse-tab/reuse-tab-context.directive';
-import { ReuseTabContextMenuComponent } from '@delon/abc/reuse-tab/reuse-tab-context-menu.component';
+import { ReuseTabComponent } from './reuse-tab.component';
+import { ReuseTabContextComponent } from './reuse-tab-context.component';
+import { ReuseTabContextDirective } from './reuse-tab-context.directive';
+import { ReuseTabContextMenuComponent } from './reuse-tab-context-menu.component';
 
 const COMPONENTS = [ReuseTabComponent];
 const NOEXPORTS = [

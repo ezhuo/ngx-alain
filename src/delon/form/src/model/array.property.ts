@@ -1,10 +1,10 @@
-import { PropertyGroup, FormProperty } from '@delon/form/src/model/form.property';
-import { SchemaValidatorFactory } from '@delon/form/src/validator.factory';
-import { SFUISchema, SFUISchemaItem } from '@delon/form/src/schema/ui';
-import { DelonFormConfig } from '@delon/form/src/config';
-import { FormPropertyFactory } from '@delon/form/src/model/form.property.factory';
-import { ObjectProperty } from '@delon/form/src/model/object.property';
-import { ErrorData } from '@delon/form/src/errors';
+import { PropertyGroup, FormProperty } from './form.property';
+import { SchemaValidatorFactory } from '../validator.factory';
+import { SFUISchema, SFUISchemaItem } from '../schema/ui';
+import { DelonFormConfig } from '../config';
+import { FormPropertyFactory } from './form.property.factory';
+import { ObjectProperty } from './object.property';
+import { ErrorData } from '../errors';
 
 export class ArrayProperty extends PropertyGroup {
   tick = 1;

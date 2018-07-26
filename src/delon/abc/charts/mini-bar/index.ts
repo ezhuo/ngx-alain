@@ -1,1 +1,1 @@
-export * from '@delon/abc/charts/mini-bar/public_api';
+export * from './public_api';

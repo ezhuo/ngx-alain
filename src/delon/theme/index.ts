@@ -1,1 +1,1 @@
-export * from '@delon/theme/public_api';
+export * from './public_api';

@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { StandardFormRowComponent } from '@delon/abc/standard-form-row/standard-form-row.component';
+import { StandardFormRowComponent } from './standard-form-row.component';
 
 const COMPONENTS = [StandardFormRowComponent];
 

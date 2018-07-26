@@ -17,7 +17,7 @@ import { NgModel } from '@angular/forms';
 import { updateHostClass, toNumber } from '@delon/util';
 import { Subscription } from 'rxjs';
 
-import { SHFWrapDirective } from '@delon/abc/simple-html-form/wrap.directive';
+import { SHFWrapDirective } from './wrap.directive';
 
 @Component({
   selector: 'shf-item',

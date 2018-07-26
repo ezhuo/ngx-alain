@@ -2,7 +2,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 
-import { G2PieComponent } from '@delon/abc/charts/pie/pie.component';
+import { G2PieComponent } from './pie.component';
 
 const COMPONENTS = [G2PieComponent];
 

@@ -2,13 +2,13 @@
 import { Observable, BehaviorSubject, Subject, combineLatest } from 'rxjs';
 import { map, distinctUntilChanged } from 'rxjs/operators';
 
-import { SchemaValidatorFactory } from '@delon/form/src/validator.factory';
-import { SFSchema } from '@delon/form/src/schema';
-import { SFUISchema, SFUISchemaItem, SFUISchemaItemRun } from '@delon/form/src/schema/ui';
-import { DelonFormConfig } from '@delon/form/src/config';
-import { ErrorData } from '@delon/form/src/errors';
-import { Widget } from '@delon/form/src/widget';
-import { isBlank } from '@delon/form/src/utils';
+import { SchemaValidatorFactory } from '../validator.factory';
+import { SFSchema } from '../schema';
+import { SFUISchema, SFUISchemaItem, SFUISchemaItemRun } from '../schema/ui';
+import { DelonFormConfig } from '../config';
+import { ErrorData } from '../errors';
+import { Widget } from '../widget';
+import { isBlank } from '../utils';
 
 export abstract class FormProperty {
   schemaValidator: (value: any) => ErrorData[];

@@ -1,11 +1,11 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 
-import { DelonAuthConfig } from '@delon/auth/auth.config';
-import { DA_STORE_TOKEN } from '@delon/auth/store/interface';
-import { DA_SERVICE_TOKEN } from '@delon/auth/token/interface';
-import { LocalStorageStore } from '@delon/auth/store/local-storage.service';
-import { TokenService } from '@delon/auth/token/token.service';
-import { WINDOW } from '@delon/auth/win_tokens';
+import { DelonAuthConfig } from './auth.config';
+import { DA_STORE_TOKEN } from './store/interface';
+import { DA_SERVICE_TOKEN } from './token/interface';
+import { LocalStorageStore } from './store/local-storage.service';
+import { TokenService } from './token/token.service';
+import { WINDOW } from './win_tokens';
 
 @NgModule({})
 export class DelonAuthModule {

@@ -1,4 +1,4 @@
-import { ITokenModel } from '@delon/auth/token/interface';
+import { ITokenModel } from '../interface';
 
 export class SimpleTokenModel implements ITokenModel {
   [key: string]: any;

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SimpleTableMultiSort } from '@delon/abc/simple-table/interface';
+import { SimpleTableMultiSort } from './interface';
 
 @Injectable()
 export class AdSimpleTableConfig {
