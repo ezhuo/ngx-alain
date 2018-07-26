@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { Injector } from '@angular/core';
 import { XlsxService } from '../xlsx/xlsx.service';
 import { XlsxExportOptions } from '../xlsx/interface';
-import { SimpleTableExport } from './simple-table-export';
-import { STExportOptions, SimpleTableColumn } from './interface';
+import { SimpleTableExport } from '@theme/component/simple-table/simple-table-export';
+import { STExportOptions, SimpleTableColumn } from '@theme/component/simple-table/interface';
 
 class MockXlsxService {
   export(options: XlsxExportOptions) {

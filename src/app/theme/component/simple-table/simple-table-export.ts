@@ -1,7 +1,7 @@
 import { Injectable, Optional } from '@angular/core';
 import { deepGet } from '@delon/util';
 import { XlsxService } from '@delon/abc';
-import { SimpleTableColumn, STExportOptions } from './interface';
+import { SimpleTableColumn, STExportOptions } from '@theme/component/simple-table/interface';
 
 @Injectable()
 export class SimpleTableExport {

@@ -36,13 +36,14 @@ import {
   ResReNameType,
   ReqReNameType,
   SimpleTableMultiSort,
-} from './interface';
-import { AdSimpleTableConfig } from './simple-table.config';
-import { SimpleTableExport } from './simple-table-export';
+} from '@theme/component/simple-table/interface';
+import { AdSimpleTableConfig } from '@theme/component/simple-table/simple-table.config';
+import { SimpleTableExport } from '@theme/component/simple-table/simple-table-export';
 
 @Component({
   selector: 'ez-simple-table',
   templateUrl: './simple-table.component.html',
+  styleUrls: ['./style/simple-table.component.less'],
   host: { '[class.ad-st]': 'true' },
   providers: [SimpleTableExport, CNCurrencyPipe, DatePipe, YNPipe, DecimalPipe],
   preserveWhitespaces: false,
@@ -320,6 +321,15 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
   readonly filterChange: EventEmitter<SimpleTableColumn> = new EventEmitter<
     SimpleTableColumn
     >();
+  /** 后端分页是否采用`1`基索引，只在`data`类型为`string`时有效 */
+  @Input()
+  get zeroIndexedOnPage() {
+    return this._zeroIndexedOnPage;
+  }
+  set zeroIndexedOnPage(value: any) {
+    this._zeroIndexedOnPage = toBoolean(value);
+  }
+  private _zeroIndexedOnPage = false;
 
   // endregion
 
@@ -378,7 +388,7 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
   private getAjaxData(url?: string): Observable<any> {
     const params: any = Object.assign(
       {
-        [this.reqReName.pi]: this.pi,
+        [this.reqReName.pi]: this._zeroIndexedOnPage ? this.pi - 1 : this.pi,
         [this.reqReName.ps]: this.ps,
       },
       this.extraParams,
@@ -394,14 +404,14 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(
         map((res: any) => {
           // list
-          let ret = deepGet(res, this.resReName.list as string[], []);
+          let ret = deepGet(res.data, this.resReName.list as string[], []);
           if (ret == null || !Array.isArray(ret)) {
             ret = [];
           }
           // total
           const retTotal =
             this.resReName.total &&
-            deepGet(res, this.resReName.total as string[], null);
+            deepGet(res.data, this.resReName.total as string[], null);
           this.total = retTotal == null ? this.total || 0 : +retTotal;
           return <any[]>ret;
         }),
@@ -585,11 +595,13 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
 
     const ms = this.multiSort;
     if (ms) {
-      Object.keys(this._sortMap).forEach(key => {
-        const item = this._sortMap[key];
-        ret[item.key] =
-          (item.column.sortReName || this.sortReName || {})[item.v] || item.v;
-      });
+      Object.keys(this._sortMap)
+        .filter(key => this._sortMap[key].enabled && this._sortMap[key].v)
+        .forEach(key => {
+          const item = this._sortMap[key];
+          ret[item.key] =
+            (item.column.sortReName || this.sortReName || {})[item.v] || item.v;
+        });
       // 合并处理
       if (typeof ms === 'object') {
         ret = {
@@ -929,12 +941,14 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
       if (item.type === 'yn' && typeof item.ynTruth === 'undefined') {
         item.ynTruth = true;
       }
-      if (item.type === 'link' && typeof item.click !== 'function') {
+      if (
+        (item.type === 'link' && typeof item.click !== 'function') ||
+        (item.type === 'badge' && typeof item.badge === 'undefined') ||
+        (item.type === 'tag' && typeof item.tag === 'undefined')
+      ) {
         (item as any).type = '';
       }
-      if (item.type === 'badge' && typeof item.badge === 'undefined') {
-        (item as any).type = '';
-      }
+
       if (!item.className) {
         item.className = {
           // 'checkbox': 'text-center',

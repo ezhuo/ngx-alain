@@ -1,1 +1,1 @@
-export * from './public_api';
+export * from '@theme/component/simple-table/public_api';

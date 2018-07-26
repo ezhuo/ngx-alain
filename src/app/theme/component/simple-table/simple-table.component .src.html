@@ -4,7 +4,6 @@
   [nzPageSizeOptions]="pageSizeOptions" [nzShowQuickJumper]="showQuickJumper" [nzShowSizeChanger]="showSizeChanger" [nzShowTotal]="totalTpl">
   <thead class="ad-st-head">
     <tr>
-      <th class="col-idx">#</th>
       <th *ngIf="expand" [nzShowExpand]="expand"></th>
       <th *ngFor="let c of _columns; let index=index" [nzWidth]="c.width" [nzLeft]="c._left" [nzRight]="c._right" [ngClass]="c.className"
         [attr.colspan]="c.colSpan" [attr.data-col]="c.indexKey" [nzShowSort]="_sortMap[index].enabled" [nzSort]="_sortMap[index].v"
@@ -59,9 +58,6 @@
   <tbody class="ad-st-body">
     <ng-container *ngFor="let i of _data; let index=index">
       <tr [attr.data-index]="index">
-        <td class="td-idx">
-          <span [innerHTML]='index+1'></span>
-        </td>
         <td *ngIf="expand" [nzShowExpand]="expand" [(nzExpand)]="i.expand"></td>
         <td *ngFor="let c of _columns; let cIdx=index" [nzLeft]="c._left" [nzRight]="c._right" [nzCheckbox]="c.type === 'checkbox'" [ngClass]="c.className"
           [attr.colspan]="c.colSpan">

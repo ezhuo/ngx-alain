@@ -1,4 +1,4 @@
-import { SimpleTableComponent } from './simple-table.component';
+import { SimpleTableComponent } from '@theme/component/simple-table/simple-table.component';
 import { ElementRef, TemplateRef } from '@angular/core';
 
 export type CompareFn = ((a: any, b: any) => number);
