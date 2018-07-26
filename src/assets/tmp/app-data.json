@@ -1,8 +1,8 @@
 {
   "app": {
-    "name": "智慧党建云平台",
-    "short": "智慧党建",
-    "description": "智慧党建云平台"
+    "name": "ngx-alain",
+    "short": "ngx-alain",
+    "description": "ngx-alain"
   },
   "menu": [{
       "text": "主导航",

@@ -123,7 +123,7 @@ export class UserLoginComponent implements OnDestroy {
             this.error = '';
             this.noticeSrv.notice_success('登录成功！');
             setTimeout(() => {
-              return this.goHome();
+              return this.goDefaultURL();
             }, 0);
           },
           error => {
@@ -209,8 +209,8 @@ export class UserLoginComponent implements OnDestroy {
     }
   }
 
-  goHome() {
-    return this.router.navigate([this.configSrv.config.router.home]);
+  goDefaultURL() {
+    return this.router.navigate([this.configSrv.config.router.default]);
   }
 
   // endregion

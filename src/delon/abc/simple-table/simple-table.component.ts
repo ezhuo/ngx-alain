@@ -44,9 +44,9 @@ import {
   ResReNameType,
   ReqReNameType,
   SimpleTableMultiSort,
-} from '@delon/abc/simple-table/interface';
-import { AdSimpleTableConfig } from '@delon/abc/simple-table/simple-table.config';
-import { SimpleTableExport } from '@delon/abc/simple-table/simple-table-export';
+} from './interface';
+import { AdSimpleTableConfig } from './simple-table.config';
+import { SimpleTableExport } from './simple-table-export';
 
 @Component({
   selector: 'simple-table',
@@ -817,6 +817,7 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
       const obj = {};
       obj[btn.paramName || this.defConfig.modalParamsName || 'record'] = record;
       const options: ModalHelperOptions = Object.assign({}, btn.modal);
+      options.modalOptions = Object.assign(options.modalOptions || {}, { nzStyle: { top: '20px' } });
       // TODO: deprecated
       if (btn.size) options.size = btn.size;
       if (btn.modalOptions) options.modalOptions = btn.modalOptions;

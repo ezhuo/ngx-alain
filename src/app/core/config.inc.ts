@@ -3,10 +3,10 @@ import { App, Menu } from '@delon/theme';
 export const app_debug = false;
 
 export const app: App = {
-  name: '智慧党建云平台',
-  short: '智慧党建',
-  description: '智慧党建云平台',
-  key: 'dangjian',
+  name: 'ngx-alain',
+  short: 'alain',
+  description: 'alain',
+  key: 'ngx-alain',
   year: 2018
 };
 
@@ -52,7 +52,8 @@ export const define = {
  *路由配置
  */
 export const router = {
-  home: '/app/admin',
+  default: '/app/admin',
+  home: '/app/home',
   admin: '/app/admin',
   login: '/passport/login',
   lock: '/passport/lock'
