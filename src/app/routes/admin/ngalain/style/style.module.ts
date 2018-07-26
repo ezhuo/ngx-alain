@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 
-import { StyleRoutingModule } from '@routes/admin/ngalain/style/style-routing.module';
-import { ColorService } from '@routes/admin/ngalain/style/color.service';
+import { StyleRoutingModule } from './style-routing.module';
+import { ColorService } from './color.service';
 
-import { GridMasonryComponent } from '@routes/admin/ngalain/style/gridmasonry/gridmasonry.component';
-import { TypographyComponent } from '@routes/admin/ngalain/style/typography/typography.component';
-import { ColorsComponent } from '@routes/admin/ngalain/style/colors/colors.component';
+import { GridMasonryComponent } from './gridmasonry/gridmasonry.component';
+import { TypographyComponent } from './typography/typography.component';
+import { ColorsComponent } from './colors/colors.component';
 
 @NgModule({
   imports: [SharedModule, StyleRoutingModule],

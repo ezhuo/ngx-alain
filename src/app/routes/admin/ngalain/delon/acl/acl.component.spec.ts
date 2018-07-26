@@ -1,7 +1,7 @@
 import { TestBed, TestModuleMetadata } from '@angular/core/testing';
 import { setUpTestBed } from '@testing/common.spec';
 
-import { ACLComponent } from '@routes/admin/ngalain/delon/acl/acl.component';
+import { ACLComponent } from './acl.component';
 
 describe('Comoponent: ACL', () => {
   setUpTestBed(<TestModuleMetadata>{

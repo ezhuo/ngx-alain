@@ -1,8 +1,8 @@
 import { TestBed, TestModuleMetadata } from '@angular/core/testing';
 import { setUpTestBed } from '@testing/common.spec';
 
-import { ColorsComponent } from '@routes/admin/ngalain/style/colors/colors.component';
-import { ColorService } from '@routes/admin/ngalain/style/color.service';
+import { ColorsComponent } from './colors.component';
+import { ColorService } from '../color.service';
 
 describe('Component: Colors', () => {
   setUpTestBed(<TestModuleMetadata>{

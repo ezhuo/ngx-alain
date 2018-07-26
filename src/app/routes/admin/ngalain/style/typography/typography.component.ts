@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ColorService } from '@routes/admin/ngalain/style/color.service';
+import { ColorService } from '../color.service';
 
 @Component({
   selector: 'app-typography',

@@ -2,23 +2,23 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@shared/shared.module';
 
-import { DelonRoutingModule } from '@routes/admin/ngalain/delon/delon-routing.module';
+import { DelonRoutingModule } from './delon-routing.module';
 
-import { SimpleTableComponent } from '@routes/admin/ngalain/delon/simple-table/simple-table.component';
-import { UtilComponent } from '@routes/admin/ngalain/delon/util/util.component';
-import { PrintComponent } from '@routes/admin/ngalain/delon/print/print.component';
-import { ACLComponent } from '@routes/admin/ngalain/delon/acl/acl.component';
-import { CanLeaveProvide } from '@routes/admin/ngalain/delon/guard/can-leave.provide';
-import { GuardComponent } from '@routes/admin/ngalain/delon/guard/guard.component';
-import { GuardLeaveComponent } from '@routes/admin/ngalain/delon/guard/leave.component';
-import { GuardAdminComponent } from '@routes/admin/ngalain/delon/guard/admin.component';
-import { GuardAuthComponent } from '@routes/admin/ngalain/delon/guard/auth.component';
-import { CacheComponent } from '@routes/admin/ngalain/delon/cache/cache.component';
-import { DownFileComponent } from '@routes/admin/ngalain/delon/downfile/downfile.component';
-import { XlsxComponent } from '@routes/admin/ngalain/delon/xlsx/xlsx.component';
-import { ZipComponent } from '@routes/admin/ngalain/delon/zip/zip.component';
-import { DelonFormComponent } from '@routes/admin/ngalain/delon/form/form.component';
-import { QRComponent } from '@routes/admin/ngalain/delon/qr/qr.component';
+import { SimpleTableComponent } from './simple-table/simple-table.component';
+import { UtilComponent } from './util/util.component';
+import { PrintComponent } from './print/print.component';
+import { ACLComponent } from './acl/acl.component';
+import { CanLeaveProvide } from './guard/can-leave.provide';
+import { GuardComponent } from './guard/guard.component';
+import { GuardLeaveComponent } from './guard/leave.component';
+import { GuardAdminComponent } from './guard/admin.component';
+import { GuardAuthComponent } from './guard/auth.component';
+import { CacheComponent } from './cache/cache.component';
+import { DownFileComponent } from './downfile/downfile.component';
+import { XlsxComponent } from './xlsx/xlsx.component';
+import { ZipComponent } from './zip/zip.component';
+import { DelonFormComponent } from './form/form.component';
+import { QRComponent } from './qr/qr.component';
 
 const COMPONENT = [
   SimpleTableComponent,

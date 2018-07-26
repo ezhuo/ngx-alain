@@ -1,7 +1,7 @@
 import { TestBed, TestModuleMetadata } from '@angular/core/testing';
 import { setUpTestBed } from '@testing/common.spec';
 
-import { DashboardV1Component } from '@routes/admin/ngalain/dashboard/v1/v1.component';
+import { DashboardV1Component } from './v1.component';
 
 describe('Comoponent: DashboardV1', () => {
   setUpTestBed(<TestModuleMetadata>{

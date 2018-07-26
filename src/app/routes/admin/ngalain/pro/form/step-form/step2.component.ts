@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { TransferService } from '@routes/admin/ngalain/pro/form/step-form/transfer.service';
+import { TransferService } from './transfer.service';
 
 @Component({
   selector: 'app-step2',

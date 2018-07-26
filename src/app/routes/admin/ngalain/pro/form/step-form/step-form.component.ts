@@ -1,5 +1,5 @@
 import { Component, AfterViewInit, ViewEncapsulation } from '@angular/core';
-import { TransferService } from '@routes/admin/ngalain/pro/form/step-form/transfer.service';
+import { TransferService } from './transfer.service';
 
 @Component({
   selector: 'app-step-form',

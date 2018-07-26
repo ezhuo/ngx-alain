@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd';
 import { ModalHelper } from '@delon/theme';
 import { SimpleTableComponent, SimpleTableColumn } from '@delon/abc';
-import { ExtrasPoiEditComponent } from '@routes/admin/ngalain/extras/poi/edit/edit.component';
+import { ExtrasPoiEditComponent } from './edit/edit.component';
 
 @Component({
   selector: 'app-extras-poi',

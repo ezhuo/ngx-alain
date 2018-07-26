@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { GridMasonryComponent } from '@routes/admin/ngalain/style/gridmasonry/gridmasonry.component';
-import { TypographyComponent } from '@routes/admin/ngalain/style/typography/typography.component';
-import { ColorsComponent } from '@routes/admin/ngalain/style/colors/colors.component';
+import { GridMasonryComponent } from './gridmasonry/gridmasonry.component';
+import { TypographyComponent } from './typography/typography.component';
+import { ColorsComponent } from './colors/colors.component';
 
 const routes: Routes = [
   { path: 'gridmasonry', component: GridMasonryComponent },

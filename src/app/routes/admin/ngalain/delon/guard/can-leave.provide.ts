@@ -4,7 +4,7 @@ import {
   ActivatedRouteSnapshot,
   RouterStateSnapshot,
 } from '@angular/router';
-import { GuardComponent } from '@routes/admin/ngalain/delon/guard/guard.component';
+import { GuardComponent } from './guard.component';
 import { Observable } from 'rxjs';
 import { NzModalService } from 'ng-zorro-antd';
 

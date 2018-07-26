@@ -1,7 +1,7 @@
 import { TestBed, TestModuleMetadata } from '@angular/core/testing';
 import { setUpTestBed } from '@testing/common.spec';
 
-import { HelpCenterComponent } from '@routes/admin/ngalain/extras/helpcenter/helpcenter.component';
+import { HelpCenterComponent } from './helpcenter.component';
 
 describe('Comoponent: HelpCenter', () => {
   setUpTestBed(<TestModuleMetadata>{

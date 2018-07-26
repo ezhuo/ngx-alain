@@ -1,7 +1,7 @@
 import { TestBed, TestModuleMetadata } from '@angular/core/testing';
 import { setUpTestBed } from '@testing/common.spec';
 
-import { WidgetsComponent } from '@routes/admin/ngalain/widgets/widgets/widgets.component';
+import { WidgetsComponent } from './widgets.component';
 
 describe('Comoponent: Widgets', () => {
   setUpTestBed(<TestModuleMetadata>{

@@ -1,7 +1,7 @@
 import { TestBed, TestModuleMetadata } from '@angular/core/testing';
 import { setUpTestBed } from '@testing/common.spec';
 
-import { DownFileComponent } from '@routes/admin/ngalain/delon/downfile/downfile.component';
+import { DownFileComponent } from './downfile.component';
 
 describe('Comoponent: DownFile', () => {
   setUpTestBed(<TestModuleMetadata>{
