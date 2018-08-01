@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
-import { LayoutHomeModule } from '@layout/home/home.module';
-import { LayoutDefaultModule } from '@layout/default/default.module';
-import { LayoutFullScreenModule } from '@layout/fullscreen/fullscreen.module';
+import { LayoutHomeModule } from './home/home.module';
+import { LayoutDefaultModule } from './default/default.module';
+import { LayoutFullScreenModule } from './fullscreen/fullscreen.module';
 
 const MODULE = [
   LayoutHomeModule,

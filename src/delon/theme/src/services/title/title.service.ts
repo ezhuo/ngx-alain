@@ -126,6 +126,14 @@ export class TitleService implements OnDestroy {
     this.title.setTitle(newTitles.join(this._separator));
   }
 
+  getTitle() {
+    return this.getByRoute() ||
+      this.getByMenu() ||
+      this.getByElement() ||
+      this._default ||
+      this.title.getTitle();
+  }
+
   ngOnDestroy(): void {
     if (this.i18n$) this.i18n$.unsubscribe();
   }

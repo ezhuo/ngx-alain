@@ -60,6 +60,7 @@ export class ModalService {
             Object.assign(
                 {
                     nzMaskClosable: false,
+                    nzStyle: { top: '20px' }
                 },
                 options,
             ),

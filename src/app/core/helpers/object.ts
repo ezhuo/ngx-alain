@@ -20,43 +20,43 @@ const isTypeCheck = function (typeName, obj) {
   );
 };
 
-export function isNull(obj) {
+export const isNull = (obj) => {
   return isTypeCheck('isNull', obj);
-}
+};
 
-export function isUndefined(obj) {
+export const isUndefined = (obj) => {
   return isTypeCheck('isUndefined', obj);
-}
+};
 
-export function isObject(obj) {
+export const isObject = (obj) => {
   return isTypeCheck('isObject', obj);
-}
+};
 
-export function isArray(obj) {
+export const isArray = (obj) => {
   return isTypeCheck('isArray', obj);
-}
+};
 
-export function isString(obj) {
+export const isString = (obj) => {
   return isTypeCheck('isString', obj);
-}
+};
 
-export function isNumber(obj) {
+export const isNumber = (obj) => {
   return isTypeCheck('isNumber', obj);
-}
+};
 
-export function isBoolean(obj) {
+export const isBoolean = (obj) => {
   return isTypeCheck('isBoolean', obj);
-}
+};
 
-export function isFunction(obj) {
+export const isFunction = (obj) => {
   return isTypeCheck('isFunction', obj);
-}
+};
 
-export function isRegExp(obj) {
+export const isRegExp = (obj) => {
   return isTypeCheck('isRegExp', obj);
-}
+};
 
-export function IsEmpty(obj) {
+export const IsEmpty = (obj) => {
   if (obj == null || obj === undefined) return true;
 
   if (isObject(obj)) {
@@ -73,13 +73,13 @@ export function IsEmpty(obj) {
   }
 
   return !Boolean(obj);
-}
+};
 
-export function getNow() {
+export const getNow = () => {
   return '';
-}
+};
 
-export function parseJSON(obj) {
+export const parseJSON = (obj) => {
   if (obj == null || obj === undefined) {
     return obj;
   }
@@ -88,4 +88,4 @@ export function parseJSON(obj) {
   } catch (e) {
     return null;
   }
-}
+};

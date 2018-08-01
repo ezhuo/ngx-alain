@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Injector, Optional } from '@angular/core';
+import { Component, OnInit, OnDestroy, Injector } from '@angular/core';
 import { BaseComponent } from '@theme/parent/base.component';
 import { NzModalRef } from 'ng-zorro-antd';
 
@@ -17,14 +17,21 @@ export class ParentModalComponent extends BaseComponent implements OnInit, OnDes
     return this.injector.get(NzModalRef);
   }
 
-  modalClose() {
-    this.modalRef.destroy();
-  }
-
   ngOnInit() {
+    super.ngOnInit();
+    this.__getPrimaryKeyValue();
   }
 
   ngOnDestroy() {
+    super.ngOnDestroy();
+  }
+
+  modalClose(result: any = false) {
+    this.modalRef.destroy(result);
+  }
+
+  protected __init(url: string, key: any, params?: any) {
+    return super.__init(url, key, params);
   }
 
 }

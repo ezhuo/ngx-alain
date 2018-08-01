@@ -484,4 +484,30 @@ export class HttpService {
       }),
     );
   }
+
+  update(url: string,
+    body: any,
+    id?: any
+  ): Observable<any> {
+    if (id) {
+      return this.put(url + '/' + id, body);
+    } else {
+      return this.post(url, body);
+    }
+  }
+
+  deleteById(
+    url: string,
+    id: any,
+    body?: any
+  ) {
+    return this.request(
+      'DELETE',
+      url + '/' + id,
+      Object.assign({
+        body: body || null,
+      }),
+    );
+  }
+
 }

@@ -33,7 +33,8 @@ export class SweetAlertService {
     return myWindow.Sweetalert2(Object.assign(defaultOptions, {}));
   }
 
-  confirm(msg: any) {
+  confirm(msg: any, options?: Object) {
+    options = options || {};
     const defaultOptions = {
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -48,10 +49,18 @@ export class SweetAlertService {
       title: '询问',
       text: msg
     };
-    return myWindow.Sweetalert2(Object.assign(defaultOptions, {}));
+    return myWindow.Sweetalert2(Object.assign(defaultOptions, options, {}));
   }
 
-  prompt(msg: any, value: any = '') {
+  confirmWait(msg: any, preConfirm: any) {
+    return this.confirm(msg, {
+      showLoaderOnConfirm: true,
+      allowOutsideClick: () => !this.swalObj.isLoading(),
+      preConfirm
+    });
+  }
+
+  prompt(msg: any, value: any = '', options?: Object) {
     const defaultOptions = {
       confirmButtonText: '确定',
       showCancelButton: true,
@@ -61,6 +70,14 @@ export class SweetAlertService {
       text: msg
     };
     return myWindow.Sweetalert2(Object.assign(defaultOptions, {}));
+  }
+
+  promptWait(msg: any, value: any = '', preConfirm: any = {}) {
+    return this.prompt(msg, value, {
+      showLoaderOnConfirm: true,
+      allowOutsideClick: () => !this.swalObj.isLoading(),
+      preConfirm
+    });
   }
 
   question(options: any) {

@@ -1,10 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { BaseComponent } from '@theme/parent/base.component';
-import { ParentIndexComponent } from '@routes/parent/parent.index.component';
-import { ParentModalComponent } from '@routes/parent/parent.modal.component';
-
-import { DtTreeDirective } from '@theme/directives/tree.directives';
+import { DtTreeDirective } from './directives/tree.directives';
 
 const MODULES = [];
 
@@ -13,9 +9,6 @@ const DIRECTIVES = [
 ];
 
 const COMPONENTS = [
-    BaseComponent,
-    ParentIndexComponent,
-    ParentModalComponent,
 ];
 const PROVIDERS = [];
 

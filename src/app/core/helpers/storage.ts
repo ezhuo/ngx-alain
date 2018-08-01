@@ -1,4 +1,4 @@
-import * as common from '@core/helpers/common';
+import * as common from './object';
 import { app } from '@core/config.inc';
 
 export default class Storage {

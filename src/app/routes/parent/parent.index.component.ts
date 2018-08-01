@@ -7,23 +7,30 @@ import { BaseComponent } from '@theme/parent/base.component';
   styles: [``]
 })
 export class ParentIndexComponent extends BaseComponent implements OnInit, OnDestroy {
-
-  constructor(protected injector: Injector) {
-    super(injector);
-  }
+  constructor(protected injector: Injector) { super(injector); }
 
   ngOnInit() {
+    super.ngOnInit();
+    this.__logs('进入');
   }
 
   ngOnDestroy() {
+    return super.ngOnDestroy();
   }
 
-  // 表格参数
-  tableParams: any = {
-    ps: 10,
-  };
+  protected __init(url: string, key: any, params?: any) {
+    return super.__init(url, key, params);
+  }
 
-  tableUrl = '';
+  modalParamsFromTable(record: any = {}) {
+    return {
+      primaryKey: this.primaryKey,
+      primaryURL: this.primaryURL
+    };
+  }
 
+  modalParams() {
+    return Object.assign({ formData: {} }, this.modalParamsFromTable());
+  }
 
 }

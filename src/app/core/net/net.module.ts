@@ -12,7 +12,7 @@ const SERVICES = [{
 @NgModule({
     imports: [],
     exports: [],
-    providers: [...SERVICES]
+    providers: []
 })
 export class NetModule {
     static forRoot(): ModuleWithProviders {
