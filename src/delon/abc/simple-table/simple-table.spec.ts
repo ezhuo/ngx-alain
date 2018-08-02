@@ -523,9 +523,17 @@ describe('abc: simple-table', () => {
           ];
           page.newColumn(columns).expectCell('del', 1, 1, 'nz-popconfirm');
           // mock trigger
-          comp.btnClick(comp._data[0], comp._columns[0].buttons[0]);
+          comp.btnClick(
+            new MouseEvent('click'),
+            comp._data[0],
+            comp._columns[0].buttons[0],
+          );
           expect(columns[0].buttons[1].click).not.toHaveBeenCalled();
-          comp.btnClick(comp._data[0], comp._columns[0].buttons[1]);
+          comp.btnClick(
+            new MouseEvent('click'),
+            comp._data[0],
+            comp._columns[0].buttons[1],
+          );
           expect(columns[0].buttons[1].click).toHaveBeenCalled();
         });
         it(
@@ -657,7 +665,12 @@ describe('abc: simple-table', () => {
                 {
                   title: '',
                   buttons: [
-                    { text: 'a', type: 'modal', click: jasmine.createSpy(), size: 'sm' },
+                    {
+                      text: 'a',
+                      type: 'modal',
+                      click: jasmine.createSpy(),
+                      size: 'sm',
+                    },
                   ],
                 },
               ];
@@ -678,7 +691,12 @@ describe('abc: simple-table', () => {
                 {
                   title: '',
                   buttons: [
-                    { text: 'a', type: 'modal', click: jasmine.createSpy(), modalOptions: {} },
+                    {
+                      text: 'a',
+                      type: 'modal',
+                      click: jasmine.createSpy(),
+                      modalOptions: {},
+                    },
                   ],
                 },
               ];
@@ -937,7 +955,9 @@ describe('abc: simple-table', () => {
           fixture.detectChanges();
           const h = httpMock.expectOne(w => true) as TestRequest;
           expect(context.comp.zeroIndexedOnPage).toBe(true);
-          expect(h.request.params.get('pi').toString()).toBe((context.pi - 1).toString());
+          expect(h.request.params.get('pi').toString()).toBe(
+            (context.pi - 1).toString(),
+          );
         });
         it('should be empty array when invalid list', () => {
           fixture.detectChanges();
@@ -1203,7 +1223,7 @@ describe('abc: simple-table', () => {
       describe('#frontPagination', () => {
         // `true` 由 `simple-table` 根据 `data` 长度受控分页，包括：排序、过滤等
         describe('with true', () => {
-          beforeEach(() => context.frontPagination = true);
+          beforeEach(() => (context.frontPagination = true));
           it('should be control paged by data', () => {
             context.pi = 1;
             context.ps = 3;
@@ -1529,10 +1549,11 @@ describe('abc: simple-table', () => {
 
   describe('[i18n]', () => {
     let i18nSrv: AlainI18NService;
+    let curLang = 'en';
     beforeEach(() => {
       genModule({ i18n: true });
       i18nSrv = injector.get(ALAIN_I18N_TOKEN);
-      spyOn(i18nSrv, 'fanyi');
+      spyOn(i18nSrv, 'fanyi').and.callFake(() => curLang);
     });
     it('in title', () => {
       page.newColumn([{ title: '', index: 'id' }]);
@@ -1547,6 +1568,15 @@ describe('abc: simple-table', () => {
         { title: '', index: 'id', buttons: [{ text: '', i18n: 'a' }] },
       ]);
       expect(i18nSrv.fanyi).toHaveBeenCalled();
+    });
+    it('should be re-render columns when i18n changed', () => {
+      page
+        .newColumn([{ title: '', i18n: curLang, index: 'id' }])
+        .expectHead(curLang, 'id');
+      curLang = 'zh';
+      i18nSrv.use(curLang);
+      fixture.detectChanges();
+      page.expectHead(curLang, 'id');
     });
   });
 
@@ -1630,6 +1660,38 @@ describe('abc: simple-table', () => {
     });
   });
 
+  describe('[row events]', () => {
+    beforeEach(() => {
+      genModule({ minColumn: true });
+      context.rowClickTime = 10;
+      fixture.detectChanges();
+    });
+    it(`should be row click`, (done: () => void) => {
+      expect(context.rowClick).not.toHaveBeenCalled();
+      expect(context.rowDblClick).not.toHaveBeenCalled();
+      (page.getCell() as HTMLElement).click();
+      fixture.detectChanges();
+      setTimeout(() => {
+        expect(context.rowClick).toHaveBeenCalled();
+        expect(context.rowDblClick).not.toHaveBeenCalled();
+        done();
+      }, 25);
+    });
+    it(`should be row double click`, (done: () => void) => {
+      expect(context.rowClick).not.toHaveBeenCalled();
+      expect(context.rowDblClick).not.toHaveBeenCalled();
+      const cell = page.getCell() as HTMLElement;
+      cell.click();
+      cell.click();
+      fixture.detectChanges();
+      setTimeout(() => {
+        expect(context.rowClick).not.toHaveBeenCalled();
+        expect(context.rowDblClick).toHaveBeenCalled();
+        done();
+      }, 25);
+    });
+  });
+
   class PageObject {
     constructor() {
       spyOn(context, 'reqError');
@@ -1638,6 +1700,8 @@ describe('abc: simple-table', () => {
       spyOn(context, 'radioChange');
       spyOn(context, 'sortChange');
       spyOn(context, 'filterChange');
+      spyOn(context, 'rowClick');
+      spyOn(context, 'rowDblClick');
       comp = context.comp;
     }
     get(cls: string): DebugElement {
@@ -1836,7 +1900,11 @@ describe('abc: simple-table', () => {
         (checkboxChange)="checkboxChange()"
         (radioChange)="radioChange()"
         (sortChange)="sortChange()"
-        (filterChange)="filterChange()">
+        (filterChange)="filterChange()"
+        [rowClickTime]="rowClickTime"
+        (rowClick)="rowClick()"
+        (rowDblClick)="rowDblClick()"
+    >
     </simple-table>`,
 })
 class TestComponent {
@@ -1878,4 +1946,7 @@ class TestComponent {
   radioChange() {}
   sortChange() {}
   filterChange() {}
+  rowClickTime = 200;
+  rowClick() {}
+  rowDblClick() {}
 }

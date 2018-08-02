@@ -44,6 +44,7 @@ import {
   ResReNameType,
   ReqReNameType,
   SimpleTableMultiSort,
+  SimpleTableRowClick,
 } from './interface';
 import { AdSimpleTableConfig } from './simple-table.config';
 import { SimpleTableExport } from './simple-table-export';
@@ -58,6 +59,7 @@ import { SimpleTableExport } from './simple-table-export';
 })
 export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
   private data$: Subscription;
+  private i18n$: Subscription;
   private _inited = false;
   _data: SimpleTableData[] = [];
   _url: string;
@@ -68,7 +70,7 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
   _indeterminate = false;
   _columns: SimpleTableColumn[] = [];
 
-  // region: fields
+  //#region fields
 
   /** 数据源 */
   @Input() data: string | any[] | Observable<any[]>;
@@ -225,9 +227,9 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
   renderTotal(total: string, range: string[]) {
     return this._totalTpl
       ? this._totalTpl
-        .replace('{{total}}', total)
-        .replace('{{range[0]}}', range[0])
-        .replace('{{range[1]}}', range[1])
+          .replace('{{total}}', total)
+          .replace('{{range[0]}}', range[0])
+          .replace('{{range[1]}}', range[1])
       : '';
   }
   /**
@@ -311,24 +313,36 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
   @Output()
   readonly change: EventEmitter<SimpleTableChange> = new EventEmitter<
     SimpleTableChange
-    >();
+  >();
   /** checkbox变化时回调，参数为当前所选清单 */
   @Output()
   readonly checkboxChange: EventEmitter<SimpleTableData[]> = new EventEmitter<
     SimpleTableData[]
-    >();
+  >();
   /** radio变化时回调，参数为当前所选 */
   @Output()
   readonly radioChange: EventEmitter<SimpleTableData> = new EventEmitter<
     SimpleTableData
-    >();
+  >();
   /** 排序回调 */
   @Output() readonly sortChange: EventEmitter<any> = new EventEmitter<any>();
   /** Filter回调 */
   @Output()
   readonly filterChange: EventEmitter<SimpleTableColumn> = new EventEmitter<
     SimpleTableColumn
-    >();
+  >();
+  /** 行单击回调 */
+  @Output()
+  readonly rowClick: EventEmitter<SimpleTableRowClick> = new EventEmitter<
+    SimpleTableRowClick
+  >();
+  /** 行双击回调 */
+  @Output()
+  readonly rowDblClick: EventEmitter<SimpleTableRowClick> = new EventEmitter<
+    SimpleTableRowClick
+  >();
+  /** 行单击多少时长之类为双击（单位：毫秒），默认：`200` */
+  @Input() rowClickTime = 200;
   /** 后端分页是否采用`1`基索引，只在`data`类型为`string`时有效 */
   @Input()
   get zeroIndexedOnPage() {
@@ -339,7 +353,7 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
   }
   private _zeroIndexedOnPage = false;
 
-  // endregion
+  //#endregion
 
   constructor(
     private defConfig: AdSimpleTableConfig,
@@ -360,9 +374,12 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
     @Inject(DOCUMENT) private doc: any,
   ) {
     Object.assign(this, deepCopy(defConfig));
+    if (i18nSrv) {
+      this.i18n$ = i18nSrv.change.subscribe(() => this.updateColumns());
+    }
   }
 
-  // region: data
+  //#region data
 
   /**
    * 根据页码重新加载数据
@@ -425,7 +442,7 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
           this.total = retTotal == null ? this.total || 0 : +retTotal;
           return <any[]>ret;
         }),
-    );
+      );
   }
 
   private _genAjax(forceRefresh: boolean = false) {
@@ -590,9 +607,23 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
     return false;
   }
 
-  // endregion
+  private rowClickCount = 0;
+  _rowClick(e: Event, item: any, index: number) {
+    ++this.rowClickCount;
+    if (this.rowClickCount !== 1) return;
+    setTimeout(() => {
+      if (this.rowClickCount === 1) {
+        this.rowClick.emit({ e, item, index });
+      } else {
+        this.rowDblClick.emit({ e, item, index });
+      }
+      this.rowClickCount = 0;
+    }, this.rowClickTime);
+  }
 
-  // region: sort
+  //#endregion
+
+  //#region sort
 
   _sortMap: { [key: number]: any } = {};
   _sortColumn: SimpleTableColumn = null;
@@ -663,9 +694,9 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  // endregion
+  //#endregion
 
-  // region: filter
+  //#region filter
 
   private getReqFilterMap(): { [key: string]: string } {
     let ret = {};
@@ -707,9 +738,9 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
     item.checked = checked;
   }
 
-  // endregion
+  //#endregion
 
-  // region: checkbox
+  //#region checkbox
 
   /** 清除所有 `checkbox` */
   clearCheck(): this {
@@ -749,9 +780,9 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
     return this;
   }
 
-  // endregion
+  //#endregion
 
-  // region: radio
+  //#region radio
 
   /** 清除所有 `radio` */
   clearRadio(): this {
@@ -768,9 +799,9 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
     return this;
   }
 
-  // endregion
+  //#endregion
 
-  // region: buttons
+  //#region buttons
 
   btnCoerce(list: SimpleTableButton[]): SimpleTableButton[] {
     if (!list) return [];
@@ -812,7 +843,8 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-  btnClick(record: any, btn: SimpleTableButton) {
+  btnClick(e: Event, record: any, btn: SimpleTableButton) {
+    e.stopPropagation();
     if (btn.type === 'modal' || btn.type === 'static') {
       const obj = {};
       obj[btn.paramName || this.defConfig.modalParamsName || 'record'] = record;
@@ -861,9 +893,9 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
     return btn.text;
   }
 
-  // endregion
+  //#endregion
 
-  // region: fixed
+  //#region fixed
 
   fixedCoerce(list: SimpleTableColumn[]) {
     list.forEach((item, idx) => {
@@ -877,9 +909,9 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  // endregion
+  //#endregion
 
-  // region: export
+  //#region export
 
   /**
    * 导出Excel，确保已经注册 `AdXlsxModule`
@@ -904,7 +936,7 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
     );
   }
 
-  // endregion
+  //#endregion
 
   ngOnInit(): void {
     this._inited = true;
@@ -1032,9 +1064,9 @@ export class SimpleTableComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.data$) {
-      this.data$.unsubscribe();
-      this.data$ = null;
-    }
+    [this.data$, this.i18n$].filter(w => w).forEach(i => {
+      i.unsubscribe();
+      i = null;
+    });
   }
 }
