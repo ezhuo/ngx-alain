@@ -1,14 +1,17 @@
 <div class="content__title">
-  <h1>门店
-    <small>使用
-      <code>.simple-table</code> 样式风格的一个实际项目示例。</small>
+  <h1>schema-demo
+
   </h1>
-  <button nz-button (click)="add()" [nzType]="'primary'">添加</button>
+  <div>
+    <button nz-button (click)="add()" [nzType]="'primary'">添加</button>
+    <button nz-button (click)="addShow()" [nzType]="'primary'">schema-show</button>
+    <button nz-button (click)="addEdit()" [nzType]="'primary'">schema-edit</button>
+  </div>
 </div>
 <form nz-form [nzLayout]="'inline'" class="search-form">
   <nz-form-item>
     <nz-form-control>
-      <nz-select [(ngModel)]="s.s" name="s" [nzAllowClear]="false">
+      <nz-select [(ngModel)]="mainTableParams.s" name="s" [nzAllowClear]="false">
         <nz-option nzValue="" nzLabel="状态不限"></nz-option>
         <nz-option nzValue="1" nzLabel="正常"></nz-option>
         <nz-option nzValue="2" nzLabel="已取消"></nz-option>
@@ -20,17 +23,17 @@
   </nz-form-item>
   <nz-form-item>
     <nz-form-control>
-      <input nz-input [(ngModel)]="s.user_id" name="user_id" nzPlaceHolder="用户编号">
+      <input nz-input [(ngModel)]="mainTableParams.user_id" name="user_id" nzPlaceHolder="用户编号">
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
     <nz-form-control>
-      <input nz-input [(ngModel)]="s.q" name="q" nzPlaceHolder="门店、分店名称">
+      <input nz-input [(ngModel)]="mainTableParams.q" name="q" nzPlaceHolder="门店、分店名称">
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
     <nz-form-control>
-      <button nz-button (click)="st.reset(s)">搜索</button>
+      <button nz-button (click)="st.reset(mainTableParams)">搜索</button>
     </nz-form-control>
   </nz-form-item>
 </form>
@@ -44,7 +47,7 @@
   </nz-form-item>
   <nz-form-item>
     <nz-form-control>
-      <nz-upload [nzAction]="configSrv.api.upload" nzMultiple nzListType="picture-card" [nzFileList]='fileList' (nzChange)='nzUploadHandleChange($event)'>
+      <nz-upload [nzAction]="configSrv.api.upload" nzMultiple nzListType="picture-card" [nzFileList]='fileList' (nzChange)='caseSrv.nzUploadHandleChange($event)'>
         <button nz-button>
           <i class="anticon anticon-upload"></i>
           <span>Click to Upload</span>
@@ -55,7 +58,7 @@
   <nz-form-item>
     <nz-form-control>
       {{values|json}}
-      <nz-cascader name="nzcascader" [(ngModel)]='values' nzChangeOnSelect [nzLoadData]="nzCascaderLoadData" (ngModelChange)="onChanges($event)">
+      <nz-cascader name="nzcascader" [(ngModel)]='values' nzChangeOnSelect [nzLoadData]="caseSrv.nzCascaderLoadData" (ngModelChange)="onChanges($event)">
       </nz-cascader>
     </nz-form-control>
   </nz-form-item>
@@ -92,7 +95,7 @@
   </nz-form-item>
 </form>
 
-<simple-table #st class="simple-table" [columns]="columns" [data]="url" [extraParams]="s">
+<simple-table #st class="simple-table" [columns]="mainTableColumns" [data]="url" [extraParams]="mainTableParams">
   <ng-template st-row="custom" type="title" let-c>
     {{ c.title }}
     <nz-dropdown nzTrigger="click" [nzClickHide]="false">

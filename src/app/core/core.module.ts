@@ -1,3 +1,4 @@
+import { CaseModule } from './case/case.module';
 import {
   NgModule, Optional, SkipSelf, ModuleWithProviders,
   LOCALE_ID, APP_INITIALIZER
@@ -20,10 +21,11 @@ const CORE_PROVIDERS = [
   ...DataModule.forRoot().providers,
   ...UtilsModule.forRoot().providers,
   ...NetModule.forRoot().providers,
+  ...CaseModule.forRoot().providers
 ];
 
 @NgModule({
-  exports: [DataModule, UtilsModule, NetModule],
+  exports: [DataModule, UtilsModule, NetModule, CaseModule],
   providers: []
 })
 export class CoreModule {

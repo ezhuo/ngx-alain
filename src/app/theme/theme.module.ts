@@ -8,8 +8,7 @@ const DIRECTIVES = [
     DtTreeDirective
 ];
 
-const COMPONENTS = [
-];
+const COMPONENTS = [];
 const PROVIDERS = [];
 
 @NgModule({

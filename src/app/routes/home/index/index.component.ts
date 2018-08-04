@@ -1,6 +1,6 @@
 import { Component, ViewChild, Injector } from '@angular/core';
 
-import { ParentIndexComponent } from '@routes/parent/parent.index.component';
+import { ParentIndexComponent } from '@core/parent';
 
 @Component({
   selector: 'com-home-index',

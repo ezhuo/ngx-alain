@@ -1,5 +1,5 @@
 import { Component, OnInit, Injector } from '@angular/core';
-import { ParentModalComponent } from '@routes/parent/parent.modal.component';
+import { ParentModalComponent } from '@core/parent';
 
 @Component({
   selector: 'app-extras-poi-edit',

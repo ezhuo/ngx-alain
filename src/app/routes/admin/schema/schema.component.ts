@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
     template: `<router-outlet></router-outlet>`
 })
 
-export class CustomerComponent implements OnInit {
+export class SchemaComponent implements OnInit {
     constructor() { }
 
     ngOnInit() { }

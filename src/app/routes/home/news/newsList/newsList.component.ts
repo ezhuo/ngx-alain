@@ -1,5 +1,5 @@
 import { Component, OnInit, Injector, Output, EventEmitter } from '@angular/core';
-import { ParentIndexComponent } from '@routes/parent/parent.index.component';
+import { ParentIndexComponent } from '@core/parent';
 
 @Component({
   selector: 'com-home-news-list',

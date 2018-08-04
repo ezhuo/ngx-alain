@@ -406,3 +406,14 @@ export const randomNum = function (n) {
     rnd += Math.floor(Math.random() * 10);
   return rnd;
 };
+
+export const getDict = (dict, v) => {
+  for (const idx of dict) {
+    if (idx) {
+      if (idx.hasOwnProperty('value') && idx.value == v) {
+        return idx.title || idx.label || '-';
+      }
+    }
+  }
+  return '-';
+};

@@ -1,7 +1,7 @@
 import { Component, ViewChild, Injector, OnInit, OnDestroy } from '@angular/core';
 
 import { SimpleTableComponent } from '@delon/abc';
-import { ParentIndexComponent } from '@routes/parent/parent.index.component';
+import { ParentIndexComponent } from '@core/parent';
 
 import { AccountEditComponent } from '@routes/admin/system/account/edit/edit.component';
 
@@ -57,7 +57,7 @@ export class AccountComponent extends ParentIndexComponent implements OnInit, On
           {
             text: '操作', children: [
               {
-                text: '删除', click: (record, btnRes) => this.deleteAlert(null, record).then((res) => {
+                text: '删除', click: (record, btnRes) => this.caseSrv.deleteAlert(null, record).then((res) => {
                   console.log(res);
                   this.st.reload();
                 }).catch((err) => {

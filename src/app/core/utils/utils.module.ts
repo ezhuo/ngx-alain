@@ -14,9 +14,7 @@ const SERVICES = [
 @NgModule({
   imports: [],
   exports: [],
-  providers: [
-    ...SERVICES
-  ]
+  providers: []
 })
 export class UtilsModule {
   static forRoot(): ModuleWithProviders {

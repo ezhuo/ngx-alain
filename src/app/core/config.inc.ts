@@ -5,10 +5,10 @@ export const app_debug = false;
 export const app_debug_error = true;
 
 export const app: App = {
-  name: '智慧党建云平台',
-  short: '智慧党建',
-  description: '智慧党建云平台',
-  key: 'dangjian',
+  name: 'ngx-alain',
+  short: 'ngx-alain',
+  description: 'ngx-alain',
+  key: 'ngx-alain',
   year: 2018
 };
 

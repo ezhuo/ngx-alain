@@ -265,20 +265,13 @@
       "group": true,
       "hideInBreadcrumb": true,
       "children": [{
-        "text": "客户管理",
-        "link": "/app/admin/customer",
+        "text": "schema-demo",
+        "link": "/app/admin/schema",
         "icon": "icon-cup",
-        "children": [{
-            "text": "Help Center",
-            "link": "/app/admin/customer/helpcenter"
-          },
+        "children": [
           {
-            "text": "Settings",
-            "link": "/app/admin/customer/settings"
-          },
-          {
-            "text": "account",
-            "link": "/app/admin/customer/account"
+            "text": "schema-demo",
+            "link": "/app/admin/schema/schema-demo"
           }
         ]
       }, {

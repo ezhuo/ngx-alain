@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, Injector } from '@angular/core';
-import { ParentModalComponent } from '@routes/parent/parent.modal.component';
+import { ParentModalComponent } from '@core/parent';
 
 @Component({
   selector: 'com-account-edit',
@@ -20,7 +20,7 @@ export class AccountEditComponent extends ParentModalComponent implements OnInit
 
   ngOnInit() {
     super.ngOnInit();
-    this.__formGroupFillData(this.validateForm, this.formData);
+    this.baseFunc.__formGroupFillData(this.validateForm, this.formData);
   }
 
   ngOnDestroy() {

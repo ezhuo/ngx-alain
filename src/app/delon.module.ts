@@ -31,6 +31,20 @@ export function pageHeaderConfig(): AdPageHeaderConfig {
   return Object.assign(new AdPageHeaderConfig(), { home_i18n: 'home' });
 }
 
+import { DelonFormConfig } from '@delon/form';
+export function fnDelonFormConfig(): DelonFormConfig {
+  return Object.assign(new DelonFormConfig(), <DelonFormConfig>{
+    button: {
+      submit: '保存',
+      submit_type: 'primary',
+      reset: '重置',
+      reset_type: 'default',
+    }
+    // values
+  });
+}
+
+
 import { DelonAuthConfig } from '@delon/auth';
 export function delonAuthConfig(): DelonAuthConfig {
   return Object.assign(new DelonAuthConfig(), <DelonAuthConfig>{
@@ -75,6 +89,7 @@ export class DelonModule {
         // TIPS：@delon/abc 有大量的全局配置信息，例如设置所有 `simple-table` 的页码默认为 `20` 行
         // { provide: SimpleTableConfig, useFactory: simpleTableConfig }
         { provide: AdPageHeaderConfig, useFactory: pageHeaderConfig },
+        { provide: DelonFormConfig, useFactory: fnDelonFormConfig },
         { provide: DelonAuthConfig, useFactory: delonAuthConfig },
       ],
     };

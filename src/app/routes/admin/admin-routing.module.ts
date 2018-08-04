@@ -12,7 +12,7 @@ const routes: Routes = [{
     canActivate: [AuthGuard],
     children:
         [
-            { path: 'customer', loadChildren: './customer/customer.module#CustomerModule' },
+            { path: 'schema', loadChildren: './schema/schema.module#SchemaModule' },
             { path: 'system', loadChildren: './system/system.module#SystemModule' },
             {
                 path: 'demo',
