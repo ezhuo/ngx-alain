@@ -93,13 +93,20 @@ export class BaseFunc {
      * 动态表单设置
      * @param mainSchema 
      */
-    __schemaFormSetTexts(schema?: SFSchema) {
+    __schemaFormSetTexts(schema?: SFSchema, orderBy?: any[], mainSchema?: SFSchema) {
         const self = this.bc;
+        let newSchema = mainSchema || self.mainSchema;
+        orderBy = orderBy || self.mainSchemaOrder;
         if (!self.helpers.IsEmpty(schema)) {
-            self.mainSchema = self.helpers.deepExtend({}, self.mainSchema, schema);
+            newSchema = self.helpers.deepExtend({}, newSchema, schema);
         }
 
-        const prop = self.mainSchema.properties;
+        // 排序
+        if (orderBy && !self.helpers.IsEmpty(orderBy)) {
+            newSchema = this.__schemaFormOrder(orderBy, newSchema);
+        }
+
+        const prop = newSchema.properties;
         for (const idx of Object.keys(prop)) {
             if (!prop[idx].ui || self.helpers.isString(prop[idx].ui)) {
                 prop[idx].ui = { widget: 'texts' };
@@ -110,6 +117,31 @@ export class BaseFunc {
                 prop[idx].ui['enum'] = prop[idx].enum;
             }
         }
+
+        return newSchema;
+    }
+
+    /**
+     * 表单排序
+     * @param orderBy 
+     * @param mainSchema 
+     */
+    __schemaFormOrder(orderBy?: any[], mainSchema?: SFSchema): SFSchema {
+        const self = this.bc;
+        orderBy = orderBy || self.mainSchemaOrder;
+        mainSchema = mainSchema || self.mainSchema;
+        let newSchema: SFSchema = {};
+        if (orderBy && !self.helpers.IsEmpty(orderBy)) {
+            newSchema = self.helpers.deepExtend({}, mainSchema);
+            newSchema.properties = {};
+            orderBy.forEach((item) => {
+                newSchema.properties[item] = mainSchema.properties[item];
+            });
+            mainSchema = newSchema;
+        } else {
+            newSchema = mainSchema;
+        }
+        return newSchema;
     }
 
 }

@@ -101,6 +101,11 @@ export class BaseComponent implements OnInit, OnDestroy {
   protected ___mainSchema: SFSchema;
 
   /**
+   * 当前编辑业务的数据结构的排序
+   */
+  protected ___mainSchemaOrder: any[];
+
+  /**
    * 当前编辑业务的数据结构的 UI
    */
   protected ___mainSchemaUi: SFUISchema;
@@ -119,7 +124,7 @@ export class BaseComponent implements OnInit, OnDestroy {
         this[idx] = null;
       }
     }
-    console.log(this);
+    // console.log(this);
   }
 
   // ----------------------------------------
@@ -287,6 +292,14 @@ export class BaseComponent implements OnInit, OnDestroy {
 
   get mainSchema() {
     return this.___mainSchema;
+  }
+
+  set mainSchemaOrder(value) {
+    this.___mainSchemaOrder = value;
+  }
+
+  get mainSchemaOrder() {
+    return this.___mainSchemaOrder;
   }
 
   set mainSchemaUi(value) {

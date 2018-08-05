@@ -10,8 +10,7 @@ import { ParentModalComponent } from '@core/parent';
   </div>
   
   <div class="sf-view">
-  <sf #sf [schema]='mainSchema' [ui]='mainSchemaUi' [formData]='formData' (formSubmit)='submit(sf)' [button]='none'>
-   
+  <sf #sf [schema]='mainSchema' [ui]='mainSchemaUi' [formData]='formData' (formSubmit)='submit(sf)' [button]="'none'">
   </sf>
   </div>
   <div class='modal-footer'>
@@ -29,7 +28,8 @@ export class SchemaShowComponent extends ParentModalComponent implements OnInit 
   ngOnInit() {
     super.ngOnInit();
     console.log('ngOnInit', this);
-    this.baseFunc.__schemaFormSetTexts({
+
+    this.mainSchema = this.baseFunc.__schemaFormSetTexts({
       properties: {
         agree: {
           type: 'string',
@@ -40,7 +40,8 @@ export class SchemaShowComponent extends ParentModalComponent implements OnInit 
         spanLabel: 5,
         spanControl: 19,
       }
-    });
+    }, ['name', 'email', 'age']);
+
   }
 
 }

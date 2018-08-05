@@ -23,7 +23,7 @@ export class SchemaDemoComponent extends ParentIndexComponent implements OnInit 
       name: 'xxx.png',
       status: 'done',
       response: 'Server Error 500', // custom error message to show
-      url: '/file/show/2018-07-11/1531310501_43220052.jpeg'
+      url: '/file/show/2018-08-05/1533467890_207681697.jpeg'
     },
     {
       uid: 2,
@@ -153,10 +153,9 @@ export class SchemaDemoComponent extends ParentIndexComponent implements OnInit 
           'title': '附件',
           'format': 'uri',
           ui: {
-            widget: 'uploadImage',
+            widget: 'uploadAvatar',
             action: this.configSrv.api.upload,
-            change: this.caseSrv.nzUploadHandleChange,
-            listType: 'picture-card'
+            change: this.caseSrv.nzUploadHandleChange
           }
         },
         'geo': {
@@ -275,8 +274,9 @@ export class SchemaDemoComponent extends ParentIndexComponent implements OnInit 
           'type': 'string',
           'title': '内容',
           'ui': {
-            'widget': 'tinymce',
-            'grid': { 'span': 24 }
+            'widget': 'ckeditor',
+            'grid': { 'span': 24 },
+            config: this.configSrv.ckeditor
           }
         }
       },
@@ -317,7 +317,10 @@ export class SchemaDemoComponent extends ParentIndexComponent implements OnInit 
 
   addEdit() {
     this.formData = {
+      pkId: 1,
       email: 'aa@163.com',
+      content: 'fdasfdas',
+      file: { 'url': '2018-08-05/1533466761_1997158545.jpeg', 'fileName': '1533466761_1997158545.jpeg', 'type': 'image/jpeg', 'size': 867361, 'status': 1, 'dt': '2018-08-05 18:59:21', 'uid': '1533466761_1997158545.jpeg' }
     };
     this.modalSrv
       .static(SchemaEditComponent, this.modalParams())

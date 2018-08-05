@@ -15,7 +15,7 @@ export const app: App = {
 export const api = {
   base: 'api',
   upload: '/api/file/upload',
-  show: '/file/show',
+  show: '/file/show/',
   down: '/uploads/',
   canton: 'canton/selectselectselect' // 获取区域的默认URL
 };

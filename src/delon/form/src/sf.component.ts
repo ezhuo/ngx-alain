@@ -228,8 +228,8 @@ export class SFComponent implements OnInit, OnChanges, OnDestroy {
           property.format && FORMATMAPS[property.format],
           typeof property.ui === 'string' ? { widget: property.ui } : null,
           !property.ui &&
-          Array.isArray(property.enum) &&
-          property.enum.length > 0
+            Array.isArray(property.enum) &&
+            property.enum.length > 0
             ? { widget: 'select' }
             : null,
           this._defUi,
@@ -387,6 +387,12 @@ export class SFComponent implements OnInit, OnChanges, OnDestroy {
       const pui: SFUISchemaItemRun = this.rootProperty.searchProperty(path).ui;
       if (!pui._render) pui._render = tpl;
     });
+  }
+
+  submit() {
+    if (!this.liveValidate) this.validator();
+    if (!this.valid) return;
+    this.formSubmit.emit(this.value);
   }
 
   validator() {

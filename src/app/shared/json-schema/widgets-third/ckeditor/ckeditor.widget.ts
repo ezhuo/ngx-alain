@@ -5,17 +5,18 @@ import { ControlWidget } from '@delon/form';
   selector: 'sf-ckeditor',
   template: `
   <sf-item-wrap [id]="id" [schema]="schema" [ui]="ui" [showError]="showError" [error]="error" [showTitle]="schema.title">
-    <ueditor
-      [ngModel]="value"
-      [config]="config"
-      [loadingTip]="loading"
-      [delay]="delay"
-      (ngModelChange)="change($event)">
-    </ueditor>
+    <ckeditor 
+          [(ngModel)]="value" 
+          [config]="config" 
+          [readonly]="false"  
+          (change)="change($event)" 
+          [debounce]="delay" 
+          name='ckeditor'>
+    </ckeditor>
   </sf-item-wrap>
   `,
   preserveWhitespaces: false,
-  styles: [`:host ueditor { line-height:normal; }`],
+  styles: [`:host ckeditor { line-height:normal; }`],
 })
 // tslint:disable-next-line:component-class-suffix
 export class CkeditorWidget extends ControlWidget implements OnInit {
@@ -28,7 +29,7 @@ export class CkeditorWidget extends ControlWidget implements OnInit {
   ngOnInit(): void {
     this.loading = this.ui.loading || '加载中……';
     this.config = this.ui.config || {};
-    this.delay = this.ui.delay || 300;
+    this.delay = this.ui.delay || 500;
   }
 
   change(value: string) {

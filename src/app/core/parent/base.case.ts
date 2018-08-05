@@ -96,22 +96,25 @@ export class BaseCase {
     /**
      * 数据上传
      */
-    nzUploadHandleChange = ($event): void => {
+    nzUploadHandleChange = ($event: any): void => {
         const self = this.bc;
-        const status = $event.file.status;
+        const file = $event.file;
+        const fileList = $event.fileList;
+        const status = file.status;
         if (status !== 'uploading') {
             // 正在上传
         }
         if (status === 'done') {
             // 上传完成
-            $event.fileList[$event.fileList.length - 1].thumbUrl = self.configSrv.api.show + $event.file.response.url;
-            $event.fileList[$event.fileList.length - 1].url = self.configSrv.api.show + $event.file.response.url;
-            console.log($event.file, $event.fileList);
-            self.msgSrv.msg_success(`${$event.file.name} 上传成功！`);
+            file.response.url = self.configSrv.api.show + file.response.url;
+            fileList[fileList.length - 1].thumbUrl = file.response.url;
+            fileList[fileList.length - 1].url = file.response.url;
+            // console.log(file, fileList);
+            self.msgSrv.msg_success(`${file.name} 上传成功！`);
         } else if (status === 'error') {
             // 上传失败
-            console.log($event.file, $event.fileList);
-            self.msgSrv.msg_error(`${$event.file.name} 上传失败！`);
+            // console.log(file, fileList);
+            self.msgSrv.msg_error(`${file.name} 上传失败！`);
         }
     }
 

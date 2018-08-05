@@ -9,18 +9,18 @@ import { CkeditorWidget } from './widgets-third/ckeditor/ckeditor.widget';
 
 import { TextsWidget } from './widgets/texts/texts.widget';
 import { TextImageWidget } from './widgets/textImage/textImage.widget';
-import { UploadImageWidget } from './widgets/uploadImage/uploadImage.widget';
+import { UploadAvatarWidget } from './widgets/uploadAvatar/uploadAvatar.widget';
 
 export const SCHEMA_THIRDS_COMPONENTS = [
   // TinymceWidget,
   // UeditorWidget,
   // MarkdownWidget,
-  // CkeditorWidget,
+  CkeditorWidget,
 
   TextsWidget,
   TextImageWidget,
-  UploadImageWidget,
-  
+  UploadAvatarWidget,
+
 ];
 
 @NgModule({
@@ -34,10 +34,10 @@ export class JsonSchemaModule {
     // widgetRegistry.register(TinymceWidget.KEY, TinymceWidget);
     // widgetRegistry.register(UeditorWidget.KEY, UeditorWidget);
     // widgetRegistry.register(MarkdownWidget.KEY, UeditorWidget);
-    // widgetRegistry.register(CkeditorWidget.KEY, CkeditorWidget);
+    widgetRegistry.register(CkeditorWidget.KEY, CkeditorWidget);
 
     widgetRegistry.register(TextsWidget.KEY, TextsWidget);
     widgetRegistry.register(TextImageWidget.KEY, TextImageWidget);
-    widgetRegistry.register(UploadImageWidget.KEY, UploadImageWidget);
+    widgetRegistry.register(UploadAvatarWidget.KEY, UploadAvatarWidget);
   }
 }

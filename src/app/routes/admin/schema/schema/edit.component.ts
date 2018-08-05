@@ -10,15 +10,15 @@ import { SFSchema } from '@delon/form';
   </div>
   
   <div class="sf-view">
-  <sf #sf [schema]='mainSchema' [ui]='mainSchemaUi' [formData]='formData' (formSubmit)='submit(sf)' [button]='none'>
-    <div class='modal-footer'>
-      <button nz-button type='button' (click)='modalClose()'>关闭</button>
-      <button type='submit' nz-button [disabled]='!sf.valid'>保存</button>
-      <button (click)='sf.reset()' type='button' nz-button>重置</button>
-    </div>
+  <sf #sf [schema]='mainSchema' [ui]='mainSchemaUi' [formData]='formData' (formSubmit)='submit(sf)' [button]="'none'">
   </sf>
   </div>
 
+  <div class='modal-footer'>
+      <button nz-button type='button' (click)='modalClose()'>关闭</button>
+      <button (click)='sf.submit()' nz-button [disabled]='!sf.valid'>保存</button>
+      <button (click)='sf.reset()' type='button' nz-button>重置</button>
+  </div>
   
   `,
   styleUrls: [`./edit.less`],
