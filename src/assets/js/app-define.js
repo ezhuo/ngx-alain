@@ -1,6 +1,6 @@
 "use strict";
 
-const assetsHelper = {};
+var assetsHelper = {};
 
 __load();
 
@@ -42,7 +42,7 @@ function __load() {
 
   var ie = IEVersion();
   if (typeof ie == 'number') {
-    if (ie >= 6 && ie < 11) {
+    if (ie >= 6 && ie < 10) {
       __ie_notice(ie);
     }
   }

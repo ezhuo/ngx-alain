@@ -29,7 +29,7 @@ export class SchemaShowComponent extends ParentModalComponent implements OnInit 
   ngOnInit() {
     super.ngOnInit();
     console.log('ngOnInit', this);
-    this.baseFunc.__schemaFormSetText({
+    this.baseFunc.__schemaFormSetTexts({
       properties: {
         agree: {
           type: 'string',

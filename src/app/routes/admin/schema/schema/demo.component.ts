@@ -153,9 +153,10 @@ export class SchemaDemoComponent extends ParentIndexComponent implements OnInit 
           'title': '附件',
           'format': 'uri',
           ui: {
-            widget: 'upload',
+            widget: 'uploadImage',
             action: this.configSrv.api.upload,
-            change: this.caseSrv.nzUploadHandleChange
+            change: this.caseSrv.nzUploadHandleChange,
+            listType: 'picture-card'
           }
         },
         'geo': {

@@ -93,7 +93,7 @@ export class BaseFunc {
      * 动态表单设置
      * @param mainSchema 
      */
-    __schemaFormSetText(schema?: SFSchema) {
+    __schemaFormSetTexts(schema?: SFSchema) {
         const self = this.bc;
         if (!self.helpers.IsEmpty(schema)) {
             self.mainSchema = self.helpers.deepExtend({}, self.mainSchema, schema);
@@ -102,9 +102,9 @@ export class BaseFunc {
         const prop = self.mainSchema.properties;
         for (const idx of Object.keys(prop)) {
             if (!prop[idx].ui || self.helpers.isString(prop[idx].ui)) {
-                prop[idx].ui = { widget: 'text' };
+                prop[idx].ui = { widget: 'texts' };
             } else {
-                prop[idx].ui['widget'] = 'text';
+                prop[idx].ui['widget'] = 'texts';
             }
             if (!prop[idx].ui['enum']) {
                 prop[idx].ui['enum'] = prop[idx].enum;
