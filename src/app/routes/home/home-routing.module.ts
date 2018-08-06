@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '@core/data/auth-guard.service';
-import { IndexComponent } from '@routes/home/index/index.component';
-import { NewsComponent } from '@routes/home/news/news.component';
+import { IndexComponent } from './index/index.component';
+import { NewsComponent } from './news/news.component';
 
-import { NewsListComponent } from '@routes/home/news/newsList/newsList.component';
-import { NewsInfoComponent } from '@routes/home/news/newsInfo/newsinfo.component';
-import { HomeBreadcrumbComponent } from '@routes/home/breadcrumb/breadcrumb.component';
-import { ZzshComponent } from '@routes/home/zzsh/zzsh.component';
+import { NewsListComponent } from './news/newsList/newsList.component';
+import { NewsInfoComponent } from './news/newsInfo/newsinfo.component';
+import { HomeBreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { ZzshComponent } from './zzsh/zzsh.component';
 
 const routes: Routes = [{
     path: '',

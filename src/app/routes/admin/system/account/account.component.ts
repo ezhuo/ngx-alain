@@ -3,7 +3,7 @@ import { Component, ViewChild, Injector, OnInit, OnDestroy } from '@angular/core
 import { SimpleTableComponent } from '@delon/abc';
 import { ParentIndexComponent } from '@core/parent';
 
-import { AccountEditComponent } from '@routes/admin/system/account/edit/edit.component';
+import { AccountEditComponent } from './edit/edit.component';
 
 import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd';
 
