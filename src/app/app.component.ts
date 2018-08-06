@@ -1,7 +1,15 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
+import {
+  Component,
+  HostBinding,
+  OnInit,
+  Renderer2,
+  ElementRef,
+} from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { SettingsService, TitleService } from '@delon/theme';
 import { filter } from 'rxjs/operators';
+import { SettingsService, TitleService } from '@delon/theme';
+import { VERSION as VERSION_ALAIN } from '@delon/theme';
+import { VERSION as VERSION_ZORRO } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-root',
@@ -22,10 +30,23 @@ export class AppComponent implements OnInit {
   }
 
   constructor(
+    el: ElementRef,
+    renderer: Renderer2,
     private settings: SettingsService,
     private router: Router,
     private titleSrv: TitleService,
-  ) {}
+  ) {
+    renderer.setAttribute(
+      el.nativeElement,
+      'ng-alain-version',
+      VERSION_ALAIN.full,
+    );
+    renderer.setAttribute(
+      el.nativeElement,
+      'ng-zorro-version',
+      VERSION_ZORRO.full,
+    );
+  }
 
   ngOnInit() {
     this.router.events

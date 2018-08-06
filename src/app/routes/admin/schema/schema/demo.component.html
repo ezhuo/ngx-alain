@@ -95,7 +95,7 @@
   </nz-form-item>
 </form>
 
-<simple-table #st class="simple-table" [columns]="mainTableColumns" [data]="url" [extraParams]="mainTableParams">
+<simple-table #st class="simple-table" [columns]="mainTableColumns" [data]="url" [extraParams]="mainTableParams" [resReName]="{list:'data.list',total:'data.total'}">
   <ng-template st-row="custom" type="title" let-c>
     {{ c.title }}
     <nz-dropdown nzTrigger="click" [nzClickHide]="false">

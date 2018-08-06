@@ -42,6 +42,7 @@ export class SchemaEditComponent extends ParentModalComponent implements OnInit 
   }
 
   submit($event: any) {
+    debugger;
     console.log($event.value);
   }
 

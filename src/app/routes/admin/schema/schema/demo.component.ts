@@ -293,6 +293,7 @@ export class SchemaDemoComponent extends ParentIndexComponent implements OnInit 
   }
 
   ngOnInit() {
+    console.log(this.mainTableParams);
   }
   add() {
     this.modalSrv

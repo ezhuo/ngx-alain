@@ -229,5 +229,6 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
       return child._open;
     }
   }
+  
   // endregion
 }
