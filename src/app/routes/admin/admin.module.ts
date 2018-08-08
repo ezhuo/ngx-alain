@@ -1,7 +1,8 @@
 
 import { NgModule } from '@angular/core';
-import { AdminRoutingModule, routedComponents, entryComponents } from '@routes/admin/admin-routing.module';
-import { SharedModule } from '@shared/shared.module';
+import { SharedModule } from '@shared';
+
+import { AdminRoutingModule, routedComponents, entryComponents } from './admin-routing.module';
 
 @NgModule({
     imports: [AdminRoutingModule, SharedModule],

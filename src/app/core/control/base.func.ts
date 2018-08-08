@@ -1,4 +1,4 @@
-import { BaseComponent } from './base.component';
+import { BaseControl } from './base.control';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Subscriber } from 'rxjs';
 
@@ -7,13 +7,13 @@ import { SFSchema, SFUISchema, SFSchemaEnumType } from '@delon/form';
 
 export class BaseFunc {
 
-    private ___bc: BaseComponent = null;
+    private ___bc: BaseControl = null;
 
     get bc() {
         return this.___bc;
     }
 
-    constructor(bc: BaseComponent) {
+    constructor(bc: BaseControl) {
         this.___bc = bc;
     }
 
@@ -23,7 +23,7 @@ export class BaseFunc {
     destroy() {
         const self = this.___bc;
 
-        console.log('ngOnDestroy', self.pageData$);
+        if (self.configSrv.app_debug) console.log('ngOnDestroy', self.pageData$);
 
         // 清空数据流
         for (const idx of Object.keys(self.pageData$)) {
@@ -107,11 +107,18 @@ export class BaseFunc {
         }
 
         const prop = newSchema.properties;
+        let old = null;
         for (const idx of Object.keys(prop)) {
+            if (!prop[idx]) { continue; }
             if (!prop[idx].ui || self.helpers.isString(prop[idx].ui)) {
-                prop[idx].ui = { widget: 'texts' };
+                old = prop[idx].ui;
+                prop[idx].ui = {};
             } else {
-                prop[idx].ui['widget'] = 'texts';
+                old = prop[idx].ui['widget'];
+            }
+            prop[idx].ui['widget'] = 'texts';
+            if (['upload', 'uploadAvatar'].indexOf(old) > -1) {
+                prop[idx].ui['widget'] = 'textFile';
             }
             if (!prop[idx].ui['enum']) {
                 prop[idx].ui['enum'] = prop[idx].enum;

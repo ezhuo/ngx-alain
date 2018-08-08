@@ -1,32 +1,38 @@
 import { App, Menu } from '@delon/theme';
+import * as env from '@env/environment.dev';
+import { deepExtend } from './helpers/extend';
 
-export const app_debug = false;
+export const app_debug = env.app_debug;
+export const app_debug_error = env.app_debug_error;
+export const app: App = env.app;
 
-export const app_debug_error = true;
+/**
+*区域设置
+*/
+export const canton = env.canton;
 
-export const app: App = {
-  name: 'ngx-alain',
-  short: 'ngx-alain',
-  description: 'ngx-alain',
-  key: 'ngx-alain',
-  year: 2018
-};
+/**
+ *路由配置
+ */
+export const router = deepExtend(
+  {
+    default: '/app/admin',
+    home: '/app/home',
+    admin: '/app/admin',
+    login: '/passport/login',
+    lock: '/passport/lock'
+  }, env.router
+);
 
+/**
+ * API
+ */
 export const api = {
   base: 'api',
   upload: '/api/file/upload',
   show: '/file/show/',
   down: '/uploads/',
   canton: 'canton/selectselectselect' // 获取区域的默认URL
-};
-
-/**
-*区域设置
-*/
-export const canton = {
-  id: null, // 默认区域ID
-  fdn: null, // 默认区域
-  name: null
 };
 
 /**
@@ -48,17 +54,6 @@ export const define = {
   // table page size
   table_page_size: 10
 
-};
-
-/**
- *路由配置
- */
-export const router = {
-  default: '/app/admin',
-  home: '/app/home',
-  admin: '/app/admin',
-  login: '/passport/login',
-  lock: '/passport/lock'
 };
 
 export const menus: Menu[] = [{

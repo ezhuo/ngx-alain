@@ -4,7 +4,8 @@ import {
     routedComponents,
     entryComponents
 } from './system-routing.module';
-import { SharedModule } from '@shared/shared.module';
+
+import { SharedModule } from '@shared';
 
 @NgModule({
     imports: [SystemRoutingModule, SharedModule],

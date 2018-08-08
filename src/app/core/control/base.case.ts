@@ -1,4 +1,4 @@
-import { BaseComponent } from './base.component';
+import { BaseControl } from './base.control';
 import { of } from 'rxjs';
 
 import { SimpleTableColumn, SimpleTableComponent } from '@delon/abc';
@@ -6,13 +6,13 @@ import { SFSchema, SFUISchema, SFSchemaEnumType } from '@delon/form';
 
 export class BaseCase {
 
-    private ___bc: BaseComponent = null;
+    private ___bc: BaseControl = null;
 
     get bc() {
         return this.___bc;
     }
 
-    constructor(bc: BaseComponent) {
+    constructor(bc: BaseControl) {
         this.___bc = bc;
     }
 

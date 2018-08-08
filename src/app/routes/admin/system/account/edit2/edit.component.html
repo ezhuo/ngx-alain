@@ -1,0 +1,11 @@
+<div class="modal-header">
+  <div class="modal-title">{{ primaryValue ? '编辑' : '添加'}}</div>
+</div>
+
+
+<sf #sf mode="default" [schema]="searchSchema" (formSubmit)="submitForm($event)" [button]="null">
+  <div class="modal-footer">
+    <button type="submit" nz-button [disabled]="!sf.valid">保存</button>
+    <button (click)="sf.reset()" type="button" nz-button>重置</button>
+  </div>
+</sf>

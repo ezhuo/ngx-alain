@@ -1,4 +1,4 @@
-import { SharedModule } from '@shared/shared.module';
+import { SharedModule } from '@shared';
 import { NgModule } from '@angular/core';
 import { PassportRoutingModule, routedComponents } from './passport-routing.module';
 

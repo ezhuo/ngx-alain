@@ -8,12 +8,12 @@ import { DelonABCModule } from '@delon/abc';
 import { DelonACLModule } from '@delon/acl';
 import { DelonFormModule } from '@delon/form';
 
-import { ModalService } from '@core/utils/modal.service';
-import { ThemeModule } from '@theme/theme.module';
+import { ModalService } from '@core';
+import { ThemeModule } from '@theme';
 
 // region: third libs
 
-import { ThirdComponentModuleList } from '@shared/third-component.module';
+import { ThirdComponentModuleList } from './third-component.module';
 
 const THIRDMODULES = [
   ...ThirdComponentModuleList

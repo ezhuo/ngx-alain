@@ -1,7 +1,10 @@
 
 import { NgModule } from '@angular/core';
-import { HomeRoutingModule, routedComponents, entryComponents } from '@routes/home/home-routing.module';
-import { SharedModule } from '@shared/shared.module';
+
+import { SharedModule } from '@shared';
+
+import { HomeRoutingModule, routedComponents, entryComponents } from './home-routing.module';
+
 
 @NgModule({
     imports: [HomeRoutingModule, SharedModule],

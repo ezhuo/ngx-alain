@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from '@core/data/auth-guard.service';
+import { AuthGuard } from '@core';
 
 import { DashboardV1Component } from './ngalain/dashboard/v1/v1.component';
 import { DashboardAnalysisComponent } from './ngalain/dashboard/analysis/analysis.component';

@@ -17,6 +17,19 @@
       <input nz-input formControlName="true_name" />
     </nz-form-control>
   </nz-form-item>
+  <nz-form-item class="mb-sm">
+    <nz-form-label nzSpan="3" nzRequired>登录名</nz-form-label>
+    <nz-form-control nzSpan="4" nzHasFeedback>
+      <input nz-input formControlName="login_username" />
+      <nz-form-explain *ngIf="validateForm.get('login_username').dirty&&validateForm.get('login_username').errors">
+        请输入
+      </nz-form-explain>
+    </nz-form-control>
+    <nz-form-label nzSpan="3">真实姓名</nz-form-label>
+    <nz-form-control nzSpan="4" nzHasFeedback>
+      <input nz-input formControlName="true_name" />
+    </nz-form-control>
+  </nz-form-item>
 
   <div class="modal-footer">
     <button nz-button type="button" (click)="modalClose({a:1})">关闭</button>

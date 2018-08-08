@@ -1,10 +1,21 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from '@core/data/auth-guard.service';
+import { AuthGuard } from '@core';
 
 import { SystemComponent } from './system.component';
 import { AccountComponent } from './account/account.component';
-import { AccountEditComponent } from './account/edit/edit.component';
+import { AccountEditComponent } from './account/account.edit.component';
+import { AccountShowComponent } from './account/account.show.component';
+
+export const entryComponents = [
+  AccountEditComponent,
+  AccountShowComponent
+];
+
+export const routedComponents = [
+  SystemComponent,
+  AccountComponent
+];
 
 const routes: Routes = [
   {
@@ -23,11 +34,3 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class SystemRoutingModule { }
-
-export const entryComponents = [
-  AccountEditComponent
-];
-
-export const routedComponents = [
-  SystemComponent, AccountComponent
-];

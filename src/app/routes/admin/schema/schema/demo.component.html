@@ -3,7 +3,8 @@
 
   </h1>
   <div>
-    <button nz-button (click)="add()" [nzType]="'primary'">添加</button>
+    <button nz-button (click)="addNgModel()" [nzType]="'primary'">添加ngModel</button>
+    <button nz-button (click)="addGroup()" [nzType]="'primary'">添加formGroup</button>
     <button nz-button (click)="addShow()" [nzType]="'primary'">schema-show</button>
     <button nz-button (click)="addEdit()" [nzType]="'primary'">schema-edit</button>
   </div>
@@ -95,7 +96,7 @@
   </nz-form-item>
 </form>
 
-<simple-table #st class="simple-table" [columns]="mainTableColumns" [data]="url" [extraParams]="mainTableParams" [resReName]="{list:'data.list',total:'data.total'}">
+<simple-table #st class="simple-table" [columns]="mainTableColumns" [data]="url" [extraParams]="mainTableParams">
   <ng-template st-row="custom" type="title" let-c>
     {{ c.title }}
     <nz-dropdown nzTrigger="click" [nzClickHide]="false">

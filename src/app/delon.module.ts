@@ -9,7 +9,7 @@ import {
   ModuleWithProviders,
 } from '@angular/core';
 import { RouteReuseStrategy } from '@angular/router';
-import { throwIfAlreadyLoaded } from '@core/module-import-guard';
+import { throwIfAlreadyLoaded } from '@core';
 
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { AlainThemeModule } from '@delon/theme';
@@ -31,6 +31,14 @@ export function pageHeaderConfig(): AdPageHeaderConfig {
   return Object.assign(new AdPageHeaderConfig(), { home_i18n: 'home' });
 }
 
+import { AdSimpleTableConfig } from '@delon/abc';
+export function fnAdSimpleTableConfig(): AdSimpleTableConfig {
+  return Object.assign(new AdSimpleTableConfig(), <AdSimpleTableConfig>{
+    resReName: { list: 'data.list', total: 'data.total' },
+    bordered: true
+  });
+}
+
 import { DelonFormConfig } from '@delon/form';
 export function fnDelonFormConfig(): DelonFormConfig {
   return Object.assign(new DelonFormConfig(), <DelonFormConfig>{
@@ -40,10 +48,8 @@ export function fnDelonFormConfig(): DelonFormConfig {
       reset: '重置',
       reset_type: 'default',
     }
-    // values
   });
 }
-
 
 import { DelonAuthConfig } from '@delon/auth';
 export function delonAuthConfig(): DelonAuthConfig {
@@ -87,10 +93,11 @@ export class DelonModule {
           deps: [ReuseTabService],
         },
         // TIPS：@delon/abc 有大量的全局配置信息，例如设置所有 `simple-table` 的页码默认为 `20` 行
-        // { provide: SimpleTableConfig, useFactory: simpleTableConfig }
+        { provide: AdSimpleTableConfig, useFactory: fnAdSimpleTableConfig },
         { provide: AdPageHeaderConfig, useFactory: pageHeaderConfig },
         { provide: DelonFormConfig, useFactory: fnDelonFormConfig },
         { provide: DelonAuthConfig, useFactory: delonAuthConfig },
+
       ],
     };
   }

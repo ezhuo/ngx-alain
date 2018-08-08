@@ -28,7 +28,7 @@ import { getData, toBool } from '@delon/form/src/utils';
       [nzRemove]="ui.remove"
       [nzPreview]="handlePreview"
       (nzChange)="change($event)">
-      <ng-container *ngIf="!avatarUrl">
+      <ng-container *ngIf="!avatar?.url ; else cross">
         <ng-container [ngSwitch]="btnType">
           <ng-container *ngSwitchCase="'plus'">
             <i class="anticon anticon-plus"></i>
@@ -46,19 +46,32 @@ import { getData, toBool } from '@delon/form/src/utils';
           </ng-container>
         </ng-container>
       </ng-container>
-      <img *ngIf="avatarUrl" [src]="avatarUrl" class="avatar" style="width:128px;height:128px;" />
+      <ng-template #cross>
+          <img [src]="avatar?.url" class="avatar" />
+          <span class="ant-upload-list-item-actions avatar-action">
+              <i (click)="handlePreview(avatar, $event)" class="anticon anticon-eye-o" title="查看"></i>
+              &nbsp;&nbsp;
+              <i (click)="handleRemove(avatar, $event)" class="anticon anticon-delete" title="删除"></i>
+          </span>
+      </ng-template>
     </nz-upload>
 
   </sf-item-wrap>
   `,
-  preserveWhitespaces: false
+  preserveWhitespaces: false,
+  styles: [`
+  .avatar-action i{
+    margin-top:10px;
+    font-size:26px;
+  }
+  `]
 })
 export class UploadAvatarWidget extends ControlWidget implements OnInit {
   static readonly KEY = 'uploadAvatar';
   i: any;
   fileList: UploadFile[] = [];
   btnType = '';
-  avatarUrl: any = null;
+  avatar: any = null;
 
   constructor(cd: ChangeDetectorRef, private modalSrv: NzModalService) {
     super(cd);
@@ -93,22 +106,25 @@ export class UploadAvatarWidget extends ControlWidget implements OnInit {
   change(args: UploadChangeParam) {
     if (this.ui.change) this.ui.change(args);
     if (args.type !== 'success') return;
-    console.log(JSON.stringify(args.fileList));
     if (args.fileList.length > 0) {
-      this.avatarUrl = args.fileList[args.fileList.length - 1].thumbUrl;
+      this.avatar = args.fileList[args.fileList.length - 1];
     }
+    this.setValue(args.fileList);
     this.notify(args.fileList);
   }
 
   reset(value: any) {
-    getData(this.schema, this.ui, this.formProperty.formData).subscribe(
-      list => {
-        this.fileList = list as UploadFile[];
-        this.avatarUrl = null;
-        this.notify(this.fileList);
-        this.detectChanges();
-      },
-    );
+    const uploadData = list => {
+      this.fileList = list as UploadFile[];
+      if (this.fileList && this.fileList.length > 0)
+        this.avatar = this.fileList[0];
+      this.notify(this.fileList);
+      this.detectChanges();
+    };
+    // getData(this.schema, this.ui, this.formProperty.formData).subscribe(uploadData);
+    if (value && value.length > 0) {
+      uploadData(value);
+    }
   }
 
   private notify(fileList: UploadFile[]) {
@@ -121,7 +137,10 @@ export class UploadAvatarWidget extends ControlWidget implements OnInit {
     );
   }
 
-  handlePreview = (file: UploadFile) => {
+  handlePreview = (file: UploadFile, $event: Event) => {
+    $event.preventDefault();
+    $event.stopPropagation();
+
     this.modalSrv
       .create({
         nzContent: `<img src="${file.url ||
@@ -129,5 +148,13 @@ export class UploadAvatarWidget extends ControlWidget implements OnInit {
         nzFooter: null,
       })
       .afterClose.subscribe(() => this.detectChanges());
+  }
+
+  handleRemove = (file: any, $event: Event) => {
+    $event.preventDefault();
+    $event.stopPropagation();
+    this.avatar = null;
+    this.setValue([]);
+    this.detectChanges();
   }
 }

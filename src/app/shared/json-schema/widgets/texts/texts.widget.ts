@@ -5,7 +5,7 @@ import { ControlWidget } from '@delon/form';
   selector: 'sf-texts',
   template: `
   <sf-item-wrap [id]="id" [schema]="schema" [ui]="ui" [showError]="showError" [error]="error" [showTitle]="schema.title">
-    {{ getTextValue }}
+    <span [innerHTML]="getTextValue"></span>
   </sf-item-wrap>
   `,
   preserveWhitespaces: false,

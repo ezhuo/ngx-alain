@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy, Injector } from '@angular/core';
-import { ParentModalComponent } from '@core/parent';
+import { ParentModalControl } from '@core/parent';
 
 @Component({
   selector: 'com-account-edit',
   templateUrl: './edit.component.html',
 })
-export class AccountEditComponent extends ParentModalComponent implements OnInit, OnDestroy {
+export class AccountEditComponent extends ParentModalControl implements OnInit, OnDestroy {
 
   validateForm: any;
 

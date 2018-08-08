@@ -4,8 +4,10 @@ import { NzModalService } from 'ng-zorro-antd';
 import { Component, ViewChild, Injector, TemplateRef, HostListener, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { SimpleTableComponent, SimpleTableColumn } from '@delon/abc';
 
-import { AccountEditComponent } from './edit/edit.component';
-import { ParentIndexComponent } from '@core/parent';
+import { SchemaFormEditComponent } from './edit/edit.component';
+import { SchemaFormEditxComponent } from './editx/edit.component';
+
+import { ParentIndexControl } from '@core';
 import { of } from 'rxjs';
 import { NzDropdownService, NzFormatEmitEvent, NzTreeNode, NzDropdownContextComponent } from 'ng-zorro-antd';
 
@@ -13,7 +15,7 @@ import { NzDropdownService, NzFormatEmitEvent, NzTreeNode, NzDropdownContextComp
   selector: 'com-account',
   templateUrl: './demo.component.html',
 })
-export class SchemaDemoComponent extends ParentIndexComponent implements OnInit {
+export class SchemaDemoComponent extends ParentIndexControl implements OnInit {
   @ViewChild('st') st: SimpleTableComponent;
 
   // fileList = [];
@@ -65,7 +67,7 @@ export class SchemaDemoComponent extends ParentIndexComponent implements OnInit 
           {
             text: '编辑',
             type: 'modal',
-            component: AccountEditComponent,
+            component: SchemaEditComponent,
             paramName: 'i',
             click: () => this.noticeSrv.msg_info('回调，重新发起列表刷新'),
           },
@@ -295,9 +297,18 @@ export class SchemaDemoComponent extends ParentIndexComponent implements OnInit 
   ngOnInit() {
     console.log(this.mainTableParams);
   }
-  add() {
+
+  addGroup() {
     this.modalSrv
-      .static(AccountEditComponent, { i: { id: 0 }, pp: this })
+      .static(SchemaFormEditComponent, { i: { id: 0 }, pp: this })
+      .subscribe(() => {
+        this.noticeSrv.msg_info('回调，重新发起列表刷新');
+      });
+  }
+
+  addNgModel() {
+    this.modalSrv
+      .static(SchemaFormEditxComponent, { i: { id: 0 }, pp: this })
       .subscribe(() => {
         this.noticeSrv.msg_info('回调，重新发起列表刷新');
       });
@@ -306,10 +317,13 @@ export class SchemaDemoComponent extends ParentIndexComponent implements OnInit 
   addShow() {
     this.formData = {
       email: 'aa@163.com',
-      agree: '同意'
+      agree: '同意',
+      content: `<p>民进党创党后，早期涉及&ldquo;国家定位&rdquo;、&ldquo;主权立场&rdquo;的论述，主要是依据1991年的&ldquo;台独党纲&rdquo;。直到1995年5月8日召开党代会，为了替陈水扁参选台湾地区领导人解套，通过&ldquo;台湾前途决议文&rdquo;，形同冻结&ldquo;台独党纲&rdquo;，民进党得以向中间路线靠拢，也成为民进党首次赢得台湾地区领导人选举的关键。</p>
+      <p><img alt="" height="443" src="http://p0.ifengimg.com/pmop/2018/0807/C54D929691B999B07543103B21DF901343B9350C_size95_w1049_h774.jpeg" width="600" /></p>
+      `,
     };
     this.modalSrv
-      .static(SchemaShowComponent, this.modalParams())
+      .static(SchemaShowComponent, this.formatModalParams())
       .subscribe(() => {
         console.log(this.mainSchema);
         this.noticeSrv.msg_info('回调，重新发起列表刷新');
@@ -321,10 +335,9 @@ export class SchemaDemoComponent extends ParentIndexComponent implements OnInit 
       pkId: 1,
       email: 'aa@163.com',
       content: 'fdasfdas',
-      file: { 'url': '2018-08-05/1533466761_1997158545.jpeg', 'fileName': '1533466761_1997158545.jpeg', 'type': 'image/jpeg', 'size': 867361, 'status': 1, 'dt': '2018-08-05 18:59:21', 'uid': '1533466761_1997158545.jpeg' }
     };
     this.modalSrv
-      .static(SchemaEditComponent, this.modalParams())
+      .static(SchemaEditComponent, this.formatModalParams())
       .subscribe(() => {
         console.log(this.mainSchema);
         this.noticeSrv.msg_info('回调，重新发起列表刷新');

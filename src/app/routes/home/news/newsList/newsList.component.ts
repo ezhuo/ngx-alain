@@ -1,12 +1,12 @@
 import { Component, OnInit, Injector, Output, EventEmitter } from '@angular/core';
-import { ParentIndexComponent } from '@core/parent';
+import { ParentIndexControl } from '@core';
 
 @Component({
   selector: 'com-home-news-list',
   templateUrl: './newsList.component.html',
   styleUrls: ['./newsList.component.less']
 })
-export class NewsListComponent extends ParentIndexComponent implements OnInit {
+export class NewsListComponent extends ParentIndexControl implements OnInit {
 
   constructor(protected injector: Injector) {
     super(injector);

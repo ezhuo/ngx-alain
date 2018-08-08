@@ -3,8 +3,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { TitleService, MenuService } from '@delon/theme';
-import { SimpleTableColumn } from '@delon/abc';
 import { SFSchema, SFUISchema } from '@delon/form';
+import { SimpleTableColumn } from '@delon/abc';
 
 import { ModalService } from '@core/utils/modal.service';
 import { NoticeService } from '@core/utils/notice.service';
@@ -20,7 +20,7 @@ import * as helpers from '@core/helpers';
 import { BaseFunc } from './base.func';
 import { BaseCase } from './base.case';
 
-export class BaseComponent implements OnInit, OnDestroy {
+export class BaseControl implements OnInit, OnDestroy {
 
   constructor(protected injector: Injector) { }
 
@@ -110,6 +110,22 @@ export class BaseComponent implements OnInit, OnDestroy {
    */
   protected ___mainSchemaUi: SFUISchema;
 
+
+  /**
+   * 查询业务的数据结构
+   */
+  protected ___searchSchema: SFSchema;
+
+  /**
+   * 查询业务的数据结构的排序
+   */
+  protected ___searchSchemaOrder: any[];
+
+  /**
+   * 查询业务的数据结构的 UI
+   */
+  protected ___searchSchemaUi: SFUISchema;
+
   // ----------------------------------------
 
   ngOnInit() { }
@@ -124,7 +140,6 @@ export class BaseComponent implements OnInit, OnDestroy {
         this[idx] = null;
       }
     }
-    // console.log(this);
   }
 
   // ----------------------------------------
@@ -308,6 +323,30 @@ export class BaseComponent implements OnInit, OnDestroy {
 
   get mainSchemaUi() {
     return this.___mainSchemaUi;
+  }
+
+  set searchSchema(value) {
+    this.___searchSchema = value;
+  }
+
+  get searchSchema() {
+    return this.___searchSchema;
+  }
+
+  get searchSchemaOrder() {
+    return this.___searchSchemaOrder;
+  }
+
+  set searchSchemaOrder(value) {
+    this.___searchSchemaOrder = value;
+  }
+
+  set searchSchemaUi(value) {
+    this.___searchSchemaUi = value;
+  }
+
+  get searchSchemaUi() {
+    return this.___searchSchemaUi;
   }
 
   set formData(value) {

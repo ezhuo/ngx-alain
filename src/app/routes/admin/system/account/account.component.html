@@ -3,43 +3,28 @@
     {{pageTitle}}
     <small></small>
   </h1>
-  <button nz-button (click)="add()" [nzType]="'primary'">添加</button>
+  <div>
+    <button nz-button (click)="add()" [nzType]="'primary'">新建</button>
+    <button nz-button (click)="add2()" [nzType]="'primary'">添加2</button>
+  </div>
 </div>
 
-<form nz-form [nzLayout]="'inline'" class="search-form">
-  <nz-form-item>
-    <nz-form-control>
-      <nz-select [(ngModel)]="mainTableParams.s" name="s" [nzAllowClear]="false">
-        <nz-option nzValue="" nzLabel="状态不限"></nz-option>
-        <nz-option nzValue="1" nzLabel="正常"></nz-option>
-        <nz-option nzValue="2" nzLabel="已取消"></nz-option>
-        <nz-option nzValue="3" nzLabel="已删除"></nz-option>
-        <nz-option nzValue="10" nzLabel="待提交"></nz-option>
-        <nz-option nzValue="11" nzLabel="待审核"></nz-option>
-      </nz-select>
+<sf #sf mode="search" [schema]="searchSchema" [formData]="mainTableParams" (formSubmit)="st.reset($event)" (formReset)="st.reset(mainTableParams)" class="search-form" [button]="'none'">
+  <nz-form-item class="sf-btns">
+    <nz-form-control class="ant-form-item-control-wrapper">
+      <div class="ant-form-item-control">
+        <button type="submit" nz-button [nzType]="'primary'">查询</button>
+      </div>
     </nz-form-control>
   </nz-form-item>
-  <nz-form-item>
-    <nz-form-control>
-      <input nz-input [(ngModel)]="mainTableParams.user_id" name="user_id" nzPlaceHolder="用户编号">
+  <nz-form-item class="sf-btns">
+    <nz-form-control class="ant-form-item-control-wrapper">
+      <div class="ant-form-item-control">
+        <button nz-button (click)="caseSrv.exportXlsFromServer()">导出</button>
+      </div>
     </nz-form-control>
   </nz-form-item>
-  <nz-form-item>
-    <nz-form-control>
-      <input nz-input [(ngModel)]="mainTableParams.q" name="q" nzPlaceHolder="门店、分店名称">
-    </nz-form-control>
-  </nz-form-item>
-  <nz-form-item>
-    <nz-form-control>
-      <button nz-button (click)="st.reset(mainTableParams)">搜索</button>
-    </nz-form-control>
-  </nz-form-item>
-  <nz-form-item>
-    <nz-form-control>
-      <button nz-button (click)="caseSrv.exportXlsFromServer()">导出</button>
-    </nz-form-control>
-  </nz-form-item>
-</form>
+</sf>
 
 <div nz-row nzGutter="16">
   <div nz-col nzSpan="4">

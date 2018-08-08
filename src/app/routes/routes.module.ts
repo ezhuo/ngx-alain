@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouteRoutingModule, routedComponents } from './routes-routing.module';
 
-import { LayoutModule } from '@layout/layout.module';
+import { LayoutModule } from '@layout';
 
 const COMPONENTS = [...routedComponents];
 const COMPONENTS_NOROUNT = [];

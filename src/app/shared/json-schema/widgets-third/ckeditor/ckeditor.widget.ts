@@ -6,7 +6,8 @@ import { ControlWidget } from '@delon/form';
   template: `
   <sf-item-wrap [id]="id" [schema]="schema" [ui]="ui" [showError]="showError" [error]="error" [showTitle]="schema.title">
     <ckeditor 
-          [(ngModel)]="value" 
+          [ngModel]="value"
+          (ngModelChange)="change($event)"
           [config]="config" 
           [readonly]="false"  
           (change)="change($event)" 

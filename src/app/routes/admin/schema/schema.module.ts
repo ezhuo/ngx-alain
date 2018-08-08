@@ -1,6 +1,13 @@
 import { NgModule } from '@angular/core';
-import { SchemaRoutingModule, routedComponents, entryComponents } from './schema-routing.module';
-import { SharedModule } from '@shared/shared.module';
+
+import { SharedModule } from '@shared';
+
+import {
+    SchemaRoutingModule,
+    routedComponents,
+    entryComponents
+} from './schema-routing.module';
+
 
 @NgModule({
     imports: [SchemaRoutingModule, SharedModule],

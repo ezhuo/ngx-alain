@@ -32,6 +32,11 @@ npm run serve:hmr
 1. 添加了getTitle方法
 ```
 
+### 4. schema-form
+```
+1. ui 部分添加了 : enum(主要是为了texts做为数据字典使用) , styleLabel(Label部分的style) , styleControl(Control的style)
+```
+
 ## 三、版本升级时出现的错误
 
 ### 1. 安装的时候出现 Cannot find module 'webpack'

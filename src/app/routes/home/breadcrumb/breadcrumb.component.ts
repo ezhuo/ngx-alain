@@ -1,5 +1,5 @@
 import { Component, OnInit, Injector, Input } from '@angular/core';
-import { ConfigService } from '@core/data/config.service';
+import { ConfigService } from '@core';
 
 @Component({
   selector: 'com-home-breadcrumb',
