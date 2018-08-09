@@ -1,3 +1,3 @@
-export { NoticeService } from '@core/utils/notice.service';
-export { ModalService } from '@core/utils/modal.service';
-export { SweetAlertService } from '@core/utils/sweetalert2.service';
+export { NoticeService } from './notice.service';
+export { ModalService } from './modal.service';
+export { SweetAlertService } from './sweetalert2.service';

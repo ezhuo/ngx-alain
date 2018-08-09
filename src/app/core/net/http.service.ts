@@ -10,7 +10,7 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import * as parse from 'date-fns/parse';
-import { api, app_debug } from '@core/config.inc';
+import { api, app_debug } from '../config.inc';
 
 /**
  * 封装HttpClient，主要解决：

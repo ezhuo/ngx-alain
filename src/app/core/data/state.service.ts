@@ -1,7 +1,8 @@
 import { Injectable, Injector } from '@angular/core';
-import { HttpService } from '@core/net/http.service';
-import { ConfigService } from '@core/data/config.service';
-import * as helpers from '@core/helpers';
+
+import { HttpService } from '../net/http.service';
+import { ConfigService } from '../data/config.service';
+import * as helpers from '../helpers';
 
 @Injectable()
 export class StateService {

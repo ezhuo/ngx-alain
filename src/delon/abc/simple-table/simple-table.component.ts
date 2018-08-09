@@ -16,7 +16,7 @@ import {
   Optional,
 } from '@angular/core';
 import { DecimalPipe, DOCUMENT } from '@angular/common';
-import { HttpService } from '@core/net/http.service';
+import { HttpService } from '@core';
 import { Router } from '@angular/router';
 import { ACLService } from '@delon/acl';
 import { Observable, Subscription, of } from 'rxjs';

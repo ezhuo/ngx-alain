@@ -1,1 +1,1 @@
-export { HttpService } from '@core/net/http.service';
+export { HttpService } from './http.service';

@@ -1,8 +1,8 @@
-import { UserService } from '@core/data/users.service';
 import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { SettingsService } from '@delon/theme';
 import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
+import { UserService } from '@core';
 
 @Component({
   selector: 'home-header-user',

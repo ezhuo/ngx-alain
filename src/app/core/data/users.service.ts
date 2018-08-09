@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { User } from '@delon/theme';
-import { define, app_debug } from '@core/config.inc';
-import { SettingsService } from '@delon/theme';
-import * as helper from '@core/helpers';
+import { User, SettingsService } from '@delon/theme';
+
+import { define, app_debug } from '../config.inc';
+import * as helper from '../helpers';
 
 @Injectable()
 export class UserService {

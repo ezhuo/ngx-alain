@@ -10,9 +10,11 @@ import { NzFormatEmitEvent, NzTreeNode } from 'ng-zorro-antd';
 
 import { FormProperty, PropertyGroup } from '@delon/form';
 
+import { tplMainIndexActionHTML } from '@theme';
+
 @Component({
   selector: 'com-account',
-  templateUrl: './account.component.html',
+  templateUrl: `./account.component.html`,
   styleUrls: [`./account.component.less`]
 })
 export class AccountComponent extends ParentIndexControl implements OnInit, OnDestroy {

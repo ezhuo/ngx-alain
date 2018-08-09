@@ -1,10 +1,10 @@
-import { StateService } from '@core/data/state.service';
 import { Injectable } from '@angular/core';
-import { HttpService } from '@core/net/http.service';
-import { TokenService } from '@core/data/token.service';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError, tap, switchMap } from 'rxjs/operators';
-import * as configInc from '@core/config.inc';
+import { TokenService } from './token.service';
+import { StateService } from './state.service';
+import { HttpService } from '../net/http.service';
+import * as configInc from '../config.inc';
 
 @Injectable()
 export class AuthService {

@@ -1,5 +1,5 @@
 import * as common from './object';
-import { app } from '@core/config.inc';
+import { app } from '../config.inc';
 
 export default class Storage {
     private $cache = null;

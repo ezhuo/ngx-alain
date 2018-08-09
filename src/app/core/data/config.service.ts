@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as config from '@core/config.inc';
+import * as config from '../config.inc';
 
 @Injectable()
 export class ConfigService {

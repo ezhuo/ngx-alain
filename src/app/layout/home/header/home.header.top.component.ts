@@ -1,8 +1,7 @@
-import { ConfigService } from '@core/data/config.service';
 import { Component } from '@angular/core';
 import { SettingsService } from '@delon/theme';
 import { Router } from '@angular/router';
-import { TokenService } from '@core/data/token.service';
+import { TokenService, ConfigService } from '@core';
 
 @Component({
   selector: 'home-header-top',

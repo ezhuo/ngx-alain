@@ -3,7 +3,7 @@ import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { MenuService, SettingsService, TitleService } from '@delon/theme';
-import { ConfigService } from '@core/data/config.service';
+import { ConfigService } from '../data/config.service';
 
 /**
  * 用于应用启动时

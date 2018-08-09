@@ -2,9 +2,7 @@ import { Component, Inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { SettingsService } from '@delon/theme';
 import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
-import { UserService } from '@core/data/users.service';
-import { TokenService } from '@core/data/token.service';
-import { ConfigService } from '@core/data/config.service';
+import { UserService, TokenService, ConfigService } from '@core';
 
 @Component({
   selector: 'header-user',

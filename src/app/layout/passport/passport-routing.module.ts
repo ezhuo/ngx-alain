@@ -1,11 +1,11 @@
 
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { UserLoginComponent } from '@layout/passport/login/login.component';
-import { UserLockComponent } from '@layout/passport/lock/lock.component';
-import { LayoutPassportComponent } from '@layout/passport/passport.component';
-import { UserRegisterComponent } from '@layout/passport/register/register.component';
-import { UserRegisterResultComponent } from '@layout/passport/register-result/register-result.component';
+import { UserLoginComponent } from './login/login.component';
+import { UserLockComponent } from './lock/lock.component';
+import { LayoutPassportComponent } from './passport.component';
+import { UserRegisterComponent } from './register/register.component';
+import { UserRegisterResultComponent } from './register-result/register-result.component';
 
 const routes: Routes = [
   {

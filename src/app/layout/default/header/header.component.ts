@@ -1,9 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
-import { SettingsService } from '@delon/theme';
-import { UserService } from '@core/data/users.service';
-import { TokenService } from '@core/data/token.service';
 import { Router } from '@angular/router';
-import { ConfigService } from '@core/data/config.service';
+
+import { SettingsService } from '@delon/theme';
+import { UserService, TokenService, ConfigService } from '@core';
 
 @Component({
   selector: 'layout-header',

@@ -1,4 +1,3 @@
-import { NoticeService } from '@core/utils/notice.service';
 import { Injectable, Injector } from '@angular/core';
 import {
   HttpSentEvent,
@@ -12,13 +11,16 @@ import {
   HttpResponse
 } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { TokenService } from '@core/data/token.service';
-import { UserService } from '@core/data/users.service';
-import { SweetAlertService } from '@core/utils/sweetalert2.service';
+
 import { Observable, of, throwError } from 'rxjs';
 import { mergeMap, catchError } from 'rxjs/operators';
-import * as configInc from '@core/config.inc';
-import * as helper from '@core/helpers';
+
+import { NoticeService } from '../utils/notice.service';
+import { TokenService } from '../data/token.service';
+import { UserService } from '../data/users.service';
+import { SweetAlertService } from '../utils/sweetalert2.service';
+import * as configInc from '../config.inc';
+import * as helper from '../helpers';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {

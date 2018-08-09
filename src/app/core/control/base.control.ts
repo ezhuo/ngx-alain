@@ -6,16 +6,16 @@ import { TitleService, MenuService } from '@delon/theme';
 import { SFSchema, SFUISchema } from '@delon/form';
 import { SimpleTableColumn } from '@delon/abc';
 
-import { ModalService } from '@core/utils/modal.service';
-import { NoticeService } from '@core/utils/notice.service';
-import { SweetAlertService } from '@core/utils/sweetalert2.service';
-import { AuthService } from '@core/data/auth.service';
-import { TokenService } from '@core/data/token.service';
-import { StateService } from '@core/data/state.service';
-import { ConfigService } from '@core/data/config.service';
-import { HttpService } from '@core/net/http.service';
+import { ModalService } from '../utils/modal.service';
+import { NoticeService } from '../utils/notice.service';
+import { SweetAlertService } from '../utils/sweetalert2.service';
+import { AuthService } from '../data/auth.service';
+import { TokenService } from '../data/token.service';
+import { StateService } from '../data/state.service';
+import { ConfigService } from '../data/config.service';
+import { HttpService } from '../net/http.service';
 
-import * as helpers from '@core/helpers';
+import * as helpers from '../helpers';
 
 import { BaseFunc } from './base.func';
 import { BaseCase } from './base.case';

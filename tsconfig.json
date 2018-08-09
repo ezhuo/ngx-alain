@@ -56,12 +56,6 @@
       "@layout/*": [
         "app/layout/*"
       ],
-      "@helpers": [
-        "app/core/helpers/"
-      ],
-      "@helpers/*": [
-        "app/core/helpers/*"
-      ],
       "@routes": [
         "app/routes/"
       ],

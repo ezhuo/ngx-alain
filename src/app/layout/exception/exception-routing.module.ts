@@ -1,7 +1,7 @@
-import { Exception500Component } from '@layout/exception/exception/500.component';
-import { Exception404Component } from '@layout/exception/exception/404.component';
-import { Exception403Component } from '@layout/exception/exception/403.component';
-import { LayoutExceptionComponent } from '@layout/exception/exception.component';
+import { Exception500Component } from './exception/500.component';
+import { Exception404Component } from './exception/404.component';
+import { Exception403Component } from './exception/403.component';
+import { LayoutExceptionComponent } from './exception.component';
 
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';

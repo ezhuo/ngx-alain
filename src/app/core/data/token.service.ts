@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
-import { NoticeService } from '@core/utils/notice.service';
-import { http, menus, app_debug } from '@core/config.inc';
+
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { UserService } from '@core/data/users.service';
 import { MenuService, SettingsService, Menu } from '@delon/theme';
-import * as helper from '@core/helpers';
+
+import { NoticeService } from '../utils/notice.service';
+import { http, menus, app_debug } from '../config.inc';
+
+import { UserService } from './users.service';
+import * as helper from '../helpers';
 
 @Injectable()
 export class TokenService {
