@@ -114,13 +114,15 @@ export class BaseFunc {
                 old = prop[idx].ui;
                 prop[idx].ui = {};
             } else {
+                prop[idx].ui = prop[idx].ui || {};
                 old = prop[idx].ui['widget'];
             }
             prop[idx].ui['widget'] = 'texts';
-            if (['upload', 'uploadAvatar'].indexOf(old) > -1) {
-                prop[idx].ui['widget'] = 'textFile';
+            if (old) {
+                prop[idx].ui['options'] = prop[idx].ui['options'] || {};
+                prop[idx].ui['options']['oldwidget'] = old;
             }
-            if (!prop[idx].ui['enum']) {
+            if (!prop[idx].ui['enum'] && prop[idx].enum) {
                 prop[idx].ui['enum'] = prop[idx].enum;
             }
         }

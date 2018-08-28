@@ -1,0 +1,48 @@
+<div class="content__title">
+  <h1>
+    {{pageTitle}}
+    <small></small>
+  </h1>
+  <div>
+    <button nz-button (click)="add()" [nzType]="'primary'" [nzSize]="'large'">新建</button>
+  </div>
+</div>
+
+<sf #sf mode="search" [schema]="searchSchema" [formData]="mainTableParams" (formSubmit)="searchSubmit(st,$event)" (formReset)="st.reset(mainTableParams)" class="search-form" [button]="'none'">
+  <nz-form-item class="sf-btns">
+    <nz-form-control class="ant-form-item-control-wrapper">
+      <div class="ant-form-item-control">
+        <button type="submit" nz-button [nzType]="'primary'">查询</button>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item class="sf-btns">
+    <nz-form-control class="ant-form-item-control-wrapper">
+      <div class="ant-form-item-control">
+        <button nz-button (click)="caseFunc.exportXlsFromSt(st)">导出</button>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+</sf>
+
+<div nz-row nzGutter="16">
+  <div nz-col nzSpan="4">
+    <nz-card>
+      <p>
+        <nz-tree #tree
+            [(ngModel)]="treeData" 
+            [nzShowLine]="true" 
+            [nzShowExpand]="'false'" 
+            [nzDefaultExpandedKeys]="treeDataExpandKeys" 
+            [nzDefaultSelectedKeys]="treeDataSelectKeys"
+            (nzClick)="mouseTreeAction('click',$event)" 
+            (nzContextMenu)="mouseTreeAction('click',$event)"
+            [ngModelOptions]="{standalone: true}">
+        </nz-tree>
+      </p>
+    </nz-card>
+  </div>
+  <div nz-col nzSpan="20">
+    <simple-table #st class="simple-table" [data]="primaryURL" [columns]="mainTableColumns" [extraParams]="mainTableParams"></simple-table>
+  </div>
+</div>

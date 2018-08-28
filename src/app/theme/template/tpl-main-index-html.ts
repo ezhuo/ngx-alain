@@ -22,7 +22,7 @@ export const tplMainIndexHTML =
   <nz-form-item class="sf-btns">
     <nz-form-control class="ant-form-item-control-wrapper">
       <div class="ant-form-item-control">
-        <button nz-button (click)="caseSrv.exportXlsFromServer()">导出</button>
+        <button nz-button (click)="caseFunc.exportXlsFromServer()">导出</button>
       </div>
     </nz-form-control>
   </nz-form-item>

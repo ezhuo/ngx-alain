@@ -3,7 +3,9 @@
     "name": "Alain",
     "description": "Ng-zorro admin panel front-end framework"
   },
-  "menu": [{
+  "menu": [
+    
+    {
       "text": "主导航",
       "group": true,
       "hideInBreadcrumb": true,
@@ -301,5 +303,7 @@
         ]
       }]
     }
+
+    
   ]
 }

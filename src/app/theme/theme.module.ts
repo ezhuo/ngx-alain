@@ -1,11 +1,15 @@
 import { NgModule } from '@angular/core';
 
-import { DtTreeDirective } from './directives/tree.directives';
+import {
+    JsTreeDirective,
+    SafeHTMLDirective
+} from './directives';
 
 const MODULES = [];
 
 const DIRECTIVES = [
-    DtTreeDirective
+    JsTreeDirective,
+    SafeHTMLDirective
 ];
 
 const COMPONENTS = [];

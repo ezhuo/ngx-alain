@@ -1,0 +1,20 @@
+<div class="content__title">
+  <h1>
+    {{pageTitle}}
+    <small></small>
+  </h1>
+</div>
+
+<div class="search-form" style="background-color:#fff">
+  <result [type]="iconType" [title]="title" [description]="description" extra="">
+    <ng-template #title>
+      <div>清除缓存</div>
+    </ng-template>
+    <ng-template #description>
+      <div>系统运行一段时间后，就会留下一些临时文件，这些临时文件将有助于系统运行并且提高运行效率；但要想更新这些文件，就需要先清除这些临时文件，系统会重新缓存一些临时文件。</div>
+    </ng-template>
+    <div>
+      <button nz-button [nzSize]="'large'" nzType="primary" [nzLoading]="httpSrv.loading" (click)="clearCache()">清除缓存</button>
+    </div>
+  </result>
+</div>

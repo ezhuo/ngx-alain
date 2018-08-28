@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import { SharedModule } from '@shared';
-import { LayoutDefaultModule } from '../default/default.module';
+import { LayoutCommonModule } from '../common';
 
 import { LayoutHomeComponent } from './home.component';
 import { HomeHeaderTopComponent } from './header/home.header.top.component';
@@ -22,7 +22,7 @@ const HEADERCOMPONENTS = [
 
 @NgModule({
     declarations: [...COMPONENTS, ...HEADERCOMPONENTS],
-    imports: [SharedModule, LayoutDefaultModule],
+    imports: [SharedModule, LayoutCommonModule],
     exports: [...COMPONENTS, ...HEADERCOMPONENTS],
     providers: []
 })

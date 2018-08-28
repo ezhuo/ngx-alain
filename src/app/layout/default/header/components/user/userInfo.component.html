@@ -1,0 +1,36 @@
+<div class='modal-header'>
+  <div class='modal-title'>{{userSrv.user.name}}</div>
+</div>
+
+<div nz-row class="userInfo">
+  <div class="avatar">
+    <nz-avatar nzSize="large" [nzSrc]="userSrv.userInfo.avatar"></nz-avatar>
+  </div>
+</div>
+
+<nz-card>
+  <div nz-row nzGutter="24">
+    <div nz-col nzSpan="5">帐号：</div>
+    <div nz-col nzSpan="19">{{userSrv.userInfo.login_username}}</div>
+  </div>
+  <div nz-row nzGutter="16">
+    <div nz-col nzSpan="5">姓名：</div>
+    <div nz-col nzSpan="19">{{userSrv.userInfo.true_name}}</div>
+  </div>
+  <div nz-row nzGutter="16">
+    <div nz-col nzSpan="5">公司：</div>
+    <div nz-col nzSpan="19">{{userSrv.userInfo?.org_name}}</div>
+  </div>
+  <div nz-row nzGutter="16">
+    <div nz-col nzSpan="5">角色：</div>
+    <div nz-col nzSpan="19">{{userSrv.userInfo?.role_name}}</div>
+  </div>
+  <div nz-row nzGutter="16">
+    <div nz-col nzSpan="5">eMail：</div>
+    <div nz-col nzSpan="19">{{userSrv.userInfo.email}}</div>
+  </div>
+</nz-card>
+
+<div class="modal-footer">
+  <button nz-button type="button" (click)="modalClose(false)">关闭</button>
+</div>

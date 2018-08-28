@@ -20,13 +20,13 @@ export class UserService {
   set userInfo(dd: any) {
     this.__userInfo = dd;
     if (dd) {
-      const pic = helper.parseJSON(dd.images) || [];
-      if (pic && pic.length > 1000) {
-        this.__userInfo.avatar = pic[0].path;
-      } else {
-        this.__userInfo.avatar = define.user_images;
+      this.__userInfo.avatar = define.user_images;
+      if (dd.images) {
+        const pic = helper.parseJSON(dd.images) || [];
+        if (pic && pic.length > 0) {
+          this.__userInfo.avatar = pic[0].url;
+        }
       }
-
       this.__user.name = this.__userInfo.true_name;
       this.__user.avatar = this.__userInfo.avatar;
       this.__user.email = this.__userInfo.email || '';

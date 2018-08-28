@@ -6,19 +6,13 @@ import { environment } from '@env/environment';
 const routes: Routes = [
   {
     path: 'app',
-    canLoad: [AuthGuard],
     loadChildren: './routes/routes.module#RoutesModule',
     data: { app: true }
-  },
-  // 全屏布局
-  {
-    path: 'data-v',
-    loadChildren: './routes/admin/ngalain/data-v/data-v.module#DataVModule'
   },
   // passport
   {
     path: 'passport',
-    loadChildren: './layout/passport/passport.module#PassportModule',
+    loadChildren: './layout/passport/passport.module#LayoutPassportModule',
   },
   // exception
   {

@@ -1,5 +1,5 @@
 import { OnInit, OnDestroy, Injector } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { TitleService, MenuService } from '@delon/theme';
@@ -9,10 +9,13 @@ import { SimpleTableColumn } from '@delon/abc';
 import { ModalService } from '../utils/modal.service';
 import { NoticeService } from '../utils/notice.service';
 import { SweetAlertService } from '../utils/sweetalert2.service';
+
 import { AuthService } from '../data/auth.service';
 import { TokenService } from '../data/token.service';
 import { StateService } from '../data/state.service';
 import { ConfigService } from '../data/config.service';
+import { UserService } from '../data/users.service';
+
 import { HttpService } from '../net/http.service';
 
 import * as helpers from '../helpers';
@@ -22,7 +25,24 @@ import { BaseCase } from './base.case';
 
 export class BaseControl implements OnInit, OnDestroy {
 
-  constructor(protected injector: Injector) { }
+  constructor(protected injector: Injector) {
+    this.modalParams.modal = {
+      button: {
+        submit: {
+          show: true,
+          title: '保存'
+        },
+        reset: {
+          show: true,
+          title: '重置'
+        },
+        close: {
+          show: true,
+          title: '关闭'
+        },
+      }
+    };
+  }
 
   /**
    * 基础处理类
@@ -92,6 +112,11 @@ export class BaseControl implements OnInit, OnDestroy {
   * 主要表单值
   */
   protected ___formData: any = {};
+
+  /**
+   * modal对话框中的参数传递
+   */
+  protected ___modalParams: any = {};
 
   // ----------------------------------------
 
@@ -188,6 +213,10 @@ export class BaseControl implements OnInit, OnDestroy {
     return this.injector.get(ConfigService);
   }
 
+  get userSrv() {
+    return this.injector.get(UserService);
+  }
+
   get authSrv() {
     return this.injector.get(AuthService);
   }
@@ -204,6 +233,10 @@ export class BaseControl implements OnInit, OnDestroy {
     return FormGroup;
   }
 
+  get FormControl() {
+    return FormControl;
+  }
+
   get Validators() {
     return Validators;
   }
@@ -214,7 +247,7 @@ export class BaseControl implements OnInit, OnDestroy {
     return helpers;
   }
 
-  get caseSrv() {
+  get caseFunc() {
     return this.__baseCase;
   }
 
@@ -355,6 +388,14 @@ export class BaseControl implements OnInit, OnDestroy {
 
   get formData() {
     return this.___formData;
+  }
+
+  set modalParams(value) {
+    this.___modalParams = value;
+  }
+
+  get modalParams() {
+    return this.___modalParams;
   }
 
   set mainTableColumns(value) {

@@ -2,8 +2,8 @@
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
-import { MenuService, SettingsService, TitleService } from '@delon/theme';
-import { ConfigService } from '../data/config.service';
+import { SettingsService, TitleService } from '@delon/theme';
+import { ConfigService, TokenService, StateService } from '../data';
 
 /**
  * 用于应用启动时
@@ -13,7 +13,6 @@ import { ConfigService } from '../data/config.service';
 export class StartupService {
 
     constructor(
-        private menuService: MenuService,
         private settingService: SettingsService,
         private titleService: TitleService,
         private httpClient: HttpClient,
@@ -24,13 +23,21 @@ export class StartupService {
         return this.injector.get(ConfigService);
     }
 
+    get tokenSrv() {
+        return this.injector.get(TokenService);
+    }
+
+    get stateSrv() {
+        return this.injector.get(StateService);
+    }
+
     load(): Promise<any> {
         const self = this;
         // only works with promises
         // https://github.com/angular/angular/issues/15088
         return new Promise((resolve, reject) => {
 
-            this.httpClient.get(`assets/tmp/app-data.json`).pipe(
+            this.httpClient.get(`assets/data/app.json`).pipe(
                 // 接收其他拦截器后产生的异常消息
                 catchError((appData) => {
                     resolve(null);
@@ -52,8 +59,7 @@ export class StartupService {
                 }
 
                 // 初始化菜单
-                self.menuService.clear();
-                self.menuService.add(self.configSrv.menus);
+                self.tokenSrv.appMenuBase = appData.menu;
             }
 
             function error(err) {
@@ -66,6 +72,5 @@ export class StartupService {
 
         });
     }
-
 
 }

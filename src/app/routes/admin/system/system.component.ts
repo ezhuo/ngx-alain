@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-    selector: 'app-test-component',
+    selector: 'app-system-component',
     template: `<router-outlet></router-outlet>`
 })
 

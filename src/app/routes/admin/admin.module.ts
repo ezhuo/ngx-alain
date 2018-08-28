@@ -1,11 +1,16 @@
 
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared';
+import { LayoutDefaultModule } from '@layout';
 
-import { AdminRoutingModule, routedComponents, entryComponents } from './admin-routing.module';
+import {
+    AdminRoutingModule,
+    routedComponents,
+    entryComponents
+} from './admin-routing.module';
 
 @NgModule({
-    imports: [AdminRoutingModule, SharedModule],
+    imports: [AdminRoutingModule, SharedModule, LayoutDefaultModule],
     exports: [],
     declarations: [...routedComponents, ...entryComponents],
     providers: [],

@@ -4,9 +4,11 @@ import {
   NavigationEnd,
   RouteConfigLoadStart,
   NavigationError,
+  NavigationCancel,
 } from '@angular/router';
 import { NzMessageService } from 'ng-zorro-antd';
 import { ScrollService, MenuService, SettingsService } from '@delon/theme';
+import { TokenService } from '@core/data';
 
 @Component({
   selector: 'layout-default',
@@ -18,18 +20,24 @@ export class LayoutDefaultComponent {
   constructor(
     router: Router,
     scroll: ScrollService,
-    private _message: NzMessageService,
+    _message: NzMessageService,
     public menuSrv: MenuService,
     public settings: SettingsService,
+    private tokenSrv: TokenService,
   ) {
+    // menu 
+    this.tokenSrv.menuReload();
+
     // scroll to top in change page
     router.events.subscribe(evt => {
       if (!this.isFetching && evt instanceof RouteConfigLoadStart) {
         this.isFetching = true;
       }
-      if (evt instanceof NavigationError) {
+      if (evt instanceof NavigationError || evt instanceof NavigationCancel) {
         this.isFetching = false;
-        _message.error(`无法加载${evt.url}路由`, { nzDuration: 1000 * 3 });
+        if (evt instanceof NavigationError) {
+          _message.error(`无法加载${evt.url}路由`, { nzDuration: 1000 * 3 });
+        }
         return;
       }
       if (!(evt instanceof NavigationEnd)) {

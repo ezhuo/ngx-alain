@@ -41,7 +41,17 @@ export class ModalService {
         size: 'sm' | 'md' | 'lg' | 'xl' | '' | number = 'lg',
         options?: ModalOptionsForService,
     ): Observable<any> {
-        return this.modalHelper.open(comp, params, size, options);
+        return this.modalHelper.open(
+            comp,
+            params,
+            size,
+            Object.assign(
+                {
+                    nzStyle: { top: '20px' }
+                },
+                options,
+            ),
+        );
     }
 
     /**
@@ -59,8 +69,7 @@ export class ModalService {
             size,
             Object.assign(
                 {
-                    nzMaskClosable: false,
-                    nzStyle: { top: '20px' }
+                    nzMaskClosable: false
                 },
                 options,
             ),

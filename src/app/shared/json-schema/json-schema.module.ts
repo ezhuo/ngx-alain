@@ -8,8 +8,8 @@ import { SharedModule } from '../shared.module';
 import { CkeditorWidget } from './widgets-third/ckeditor/ckeditor.widget';
 
 import { TextsWidget } from './widgets/texts/texts.widget';
-import { TextFileWidget } from './widgets/textFile/textFile.widget';
-import { UploadAvatarWidget } from './widgets/uploadAvatar/uploadAvatar.widget';
+// import { UploadAvatarWidget } from './widgets/uploadAvatar/uploadAvatar.widget';
+import { UploadxWidget } from './widgets/uploadx/uploadx.widget';
 
 export const SCHEMA_THIRDS_COMPONENTS = [
   // TinymceWidget,
@@ -18,8 +18,8 @@ export const SCHEMA_THIRDS_COMPONENTS = [
   CkeditorWidget,
 
   TextsWidget,
-  TextFileWidget,
-  UploadAvatarWidget,
+  // UploadAvatarWidget,
+  UploadxWidget,
 
 ];
 
@@ -37,7 +37,7 @@ export class JsonSchemaModule {
     widgetRegistry.register(CkeditorWidget.KEY, CkeditorWidget);
 
     widgetRegistry.register(TextsWidget.KEY, TextsWidget);
-    widgetRegistry.register(TextFileWidget.KEY, TextFileWidget);
-    widgetRegistry.register(UploadAvatarWidget.KEY, UploadAvatarWidget);
+    // widgetRegistry.register(UploadAvatarWidget.KEY, UploadAvatarWidget);
+    widgetRegistry.register(UploadxWidget.KEY, UploadxWidget);
   }
 }

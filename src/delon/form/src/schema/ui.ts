@@ -117,12 +117,12 @@ export interface SFInputSchema {
   /**
    * **限string** 文字框中显示提示信息
    */
-  placeholder?: string;
+  placeholder?: string | string[];
 
   /**
    * **限string** 加载时是否获得焦点
    */
-  autofocus?: boolean;
+  autofocus?: boolean | string;
 }
 
 export interface SFDataSchema {
@@ -147,8 +147,18 @@ export interface SFEnumSchema {
 }
 
 export interface SFstyleSchema {
+  /**
+   * 当前控件的ngstyle
+   */
   styleLabel?: Object;
   styleControl?: Object;
+}
+
+export interface SFoptionsSchema {
+  /**
+   * 当前控件的一些属性
+   */
+  options?: Object;
 }
 
 /** 指定如何渲染 `Schema` */
@@ -160,6 +170,7 @@ export interface SFUISchemaItem
   SFInputSchema,
   SFEnumSchema,
   SFstyleSchema,
+  SFoptionsSchema,
   ErrorSchema {
   [key: string]: any;
 

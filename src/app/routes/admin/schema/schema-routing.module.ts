@@ -9,18 +9,6 @@ import { SchemaEditComponent } from './schema/edit.component';
 import { SchemaFormEditComponent } from './schema/edit/edit.component';
 import { SchemaFormEditxComponent } from './schema/editx/edit.component';
 
-export const entryComponents = [
-    SchemaFormEditComponent,
-    SchemaFormEditxComponent,
-    SchemaShowComponent,
-    SchemaEditComponent
-];
-
-export const routedComponents = [
-    SchemaDemoComponent,
-    SchemaComponent
-];
-
 const routes: Routes = [
     {
         path: '',
@@ -31,6 +19,18 @@ const routes: Routes = [
             { path: 'schema-demo', component: SchemaDemoComponent }
         ]
     },
+];
+
+export const entryComponents = [
+    SchemaFormEditComponent,
+    SchemaFormEditxComponent,
+    SchemaShowComponent,
+    SchemaEditComponent
+];
+
+export const routedComponents = [
+    SchemaDemoComponent,
+    SchemaComponent
 ];
 
 @NgModule({

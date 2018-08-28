@@ -1,4 +1,4 @@
-import { App, Menu } from '@delon/theme';
+import { App } from '@delon/theme';
 import * as env from '@env/environment.dev';
 import { deepExtend } from './helpers/extend';
 
@@ -7,8 +7,8 @@ export const app_debug_error = env.app_debug_error;
 export const app: App = env.app;
 
 /**
-*区域设置
-*/
+ *区域设置
+ */
 export const canton = env.canton;
 
 /**
@@ -16,12 +16,14 @@ export const canton = env.canton;
  */
 export const router = deepExtend(
   {
+    routeDefault: 'admin',
     default: '/app/admin',
     home: '/app/home',
     admin: '/app/admin',
     login: '/passport/login',
-    lock: '/passport/lock'
-  }, env.router
+    lock: '/passport/lock',
+  },
+  env.router,
 );
 
 /**
@@ -32,45 +34,36 @@ export const api = {
   upload: '/api/file/upload',
   show: '/file/show/',
   down: '/uploads/',
-  canton: 'canton/selectselectselect' // 获取区域的默认URL
+  canton: 'canton/selectselectselect', // 获取区域的默认URL
 };
 
 /**
-* 富文本编辑器
-*/
+ * 富文本编辑器
+ */
 export const editor = assetsHelper.getCkeditorConfig();
 
 /**
  *默认定义
  */
-export const define = {
-
-  // 用户默认图片
-  user_images: './assets/images/default/no-user.png',
-
-  // 默认用户的图片
-  user_cut_images: './assets/images/user/default_user.png',
-
-  // table page size
-  table_page_size: 10
-
-};
-
-export const menus: Menu[] = [{
-  'text': '用户登录',
-  'hide': true,
-  'reuse': false,
-  'children': [{
-    'text': '安全登录',
-    'link': '/passport/login',
-    'reuse': false
-  },
+export const define = deepExtend(
   {
-    'text': '安全锁定',
-    'link': '/passport/lock',
-    'reuse': false
-  }]
-}];
+    // table page size
+    table_page_size: 10,
+
+    // 用户默认图片
+    user_images: './assets/images/default/no-user.png',
+
+    // 默认用户的图片
+    user_cut_images: './assets/images/user/default_user.png',
+
+    logo_login: './assets/images/logo/logo.png',
+
+    logo_top_large: './assets/images/logo/logo.png',
+
+    logo_top_small: './assets/images/logo/logo-small.png',
+  },
+  env.define,
+);
 
 /**
  *HTTP配置
@@ -80,7 +73,7 @@ export const http = {
   style: 10,
 
   // 请求验证代码
-  check: 'ezhuo@20161016'
+  check: 'ezhuo@20161016',
 };
 
 export const http_code = {
@@ -101,5 +94,5 @@ export const http_code = {
   412: '',
   422: '验证：',
   500: '服务器端异常！',
-  504: '没有连接到服务器！'
+  504: '没有连接到服务器！',
 };

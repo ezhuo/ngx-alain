@@ -8,7 +8,7 @@ import { CoreModule } from '@core';
 
 import { SharedModule, JsonSchemaModule, ThirdComponentModule } from '@shared';
 
-import { LayoutModule } from '@layout';
+import { LayoutFullScreenModule } from '@layout';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -23,7 +23,7 @@ import { AppComponent } from './app.component';
     ThirdComponentModule.forRoot(),
     CoreModule.forRoot(),
     SharedModule,
-    LayoutModule,
+    LayoutFullScreenModule,
     AppRoutingModule,
     // JSON-Schema form
     JsonSchemaModule,

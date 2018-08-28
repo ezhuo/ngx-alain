@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { AuthGuard } from '@core';
+
+import { LayoutHomeComponent } from '@layout';
 
 import { IndexComponent } from './index/index.component';
 import { NewsComponent } from './news/news.component';
@@ -12,12 +13,13 @@ import { ZzshComponent } from './zzsh/zzsh.component';
 
 const routes: Routes = [{
     path: '',
-    canActivate: [AuthGuard],
+    component: LayoutHomeComponent,
+    canActivate: [],
     children:
         [
             {
                 path: '',
-                canActivateChild: [AuthGuard],
+                canActivateChild: [],
                 children: [
                     { path: 'index', component: IndexComponent },
                     {
@@ -37,12 +39,6 @@ const routes: Routes = [{
         ]
 }];
 
-@NgModule({
-    imports: [RouterModule.forChild(routes)],
-    exports: [RouterModule],
-})
-export class HomeRoutingModule { }
-
 export const entryComponents = [];
 
 export const routedComponents = [
@@ -53,3 +49,9 @@ export const routedComponents = [
     NewsInfoComponent,
     ZzshComponent
 ];
+
+@NgModule({
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule],
+})
+export class HomeRoutingModule { }

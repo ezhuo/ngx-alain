@@ -86,6 +86,12 @@ export const parseJSON = (obj) => {
   try {
     return JSON.parse(obj);
   } catch (e) {
+    console.error(obj, e);
     return null;
   }
 };
+
+export const arrayUnique = (arr: Array<any>): Array<any> => {
+  return Array.from(new Set(arr));
+};
+

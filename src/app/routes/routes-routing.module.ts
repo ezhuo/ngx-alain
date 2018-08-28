@@ -1,32 +1,19 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
-// layout
-import { LayoutDefaultComponent, LayoutHomeComponent } from '@layout';
-import { AuthGuard, configInc, helpers } from '@core';
-
-// 获取默认路径
-const routeDefault = helpers.getLastItemBySplit(configInc.router.default, '/') || 'home';
+import { AuthGuard, configInc } from '@core';
 
 const routes: Routes = [
   {
     path: 'home',
-    component: LayoutHomeComponent,
-    // canLoad: [AuthGuard],
-    children: [
-      { path: '', loadChildren: './home/home.module#HomeModule' },
-    ],
+    loadChildren: './home/home.module#HomeModule',
   },
   {
     path: 'admin',
-    component: LayoutDefaultComponent,
-    // canLoad: [AuthGuard],
-    children: [
-      { path: '', loadChildren: './admin/admin.module#AdminModule' },
-    ],
+    loadChildren: './admin/admin.module#AdminModule',
+    canLoad: [AuthGuard],
   },
-  { path: '', redirectTo: routeDefault, pathMatch: 'full' },
-  { path: '**', redirectTo: routeDefault },
+  { path: '', redirectTo: configInc.router.routeDefault, pathMatch: 'full' },
+  { path: '**', redirectTo: configInc.router.routeDefault },
 ];
 
 @NgModule({

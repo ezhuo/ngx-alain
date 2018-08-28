@@ -8,4 +8,4 @@ import { PassportRoutingModule, routedComponents } from './passport-routing.modu
     exports: [],
     providers: []
 })
-export class PassportModule { }
+export class LayoutPassportModule { }

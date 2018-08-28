@@ -1,8 +1,8 @@
 import { BaseControl } from './base.control';
 import { of } from 'rxjs';
 
-import { SimpleTableColumn, SimpleTableComponent } from '@delon/abc';
-import { SFSchema, SFUISchema, SFSchemaEnumType } from '@delon/form';
+import { SimpleTableComponent } from '@delon/abc';
+
 
 export class BaseCase {
 

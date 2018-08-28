@@ -10,6 +10,5 @@ export class ConfigService {
     canton: any = config.canton;
     define: any = config.define;
     router: any = config.router;
-    menus: any = config.menus;
     ckeditor: any = config.editor;
 }

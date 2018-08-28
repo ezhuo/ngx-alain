@@ -1,0 +1,38 @@
+<div class='modal-header'>
+  <div class='modal-title'>{{userSrv.user.name}} -- 修改密码</div>
+</div>
+
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm($event,validateForm.value)">
+  <nz-alert *ngIf="error" [nzType]="'error'" [nzMessage]="error" [nzShowIcon]="true" class="mb-lg"></nz-alert>
+  <nz-form-item class="mb-sm">
+    <nz-form-control nzSpan="24" nzHasFeedback>
+      <input nz-input formControlName="old_pwd" type="password" autofocus="autofocus" placeholder="原密码" />
+      <nz-form-explain *ngIf="validateForm.get('old_pwd').dirty&&validateForm.get('old_pwd').errors">
+        请输入原密码！
+      </nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item class="mb-sm">
+    <nz-form-control nzSpan="24" nzHasFeedback>
+      <input nz-input formControlName="login_pwd" type="password"  placeholder="新密码" />
+      <nz-form-explain *ngIf="validateForm.get('login_pwd').dirty&&validateForm.get('login_pwd').errors">
+        请输入新密码！
+      </nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item class="mb-sm">
+    <nz-form-control nzSpan="24" nzHasFeedback>
+      <input nz-input formControlName="login_pwd2" type="password" placeholder="确认新密码" />
+      <nz-form-explain *ngIf="validateForm.get('login_pwd2').dirty&&validateForm.get('login_pwd2').errors">
+        请输入确认新密码！
+      </nz-form-explain>
+    </nz-form-control>
+  </nz-form-item>
+
+  <div class="modal-footer">
+    <button nz-button type="submit" [nzLoading]="httpSrv.loading" [nzType]="'primary'" [disabled]="!validateForm.valid">提交</button>
+    <button nz-button type="button" (click)="modalClose(false)">关闭</button>
+  </div>
+</form>

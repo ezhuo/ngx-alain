@@ -19,7 +19,7 @@ export class HomeHeaderTopComponent {
 
 
   logout() {
-    this.tokenSrv.token_destory();
+    this.tokenSrv.tokenDestory();
     this.router.navigateByUrl(this.configSrv.router.login);
   }
 }

@@ -7,10 +7,11 @@ import {
   HttpEvent,
   HttpRequest,
 } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { tap, catchError } from 'rxjs/operators';
+import { Observable, throwError, of } from 'rxjs';
+import { tap, catchError, switchMap } from 'rxjs/operators';
 import * as parse from 'date-fns/parse';
 import { api, app_debug } from '../config.inc';
+import { CacheService } from '@delon/cache';
 
 /**
  * 封装HttpClient，主要解决：
@@ -21,13 +22,17 @@ import { api, app_debug } from '../config.inc';
 @Injectable()
 // tslint:disable-next-line:class-name
 export class HttpService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private cacheSrv: CacheService) { }
 
   private _loading = false;
 
   /** 是否正在加载中 */
   get loading(): boolean {
     return this._loading;
+  }
+
+  set loading(value: boolean) {
+    this._loading = value;
   }
 
   parseParams(params: any): HttpParams {
@@ -483,6 +488,44 @@ export class HttpService {
         return throwError(res);
       }),
     );
+  }
+
+  /**
+   * 获取数据字典,并且缓存
+   * @param url 
+   * @param params 
+   * @param options 60 * 60 * 6 6个小时
+   */
+  getOfDict(
+    url: string,
+    params?: any,
+    options?: any,
+  ): Observable<any> {
+
+    return this.cacheSrv.tryGet(
+      url,
+      this.get(url, params, options),
+      {
+        type: 'm',
+        expire: 60 * 60 * 6
+      }
+    ).pipe(
+      switchMap((data: any) => {
+        this.end();
+        if (data && data.data && data.data.list)
+          return of(data.data.list);
+        else
+          return of([]);
+      }));
+
+    // return this.get(url, params, options).pipe(
+    //   switchMap((data: any) => {
+    //     if (data && data.data && data.data.list)
+    //       return of(data.data.list);
+    //     else
+    //       return of([]);
+    //   })
+    // );
   }
 
   update(url: string,

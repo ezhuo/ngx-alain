@@ -1,38 +1,36 @@
 import { NgModule } from '@angular/core';
-
 import { SharedModule } from '@shared';
+
+import { LayoutCommonModule } from '../common';
 
 import { LayoutDefaultComponent } from './default.component';
 import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { HeaderSearchComponent } from './header/components/search.component';
-import { HeaderNotifyComponent } from './header/components/notify.component';
-import { HeaderTaskComponent } from './header/components/task.component';
 import { HeaderIconComponent } from './header/components/icon.component';
-import { HeaderFullScreenComponent } from './header/components/fullscreen.component';
-import { HeaderStorageComponent } from './header/components/storage.component';
-import { HeaderUserComponent } from './header/components/user.component';
+import { HeaderTaskComponent } from './header/components/task.component';
 
-const COMPONENTS = [
-    LayoutDefaultComponent,
-    HeaderComponent,
-    SidebarComponent,
-];
+import { HeaderUserComponent } from './header/components/user.component';
+import { HeaderUserPwdComponent } from './header/components/user/pwd.component';
+import { HeaderUserInfoComponent } from './header/components/user/userInfo.component';
+
+const COMPONENTS = [LayoutDefaultComponent, HeaderComponent, SidebarComponent];
 
 const HEADERCOMPONENTS = [
-    HeaderSearchComponent,
-    HeaderNotifyComponent,
-    HeaderTaskComponent,
-    HeaderIconComponent,
-    HeaderFullScreenComponent,
-    HeaderStorageComponent,
-    HeaderUserComponent,
+  HeaderSearchComponent,
+  HeaderUserComponent,
+  HeaderUserPwdComponent,
+  HeaderIconComponent,
+  HeaderTaskComponent,
 ];
 
+const entryComponents = [HeaderUserPwdComponent, HeaderUserInfoComponent];
+
 @NgModule({
-    declarations: [...COMPONENTS, ...HEADERCOMPONENTS],
-    imports: [SharedModule],
-    exports: [...COMPONENTS, ...HEADERCOMPONENTS],
-    providers: []
+  declarations: [...COMPONENTS, ...HEADERCOMPONENTS, ...entryComponents],
+  imports: [SharedModule, LayoutCommonModule],
+  exports: [...COMPONENTS, ...HEADERCOMPONENTS],
+  providers: [],
+  entryComponents: [...entryComponents],
 })
-export class LayoutDefaultModule { }
+export class LayoutDefaultModule {}

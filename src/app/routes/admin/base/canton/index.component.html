@@ -1,0 +1,10 @@
+<div class="content__title">
+  <h1>
+    {{pageTitle}}
+    <small></small>
+  </h1>
+</div>
+
+<div class="search-form" style="background-color: #ffffff">
+  <div [jstree]="jstree" (jstreeChange)="jstreeChange($event)" class="jstree"></div>
+</div>

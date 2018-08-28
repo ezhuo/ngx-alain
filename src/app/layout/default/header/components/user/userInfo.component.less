@@ -1,0 +1,26 @@
+:host {
+    ::ng-deep {
+        .userInfo {
+            margin-bottom: 20px;
+            .avatar {
+                text-align: center;
+                .ant-avatar-lg {
+                    width: 100px;
+                    height: 100px;
+                    line-height: 100px;
+                    border-radius: 50%;
+                }
+            }
+        }
+        nz-card {
+            [nz-row] {
+                padding-top: 15px;
+                padding-bottom: 15px;
+                border-bottom: 1px dotted rgba(0, 0, 0, 0.397);
+                [nz-col]:first-child {
+                    text-align: right;
+                }
+            }
+        }
+    }
+}

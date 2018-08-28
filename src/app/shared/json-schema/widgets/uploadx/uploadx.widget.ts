@@ -5,7 +5,7 @@ import { ControlWidget } from '@delon/form';
 import { getData, toBool } from '@delon/form/src/utils';
 
 @Component({
-  selector: 'sf-uploadAvatar',
+  selector: 'sf-uploadx',
   template: `
   <sf-item-wrap [id]="id" [schema]="schema" [ui]="ui" [showError]="showError" [error]="error" [showTitle]="schema.title">
 
@@ -29,30 +29,32 @@ import { getData, toBool } from '@delon/form/src/utils';
       [nzPreview]="handlePreview"
       (nzChange)="change($event)">
       <ng-container *ngIf="!avatar?.url ; else cross">
-        <ng-container [ngSwitch]="btnType">
-          <ng-container *ngSwitchCase="'plus'">
-            <i class="anticon anticon-plus"></i>
-            <div class="ant-upload-text" [innerHTML]="i.text"></div>
-          </ng-container>
-          <ng-container *ngSwitchCase="'drag'">
-            <p class="ant-upload-drag-icon"><i class="anticon anticon-inbox"></i></p>
-            <p class="ant-upload-text" [innerHTML]="i.text"></p>
-            <p class="ant-upload-hint" [innerHTML]="i.hint"></p>
-          </ng-container>
-          <ng-container *ngSwitchDefault>
-            <button type="button" nz-button>
-              <i class="anticon anticon-upload"></i><span [innerHTML]="i.text"></span>
-            </button>
-          </ng-container>
+      <ng-container [ngSwitch]="btnType">
+        <ng-container *ngSwitchCase="'plus'">
+          <i class="anticon anticon-plus"></i>
+          <div class="ant-upload-text" [innerHTML]="i.text"></div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'drag'">
+          <p class="ant-upload-drag-icon"><i class="anticon anticon-inbox"></i></p>
+          <p class="ant-upload-text" [innerHTML]="i.text"></p>
+          <p class="ant-upload-hint" [innerHTML]="i.hint"></p>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          <button type="button" nz-button>
+            <i class="anticon anticon-upload"></i><span [innerHTML]="i.text"></span>
+          </button>
         </ng-container>
       </ng-container>
+      </ng-container>
       <ng-template #cross>
+        <div class="avatarbutton">
           <img [src]="avatar?.url" class="avatar" />
           <span class="ant-upload-list-item-actions avatar-action">
               <i (click)="handlePreview(avatar, $event)" class="anticon anticon-eye-o" title="查看"></i>
               &nbsp;&nbsp;
               <i (click)="handleRemove(avatar, $event)" class="anticon anticon-delete" title="删除"></i>
           </span>
+        </div>  
       </ng-template>
     </nz-upload>
 
@@ -60,14 +62,16 @@ import { getData, toBool } from '@delon/form/src/utils';
   `,
   preserveWhitespaces: false,
   styles: [`
-  .avatar-action i{
-    margin-top:10px;
-    font-size:26px;
-  }
+      .avatarbutton{
+        .avatar-action i {
+          margin-top:10px;
+          font-size:26px;
+        }
+      }
   `]
 })
-export class UploadAvatarWidget extends ControlWidget implements OnInit {
-  static readonly KEY = 'uploadAvatar';
+export class UploadxWidget extends ControlWidget implements OnInit {
+  static readonly KEY = 'uploadx';
   i: any;
   fileList: UploadFile[] = [];
   btnType = '';
@@ -85,14 +89,15 @@ export class UploadAvatarWidget extends ControlWidget implements OnInit {
       accept: this.ui.accept || '',
       limit: this.ui.limit == null ? 0 : +this.ui.limit,
       size: this.ui.size == null ? 0 : +this.ui.size,
-      fileType: this.ui.fileType || 'image/png,image/jpeg,image/gif,image/bmp',
-      listType: this.ui.listType || 'picture-card',
+      fileType: this.ui.fileType || '',
+      listType: this.ui.listType || 'text',
       multiple: toBool(this.ui.multiple, false),
       name: this.ui.name || 'file',
-      showUploadList: toBool(this.ui.showUploadList, false),
+      showUploadList: toBool(this.ui.showUploadList, true),
       withCredentials: toBool(this.ui.withCredentials, false),
       resReName: (this.ui.resReName || '').split('.'),
     };
+    this.avatarInit();
     if (this.i.listType === 'picture-card') this.btnType = 'plus';
     if (this.i.type === 'drag') {
       this.i.listType = null;
@@ -106,41 +111,49 @@ export class UploadAvatarWidget extends ControlWidget implements OnInit {
   change(args: UploadChangeParam) {
     if (this.ui.change) this.ui.change(args);
     if (args.type !== 'success') return;
-    if (args.fileList.length > 0) {
-      this.avatar = args.fileList[args.fileList.length - 1];
-    }
-    this.setValue(args.fileList);
     this.notify(args.fileList);
   }
 
   reset(value: any) {
-    const uploadData = list => {
-      this.fileList = list as UploadFile[];
-      if (this.fileList && this.fileList.length > 0)
-        this.avatar = this.fileList[0];
-      this.notify(this.fileList);
-      this.detectChanges();
-    };
-    // getData(this.schema, this.ui, this.formProperty.formData).subscribe(uploadData);
-    if (value && value.length > 0) {
-      uploadData(value);
-    }
+    getData(this.schema, this.ui, this.formProperty.formData).subscribe(
+      list => {
+        if (!this.ui.enum && this.formProperty.formData && Array.isArray(this.formProperty.formData)) {
+          list = this.formProperty.formData;
+        }
+        this.fileList = list as UploadFile[];
+        this.notify(this.fileList);
+        this.detectChanges();
+      },
+    );
   }
 
   private notify(fileList: UploadFile[]) {
-    const res = fileList.map(item =>
-      deepGet(item.response, this.i.resReName, item.response),
+    const res = fileList.map(
+      item => {
+        return (!item.response) ? item : deepGet(item.response, this.i.resReName, item.response);
+      }
     );
-    this.formProperty.setValue(
-      this.i.multiple === true ? res : res.pop(),
-      false,
-    );
+    if (this.ui.options['avatar']) {
+      const resLast = (res && res.length > 0) ? [res.pop()] : [];
+      this.avatar = (resLast && resLast.length > 0) ? resLast[0] : null;
+      this.formProperty.setValue(
+        resLast,
+        false,
+      );
+    } else {
+      this.formProperty.setValue(
+        this.i.multiple === true ? res : res.pop(),
+        false,
+      );
+    }
+
   }
 
-  handlePreview = (file: UploadFile, $event: Event) => {
-    $event.preventDefault();
-    $event.stopPropagation();
-
+  handlePreview = (file: UploadFile, $event?: Event) => {
+    if ($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+    }
     this.modalSrv
       .create({
         nzContent: `<img src="${file.url ||
@@ -153,8 +166,17 @@ export class UploadAvatarWidget extends ControlWidget implements OnInit {
   handleRemove = (file: any, $event: Event) => {
     $event.preventDefault();
     $event.stopPropagation();
-    this.avatar = null;
-    this.setValue([]);
+
+    this.notify([]);
     this.detectChanges();
+  }
+
+  avatarInit() {
+    this.ui.options = this.ui.options || {};
+    if (this.ui.options['avatar']) {
+      this.i.fileType = this.ui.fileType || 'image/png,image/jpeg,image/gif,image/bmp';
+      this.i.listType = this.ui.listType || 'picture-card';
+      this.i.showUploadList = false;
+    }
   }
 }

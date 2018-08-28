@@ -1,5 +1,5 @@
 export const tplModalEditHTML =
-  `
+    `
 <div class='modal-header'>
     <div class='modal-title'>{{  modalTitle }}</div>
 </div>
@@ -14,9 +14,15 @@ export const tplModalEditHTML =
 </div>
 
 <div class='modal-footer'>
-    <button nz-button nzType="primary" (click)='sf.submit()' [nzLoading]="httpSrv.loading" [disabled]='!sf.valid'>保存</button>
-    <button nz-button nzType="danger" (click)='sf.reset()'>重置</button>
-    <button nz-button nzType="default" (click)='modalClose()'>关闭</button>
+    <button nz-button *ngIf="modalParams?.modal?.button?.submit?.show" nzType="primary" (click)='sf.submit()' [nzLoading]="httpSrv.loading" [disabled]='!sf.valid'>
+        {{modalParams?.modal?.button?.submit?.title || '保存'}}
+    </button>
+    <button nz-button *ngIf="modalParams?.modal?.button?.reset?.show" nzType="danger" (click)='sf.reset()'>
+        {{modalParams?.modal?.button?.reset?.title || '重置'}}
+    </button>
+    <button nz-button *ngIf="modalParams?.modal?.button?.close?.show" nzType="default" (click)='modalClose()'>
+        {{modalParams?.modal?.button?.close?.title || '关闭'}}
+    </button>
 </div>
 
 `;

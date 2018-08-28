@@ -49,8 +49,11 @@ export class ParentModalControl extends BaseControl implements OnInit, OnDestroy
           } else {
             widget = prop[idx].ui.widget;
           }
-          if (['upload', 'uploadAvatar'].indexOf(widget) > -1) {
+          if (widget.indexOf('upload') > -1) {
             formValue[idx] = this.helpers.formatUploadFilesToString(formValue[idx]);
+          }
+          if (widget.indexOf('cascader') > -1) {
+            formValue[idx] = this.helpers.formatCascaderToString(formValue[idx]);
           }
         }
       }

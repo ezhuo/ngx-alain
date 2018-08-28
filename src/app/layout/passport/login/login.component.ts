@@ -1,7 +1,7 @@
-import { SettingsService } from '@delon/theme';
-import { Component, OnDestroy, Inject, Optional } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, Optional } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { SettingsService, TitleService } from '@delon/theme';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import {
   SocialService,
@@ -11,7 +11,13 @@ import {
 } from '@delon/auth';
 import { ReuseTabService } from '@delon/abc';
 import { environment } from '@env/environment';
-import { StartupService, AuthService, StateService, NoticeService, ConfigService } from '@core';
+import {
+  StartupService,
+  AuthService,
+  StateService,
+  NoticeService,
+  ConfigService,
+} from '@core';
 
 @Component({
   selector: 'app-passport-login',
@@ -19,7 +25,7 @@ import { StartupService, AuthService, StateService, NoticeService, ConfigService
   styleUrls: ['./login.component.less'],
   providers: [SocialService],
 })
-export class UserLoginComponent implements OnDestroy {
+export class UserLoginComponent implements OnInit, OnDestroy {
   form: FormGroup;
   error = '';
   type = 0;
@@ -31,6 +37,7 @@ export class UserLoginComponent implements OnDestroy {
     public msg: NzMessageService,
     private modalSrv: NzModalService,
     private settingsService: SettingsService,
+    private titleSrv: TitleService,
     private socialService: SocialService,
     private configSrv: ConfigService,
     private stateSrv: StateService,
@@ -43,13 +50,21 @@ export class UserLoginComponent implements OnDestroy {
     private startupSrv: StartupService,
   ) {
     this.form = fb.group({
-      account: [null, [Validators.required, Validators.minLength(5)]],
+      account: [null, [Validators.required, Validators.minLength(1)]],
       password: [null, Validators.required],
       mobile: [null, [Validators.required, Validators.pattern(/^1\d{10}$/)]],
       captcha: [null, [Validators.required]],
       remember: [true],
     });
-    modalSrv.closeAll();
+    this.modalSrv.closeAll();
+  }
+
+  ngOnInit(): void {
+    this.titleSrv.setTitle('用户登录');
+  }
+
+  ngOnDestroy(): void {
+    if (this.interval$) clearInterval(this.interval$);
   }
 
   // region: fields
@@ -108,28 +123,24 @@ export class UserLoginComponent implements OnDestroy {
       if (this.mobile.invalid || this.captcha.invalid) return;
     }
 
+    this.reuseTabService.clear();
+
     if (this.type === 0) {
-      this.reuseTabService.clear();
-      console.log(this.form.value);
-      this.login$ = this.authSrv
-        .doLogin(this.form.value)
-        .subscribe(
-          data => {
-            if (this.configSrv.app_debug) console.log('login.component:', data);
-            this.error = '';
-            this.noticeSrv.notice_success('登录成功！');
-            setTimeout(() => {
-              return this.goDefaultURL();
-            }, 0);
-          },
-          error => {
-            console.error('login.component:', error);
-            if (error && error.message2) {
-              return this.error = error.message2;
-            }
-            return this.error = `账户或密码错误`;
+      this.login$ = this.authSrv.doLogin(this.form.value).subscribe(
+        data => {
+          if (this.configSrv.app_debug) console.log('login.component:', data);
+          this.error = '';
+          // this.noticeSrv.msg_success('登录成功！');
+          return this.goDefaultURL();
+        },
+        error => {
+          console.error('login.component:', error);
+          if (error && error.message2) {
+            return (this.error = error.message2);
           }
-        );
+          return (this.error = `账户或密码错误`);
+        },
+      );
     }
     // setTimeout(() => {
     //   this.loading = false;
@@ -158,8 +169,6 @@ export class UserLoginComponent implements OnDestroy {
     //   // 否则直接跳转
     //   this.router.navigate(['/']);
     // }, 1000);
-
-
   }
 
   // region: social
@@ -210,8 +219,4 @@ export class UserLoginComponent implements OnDestroy {
   }
 
   // endregion
-
-  ngOnDestroy(): void {
-    if (this.interval$) clearInterval(this.interval$);
-  }
 }

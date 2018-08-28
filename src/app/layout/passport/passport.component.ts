@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ConfigService } from '@core';
 
 @Component({
   selector: 'layout-passport',
@@ -6,6 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./passport.component.less'],
 })
 export class LayoutPassportComponent {
+
+  constructor(public configSrv: ConfigService) {
+
+   }
+  
   links = [
     {
       title: '帮助',

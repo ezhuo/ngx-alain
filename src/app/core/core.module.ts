@@ -1,11 +1,12 @@
-import { CaseModule } from './case/case.module';
 import {
   NgModule, Optional, SkipSelf, ModuleWithProviders,
   LOCALE_ID, APP_INITIALIZER
 } from '@angular/core';
+
 import { UtilsModule } from './utils/utils.module';
 import { DataModule } from './data/data.module';
 import { NetModule } from './net/net.module';
+import { CaseModule } from './case/case.module';
 import { throwIfAlreadyLoaded } from './module-import-guard';
 
 import { StartupService } from './startup/startup.service';

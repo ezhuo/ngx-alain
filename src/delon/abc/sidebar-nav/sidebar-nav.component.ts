@@ -222,13 +222,5 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getOpen(child) {
-    if (child._open == undefined && child.link) {
-      return this.router.url.startsWith(child.link);
-    } else {
-      return child._open;
-    }
-  }
-  
   // endregion
 }

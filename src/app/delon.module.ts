@@ -18,7 +18,7 @@ import { DelonAuthModule } from '@delon/auth';
 import { DelonACLModule } from '@delon/acl';
 import { DelonCacheModule } from '@delon/cache';
 import { DelonUtilModule } from '@delon/util';
-// mock
+// // mock
 import { DelonMockModule } from '@delon/mock';
 import * as MOCKDATA from '../../_mock';
 import { environment } from '@env/environment';

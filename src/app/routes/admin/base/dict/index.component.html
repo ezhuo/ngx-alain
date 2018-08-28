@@ -1,0 +1,34 @@
+<div class="content__title">
+  <h1>
+    {{pageTitle}}
+    <small></small>
+  </h1>
+  <div>
+    <button nz-button (click)="add()" [nzType]="'primary'" [nzSize]="'large'">新建</button>
+  </div>
+</div>
+
+<div nz-row nzGutter="24">
+
+  <div nz-col nzSpan="7">
+    <div style="background-color:#fff;">
+      <nz-list [nzDataSource]="dictTypeName" nzBordered nzSize="small" [nzHeader]="'数据字典'" [nzRenderItem]="item">
+        <ng-template #item let-item>
+          <nz-list-item [nzExtra]="extra" [class.active]="item['type']==dictActive['type']">
+            <ng-template #extra>
+              <div class="dictList" >
+                <span (click)="dictTypeClick($event ,item)">{{item['type_name']}}</span>
+              </div>
+            </ng-template>
+          </nz-list-item>
+        </ng-template>
+      </nz-list>
+    </div>
+  </div>
+
+  <div nz-col nzSpan="17">
+    <simple-table #st class="simple-table" [data]="url" [columns]="mainTableColumns" [extraParams]="mainTableParams"></simple-table>
+  </div>
+
+
+</div>

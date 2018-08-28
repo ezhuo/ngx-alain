@@ -83,7 +83,8 @@ export const formatNum = function (num, n) {
 };
 
 /**
- * 传入的数据格式必须为数组
+ * 将上传组件的值，格式化为字符串
+ * 注意：输入数据格式必须为数组
  * @param uploadFile 
  */
 export const formatUploadFilesToString = function (uploadFile: any[] | Object): String {
@@ -93,17 +94,79 @@ export const formatUploadFilesToString = function (uploadFile: any[] | Object): 
   }
   if (!objCheck.isArray(uploadFile)) uploadFile = [];
   for (const idx of (uploadFile as any[])) {
-    if (idx && idx.status) {
-      delete idx.status;
+    if (idx) {
+      if (idx.status) {
+        delete idx.status;
+      }
+      if (idx.dt) {
+        delete idx.dt;
+      }
+      if (idx.message) {
+        delete idx.message;
+      }
     }
+
   }
   return JSON.stringify(uploadFile);
 };
 
+/**
+ * 将文件上传的字符串，格式化为数组
+ * 输入数据必须为字符串
+ * @param uploadFile 
+ */
 export const formatUploadFilesToObject = function (uploadFile: string): any[] | Object {
   uploadFile = uploadFile || '[]';
   return objCheck.parseJSON(uploadFile);
 };
+
+
+/**
+ * 将区域选择组件的值，格式化为字符串
+ * 注意：输入数据格式必须为数组
+ * @param fdn 
+ */
+export const formatCascaderToString = function (fdn: any[]): String {
+  fdn = fdn || [];
+  if (objCheck.isObject(fdn)) {
+    fdn = [fdn];
+  }
+  if (!objCheck.isArray(fdn)) fdn = [];
+  if (!objCheck.IsEmpty(fdn)) {
+    return fdn[fdn.length - 1];
+  } else {
+    return '';
+  }
+};
+
+/**
+ * 将区域选择组件的字符串，格式化为数组
+ * 输入数据必须为字符串
+ * @param uploadFile 
+ */
+export const formatCascaderToObject = function (fdn: string): any[] {
+  fdn = fdn || '[]';
+  const arr = fdn.split('.');
+  arr.pop();
+  let result = [];
+  for (let idx = 0; idx < arr.length; idx++) {
+    if (idx > 0) result.push(arrConcat(idx));
+  }
+  if (result.length == 0) result = arr;
+  return result;
+
+  function arrConcat(__idx) {
+    const r = [];
+    arr.forEach((_e, _i) => {
+      if (_i <= __idx) {
+        r.push(_e);
+      }
+    });
+    r.push('');
+    return r.join('.');
+  }
+};
+
 
 export const getDate = function (o) {
   let arr, day, month, res;
@@ -305,15 +368,49 @@ export const randomNum = function (n) {
   return rnd;
 };
 
-export const getDict = (dict, v) => {
-  for (const idx of dict) {
-    if (idx) {
-      if (idx.hasOwnProperty('value') && idx.value == v) {
-        return idx.title || idx.label || '-';
+/**
+ * 潜度获取值
+ * @param dict 
+ * @param v 
+ */
+export const getDict = (dict: any[], val: any | any[]): any => {
+  if (!objCheck.isArray(val)) val = [val];
+  const res = getDictDeep(dict, val) || [];
+  if (res.length < 1) return '-';
+  return res.join(' | ');
+};
+
+/**
+ * 深度获取值
+ * @param dict 
+ * @param val 
+ */
+export const getDictDeep = (dict: any[], val: any[]): any[] => {
+  const res = [];
+  let flage = 0;
+  if (dict && dict.length > 0) {
+    for (const item of dict) {
+      if (item.value === val[flage]) {
+        res.push(item.label || item.title);
+        flage++;
+        if (item.children && item.children.length > 0) {
+          (function fn(_arr) {
+            const obj = _arr;
+            for (const _item of obj) {
+              if (_item.value === val[flage]) {
+                flage++;
+                res.push(_item.label || item.title);
+                if (_item.children && _item.children.length > 0) {
+                  return fn(_item.children);
+                }
+              }
+            }
+          })(item.children);
+        }
       }
     }
   }
-  return '-';
+  return res;
 };
 
 /**

@@ -13,7 +13,7 @@ import {
   template: `
   <nz-input-group nzAddOnBeforeIcon="anticon anticon-search">
     <input nz-input [(ngModel)]="q" (focus)="qFocus()" (blur)="qBlur()"
-      [placeholder]="'top-search-ph'">
+      [placeholder]="'请输入物联网卡号'">
   </nz-input-group>
   `,
 })
