@@ -1,4 +1,4 @@
-> 基于 ng-alain 1.2.0 ng-zorro
+> 基于 ng-alain 1.3.0 ng-zorro
 
 ## 一、执行
 ```
