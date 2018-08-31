@@ -10,7 +10,7 @@
 
 <div nz-row nzGutter="24">
 
-  <div nz-col nzSpan="7">
+  <div nz-col nzSpan="7" nzLg="7" nzXs="24">
     <div style="background-color:#fff;">
       <nz-list [nzDataSource]="dictTypeName" nzBordered nzSize="small" [nzHeader]="'数据字典'" [nzRenderItem]="item">
         <ng-template #item let-item>
@@ -26,7 +26,7 @@
     </div>
   </div>
 
-  <div nz-col nzSpan="17">
+  <div nz-col nzSpan="17" nzLg="17" nzXs="24">
     <simple-table #st class="simple-table" [data]="url" [columns]="mainTableColumns" [extraParams]="mainTableParams"></simple-table>
   </div>
 

@@ -6,10 +6,10 @@ import { tplModalEditHTML } from '@theme';
 @Component({
     selector: 'app-orginfo-edit',
     template: tplModalEditHTML,
-    styles: [``]
+    styles: [``],
 })
-export class OrgInfoEditComponent extends ParentModalControl implements OnInit, OnDestroy {
-
+export class OrgInfoEditComponent extends ParentModalControl
+    implements OnInit, OnDestroy {
     constructor(protected injector: Injector) {
         super(injector);
     }
@@ -17,7 +17,9 @@ export class OrgInfoEditComponent extends ParentModalControl implements OnInit, 
     ngOnInit() {
         super.ngOnInit();
         if (!this.primaryValue) {
-            this.formData['parent_org_name'] = this.modalParams.tree.origin.title;
+            this.formData[
+                'parent_org_name'
+            ] = this.modalParams.tree.origin.title;
         }
         console.log(this.formData);
     }
@@ -36,10 +38,15 @@ export class OrgInfoEditComponent extends ParentModalControl implements OnInit, 
             // 编辑状态下不允许修改机构
             delete formData['parent_id'];
         }
-        this.httpSrv.update(this.primaryURL, formData, this.primaryValue).subscribe((result) => {
-            // console.log(result);
-            this.modalClose(result);
-        });
+        this.httpSrv
+            .update(this.primaryURL, formData, this.primaryValue)
+            .subscribe(
+                result => {
+                    this.modalClose(result);
+                },
+                err => {
+                     console.log(err);
+                },
+            );
     }
-
 }

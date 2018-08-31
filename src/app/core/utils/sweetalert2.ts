@@ -1,9 +1,6 @@
-import { Injectable } from '@angular/core';
-
 const myWindow: any = (typeof window !== 'undefined' && window) || {};
 
-@Injectable()
-export class SweetAlertService {
+export class SweetAlert {
   swalObj = myWindow.Sweetalert2;
 
   constructor() { }

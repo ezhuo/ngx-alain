@@ -61,7 +61,7 @@ export class TokenService {
         throw new Error('token is empty');
       }
       this.__token = token;
-      if (helper.IsEmpty(this.userSrv.userInfo)) {
+      if (helper.isEmpty(this.userSrv.userInfo)) {
         const userInfo = this.__jwtHelper.decodeToken(token);
         this.userSrv.userInfo = userInfo;
       }
@@ -101,7 +101,7 @@ export class TokenService {
   get isAuth() {
     this.__isAuth =
       (this.tokenRead() || '').length > 10 &&
-      !helper.IsEmpty(this.userSrv.userInfo);
+      !helper.isEmpty(this.userSrv.userInfo);
     if (app_debug) console.log('isAuth', this.__isAuth);
     return this.__isAuth;
   }

@@ -1,12 +1,10 @@
 import { BaseControl } from './base.control';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Subscriber } from 'rxjs';
 
 import { SimpleTableColumn, SimpleTableComponent } from '@delon/abc';
 import { SFSchema, SFUISchema, SFSchemaEnumType } from '@delon/form';
 
 export class BaseFunc {
-
     private ___bc: BaseControl = null;
 
     get bc() {
@@ -15,50 +13,29 @@ export class BaseFunc {
 
     constructor(bc: BaseControl) {
         this.___bc = bc;
+
+        this.___bc.modalParams = {
+            button: {
+                submit: {
+                    show: true,
+                    title: '保存',
+                },
+                reset: {
+                    show: true,
+                    title: '重置',
+                },
+                close: {
+                    show: true,
+                    title: '关闭',
+                },
+            },
+        };
     }
 
     /**
-     * 释放
+     * 表单初始化
      */
-    destroy() {
-        const self = this.___bc;
-
-        if (self.configSrv.app_debug) console.log('ngOnDestroy', self.pageData$);
-
-        // 清空数据流
-        for (const idx of Object.keys(self.pageData$)) {
-            if (self.pageData$[idx] instanceof Subscriber) {
-                if (self.pageData$[idx].unsubscribe) {
-                    self.pageData$[idx].unsubscribe();
-                }
-            }
-            if (self.pageData$[idx] instanceof Promise) {
-                // console.log('Promise');
-            }
-            self.pageData$[idx] = null;
-        }
-
-        // 清空定时器timeout
-        for (const idx of Object.keys(self.pageTimeOut)) {
-            if (self.pageTimeOut[idx]) {
-                clearTimeout(self.pageTimeOut[idx]);
-            }
-            self.pageTimeOut[idx] = null;
-        }
-
-        // 清空定时器timeinterval
-        for (const idx of Object.keys(self.pageTimeInterval)) {
-            if (self.pageTimeInterval[idx]) {
-                clearInterval(self.pageTimeInterval[idx]);
-            }
-            self.pageTimeInterval[idx] = null;
-        }
-    }
-
-    /**
-   * 表单初始化
-   */
-    __formGroupFillData(__frmGroup?: FormGroup, __frmData?: Object, ): void {
+    __formGroupFillData(__frmGroup?: FormGroup, __frmData?: Object): void {
         const self = this.bc;
         if (!__frmGroup === null) __frmGroup = self.mainForm;
         for (const idx of Object.keys(__frmData)) {
@@ -80,36 +57,42 @@ export class BaseFunc {
         if (!__primaryKey) {
             __primaryKey = self.primaryKey;
         }
-        if (!self.helpers.IsEmpty(__frmData) && __primaryKey) {
-            if (!self.helpers.IsEmpty(__frmData.hasOwnProperty(__primaryKey))) {
+        if (!self.helpers.isEmpty(__frmData) && __primaryKey) {
+            if (!self.helpers.isEmpty(__frmData.hasOwnProperty(__primaryKey))) {
                 result = __frmData[__primaryKey];
                 self.primaryValue = result;
             }
         }
         return result;
-    }
+    };
 
     /**
      * 动态表单设置
-     * @param mainSchema 
+     * @param mainSchema
      */
-    __schemaFormSetTexts(schema?: SFSchema, orderBy?: any[], mainSchema?: SFSchema) {
+    __schemaFormSetTexts(
+        schema?: SFSchema,
+        orderBy?: any[],
+        mainSchema?: SFSchema,
+    ) {
         const self = this.bc;
         let newSchema = mainSchema || self.mainSchema;
         orderBy = orderBy || self.mainSchemaOrder;
-        if (!self.helpers.IsEmpty(schema)) {
+        if (!self.helpers.isEmpty(schema)) {
             newSchema = self.helpers.deepExtend({}, newSchema, schema);
         }
 
         // 排序
-        if (orderBy && !self.helpers.IsEmpty(orderBy)) {
+        if (orderBy && !self.helpers.isEmpty(orderBy)) {
             newSchema = this.__schemaFormOrder(orderBy, newSchema);
         }
 
         const prop = newSchema.properties;
         let old = null;
         for (const idx of Object.keys(prop)) {
-            if (!prop[idx]) { continue; }
+            if (!prop[idx]) {
+                continue;
+            }
             if (!prop[idx].ui || self.helpers.isString(prop[idx].ui)) {
                 old = prop[idx].ui;
                 prop[idx].ui = {};
@@ -132,18 +115,18 @@ export class BaseFunc {
 
     /**
      * 表单排序
-     * @param orderBy 
-     * @param mainSchema 
+     * @param orderBy
+     * @param mainSchema
      */
     __schemaFormOrder(orderBy?: any[], mainSchema?: SFSchema): SFSchema {
         const self = this.bc;
         orderBy = orderBy || self.mainSchemaOrder;
         mainSchema = mainSchema || self.mainSchema;
         let newSchema: SFSchema = {};
-        if (orderBy && !self.helpers.IsEmpty(orderBy)) {
+        if (orderBy && !self.helpers.isEmpty(orderBy)) {
             newSchema = self.helpers.deepExtend({}, mainSchema);
             newSchema.properties = {};
-            orderBy.forEach((item) => {
+            orderBy.forEach(item => {
                 newSchema.properties[item] = mainSchema.properties[item];
             });
             mainSchema = newSchema;
@@ -152,5 +135,4 @@ export class BaseFunc {
         }
         return newSchema;
     }
-
 }

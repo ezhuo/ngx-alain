@@ -34,7 +34,7 @@
       "hideInBreadcrumb": true,
       "children": [{
         "text": "仪表盘",
-        "icon": "icon-speedometer",
+        "icon": "anticon anticon-dashboard",
         "link": "/app/admin/dashboard"
       }]
     },
@@ -45,7 +45,7 @@
       "children": [{
         "text": "schema-demo",
         "link": "/app/admin/schema",
-        "icon": "icon-cup",
+        "icon": "anticon anticon-appstore-o",
         "children": [{
           "text": "schema-demo",
           "link": "/app/admin/schema/schema-demo"

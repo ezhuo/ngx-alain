@@ -1,25 +1,19 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { NoticeService } from './notice.service';
 import { ModalService } from './modal.service';
-import { SweetAlertService } from './sweetalert2.service';
 
-
-const SERVICES = [
-  NoticeService,
-  ModalService,
-  SweetAlertService
-];
+const SERVICES = [NoticeService, ModalService];
 
 @NgModule({
-  imports: [],
-  exports: [],
-  providers: []
+    imports: [],
+    exports: [],
+    providers: [],
 })
 export class UtilsModule {
-  static forRoot(): ModuleWithProviders {
-    return <ModuleWithProviders>{
-      ngModule: UtilsModule,
-      providers: [...SERVICES]
-    };
-  }
+    static forRoot(): ModuleWithProviders {
+        return <ModuleWithProviders>{
+            ngModule: UtilsModule,
+            providers: [...SERVICES],
+        };
+    }
 }

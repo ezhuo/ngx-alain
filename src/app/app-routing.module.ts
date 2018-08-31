@@ -7,7 +7,7 @@ const routes: Routes = [
   {
     path: 'app',
     loadChildren: './routes/routes.module#RoutesModule',
-    data: { app: true }
+    data: { app: true },
   },
   // passport
   {
@@ -31,6 +31,6 @@ export const routedComponents = [];
   imports: [RouterModule.forRoot(routes, config)],
   exports: [RouterModule],
   providers: [AuthGuard],
-  declarations: [...routedComponents]
+  declarations: [...routedComponents],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

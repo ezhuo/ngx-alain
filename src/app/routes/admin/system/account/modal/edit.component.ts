@@ -6,10 +6,10 @@ import { tplModalEditHTML } from '@theme';
 @Component({
     selector: 'app-account-edit',
     template: tplModalEditHTML,
-    styles: [``]
+    styles: [``],
 })
-export class AccountEditComponent extends ParentModalControl implements OnInit, OnDestroy {
-
+export class AccountEditComponent extends ParentModalControl
+    implements OnInit, OnDestroy {
     constructor(protected injector: Injector) {
         super(injector);
     }
@@ -22,6 +22,11 @@ export class AccountEditComponent extends ParentModalControl implements OnInit, 
             this.formData['org_id'] = this.formData['org_name'];
         } else {
             this.formData['org_id'] = this.modalParams.tree.origin.title;
+        }
+
+        if (!this.userSrv.userInfo.is_group) {
+            this.formData['role_id'] = 10;
+            this.mainSchema.properties['role_id'].ui['widget'] = 'texts';
         }
     }
 
@@ -39,10 +44,11 @@ export class AccountEditComponent extends ParentModalControl implements OnInit, 
             // 编辑状态下不允许修改机构
             delete formData['org_id'];
         }
-        this.httpSrv.update(this.primaryURL, formData, this.primaryValue).subscribe((result) => {
-            // console.log(result);
-            this.modalClose(result);
-        });
+        this.httpSrv
+            .update(this.primaryURL, formData, this.primaryValue)
+            .subscribe(result => {
+                // console.log(result);
+                this.modalClose(result);
+            });
     }
-
 }

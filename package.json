@@ -16,7 +16,9 @@
   "scripts": {
     "precommit2": "npm run lint-staged",
     "ng": "ng",
-    "start": "ng serve  --proxy-config proxy.conf.json --live-reload=false",
+    "start": "ng serve --proxy-config proxy.conf.json --live-reload=false",
+    "watch": "ng build --watch",
+    "watch2": "ng build --watch --verbose --vendor-source-map=false --eval-source-map=false",
     "hmr": "ng serve -c=hmr --proxy-config proxy.conf.json",
     "build": "ng build --prod --build-optimizer",
     "analyze": "ng build --prod --build-optimizer --stats-json",

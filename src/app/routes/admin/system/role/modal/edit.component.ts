@@ -43,7 +43,7 @@ export class RoleEditComponent extends ParentModalControl implements OnInit, OnD
     treeDataSelectKeys = [];
     treeDataCheckedKeys = [];
     gettreeData() {
-        this.___pageData$.menu = this.httpSrv.post('/menu/get_menu_list', { 'role_id': this.primaryValue }).subscribe((result: any) => {
+        this.freeData.menu = this.httpSrv.post('/menu/get_menu_list', { 'role_id': this.primaryValue }).subscribe((result: any) => {
             result.data.list.forEach((node, idx) => {
                 // console.log(idx);
                 // if (idx === 0) {

@@ -132,7 +132,7 @@ export const formatCascaderToString = function (fdn: any[]): String {
     fdn = [fdn];
   }
   if (!objCheck.isArray(fdn)) fdn = [];
-  if (!objCheck.IsEmpty(fdn)) {
+  if (!objCheck.isEmpty(fdn)) {
     return fdn[fdn.length - 1];
   } else {
     return '';
@@ -421,7 +421,7 @@ export const getDictDeep = (dict: any[], val: any[]): any[] => {
 export const getLastItemBySplit = (srcStr: string, split: string) => {
   const arr = srcStr.split(split);
   let result = '';
-  if (!objCheck.IsEmpty(arr)) {
+  if (!objCheck.isEmpty(arr)) {
     result = arr[arr.length - 1];
   }
   return result;

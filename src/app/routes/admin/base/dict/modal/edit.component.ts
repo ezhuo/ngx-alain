@@ -35,7 +35,7 @@ export class DictEditComponent extends ParentModalControl
   onSubmit($event: any) {
     const formData = this.formatSubmitData($event.value, this.mainSchema);
 
-    this.pageData$.save = this.httpSrv
+    this.freeData.save = this.httpSrv
       .update(this.primaryURL, formData, this.primaryValue)
       .subscribe(result => {
         this.modalClose(result);

@@ -1,85 +1,96 @@
 import { Injectable, Injector } from '@angular/core';
 import { NzMessageService, NzNotificationService } from 'ng-zorro-antd';
+import { SweetAlert } from './sweetalert2';
 
 @Injectable()
 export class NoticeService {
-  constructor(
-    private injector: Injector
-  ) { }
+    constructor(private injector: Injector) {}
 
-  private types: string[] = ['default', 'info', 'success', 'warning', 'error', 'loading'];
+    private __sweet: SweetAlert = new SweetAlert();
+    
+    private types: string[] = [
+        'default',
+        'info',
+        'success',
+        'warning',
+        'error',
+        'loading',
+    ];
 
-  get nzMessageService() {
-    return this.injector.get(NzMessageService);
-  }
+    get nzMessageService() {
+        return this.injector.get(NzMessageService);
+    }
 
-  get nzNotificationService() {
-    return this.injector.get(NzNotificationService);
-  }
+    get nzNotificationService() {
+        return this.injector.get(NzNotificationService);
+    }
 
-  private showNotice(type: string, title: string, body: string) {
-    return this.nzNotificationService.create(type, title, body);
-  }
+    get sweet() {
+        return this.__sweet;
+    }
 
-  private showMsg(type: string, title: string, body: string) {
-    return this.nzMessageService.create(type, body);
-  }
+    private showNotice(type: string, title: string, body: string) {
+        return this.nzNotificationService.create(type, title, body);
+    }
 
-  clear() {
-    this.nzNotificationService.remove();
-    this.nzMessageService.remove();
-  }
+    private showMsg(type: string, title: string, body: string) {
+        return this.nzMessageService.create(type, body);
+    }
 
-  notice_info(msg, title = '信息') {
-    return this.showNotice(this.types[1], title, msg);
-  }
+    clear() {
+        this.nzNotificationService.remove();
+        this.nzMessageService.remove();
+    }
 
-  notice_success(msg, title = '成功') {
-    return this.showNotice(this.types[2], title, msg);
-  }
+    notice_info(msg, title = '信息') {
+        return this.showNotice(this.types[1], title, msg);
+    }
 
-  notice_warning(msg, title = '警告') {
-    return this.showNotice(this.types[3], title, msg);
-  }
+    notice_success(msg, title = '成功') {
+        return this.showNotice(this.types[2], title, msg);
+    }
 
-  notice_error(msg, title = '错误') {
-    return this.showNotice(this.types[4], title, msg);
-  }
+    notice_warning(msg, title = '警告') {
+        return this.showNotice(this.types[3], title, msg);
+    }
 
-  notice_html(html) {
-    // return this.nzNotificationService.html(html);
-  }
+    notice_error(msg, title = '错误') {
+        return this.showNotice(this.types[4], title, msg);
+    }
 
-  notice_clear() {
-    return this.nzNotificationService.remove();
-  }
+    notice_html(html) {
+        // return this.nzNotificationService.html(html);
+    }
 
-  msg_info(msg, title = '信息') {
-    return this.showMsg(this.types[1], title, msg);
-  }
+    notice_clear() {
+        return this.nzNotificationService.remove();
+    }
 
-  msg_success(msg, title = '成功') {
-    return this.showMsg(this.types[2], title, msg);
-  }
+    msg_info(msg, title = '信息') {
+        return this.showMsg(this.types[1], title, msg);
+    }
 
-  msg_warning(msg, title = '警告') {
-    return this.showMsg(this.types[3], title, msg);
-  }
+    msg_success(msg, title = '成功') {
+        return this.showMsg(this.types[2], title, msg);
+    }
 
-  msg_error(msg, title = '错误') {
-    return this.showMsg(this.types[4], title, msg);
-  }
+    msg_warning(msg, title = '警告') {
+        return this.showMsg(this.types[3], title, msg);
+    }
 
-  msg_loading(msg, title = '') {
-    return this.nzMessageService.loading(msg);
-  }
+    msg_error(msg, title = '错误') {
+        return this.showMsg(this.types[4], title, msg);
+    }
 
-  msg_html(html) {
-    // return this.nzMessageService.html(html);
-  }
+    msg_loading(msg, title = '') {
+        return this.nzMessageService.loading(msg);
+    }
 
-  msg_clear() {
-    return this.nzMessageService.remove();
-  }
+    msg_html(html) {
+        // return this.nzMessageService.html(html);
+    }
 
+    msg_clear() {
+        return this.nzMessageService.remove();
+    }
 }

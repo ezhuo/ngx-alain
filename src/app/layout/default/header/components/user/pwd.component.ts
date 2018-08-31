@@ -30,7 +30,7 @@ export class HeaderUserPwdComponent extends ParentModalControl {
       this.validateForm.controls[key].updateValueAndValidity();
     }
     $value['action'] = 1;
-    this.pageData$.headPwd = this.httpSrv.update('/account/check_pwd', $value, this.userSrv.userInfo.id).subscribe(
+    this.freeData.headPwd = this.httpSrv.update('/account/check_pwd', $value, this.userSrv.userInfo.id).subscribe(
       (result) => {
         this.modalClose(result);
       },
