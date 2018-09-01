@@ -3,9 +3,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from '@core';
 
 import { SchemaComponent } from './schema.component';
-import { SchemaDemoComponent } from './schema/demo.component';
-import { SchemaShowComponent } from './schema/show.component';
-import { SchemaEditComponent } from './schema/edit.component';
+import { SchemaDemoComponent } from './schema/index.component';
+import { SchemaShowComponent } from './schema/modal/show.component';
+import { SchemaEditComponent } from './schema/modal/edit.component';
 import { SchemaFormEditComponent } from './schema/edit/edit.component';
 import { SchemaFormEditxComponent } from './schema/editx/edit.component';
 

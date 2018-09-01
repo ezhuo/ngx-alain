@@ -1,5 +1,5 @@
-import { SchemaShowComponent } from './show.component';
-import { SchemaEditComponent } from './edit.component';
+import { SchemaShowComponent } from './modal/show.component';
+import { SchemaEditComponent } from './modal/edit.component';
 import { NzModalService } from 'ng-zorro-antd';
 import {
   Component,
@@ -27,7 +27,7 @@ import {
 
 @Component({
   selector: 'com-account',
-  templateUrl: './demo.component.html',
+  templateUrl: './index.component.html',
 })
 export class SchemaDemoComponent extends ParentIndexControl implements OnInit {
   @ViewChild('st')
