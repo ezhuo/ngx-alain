@@ -21,16 +21,16 @@
         "./delon/*"
       ],
       "@shared": [
-        "app/shared"
+        "app/@shared"
       ],
       "@shared/*": [
-        "app/shared/*"
+        "app/@shared/*"
       ],
       "@core": [
-        "app/core/"
+        "app/@core/"
       ],
       "@core/*": [
-        "app/core/*"
+        "app/@core/*"
       ],
       "@testing": [
         "testing/"
@@ -43,12 +43,6 @@
       ],
       "@env/*": [
         "environments/*"
-      ],
-      "@theme": [
-        "app/theme/"
-      ],
-      "@theme/*": [
-        "app/theme/*"
       ],
       "@layout": [
         "app/layout/"

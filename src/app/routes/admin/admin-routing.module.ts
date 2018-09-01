@@ -18,9 +18,9 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'schema', loadChildren: './schema/schema.module#SchemaModule' },
-      { path: 'base', loadChildren: './base/base.module#BaseModule' },
-      { path: 'system', loadChildren: './system/system.module#SystemModule' },
+      { path: 'schema', loadChildren: './basic/schema/schema.module#SchemaModule' },
+      { path: 'base', loadChildren: './basic/base/base.module#BaseModule' },
+      { path: 'system', loadChildren: './basic/system/system.module#SystemModule' },
       {
         path: 'demo',
         canLoad: [AuthGuard],

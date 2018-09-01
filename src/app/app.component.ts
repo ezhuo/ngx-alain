@@ -11,7 +11,7 @@ import { filter } from 'rxjs/operators';
 import { SettingsService, TitleService } from '@delon/theme';
 import { VERSION as VERSION_ALAIN } from '@delon/theme';
 import { VERSION as VERSION_ZORRO } from 'ng-zorro-antd';
-import { StateService } from './core';
+import { StateService } from './@core';
 
 @Component({
   selector: 'app-root',

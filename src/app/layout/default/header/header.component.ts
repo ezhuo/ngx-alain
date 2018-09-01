@@ -13,7 +13,7 @@ export class HeaderComponent {
   searchToggleStatus: boolean;
 
   constructor(public settings: SettingsService, private router: Router,
-    private configSrv: ConfigService,
+    public configSrv: ConfigService,
     private tokenSrv: TokenService) { }
 
   toggleCollapsedSidebar() {
