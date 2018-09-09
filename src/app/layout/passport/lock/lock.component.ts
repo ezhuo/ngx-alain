@@ -1,35 +1,40 @@
-import { Router } from '@angular/router';
-import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { SettingsService } from '@delon/theme';
-
+import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
+import { FormGroup, Validators } from '@angular/forms';
+import { InjectorControl } from '@core';
 @Component({
-  selector: 'passport-lock',
-  templateUrl: './lock.component.html',
+    selector: 'passport-lock',
+    templateUrl: './lock.component.html',
 })
-export class UserLockComponent {
-  f: FormGroup;
+export class UserLockComponent extends InjectorControl
+    implements OnInit, OnDestroy {
+    f: FormGroup;
 
-  constructor(
-    public settings: SettingsService,
-    fb: FormBuilder,
-    private router: Router,
-  ) {
-    this.f = fb.group({
-      password: [null, Validators.required],
-    });
-  }
+    constructor(protected injector: Injector) {
+        super(injector);
 
-  submit() {
-    // tslint:disable-next-line:forin
-    for (const i in this.f.controls) {
-      this.f.controls[i].markAsDirty();
-      this.f.controls[i].updateValueAndValidity();
+        this.f = this.FormBuilder.group({
+            password: [null, Validators.required],
+        });
     }
-    if (this.f.valid) {
-      console.log('Valid!');
-      console.log(this.f.value);
-      this.router.navigate(['dashboard']);
+
+    ngOnInit() {
+        super.ngOnInit();
     }
-  }
+
+    ngOnDestory() {
+        super.ngOnDestroy();
+    }
+
+    submit() {
+        // tslint:disable-next-line:forin
+        for (const i in this.f.controls) {
+            this.f.controls[i].markAsDirty();
+            this.f.controls[i].updateValueAndValidity();
+        }
+        if (this.f.valid) {
+            console.log('Valid!');
+            console.log(this.f.value);
+            this.route.navigate(['dashboard']);
+        }
+    }
 }

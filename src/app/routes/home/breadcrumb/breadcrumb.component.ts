@@ -1,19 +1,25 @@
-import { Component, OnInit, Injector, Input } from '@angular/core';
-import { ConfigService } from '@core';
+import { Component, Injector, Input, OnInit, OnDestroy } from '@angular/core';
+import { InjectorControl } from '@core';
 
 @Component({
-  selector: 'com-home-breadcrumb',
-  templateUrl: './breadcrumb.component.html',
-  styleUrls: ['./breadcrumb.component.less']
+    selector: 'com-home-breadcrumb',
+    templateUrl: './breadcrumb.component.html',
+    styleUrls: ['./breadcrumb.component.less'],
 })
-export class HomeBreadcrumbComponent implements OnInit {
+export class HomeBreadcrumbComponent extends InjectorControl
+    implements OnInit, OnDestroy {
+    @Input()
+    current = '';
 
-  @Input() current = '';
+    constructor(protected injector: Injector) {
+        super(injector);
+    }
 
-  constructor(protected injector: Injector, public configSrv: ConfigService) {
-  }
+    ngOnInit() {
+        super.ngOnInit();
+    }
 
-  ngOnInit() {
-  }
-
+    ngOnDestory() {
+        super.ngOnDestroy();
+    }
 }

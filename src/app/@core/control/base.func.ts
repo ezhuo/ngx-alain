@@ -114,6 +114,26 @@ export class BaseFunc {
     }
 
     /**
+     * 字段时行设置
+     */
+    __schemaFormFieldsSetTexts(fields: string | string[], schema?: SFSchema) {
+        const self = this.bc;
+        let result: string[] = [];
+        if (this.bc.helpers.isString(fields)) {
+            result.push(<string>fields);
+        } else {
+            result = [].concat(fields);
+        }
+
+        schema = schema || self.mainSchema;
+        result.forEach(item => {
+            if (schema.properties[item]) {
+                schema.properties[item]['ui']['widget'] = 'texts';
+            }
+        });
+    }
+
+    /**
      * 表单排序
      * @param orderBy
      * @param mainSchema

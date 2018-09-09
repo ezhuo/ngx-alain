@@ -1,16 +1,22 @@
-import { Component, Injector } from '@angular/core';
+import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import { ParentModalControl } from '@core';
 
 @Component({
-  selector: 'header-user-info',
-  templateUrl: `./userInfo.component.html`,
-  styleUrls: [`./userInfo.component.less`],
+    selector: 'header-user-info',
+    templateUrl: `./userInfo.component.html`,
+    styleUrls: [`./userInfo.component.less`],
 })
-export class HeaderUserInfoComponent extends ParentModalControl {
+export class HeaderUserInfoComponent extends ParentModalControl
+    implements OnInit, OnDestroy {
+    constructor(protected injector: Injector) {
+        super(injector);
+    }
 
+    ngOnInit() {
+        super.ngOnInit();
+    }
 
-  constructor(protected injector: Injector) {
-    super(injector);
-  }
-
+    ngOnDestory() {
+        super.ngOnDestroy();
+    }
 }

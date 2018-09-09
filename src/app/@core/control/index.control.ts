@@ -74,7 +74,7 @@ export class ParentIndexControl extends BaseControl
             mainSchema: mSchema,
             mainSchemaOrder: this.helpers.deepExtend({}, this.mainSchemaOrder),
             mainSchemaUi: this.helpers.deepExtend({}, this.mainSchemaUi),
-            modalParams: this.modalParams,
+            modalParams: this.helpers.deepExtend({}, this.modalParams),
         };
     }
 

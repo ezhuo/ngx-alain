@@ -1,14 +1,12 @@
-import { Component, Inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { SettingsService } from '@delon/theme';
-import { UserService, TokenService, ConfigService, ModalService } from '@core';
+import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 
 import { HeaderUserPwdComponent } from './user/pwd.component';
 import { HeaderUserInfoComponent } from './user/userInfo.component';
+import { InjectorControl } from '@core';
 
 @Component({
-  selector: 'header-user',
-  template: `
+    selector: 'header-user',
+    template: `
   <nz-dropdown nzPlacement="bottomRight">
     <div class="item d-flex align-items-center px-sm" nz-dropdown>
       <nz-avatar [nzSrc]="userSrv.user.avatar" nzSize="small" class="mr-sm"></nz-avatar>
@@ -22,27 +20,34 @@ import { HeaderUserInfoComponent } from './user/userInfo.component';
   </nz-dropdown>
   `,
 })
-export class HeaderUserComponent {
-  constructor(
-    public settings: SettingsService,
-    public userSrv: UserService,
-    private router: Router,
-    private tokenSrv: TokenService,
-    private configSrv: ConfigService,
-    private modalSrv: ModalService
-  ) { }
+export class HeaderUserComponent extends InjectorControl
+    implements OnInit, OnDestroy {
+    constructor(protected injector: Injector) {
+        super(injector);
+    }
 
-  userInfo() {
-    this.modalSrv.open(HeaderUserInfoComponent, {}, 'md').subscribe((result: any) => { });
-  }
+    ngOnInit() {
+        super.ngOnInit();
+    }
 
-  changePwd() {
-    this.modalSrv.open(HeaderUserPwdComponent, {}, 'md').subscribe((result: any) => { });
-  }
+    ngOnDestory() {
+        super.ngOnDestroy();
+    }
 
-  logout() {
-    this.tokenSrv.tokenDestory();
-    this.router.navigateByUrl(this.configSrv.router.login);
-  }
+    userInfo() {
+        this.modalSrv
+            .open(HeaderUserInfoComponent, {}, 'md')
+            .subscribe((result: any) => {});
+    }
 
+    changePwd() {
+        this.modalSrv
+            .open(HeaderUserPwdComponent, {}, 'md')
+            .subscribe((result: any) => {});
+    }
+
+    logout() {
+        this.tokenSrv.tokenDestory();
+        this.route.navigateByUrl(this.configSrv.router.login);
+    }
 }

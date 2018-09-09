@@ -1,53 +1,86 @@
 import {
-  Component,
-  HostBinding,
-  ViewChild,
-  Input,
-  OnInit,
-  ElementRef,
-  AfterViewInit,
+    Component,
+    HostBinding,
+    Input,
+    Injector,
+    AfterViewInit,
+    OnInit,
+    OnDestroy,
 } from '@angular/core';
 
+import { InjectorControl } from '@core';
+
 @Component({
-  selector: 'header-search',
-  template: `
+    selector: 'header-search',
+    template: `
   <nz-input-group nzAddOnBeforeIcon="anticon anticon-search">
-    <input nz-input [(ngModel)]="q" (focus)="qFocus()" (blur)="qBlur()"
+    <input nz-input [(ngModel)]="q" (focus)="qFocus()" (blur)="qBlur()" (keyup.enter)="onEnter()"
       [placeholder]="'请输入物联网卡号'">
   </nz-input-group>
   `,
 })
-export class HeaderSearchComponent implements AfterViewInit {
-  q: string;
+export class HeaderSearchComponent extends InjectorControl
+    implements OnInit, OnDestroy, AfterViewInit {
+    q: string;
 
-  qIpt: HTMLInputElement;
+    qIpt: HTMLInputElement;
 
-  @HostBinding('class.header-search__focus') focus = false;
+    @HostBinding('class.header-search__focus')
+    focus = false;
 
-  @HostBinding('class.header-search__toggled') searchToggled = false;
+    @HostBinding('class.header-search__toggled')
+    searchToggled = false;
 
-  @Input()
-  set toggleChange(value: boolean) {
-    if (typeof value === 'undefined') return;
-    this.searchToggled = true;
-    this.focus = true;
-    setTimeout(() => this.qIpt.focus(), 300);
-  }
+    @Input()
+    set toggleChange(value: boolean) {
+        if (typeof value === 'undefined') return;
+        this.searchToggled = true;
+        this.focus = true;
+        this.freeTimeOut.tc = setTimeout(() => this.qIpt.focus(), 300);
+    }
 
-  constructor(private el: ElementRef) {}
+    constructor(protected injector: Injector) {
+        super(injector);
+    }
 
-  ngAfterViewInit() {
-    this.qIpt = (this.el.nativeElement as HTMLElement).querySelector(
-      '.ant-input',
-    ) as HTMLInputElement;
-  }
+    ngOnInit() {
+        super.ngOnInit();
+    }
 
-  qFocus() {
-    this.focus = true;
-  }
+    ngOnDestory() {
+        super.ngOnDestroy();
+    }
 
-  qBlur() {
-    this.focus = false;
-    this.searchToggled = false;
-  }
+    ngAfterViewInit() {
+        this.qIpt = (this.eleRef.nativeElement as HTMLElement).querySelector(
+            '.ant-input',
+        ) as HTMLInputElement;
+    }
+
+    qFocus() {
+        this.focus = true;
+    }
+
+    qBlur() {
+        this.focus = false;
+        this.searchToggled = false;
+    }
+
+    onEnter() {
+        if ((this.q + '').length > 5) this.qSearch();
+    }
+
+    qSearch(isUpdate: boolean = false) {
+        this.noticeSrv.msg_loading('正在查询...');
+        this.freeData.http = this.httpSrv
+            .post('/cardSearch/' + this.q, {
+                isUpdate,
+            })
+            .subscribe(
+                (result: any) => {
+                    this.q = '';
+                },
+                err => {},
+            );
+    }
 }

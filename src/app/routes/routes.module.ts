@@ -6,8 +6,8 @@ const COMPONENTS = [...routedComponents];
 const COMPONENTS_NOROUNT = [];
 
 @NgModule({
-  imports: [RouteRoutingModule],
-  declarations: [...COMPONENTS, ...COMPONENTS_NOROUNT],
-  entryComponents: COMPONENTS_NOROUNT
+    imports: [RouteRoutingModule],
+    declarations: [...COMPONENTS, ...COMPONENTS_NOROUNT],
+    entryComponents: COMPONENTS_NOROUNT,
 })
-export class RoutesModule { }
+export class RoutesModule {}

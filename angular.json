@@ -21,15 +21,10 @@
               "src/favicon.ico"
             ],
             "styles": [
-              "node_modules/simple-line-icons/css/simple-line-icons.css",
               "node_modules/sweetalert2/dist/sweetalert2.css",
               "src/styles.less"
             ],
             "scripts": [
-              "node_modules/@antv/g2/dist/g2.min.js",
-              "node_modules/@antv/data-set/dist/data-set.min.js",
-              "node_modules/@antv/g2-plugin-slider/dist/g2-plugin-slider.min.js",
-              "node_modules/ajv/dist/ajv.bundle.js",
               "node_modules/qrious/dist/qrious.min.js",
               "node_modules/sweetalert2/dist/sweetalert2.js",
               "node_modules/blueimp-md5/js/md5.min.js"

@@ -1,7 +1,6 @@
-
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ModalOptionsForService } from 'ng-zorro-antd';
+import { ModalOptionsForService, NzModalService } from 'ng-zorro-antd';
 import { ModalHelper, ModalHelperOptions } from '@delon/theme';
 
 /**
@@ -9,12 +8,15 @@ import { ModalHelper, ModalHelperOptions } from '@delon/theme';
  */
 @Injectable()
 export class ModalService {
-    constructor(private modalHelper: ModalHelper) { }
+    constructor(
+        private modalHelper: ModalHelper,
+        private nzModalSrv: NzModalService,
+    ) {}
 
     create(
         comp: any,
         params?: any,
-        options?: ModalHelperOptions
+        options?: ModalHelperOptions,
     ): Observable<any> {
         return this.modalHelper.create(comp, params, options);
     }
@@ -47,7 +49,7 @@ export class ModalService {
             size,
             Object.assign(
                 {
-                    nzStyle: { top: '20px' }
+                    nzStyle: { top: '20px' },
                 },
                 options,
             ),
@@ -69,10 +71,14 @@ export class ModalService {
             size,
             Object.assign(
                 {
-                    nzMaskClosable: false
+                    nzMaskClosable: false,
                 },
                 options,
             ),
         );
+    }
+
+    closeAll() {
+        return this.nzModalSrv.closeAll();
     }
 }

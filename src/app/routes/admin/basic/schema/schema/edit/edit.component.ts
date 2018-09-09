@@ -12,7 +12,7 @@ export class SchemaFormEditComponent extends ParentModalControl implements OnIni
   constructor(protected injector: Injector) {
     super(injector);
 
-    this.validateForm = this.frmBuild.group({
+    this.validateForm = this.FormBuilder.group({
       login_username: ['', [this.Validators.required]],
       true_name: ['', [this.Validators.required]],
     });

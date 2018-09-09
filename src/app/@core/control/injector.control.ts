@@ -1,4 +1,10 @@
-import { OnInit, OnDestroy, Injector, ElementRef } from '@angular/core';
+import {
+    OnInit,
+    OnDestroy,
+    Injector,
+    ElementRef,
+    ChangeDetectorRef,
+} from '@angular/core';
 import {
     FormGroup,
     FormBuilder,
@@ -7,7 +13,13 @@ import {
 } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { TitleService, MenuService } from '@delon/theme';
+import {
+    TitleService,
+    MenuService,
+    SettingsService,
+    ScrollService,
+} from '@delon/theme';
+
 
 import { ModalService } from '../utils/modal.service';
 import { NoticeService } from '../utils/notice.service';
@@ -87,6 +99,14 @@ export class InjectorControl implements OnInit, OnDestroy {
         return this.injector.get(MenuService);
     }
 
+    get settingsSrv() {
+        return this.injector.get(SettingsService);
+    }
+
+    get scrollSrv() {
+        return this.injector.get(ScrollService);
+    }
+
     get modalSrv() {
         return this.injector.get(ModalService);
     }
@@ -127,7 +147,11 @@ export class InjectorControl implements OnInit, OnDestroy {
         return this.injector.get(TokenService);
     }
 
-    get frmBuild() {
+    get cdRef() {
+        return this.injector.get(ChangeDetectorRef);
+    }
+
+    get FormBuilder() {
         return this.injector.get(FormBuilder);
     }
 

@@ -20,10 +20,10 @@ export const tplModalUploadHTML = `
 
 <div class='modal-footer'>
     <button nz-button *ngIf="modalParams?.button?.submit?.show" nzType="primary" (click)='onSubmit($event)' [nzLoading]="httpSrv.loading" [disabled]='fileList.length < 1'>
-        {{modalParams?.button?.submit?.title || '执行'}}
+        <span [innerHTML]="modalParams?.button?.submit?.title || '执行'"></span>
     </button>
     <button nz-button *ngIf="modalParams?.button?.close?.show" nzType="default" (click)='modalClose()'>
-        {{modalParams?.button?.close?.title || '关闭'}}
+        <span [innerHTML]="modalParams?.button?.close?.title || '关闭'"></span>    
     </button>
 </div>
 

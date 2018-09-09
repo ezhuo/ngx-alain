@@ -81,7 +81,9 @@
               <ng-container *ngSwitchCase="'badge'">
                 <nz-badge [nzStatus]="c.badge[i._values[cIdx]].color" [nzText]="c.badge[i._values[cIdx]].text || i._values[cIdx]"></nz-badge>
               </ng-container>
-              <span *ngSwitchDefault [innerHTML]="i._values[cIdx]"></span>
+              <ng-container *ngSwitchDefault>
+                <span [innerHTML]="i._values[cIdx]" *ngIf="i._values[cIdx] !== null && i._values[cIdx] !== undefined"></span>
+              </ng-container>
             </ng-container>
             <ng-container *ngFor="let btn of c.buttons; let last=last">
               <ng-container *ngIf="btn.iif(i, btn, c)" [ngSwitch]="btn._type">

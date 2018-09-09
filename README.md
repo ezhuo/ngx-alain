@@ -1,4 +1,4 @@
-> 基于 ng-alain 1.3.0 ng-zorro
+> 基于 ng-alain 1.4.0 ng-zorro
 
 ## 一、执行
 ```
@@ -22,17 +22,12 @@ npm run serve:hmr
 2. 将http.helpers 修改为 httpService
 ```
 
-### 2. sidebar-nav
-```
-1. 修改路径中添加canload子路径后无法显示当前路径的问题，添加了getOpen(child)
-```
-
-### 3. title.service
+### 2. title.service
 ```
 1. 添加了getTitle方法
 ```
 
-### 4. schema-form
+### 3. schema-form
 ```
 1. ui 部分添加了 : enum(主要是为了texts做为数据字典使用) , styleLabel(Label部分的style) , styleControl(Control的style)
 ```

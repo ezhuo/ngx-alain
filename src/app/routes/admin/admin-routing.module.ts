@@ -57,8 +57,6 @@ const routes: Routes = [
   },
 ];
 
-export const entryComponents = [];
-
 export const routedComponents = [
   DashboardComponent,
   DashboardV1Component,
@@ -66,6 +64,9 @@ export const routedComponents = [
   DashboardMonitorComponent,
   DashboardWorkplaceComponent,
 ];
+
+export const entryComponents = [];
+
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],

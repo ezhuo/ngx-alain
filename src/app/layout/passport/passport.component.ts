@@ -1,29 +1,37 @@
-import { Component } from '@angular/core';
-import { ConfigService } from '@core';
+import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
+import { InjectorControl } from '@core';
 
 @Component({
-  selector: 'layout-passport',
-  templateUrl: './passport.component.html',
-  styleUrls: ['./passport.component.less'],
+    selector: 'layout-passport',
+    templateUrl: './passport.component.html',
+    styleUrls: ['./passport.component.less'],
 })
-export class LayoutPassportComponent {
+export class LayoutPassportComponent extends InjectorControl
+    implements OnInit, OnDestroy {
+    constructor(protected injector: Injector) {
+        super(injector);
+    }
+    
+    ngOnInit() {
+        super.ngOnInit();
+    }
 
-  constructor(public configSrv: ConfigService) {
+    ngOnDestory() {
+        super.ngOnDestroy();
+    }
 
-   }
-  
-  links = [
-    {
-      title: '帮助',
-      href: '',
-    },
-    {
-      title: '隐私',
-      href: '',
-    },
-    {
-      title: '条款',
-      href: '',
-    },
-  ];
+    links = [
+        {
+            title: '帮助',
+            href: '',
+        },
+        {
+            title: '隐私',
+            href: '',
+        },
+        {
+            title: '条款',
+            href: '',
+        },
+    ];
 }

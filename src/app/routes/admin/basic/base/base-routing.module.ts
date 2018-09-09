@@ -15,37 +15,45 @@ import { CantonComponent } from './canton/index.component';
 import { CantonEditComponent } from './canton/modal/edit.component';
 
 const routes: Routes = [
-  {
-    path: '',
-    component: BaseComponent,
-    canActivate: [AuthGuard],
-    children: [
-      { path: '', redirectTo: 'account', pathMatch: 'full' },
-      { path: 'orgInfo', component: OrgInfoComponent },
-      { path: 'dicDict', component: DictComponent, data: { url: 'dictdic' } },
-      { path: 'sysDict', component: DictComponent, data: { url: 'sysdic' } },
-      { path: 'canton', component: CantonComponent },
-    ],
-  },
-];
-
-export const entryComponents = [
-  OrgInfoEditComponent,
-  OrgInfoShowComponent,
-
-  DictEditComponent,
-  CantonEditComponent,
+    {
+        path: '',
+        component: BaseComponent,
+        canActivate: [AuthGuard],
+        children: [
+            { path: '', redirectTo: 'account', pathMatch: 'full' },
+            { path: 'orgInfo', component: OrgInfoComponent },
+            {
+                path: 'dicDict',
+                component: DictComponent,
+                data: { url: 'dictdic' },
+            },
+            {
+                path: 'sysDict',
+                component: DictComponent,
+                data: { url: 'sysdic' },
+            },
+            { path: 'canton', component: CantonComponent },
+        ],
+    },
 ];
 
 export const routedComponents = [
-  BaseComponent,
-  OrgInfoComponent,
-  DictComponent,
-  CantonComponent,
+    BaseComponent,
+    OrgInfoComponent,
+    DictComponent,
+    CantonComponent,
+];
+
+export const entryComponents = [
+    OrgInfoEditComponent,
+    OrgInfoShowComponent,
+
+    DictEditComponent,
+    CantonEditComponent,
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule],
 })
 export class BaseRoutingModule {}

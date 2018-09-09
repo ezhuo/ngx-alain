@@ -1,12 +1,9 @@
-import { Component, Inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { SettingsService } from '@delon/theme';
-import { DA_SERVICE_TOKEN, ITokenService } from '@delon/auth';
-import { UserService } from '@core';
+import { Component, Inject, Injector, OnInit, OnDestroy } from '@angular/core';
+import { InjectorControl } from '@core';
 
 @Component({
-  selector: 'home-header-user',
-  template: `
+    selector: 'home-header-user',
+    template: `
   <nz-dropdown nzPlacement="bottomRight">
     <div class="item d-flex align-items-center px-sm" nz-dropdown>
       <nz-avatar [nzSrc]="userSrv.user.avatar" nzSize="small" class="mr-sm"></nz-avatar>
@@ -23,12 +20,16 @@ import { UserService } from '@core';
   </nz-dropdown>
   `,
 })
-export class HomeHeaderUserComponent {
-  constructor(
-    public settings: SettingsService,
-    public userSrv: UserService,
-    private router: Router,
-    @Inject(DA_SERVICE_TOKEN) private tokenService: ITokenService,
-  ) { }
+export class HomeHeaderUserComponent extends InjectorControl
+    implements OnInit, OnDestroy {
+    constructor(protected injector: Injector) {
+        super(injector);
+    }
+    ngOnInit() {
+        super.ngOnInit();
+    }
 
+    ngOnDestory() {
+        super.ngOnDestroy();
+    }
 }

@@ -38,6 +38,14 @@ const routes: Routes = [
   },
 ];
 
+export const routedComponents = [
+  SystemComponent,
+  AccountComponent,
+  RoleComponent,
+  LogsComponent,
+  CacheComponent,
+];
+
 export const entryComponents = [
   AccountEditComponent,
   AccountShowComponent,
@@ -45,14 +53,6 @@ export const entryComponents = [
   RoleEditComponent,
   RoleShowComponent,
   LogsShowComponent,
-];
-
-export const routedComponents = [
-  SystemComponent,
-  AccountComponent,
-  RoleComponent,
-  LogsComponent,
-  CacheComponent,
 ];
 
 @NgModule({

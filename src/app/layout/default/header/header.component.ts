@@ -1,36 +1,44 @@
-import { Component, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-
-import { SettingsService } from '@delon/theme';
-import { UserService, TokenService, ConfigService } from '@core';
+import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
+import { InjectorControl } from '@core';
 
 @Component({
-  selector: 'layout-header',
-  templateUrl: './header.component.html',
-  styleUrls: ['./header.component.less']
+    selector: 'layout-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.less'],
 })
-export class HeaderComponent {
-  searchToggleStatus: boolean;
+export class HeaderComponent extends InjectorControl
+    implements OnInit, OnDestroy {
+    searchToggleStatus: boolean;
 
-  constructor(public settings: SettingsService, private router: Router,
-    public configSrv: ConfigService,
-    private tokenSrv: TokenService) { }
+    constructor(protected injector: Injector) {
+        super(injector);
+    }
 
-  toggleCollapsedSidebar() {
-    this.settings.setLayout('collapsed', !this.settings.layout.collapsed);
-  }
+    ngOnInit() {
+        super.ngOnInit();
+    }
 
-  searchToggleChange() {
-    this.searchToggleStatus = !this.searchToggleStatus;
-  }
+    ngOnDestory() {
+        super.ngOnDestroy();
+    }
 
-  goHome() {
-    this.router.navigateByUrl(this.configSrv.router.home);
-  }
+    toggleCollapsedSidebar() {
+        this.settingsSrv.setLayout(
+            'collapsed',
+            !this.settingsSrv.layout.collapsed,
+        );
+    }
 
-  logout() {
-    this.tokenSrv.tokenDestory();
-    this.router.navigateByUrl(this.configSrv.router.login);
-  }
+    searchToggleChange() {
+        this.searchToggleStatus = !this.searchToggleStatus;
+    }
 
+    goHome() {
+        this.route.navigateByUrl(this.configSrv.router.home);
+    }
+
+    logout() {
+        this.tokenSrv.tokenDestory();
+        this.route.navigateByUrl(this.configSrv.router.login);
+    }
 }

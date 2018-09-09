@@ -1,7 +1,7 @@
 <div class="logo">
   <a [routerLink]="['/']">
-    <img class="expanded" src="{{configSrv.define.logo_top_large}}" alt="{{settings.app.name}}" style="max-height:40px;" />
-    <img class="collapsed" src="{{configSrv.define.logo_top_small}}" alt="{{settings.app.name}}" style="max-height:30px;" />
+    <img class="expanded" src="{{configSrv.define.logo_top_large}}" alt="{{settingsSrv.app.name}}" style="max-height:40px;" />
+    <img class="collapsed" src="{{configSrv.define.logo_top_small}}" alt="{{settingsSrv.app.name}}" style="max-height:30px;" />
   </a>
 </div>
 <div class="top-nav-wrap">
@@ -9,7 +9,7 @@
     <!-- Menu -->
     <li>
       <div class="item" (click)="toggleCollapsedSidebar()">
-        <i class="anticon anticon-menu-{{settings.layout.collapsed ? 'unfold' : 'fold'}}"></i>
+        <i class="anticon anticon-menu-{{settingsSrv.layout.collapsed ? 'unfold' : 'fold'}}"></i>
       </div>
     </li>
     <!-- Lock Page -->

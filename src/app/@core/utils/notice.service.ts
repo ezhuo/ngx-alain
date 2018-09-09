@@ -17,11 +17,11 @@ export class NoticeService {
         'loading',
     ];
 
-    get nzMessageService() {
+    get nzMsgSrv() {
         return this.injector.get(NzMessageService);
     }
 
-    get nzNotificationService() {
+    get nzNoticeSrv() {
         return this.injector.get(NzNotificationService);
     }
 
@@ -30,16 +30,16 @@ export class NoticeService {
     }
 
     private showNotice(type: string, title: string, body: string) {
-        return this.nzNotificationService.create(type, title, body);
+        return this.nzNoticeSrv.create(type, title, body);
     }
 
     private showMsg(type: string, title: string, body: string) {
-        return this.nzMessageService.create(type, body);
+        return this.nzMsgSrv.create(type, body);
     }
 
     clear() {
-        this.nzNotificationService.remove();
-        this.nzMessageService.remove();
+        this.nzNoticeSrv.remove();
+        this.nzMsgSrv.remove();
     }
 
     notice_info(msg, title = '信息') {
@@ -59,11 +59,11 @@ export class NoticeService {
     }
 
     notice_html(html) {
-        // return this.nzNotificationService.html(html);
+        // return this.nzNoticeSrv.html(html);
     }
 
     notice_clear() {
-        return this.nzNotificationService.remove();
+        return this.nzNoticeSrv.remove();
     }
 
     msg_info(msg, title = '信息') {
@@ -83,14 +83,14 @@ export class NoticeService {
     }
 
     msg_loading(msg, title = '') {
-        return this.nzMessageService.loading(msg);
+        return this.nzMsgSrv.loading(msg);
     }
 
     msg_html(html) {
-        // return this.nzMessageService.html(html);
+        // return this.nzMsgSrv.html(html);
     }
 
     msg_clear() {
-        return this.nzMessageService.remove();
+        return this.nzMsgSrv.remove();
     }
 }

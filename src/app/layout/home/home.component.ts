@@ -1,45 +1,50 @@
-import { Component } from '@angular/core';
+import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import {
-  Router,
-  NavigationEnd,
-  RouteConfigLoadStart,
-  NavigationError,
+    NavigationEnd,
+    RouteConfigLoadStart,
+    NavigationError,
 } from '@angular/router';
-import { NzMessageService } from 'ng-zorro-antd';
-import { ScrollService, MenuService, SettingsService } from '@delon/theme';
+import { InjectorControl } from '@core';
 
 @Component({
-  selector: 'layout-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.less'],
+    selector: 'layout-home',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.less'],
 })
-export class LayoutHomeComponent {
-  isFetching = false;
+export class LayoutHomeComponent extends InjectorControl
+    implements OnInit, OnDestroy {
+    isFetching = false;
 
-  constructor(
-    router: Router,
-    scroll: ScrollService,
-    private _message: NzMessageService,
-    public menuSrv: MenuService,
-    public settings: SettingsService,
-  ) {
-    // scroll to top in change page
-    router.events.subscribe(evt => {
-      if (!this.isFetching && evt instanceof RouteConfigLoadStart) {
-        this.isFetching = true;
-      }
-      if (evt instanceof NavigationError) {
-        this.isFetching = false;
-        _message.error(`无法加载${evt.url}路由`, { nzDuration: 1000 * 3 });
-        return;
-      }
-      if (!(evt instanceof NavigationEnd)) {
-        return;
-      }
-      setTimeout(() => {
-        scroll.scrollToTop();
-        this.isFetching = false;
-      }, 100);
-    });
-  }
+    constructor(protected injector: Injector) {
+        super(injector);
+
+        // scroll to top in change page
+        this.freeData.route = this.route.events.subscribe(evt => {
+            if (!this.isFetching && evt instanceof RouteConfigLoadStart) {
+                this.isFetching = true;
+            }
+            if (evt instanceof NavigationError) {
+                this.isFetching = false;
+                this.noticeSrv.nzMsgSrv.error(`无法加载${evt.url}路由`, {
+                    nzDuration: 1000 * 3,
+                });
+                return;
+            }
+            if (!(evt instanceof NavigationEnd)) {
+                return;
+            }
+            this.freeTimeOut.scroll = setTimeout(() => {
+                this.scrollSrv.scrollToTop();
+                this.isFetching = false;
+            }, 100);
+        });
+    }
+
+    ngOnInit() {
+        super.ngOnInit();
+    }
+
+    ngOnDestory() {
+        super.ngOnDestroy();
+    }
 }

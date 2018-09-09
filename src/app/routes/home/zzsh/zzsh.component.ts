@@ -1,18 +1,22 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, OnDestroy, Injector } from '@angular/core';
 import { ParentIndexControl } from '@core';
 
 @Component({
-  selector: 'com-home-zzsh',
-  templateUrl: './zzsh.component.html',
-  styleUrls: ['./zzsh.component.less']
+    selector: 'com-home-zzsh',
+    templateUrl: './zzsh.component.html',
+    styleUrls: ['./zzsh.component.less'],
 })
-export class ZzshComponent extends ParentIndexControl implements OnInit {
+export class ZzshComponent extends ParentIndexControl
+    implements OnInit, OnDestroy {
+    constructor(protected injector: Injector) {
+        super(injector);
+    }
 
-  constructor(protected injector: Injector) {
-    super(injector);
-  }
+    ngOnInit() {
+        super.ngOnInit();
+    }
 
-  ngOnInit() {
-  }
-
+    ngOnDestory() {
+        super.ngOnDestroy();
+    }
 }

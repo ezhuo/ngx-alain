@@ -2,69 +2,118 @@
 <html>
 
 <head>
-  <meta charset="utf-8">
-  <title>NGXALAIN</title>
-  <base href="/">
-  <meta name="renderer" content="webkit">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta charset="utf-8">
+    <title>NGXALAIN</title>
+    <base href="/">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="description" content="">
-  <meta name="keywords" content="">
-  <meta name="HandheldFriendly" content="true" />
-  <meta name="apple-touch-fullscreen" content="yes" />
-  <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.ico">
 
-  <!-- Apple Touch Icon -->
-  <!-- <link rel="apple-touch-icon" href="custom-icon.png"> -->
-  <link rel="stylesheet" href="https://cdn.bootcss.com/jstree/3.3.5/themes/default/style.min.css">
-  <!-- <link rel="stylesheet" href="/assets/vendor/jstree/3.3.5/themes/default/style.min.css"> -->
-  
-  <link rel="stylesheet" href="/assets/css/animation-default.css">
-  <link rel="stylesheet" href="/assets/css/app.css">
+    <!-- Apple Touch Icon -->
+    <!-- <link rel="apple-touch-icon" href="custom-icon.png"> -->
+
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jstree/3.3.5/themes/default/style.min.css">
+    <!-- <link rel="stylesheet" href="/assets/vendor/jstree/3.3.5/themes/default/style.min.css"> -->
+
+    <link rel="stylesheet" href="/assets/css/animation-default.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
 </head>
 
 <body>
-  <div id="IENotice">
-    为了保障系统安全，享受更棒的操作体验，建议您使用
-    <br/>
-    <a href="https://www.google.cn/intl/zh-CN/chrome/">谷歌浏览器</a>、
-    <a href="https://download-ssl.firefox.com.cn/releases-sha2/stub/official/zh-CN/Firefox-latest.exe">火狐浏览器</a>、
-    <a href="http://pc.uc.cn/">UC浏览器【极速模式】</a>、
-    <a href="https://ie.sogou.com/">搜狗高速浏览器【极速模式】</a>、
-    <a href="https://browser.360.cn/se/">360安全浏览器【极速模式】</a>
-    <br/> 或者使用新版本
-    <a href="http://support.microsoft.com/zh-cn/help/17621/internet-explorer-downloads?spm=875.7931836/B.a2226mw.3.66144265BcbKRf">IE11浏览器</a>， 请点击&nbsp;
-    <a href="http://browsehappy.com/" target="_blank">这里</a>&nbsp;获取更多浏览器升级信息！
-  </div>
-
-
-  <app-root></app-root>
-
-  <div class="preloader">
-    <div class="cs-loader">
-      <div class="cs-loader-inner">
-        <label> ●</label>
-        <label> ●</label>
-        <label> ●</label>
-        <label> ●</label>
-        <label> ●</label>
-        <label> ●</label>
-      </div>
+    <div id="IENotice">
+        为了保障系统安全，享受更棒的操作体验，建议您使用
+        <br />
+        <a href="https://www.google.cn/intl/zh-CN/chrome/">谷歌浏览器</a>、
+        <a href="https://download-ssl.firefox.com.cn/releases-sha2/stub/official/zh-CN/Firefox-latest.exe">火狐浏览器</a>、
+        <a href="http://pc.uc.cn/">UC浏览器【极速模式】</a>、
+        <a href="https://ie.sogou.com/">搜狗高速浏览器【极速模式】</a>、
+        <a href="https://browser.360.cn/se/">360安全浏览器【极速模式】</a>
+        <br /> 或者使用新版本
+        <a href="http://support.microsoft.com/zh-cn/help/17621/internet-explorer-downloads?spm=875.7931836/B.a2226mw.3.66144265BcbKRf">IE11浏览器</a>， 请点击&nbsp;
+        <a href="http://browsehappy.com/" target="_blank">这里</a>&nbsp;获取更多浏览器升级信息！
     </div>
-  </div>
 
-  <script src="assets/vendor/jquery/2.2.4/jquery.min.js"></script>
-  <script src="assets/vendor/jstree/3.3.5/jstree.min.js"></script>
-  <script src="assets/vendor/ckeditor/4.10.0/ckeditor.js"></script>
+    <app-root></app-root>
 
-  <!-- <script src="https://cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>  
-  <script src="https://cdn.bootcss.com/jstree/3.3.5/jstree.min.js"></script>
-  <script src="https://cdn.bootcss.com/ckeditor/4.9.2/ckeditor.js"></script> -->
+    <div class="preloader">
+        <div class="cs-loader">
+            <div class="cs-loader-inner">
+                <label> ●</label>
+                <label> ●</label>
+                <label> ●</label>
+                <label> ●</label>
+                <label> ●</label>
+                <label> ●</label>
+            </div>
+        </div>
+    </div>
 
+    <!-- pre-zone polyfills -->
+    <!-- <script src="./assets/vendor/polyfills/core-js/client/shim.min.js"></script>
+    <script src="./assets/vendor/polyfills/web-animations-js/web-animations.min.js"></script> -->
 
-  <script src="assets/js/app-define.js"></script>
-  <script src="assets/js/config.custom.js"></script>
+    <script src="https://cdn.bootcss.com/core-js/2.5.7/shim.min.js"></script>
+    <script src="https://cdn.bootcss.com/web-animations/2.3.1/web-animations.min.js"></script>
+
+    <script src="./assets/vendor/polyfills/classlist.js/classList.min.js"></script>
+    <script src="./assets/vendor/polyfills/intl/dist/Intl.min.js"></script>
+    <script src="./assets/vendor/polyfills/intl/locale-data/jsonp/zh-Hans-CN.js"></script>
+    <script src="./assets/vendor/polyfills/typed-array/typedarray.min.js"></script>
+    <script src="./assets/vendor/polyfills/blob.js/blob.min.js"></script>
+    <script src="./assets/vendor/polyfills/formdata.js/formdata.min.js"></script>
+
+    <script>
+        /**
+         * you can configure some zone flags which can disable zone interception for some
+         * asynchronous activities to improve startup performance - use these options only
+         * if you know what you are doing as it could result in hard to trace down bugs..
+         */
+        // __Zone_disable_requestAnimationFrame = true; // disable patch requestAnimationFrame
+        // __Zone_disable_on_property = true; // disable patch onProperty such as onclick
+        // __zone_symbol__BLACK_LISTED_EVENTS = ['scroll', 'mousemove']; // disable patch specified eventNames
+
+        /*
+         * in IE/Edge developer tools, the addEventListener will also be wrapped by zone.js
+         * with the following flag, it will bypass `zone.js` patch for IE/Edge
+         */
+        // __Zone_enable_cross_context_check = true;
+
+    </script>
+    <!-- zone.js required by Angular -->
+    <!-- <script src="./assets/vendor/polyfills/zone.js/dist/zone.min.js"></script> -->
+    <script src="https://cdn.bootcss.com/zone.js/0.8.26/zone.min.js"></script>
+
+    <!-- application polyfills -->
+
+    <!-- script vendor begin list -->
+    <!--
+    <script src="./assets/vendor/jquery/3.3.1/jquery.min.js"></script>
+    <script src="./assets/vendor/jstree/3.3.5/jstree.min.js"></script>
+    <script src="./assets/vendor/ckeditor/4.10.0/ckeditor.js"></script>
+
+    <script src="./assets/vendor/@antv/g2/3.2.7/g2.min.js"></script>
+    <script src="./assets/vendor/@antv/data-set/0.8.9/data-set.min.js"></script>
+    <script src="./assets/vendor/@antv/g2-plugin-slider/2.0.4/g2-plugin-slider.min.js"></script>
+    <script src="./assets/vendor/ajv/6.5.3/ajv.min.js"></script>
+    -->
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jstree/3.3.5/jstree.min.js"></script>
+    <script src="https://cdn.bootcss.com/ckeditor/4.9.2/ckeditor.js"></script>
+    <script src="https://gw.alipayobjects.com/os/antv/pkg/_antv.g2-3.2.8-beta.5/dist/g2.min.js"></script>
+    <script src="https://cdn.bootcss.com/ajv/6.5.0/ajv.min.js"></script>
+
+    <!-- script vendor end list -->
+
+    <!-- script define begin -->
+    <script src="assets/js/app-define.js"></script>
+    <script src="assets/js/config.custom.js"></script>
+    <!-- script define end -->
 
 </body>
 

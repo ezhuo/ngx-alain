@@ -1,10 +1,10 @@
 import {
-  Component,
-  HostBinding,
-  OnInit,
-  Renderer2,
-  ElementRef,
-  Injector
+    Component,
+    HostBinding,
+    OnInit,
+    Renderer2,
+    ElementRef,
+    Injector,
 } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -14,52 +14,52 @@ import { VERSION as VERSION_ZORRO } from 'ng-zorro-antd';
 import { StateService } from './@core';
 
 @Component({
-  selector: 'app-root',
-  template: `<router-outlet></router-outlet>`,
+    selector: 'app-root',
+    template: `<router-outlet></router-outlet>`,
 })
 export class AppComponent implements OnInit {
-  @HostBinding('class.layout-fixed')
-  get isFixed() {
-    return this.settings.layout.fixed;
-  }
-  @HostBinding('class.layout-boxed')
-  get isBoxed() {
-    return this.settings.layout.boxed;
-  }
-  @HostBinding('class.aside-collapsed')
-  get isCollapsed() {
-    return this.settings.layout.collapsed;
-  }
-  get stateSrv() {
-    return this.injector.get(StateService);
-  }
+    @HostBinding('class.layout-fixed')
+    get isFixed() {
+        return this.settings.layout.fixed;
+    }
+    @HostBinding('class.layout-boxed')
+    get isBoxed() {
+        return this.settings.layout.boxed;
+    }
+    @HostBinding('class.aside-collapsed')
+    get isCollapsed() {
+        return this.settings.layout.collapsed;
+    }
+    get stateSrv() {
+        return this.injector.get(StateService);
+    }
 
-  constructor(
-    el: ElementRef,
-    renderer: Renderer2,
-    private settings: SettingsService,
-    private router: Router,
-    private titleSrv: TitleService,
-    private injector: Injector,
-  ) {
-    renderer.setAttribute(
-      el.nativeElement,
-      'ng-alain-version',
-      VERSION_ALAIN.full,
-    );
-    renderer.setAttribute(
-      el.nativeElement,
-      'ng-zorro-version',
-      VERSION_ZORRO.full,
-    );
-  }
+    constructor(
+        el: ElementRef,
+        renderer: Renderer2,
+        private settings: SettingsService,
+        private router: Router,
+        private titleSrv: TitleService,
+        private injector: Injector,
+    ) {
+        renderer.setAttribute(
+            el.nativeElement,
+            'ng-alain-version',
+            VERSION_ALAIN.full,
+        );
+        renderer.setAttribute(
+            el.nativeElement,
+            'ng-zorro-version',
+            VERSION_ZORRO.full,
+        );
+    }
 
-  ngOnInit() {
-    this.router.events
-      .pipe(filter(evt => evt instanceof NavigationEnd))
-      .subscribe(() => {
-        this.titleSrv.setTitle();
-        this.stateSrv.httpLoading = false;
-      });
-  }
+    ngOnInit() {
+        this.router.events
+            .pipe(filter(evt => evt instanceof NavigationEnd))
+            .subscribe(() => {
+                this.titleSrv.setTitle();
+                this.stateSrv.httpLoading = false;
+            });
+    }
 }

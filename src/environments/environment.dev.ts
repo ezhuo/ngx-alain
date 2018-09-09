@@ -5,9 +5,6 @@ export const app_debug = true;
 export const app_debug_error = true;
 
 export const app: App = {
-  name: 'ngx-alain',
-  short: 'ngx-alain',
-  description: 'ngx-alain',
   key: 'ngxalain',
   year: 2018,
 };
