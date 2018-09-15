@@ -1,0 +1,62 @@
+@charset "UTF-8";
+
+@keyframes lol {
+    0% {
+        opacity: 0;
+        transform: translateX(-300px)
+    }
+
+    33% {
+        opacity: 1;
+        transform: translateX(0)
+    }
+
+    66% {
+        opacity: 1;
+        transform: translateX(0)
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(300px)
+    }
+}
+
+.cs-loader-inner {
+    transform: translateY(-50%);
+    top: 50%;
+    position: absolute;
+    width: 100%;
+    color: #fff;
+    text-align: center
+}
+
+.cs-loader-inner label {
+    font-size: 30px;
+    opacity: 0;
+    display: inline-block
+}
+
+.cs-loader-inner label:nth-child(6) {
+    animation: lol 3s infinite ease-in-out
+}
+
+.cs-loader-inner label:nth-child(5) {
+    animation: lol 3s .1s infinite ease-in-out
+}
+
+.cs-loader-inner label:nth-child(4) {
+    animation: lol 3s .2s infinite ease-in-out
+}
+
+.cs-loader-inner label:nth-child(3) {
+    animation: lol 3s .3s infinite ease-in-out
+}
+
+.cs-loader-inner label:nth-child(2) {
+    animation: lol 3s .4s infinite ease-in-out
+}
+
+.cs-loader-inner label:nth-child(1) {
+    animation: lol 3s .5s infinite ease-in-out
+}
