@@ -1,4 +1,3 @@
-
 import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
@@ -11,13 +10,19 @@ import { ConfigService, TokenService, StateService } from '../data';
  */
 @Injectable()
 export class StartupService {
+    constructor(private injector: Injector) {}
 
-    constructor(
-        private settingService: SettingsService,
-        private titleService: TitleService,
-        private httpClient: HttpClient,
-        private injector: Injector) { }
+    get settingService() {
+        return this.injector.get(SettingsService);
+    }
 
+    get titleService() {
+        return this.injector.get(TitleService);
+    }
+
+    get httpClient() {
+        return this.injector.get(HttpClient);
+    }
 
     get configSrv() {
         return this.injector.get(ConfigService);
@@ -36,14 +41,16 @@ export class StartupService {
         // only works with promises
         // https://github.com/angular/angular/issues/15088
         return new Promise((resolve, reject) => {
-
-            this.httpClient.get(`assets/data/app.json`).pipe(
-                // 接收其他拦截器后产生的异常消息
-                catchError((appData) => {
-                    resolve(null);
-                    return appData;
-                })
-            ).subscribe(app, error, complete);
+            this.httpClient
+                .get(`assets/data/app.json`)
+                .pipe(
+                    // 接收其他拦截器后产生的异常消息
+                    catchError(appData => {
+                        resolve(null);
+                        return appData;
+                    }),
+                )
+                .subscribe(app, error, complete);
 
             function app(appData: any = {}) {
                 // application data
@@ -69,8 +76,6 @@ export class StartupService {
             function complete() {
                 resolve(null);
             }
-
         });
     }
-
 }

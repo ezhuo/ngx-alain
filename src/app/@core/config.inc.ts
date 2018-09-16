@@ -1,5 +1,5 @@
 import { App } from '@delon/theme';
-import * as env from '@env/environment.dev';
+import * as env from '@env/environment.config';
 import { deepExtend } from './helpers/extend';
 
 export const app_debug = env.app_debug;
