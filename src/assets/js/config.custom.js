@@ -140,9 +140,11 @@ assetsHelper.getCkeditorConfig = function () {
     return config;
 }
 
-CKEDITOR.editorConfig = function (config) {
-    // Define changes to default configuration here.
-    // For complete reference see:
-    // https://docs.ckeditor.com/ckeditor4/latest/api/CKEDITOR_config.html
-    Object.assign(config, assetsHelper.getCkeditorConfig());
-};
+$(function () {
+    CKEDITOR.editorConfig = function (config) {
+        // Define changes to default configuration here.
+        // For complete reference see:
+        // https://docs.ckeditor.com/ckeditor4/latest/api/CKEDITOR_config.html
+        Object.assign(config, assetsHelper.getCkeditorConfig());
+    };
+})
