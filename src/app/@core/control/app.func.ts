@@ -1,20 +1,20 @@
-import { BaseControl } from './base.control';
+import { AppControl } from './app.control';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { SimpleTableColumn, SimpleTableComponent } from '@delon/abc';
 import { SFSchema, SFUISchema, SFSchemaEnumType } from '@delon/form';
 
-export class BaseFunc {
-    private ___bc: BaseControl = null;
+export class AppFunc {
+    private ___appCtl: AppControl = null;
 
     get bc() {
-        return this.___bc;
+        return this.___appCtl;
     }
 
-    constructor(bc: BaseControl) {
-        this.___bc = bc;
+    constructor(appCtl: AppControl) {
+        this.___appCtl = appCtl;
 
-        this.___bc.modalParams = {
+        this.___appCtl.modalParams = {
             button: {
                 submit: {
                     show: true,

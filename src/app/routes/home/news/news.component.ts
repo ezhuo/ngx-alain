@@ -1,5 +1,5 @@
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
-import { ParentIndexControl } from '@core';
+import { IndexControl } from '@core';
 
 @Component({
     selector: 'com-home-news',
@@ -10,7 +10,7 @@ import { ParentIndexControl } from '@core';
     `,
     styleUrls: ['./news.component.less'],
 })
-export class NewsComponent extends ParentIndexControl
+export class NewsComponent extends IndexControl
     implements OnInit, OnDestroy {
     constructor(protected injector: Injector) {
         super(injector);

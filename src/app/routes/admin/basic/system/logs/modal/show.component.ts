@@ -1,6 +1,6 @@
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 
-import { ParentModalControl } from '@core';
+import { ModalControl } from '@core';
 import { tplModalShowHTML } from '@layout';
 
 @Component({
@@ -8,7 +8,7 @@ import { tplModalShowHTML } from '@layout';
   template: tplModalShowHTML,
   styles: [``]
 })
-export class LogsShowComponent extends ParentModalControl implements OnInit, OnDestroy {
+export class LogsShowComponent extends ModalControl implements OnInit, OnDestroy {
 
   constructor(protected injector: Injector) {
     super(injector);
@@ -16,7 +16,7 @@ export class LogsShowComponent extends ParentModalControl implements OnInit, OnD
 
   ngOnInit() {
     super.ngOnInit();
-    this.mainSchema = this.baseFunc.__schemaFormSetTexts({}, []);
+    this.mainSchema = this.appBase.__schemaFormSetTexts({}, []);
   }
 
   ngOnDestroy() {

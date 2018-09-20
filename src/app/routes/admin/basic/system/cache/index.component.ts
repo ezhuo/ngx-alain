@@ -6,14 +6,14 @@ import {
     OnDestroy,
 } from '@angular/core';
 
-import { ParentIndexControl } from '@core';
+import { IndexControl } from '@core';
 
 @Component({
     selector: 'app-system-cache',
     templateUrl: `./index.component.html`,
     styleUrls: [`./index.component.less`],
 })
-export class CacheComponent extends ParentIndexControl
+export class CacheComponent extends IndexControl
     implements OnInit, OnDestroy {
     iconType = 'delete';
 

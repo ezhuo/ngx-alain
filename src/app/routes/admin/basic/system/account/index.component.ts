@@ -9,7 +9,7 @@ import {
 import { SimpleTableComponent } from '@delon/abc';
 import { SFComponent } from '@delon/form';
 
-import { ParentIndexControl } from '@core';
+import { IndexControl } from '@core';
 
 import { AccountEditComponent } from './modal/edit.component';
 import { AccountShowComponent } from './modal/show.component';
@@ -26,7 +26,7 @@ import { SFSchema } from '@delon/form';
     templateUrl: `./index.component.html`,
     styleUrls: [`./index.component.less`],
 })
-export class AccountComponent extends ParentIndexControl
+export class AccountComponent extends IndexControl
     implements OnInit, OnDestroy {
     @ViewChild('st')
     st: SimpleTableComponent;
@@ -120,7 +120,7 @@ export class AccountComponent extends ParentIndexControl
                     ui: {
                         widget: 'uploadx',
                         action: this.configSrv.api.upload,
-                        change: this.caseFunc.nzUploadHandleChange,
+                        change: this.appCase.nzUploadHandleChange,
                         spanLabel: 3,
                         spanControl: 21,
                         grid: {
@@ -317,7 +317,7 @@ export class AccountComponent extends ParentIndexControl
                             {
                                 text: '删除',
                                 click: (record, btnRes) =>
-                                    this.caseFunc
+                                    this.appCase
                                         .deleteAlert(null, record)
                                         .then(res => {
                                             if (

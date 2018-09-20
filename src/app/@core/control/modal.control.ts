@@ -1,8 +1,8 @@
 import { OnInit, OnDestroy, Injector } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd';
-import { BaseControl } from './base.control';
+import { AppControl } from './app.control';
 
-export class ParentModalControl extends BaseControl
+export class ModalControl extends AppControl
     implements OnInit, OnDestroy {
     constructor(protected injector: Injector) {
         super(injector);
@@ -14,7 +14,7 @@ export class ParentModalControl extends BaseControl
 
     ngOnInit() {
         super.ngOnInit();
-        this.baseFunc.__getPrimaryKeyValue();
+        this.appBase.__getPrimaryKeyValue();
     }
 
     ngOnDestroy() {

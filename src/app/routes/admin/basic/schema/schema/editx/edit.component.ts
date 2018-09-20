@@ -1,11 +1,11 @@
 import { Component, OnInit, Injector } from '@angular/core';
-import { ParentModalControl } from '@core';
+import { ModalControl } from '@core';
 
 @Component({
   selector: 'app-schema-edit',
   templateUrl: './edit.component.html',
 })
-export class SchemaFormEditxComponent extends ParentModalControl implements OnInit {
+export class SchemaFormEditxComponent extends ModalControl implements OnInit {
   i: any;
   pp: any;
   cat: string[] = ['美食', '美食,粤菜', '美食,粤菜,湛江菜'];

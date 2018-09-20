@@ -9,7 +9,7 @@ import {
 import { SimpleTableComponent } from '@delon/abc';
 import { SFComponent } from '@delon/form';
 
-import { ParentIndexControl } from '@core';
+import { IndexControl } from '@core';
 
 import { RoleEditComponent } from './modal/edit.component';
 
@@ -18,7 +18,7 @@ import { RoleEditComponent } from './modal/edit.component';
     templateUrl: `./index.component.html`,
     styleUrls: [`./index.component.less`],
 })
-export class RoleComponent extends ParentIndexControl
+export class RoleComponent extends IndexControl
     implements OnInit, OnDestroy {
     @ViewChild('st')
     st: SimpleTableComponent;
@@ -134,7 +134,7 @@ export class RoleComponent extends ParentIndexControl
                                     3000,
                                 );
                             } else
-                                this.caseFunc
+                                this.appCase
                                     .deleteAlert(null, record)
                                     .then(res => {
                                         if (

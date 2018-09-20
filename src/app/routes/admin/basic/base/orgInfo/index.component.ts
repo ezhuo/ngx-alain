@@ -10,7 +10,7 @@ import { SimpleTableComponent } from '@delon/abc';
 import { SFComponent } from '@delon/form';
 import { SimpleTableButton, SimpleTableColumn } from '@delon/abc';
 
-import { ParentIndexControl } from '@core';
+import { IndexControl } from '@core';
 
 import { OrgInfoEditComponent } from './modal/edit.component';
 import { OrgInfoShowComponent } from './modal/show.component';
@@ -22,7 +22,7 @@ import { NzFormatEmitEvent, NzTreeNode, NzTreeComponent } from 'ng-zorro-antd';
     templateUrl: `./index.component.html`,
     styleUrls: [`./index.component.less`],
 })
-export class OrgInfoComponent extends ParentIndexControl
+export class OrgInfoComponent extends IndexControl
     implements OnInit, OnDestroy {
     @ViewChild('st')
     st: SimpleTableComponent;
@@ -80,7 +80,7 @@ export class OrgInfoComponent extends ParentIndexControl
                     ui: {
                         widget: 'uploadx',
                         action: this.configSrv.api.upload,
-                        change: this.caseFunc.nzUploadHandleChange,
+                        change: this.appCase.nzUploadHandleChange,
                         spanLabel: 3,
                         spanControl: 21,
                         grid: {
@@ -174,7 +174,7 @@ export class OrgInfoComponent extends ParentIndexControl
                         spanControl: 21,
                         changeOnSelect: true,
                         asyncData: node => {
-                            return this.caseFunc.nzCascaderLoadDataBySchema(
+                            return this.appCase.nzCascaderLoadDataBySchema(
                                 node,
                             );
                         },
@@ -190,7 +190,7 @@ export class OrgInfoComponent extends ParentIndexControl
                         widget: 'uploadx',
                         multiple: true,
                         action: this.configSrv.api.upload,
-                        change: this.caseFunc.nzUploadHandleChange,
+                        change: this.appCase.nzUploadHandleChange,
                         spanLabel: 3,
                         spanControl: 21,
                         debug: true,
@@ -286,7 +286,7 @@ export class OrgInfoComponent extends ParentIndexControl
                             {
                                 text: '删除',
                                 click: (record, btnRes) =>
-                                    this.caseFunc
+                                    this.appCase
                                         .deleteAlert(null, record)
                                         .then(res => {
                                             if (

@@ -1,13 +1,13 @@
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 
-import { ParentIndexControl } from '@core';
+import { IndexControl } from '@core';
 
 @Component({
     selector: 'app-base-canton',
     templateUrl: `./index.component.html`,
     styleUrls: [`./index.component.less`],
 })
-export class CantonComponent extends ParentIndexControl
+export class CantonComponent extends IndexControl
     implements OnInit, OnDestroy {
     constructor(protected injector: Injector) {
         super(injector);

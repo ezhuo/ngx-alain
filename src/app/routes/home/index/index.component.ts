@@ -4,14 +4,14 @@ import {
     OnInit,
     OnDestroy,
 } from '@angular/core';
-import { ParentIndexControl } from '@core';
+import { IndexControl } from '@core';
 
 @Component({
     selector: 'com-home-index',
     templateUrl: './index.component.html',
     styleUrls: ['./index.component.less'],
 })
-export class IndexComponent extends ParentIndexControl
+export class IndexComponent extends IndexControl
     implements OnInit, OnDestroy {
     array = ['slide1.jpg', 'slide2.jpg', 'slide3.jpg', 'slide4.jpg'];
 

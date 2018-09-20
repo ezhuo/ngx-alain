@@ -5,15 +5,15 @@ import { SFSchema, SFUISchema } from '@delon/form';
 import { SimpleTableColumn } from '@delon/abc';
 
 import { InjectorControl } from './injector.control';
-import { BaseFunc } from './base.func';
-import { BaseCase } from './base.case';
+import { AppFunc } from './app.func';
+import { AppCase } from './app.case';
 
-export class BaseControl extends InjectorControl implements OnInit, OnDestroy {
+export class AppControl extends InjectorControl implements OnInit, OnDestroy {
     constructor(protected injector: Injector) {
         super(injector);
 
-        this.__baseFunc = new BaseFunc(this);
-        this.__baseCase = new BaseCase(this);
+        this.___appFunc = new AppFunc(this);
+        this.___appCase = new AppCase(this);
     }
 
     // ----------------------------------------
@@ -24,8 +24,8 @@ export class BaseControl extends InjectorControl implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         super.ngOnDestroy();
-        this.__baseFunc = null;
-        this.__baseCase = null;
+        this.___appFunc = null;
+        this.___appCase = null;
         // 清空其它的
         for (const idx of Object.keys(this)) {
             if (idx && idx.indexOf('___') > -1) {
@@ -37,12 +37,12 @@ export class BaseControl extends InjectorControl implements OnInit, OnDestroy {
     /**
      * 基础处理类
      */
-    protected __baseFunc: BaseFunc;
+    protected ___appFunc: AppFunc;
 
     /**
      * 业务处理类
      */
-    protected __baseCase: BaseCase;
+    protected ___appCase: AppCase;
 
     /**
      * 当前页面的参数
@@ -127,12 +127,12 @@ export class BaseControl extends InjectorControl implements OnInit, OnDestroy {
 
     // --------------------------------------
 
-    get caseFunc() {
-        return this.__baseCase;
+    get appCase() {
+        return this.___appCase;
     }
 
-    get baseFunc() {
-        return this.__baseFunc;
+    get appBase() {
+        return this.___appFunc;
     }
 
     get primaryURL() {

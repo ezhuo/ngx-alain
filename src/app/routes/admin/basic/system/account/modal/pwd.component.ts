@@ -1,6 +1,6 @@
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 
-import { ParentModalControl } from '@core';
+import { ModalControl } from '@core';
 import { tplModalEditHTML } from '@layout';
 
 @Component({
@@ -8,7 +8,7 @@ import { tplModalEditHTML } from '@layout';
     template: tplModalEditHTML,
     styles: [``]
 })
-export class AccountPwdComponent extends ParentModalControl implements OnInit, OnDestroy {
+export class AccountPwdComponent extends ModalControl implements OnInit, OnDestroy {
 
     constructor(protected injector: Injector) {
         super(injector);

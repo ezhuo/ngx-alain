@@ -1,6 +1,6 @@
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 
-import { ParentModalControl } from '@core';
+import { ModalControl } from '@core';
 import { tplModalShowHTML } from '@layout';
 
 @Component({
@@ -8,7 +8,7 @@ import { tplModalShowHTML } from '@layout';
   template: tplModalShowHTML,
   styles: [``]
 })
-export class RoleShowComponent extends ParentModalControl implements OnInit, OnDestroy {
+export class RoleShowComponent extends ModalControl implements OnInit, OnDestroy {
 
   constructor(protected injector: Injector) {
     super(injector);
@@ -19,7 +19,7 @@ export class RoleShowComponent extends ParentModalControl implements OnInit, OnD
     delete this.mainSchema.properties.login_pwd;
     delete this.mainSchema.properties.login_pwd2;
     this.formData['org_id'] = this.formData['org_name'];
-    this.mainSchema = this.baseFunc.__schemaFormSetTexts({}, []);
+    this.mainSchema = this.appBase.__schemaFormSetTexts({}, []);
   }
 
   ngOnDestroy() {

@@ -1,6 +1,6 @@
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 
-import { ParentModalControl } from '@core';
+import { ModalControl } from '@core';
 import { tplModalShowHTML } from '@layout';
 
 @Component({
@@ -8,7 +8,7 @@ import { tplModalShowHTML } from '@layout';
   template: tplModalShowHTML,
   styles: [``]
 })
-export class OrgInfoShowComponent extends ParentModalControl implements OnInit, OnDestroy {
+export class OrgInfoShowComponent extends ModalControl implements OnInit, OnDestroy {
 
   constructor(protected injector: Injector) {
     super(injector);
@@ -19,7 +19,7 @@ export class OrgInfoShowComponent extends ParentModalControl implements OnInit, 
     this.formData['parent_id'] = this.formData['parent_name'];
     this.formData['canton_fdn'] = this.formData['canton_text_name'];
     delete this.mainSchema.properties.canton_fdn.ui['asyncData'];
-    this.mainSchema = this.baseFunc.__schemaFormSetTexts({}, []);
+    this.mainSchema = this.appBase.__schemaFormSetTexts({}, []);
   }
 
   ngOnDestroy() {

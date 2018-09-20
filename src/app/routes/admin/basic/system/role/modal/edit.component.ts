@@ -1,6 +1,6 @@
 import { Component, Injector, OnInit, OnDestroy, ViewChild } from '@angular/core';
 
-import { ParentModalControl } from '@core';
+import { ModalControl } from '@core';
 
 import { NzFormatEmitEvent, NzTreeNode, NzTreeComponent } from 'ng-zorro-antd';
 
@@ -9,7 +9,7 @@ import { NzFormatEmitEvent, NzTreeNode, NzTreeComponent } from 'ng-zorro-antd';
     templateUrl: `./edit.component.html`,
     styles: [``]
 })
-export class RoleEditComponent extends ParentModalControl implements OnInit, OnDestroy {
+export class RoleEditComponent extends ModalControl implements OnInit, OnDestroy {
 
     @ViewChild('tree') tree: NzTreeComponent;
 

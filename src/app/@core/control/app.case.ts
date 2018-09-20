@@ -1,17 +1,17 @@
-import { BaseControl } from './base.control';
+import { AppControl } from './app.control';
 import { of } from 'rxjs';
 
 import { SimpleTableComponent } from '@delon/abc';
 
-export class BaseCase {
-    private ___bc: BaseControl = null;
+export class AppCase {
+    private ___appCtl: AppControl = null;
 
     get bc() {
-        return this.___bc;
+        return this.___appCtl;
     }
 
-    constructor(bc: BaseControl) {
-        this.___bc = bc;
+    constructor(appCtl: AppControl) {
+        this.___appCtl = appCtl;
     }
 
     /**
@@ -204,7 +204,7 @@ export class BaseCase {
                 __record = self.formData;
             }
             if (!__primaryKey) __primaryKey = self.primaryKey;
-            const __id = self.baseFunc.__getPrimaryKeyValue(
+            const __id = self.appBase.__getPrimaryKeyValue(
                 __record,
                 __primaryKey,
             );

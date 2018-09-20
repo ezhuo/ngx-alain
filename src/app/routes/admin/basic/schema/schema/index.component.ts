@@ -16,7 +16,7 @@ import { SimpleTableComponent, SimpleTableColumn } from '@delon/abc';
 import { SchemaFormEditComponent } from './edit/edit.component';
 import { SchemaFormEditxComponent } from './editx/edit.component';
 
-import { ParentIndexControl } from '@core';
+import { IndexControl } from '@core';
 import { of } from 'rxjs';
 import {
   NzDropdownService,
@@ -29,7 +29,7 @@ import {
   selector: 'com-account',
   templateUrl: './index.component.html',
 })
-export class SchemaDemoComponent extends ParentIndexControl implements OnInit {
+export class SchemaDemoComponent extends IndexControl implements OnInit {
   @ViewChild('st')
   st: SimpleTableComponent;
 
@@ -194,7 +194,7 @@ export class SchemaDemoComponent extends ParentIndexControl implements OnInit {
           ui: {
             widget: 'uploadx',
             action: this.configSrv.api.upload,
-            change: this.caseFunc.nzUploadHandleChange,
+            change: this.appCase.nzUploadHandleChange,
             options: {
               avatar: true,
             },
@@ -213,7 +213,7 @@ export class SchemaDemoComponent extends ParentIndexControl implements OnInit {
             widget: 'cascader',
             changeOnSelect: true,
             asyncData: node => {
-              return this.caseFunc.nzCascaderLoadDataBySchema(node);
+              return this.appCase.nzCascaderLoadDataBySchema(node);
             },
             spanLabel: 2,
             spanControl: 22,

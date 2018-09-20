@@ -9,7 +9,7 @@ import {
 import { SimpleTableComponent } from '@delon/abc';
 import { SFComponent } from '@delon/form';
 
-import { ParentIndexControl } from '@core';
+import { IndexControl } from '@core';
 
 import { LogsShowComponent } from './modal/show.component';
 
@@ -18,7 +18,7 @@ import { LogsShowComponent } from './modal/show.component';
     templateUrl: `./index.component.html`,
     styleUrls: [`./index.component.less`],
 })
-export class LogsComponent extends ParentIndexControl
+export class LogsComponent extends IndexControl
     implements OnInit, OnDestroy {
     @ViewChild('st')
     st: SimpleTableComponent;

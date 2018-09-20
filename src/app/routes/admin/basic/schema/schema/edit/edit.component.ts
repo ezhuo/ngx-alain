@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy, Injector } from '@angular/core';
-import { ParentModalControl } from '@core';
+import { ModalControl } from '@core';
 
 @Component({
   selector: 'com-schema-edit',
   templateUrl: './edit.component.html',
 })
-export class SchemaFormEditComponent extends ParentModalControl implements OnInit, OnDestroy {
+export class SchemaFormEditComponent extends ModalControl implements OnInit, OnDestroy {
 
   validateForm: any;
 
@@ -20,7 +20,7 @@ export class SchemaFormEditComponent extends ParentModalControl implements OnIni
 
   ngOnInit() {
     super.ngOnInit();
-    this.baseFunc.__formGroupFillData(this.validateForm, this.formData);
+    this.appBase.__formGroupFillData(this.validateForm, this.formData);
   }
 
   ngOnDestroy() {

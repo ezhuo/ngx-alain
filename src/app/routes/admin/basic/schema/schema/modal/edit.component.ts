@@ -1,5 +1,5 @@
 import { Component, OnInit, Injector } from '@angular/core';
-import { ParentModalControl } from '@core';
+import { ModalControl } from '@core';
 import { tplModalEditHTML } from '@layout';
 
 @Component({
@@ -7,7 +7,7 @@ import { tplModalEditHTML } from '@layout';
   template: tplModalEditHTML,
   styles: [``],
 })
-export class SchemaEditComponent extends ParentModalControl implements OnInit {
+export class SchemaEditComponent extends ModalControl implements OnInit {
 
   constructor(protected injector: Injector) {
     super(injector);

@@ -48,7 +48,7 @@
   </nz-form-item>
   <nz-form-item>
     <nz-form-control>
-      <nz-upload [nzAction]="configSrv.api.upload" nzMultiple nzListType="picture-card" [nzFileList]='fileList' (nzChange)='caseFunc.nzUploadHandleChange($event)'>
+      <nz-upload [nzAction]="configSrv.api.upload" nzMultiple nzListType="picture-card" [nzFileList]='fileList' (nzChange)='appCase.nzUploadHandleChange($event)'>
         <button nz-button>
           <i class="anticon anticon-upload"></i>
           <span>Click to Upload</span>
@@ -59,7 +59,7 @@
   <nz-form-item>
     <nz-form-control>
       {{values|json}}
-      <nz-cascader name="nzcascader" [(ngModel)]='values' nzChangeOnSelect [nzLoadData]="caseFunc.nzCascaderLoadData" (ngModelChange)="onChanges($event)">
+      <nz-cascader name="nzcascader" [(ngModel)]='values' nzChangeOnSelect [nzLoadData]="appCase.nzCascaderLoadData" (ngModelChange)="onChanges($event)">
       </nz-cascader>
     </nz-form-control>
   </nz-form-item>

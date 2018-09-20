@@ -6,14 +6,14 @@ import {
   ViewChild,
 } from '@angular/core';
 
-import { ParentModalControl } from '@core';
+import { ModalControl } from '@core';
 
 @Component({
   selector: 'app-system-role-edit',
   templateUrl: `./edit.component.html`,
   styles: [``],
 })
-export class DictEditComponent extends ParentModalControl
+export class DictEditComponent extends ModalControl
   implements OnInit, OnDestroy {
   constructor(protected injector: Injector) {
     super(injector);

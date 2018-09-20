@@ -1,6 +1,6 @@
 import { Component, OnInit, Injector } from '@angular/core';
 
-import { ParentModalControl } from '@core';
+import { ModalControl } from '@core';
 import { tplModalShowHTML } from '@layout';
 
 @Component({
@@ -8,7 +8,7 @@ import { tplModalShowHTML } from '@layout';
   template: tplModalShowHTML,
   styles: [``],
 })
-export class SchemaShowComponent extends ParentModalControl implements OnInit {
+export class SchemaShowComponent extends ModalControl implements OnInit {
 
   constructor(protected injector: Injector) {
     super(injector);
@@ -18,7 +18,7 @@ export class SchemaShowComponent extends ParentModalControl implements OnInit {
     super.ngOnInit();
     console.log('ngOnInit', this);
 
-    this.mainSchema = this.baseFunc.__schemaFormSetTexts({
+    this.mainSchema = this.appBase.__schemaFormSetTexts({
       properties: {
         agree: {
           type: 'string',
