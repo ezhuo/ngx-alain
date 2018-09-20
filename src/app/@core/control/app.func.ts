@@ -7,7 +7,7 @@ import { SFSchema, SFUISchema, SFSchemaEnumType } from '@delon/form';
 export class AppFunc {
     private ___appCtl: AppControl = null;
 
-    get bc() {
+    get appCtl() {
         return this.___appCtl;
     }
 
@@ -36,7 +36,7 @@ export class AppFunc {
      * 表单初始化
      */
     __formGroupFillData(__frmGroup?: FormGroup, __frmData?: Object): void {
-        const self = this.bc;
+        const self = this.appCtl;
         if (!__frmGroup === null) __frmGroup = self.mainForm;
         for (const idx of Object.keys(__frmData)) {
             if (__frmGroup.controls.hasOwnProperty(idx)) {
@@ -49,7 +49,7 @@ export class AppFunc {
      * 获取主键值
      */
     __getPrimaryKeyValue = (__frmData?: any, __primaryKey?: string) => {
-        const self = this.bc;
+        const self = this.appCtl;
         let result = null;
         if (!__frmData) {
             __frmData = self.formData;
@@ -75,7 +75,7 @@ export class AppFunc {
         orderBy?: any[],
         mainSchema?: SFSchema,
     ) {
-        const self = this.bc;
+        const self = this.appCtl;
         let newSchema = mainSchema || self.mainSchema;
         orderBy = orderBy || self.mainSchemaOrder;
         if (!self.helpers.isEmpty(schema)) {
@@ -117,9 +117,9 @@ export class AppFunc {
      * 字段时行设置
      */
     __schemaFormFieldsSetTexts(fields: string | string[], schema?: SFSchema) {
-        const self = this.bc;
+        const self = this.appCtl;
         let result: string[] = [];
-        if (this.bc.helpers.isString(fields)) {
+        if (this.appCtl.helpers.isString(fields)) {
             result.push(<string>fields);
         } else {
             result = [].concat(fields);
@@ -139,7 +139,7 @@ export class AppFunc {
      * @param mainSchema
      */
     __schemaFormOrder(orderBy?: any[], mainSchema?: SFSchema): SFSchema {
-        const self = this.bc;
+        const self = this.appCtl;
         orderBy = orderBy || self.mainSchemaOrder;
         mainSchema = mainSchema || self.mainSchema;
         let newSchema: SFSchema = {};

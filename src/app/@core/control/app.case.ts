@@ -6,7 +6,7 @@ import { SimpleTableComponent } from '@delon/abc';
 export class AppCase {
     private ___appCtl: AppControl = null;
 
-    get bc() {
+    get appCtl() {
         return this.___appCtl;
     }
 
@@ -18,7 +18,7 @@ export class AppCase {
      * 写日志
      */
     __logs = (content: string) => {
-        const bc = this.bc;
+        const bc = this.appCtl;
         bc.freeData.logs = bc.httpSrv
             .post('/logs', {
                 title: bc.titleSrv.getTitle(),
@@ -43,7 +43,7 @@ export class AppCase {
         __body?: any,
         __options?: any,
     ) => {
-        const self = this.bc;
+        const self = this.appCtl;
         __url = __url || self.primaryURL;
         __body = __body || {};
         __tableParams = __tableParams || self.mainTableParams;
@@ -69,7 +69,7 @@ export class AppCase {
      * 根据服务器端，数据导出到EXCEL
      */
     exportXlsFromServer = (__url?: string, __body?: any, __options?: any) => {
-        const self = this.bc;
+        const self = this.appCtl;
         __url = __url || self.primaryURL;
         __body = __body || {};
         __options = __options || {
@@ -118,7 +118,7 @@ export class AppCase {
      * 数据上传
      */
     nzUploadHandleChange = ($event: any, $isMult?: boolean): void => {
-        const self = this.bc;
+        const self = this.appCtl;
         const file = $event.file;
         const fileList: any[] = $event.fileList;
         const status = file.status;
@@ -149,7 +149,7 @@ export class AppCase {
      * 地区加载数据
      */
     nzCascaderLoadData = (node: any, index: number): PromiseLike<any> => {
-        const self = this.bc;
+        const self = this.appCtl;
         return new Promise(resolve => {
             const arrCanton = self.stateSrv.cantonList;
             if (index < 0 && arrCanton.length > 0) {
@@ -175,7 +175,7 @@ export class AppCase {
      * 动态表单中的地区加载数据
      */
     nzCascaderLoadDataBySchema = (node?: any): any => {
-        const self = this.bc;
+        const self = this.appCtl;
         if (!node) {
             const arrCanton = self.stateSrv.cantonList;
             if (arrCanton.length > 0) {
@@ -195,7 +195,7 @@ export class AppCase {
         __record?: Object,
         __primaryKey?: string,
     ): any => {
-        const self = this.bc;
+        const self = this.appCtl;
         return new Promise((resolve, reject?: any) => {
             if (!__mainUrl) {
                 __mainUrl = self.primaryURL;
