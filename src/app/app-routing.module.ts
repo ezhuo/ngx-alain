@@ -1,13 +1,17 @@
 import { NgModule } from '@angular/core';
 import { ExtraOptions, RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from '@core';
+import { AuthGuard, configInc } from '@core';
 import { environment } from '@env/environment';
 
 const routes: Routes = [
     {
-        path: 'app',
-        loadChildren: './routes/routes.module#RoutesModule',
-        data: { app: true },
+        path: 'home',
+        loadChildren: './routes/home/home.module#HomeModule',
+    },
+    {
+        path: 'admin',
+        loadChildren: './routes/admin/admin.module#AdminModule',
+        canLoad: [AuthGuard],
     },
     // passport
     {
@@ -20,8 +24,8 @@ const routes: Routes = [
         loadChildren:
             './layout/exception/exception.module#LayoutExceptionModule',
     },
-    { path: '', redirectTo: 'app', pathMatch: 'full' },
-    { path: '**', redirectTo: 'app' },
+    { path: '', redirectTo: configInc.router.routeDefault, pathMatch: 'full' },
+    { path: '**', redirectTo: configInc.router.routeDefault },
 ];
 
 const config: ExtraOptions = { useHash: environment.useHash };
