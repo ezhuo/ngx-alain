@@ -4,10 +4,12 @@ import { AuthGuard, configInc } from '@core';
 import { environment } from '@env/environment';
 
 const routes: Routes = [
+    // 前台网站
     {
         path: 'home',
         loadChildren: './routes/home/home.module#HomeModule',
     },
+    // 管理后台
     {
         path: 'admin',
         loadChildren: './routes/admin/admin.module#AdminModule',
