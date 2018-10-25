@@ -21,7 +21,6 @@ export function StartupServiceFactory(
     return () => startupService.load();
 }
 
-const CORE_PROVIDERS = [];
 
 @NgModule({
     exports: [],
@@ -39,8 +38,6 @@ export class CoreModule {
         return <ModuleWithProviders>{
             ngModule: CoreModule,
             providers: [
-                ...CORE_PROVIDERS,
-                StartupService,
                 {
                     provide: LOCALE_ID,
                     useValue: 'zh-Hans',
