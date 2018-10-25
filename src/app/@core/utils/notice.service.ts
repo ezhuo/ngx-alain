@@ -2,7 +2,9 @@ import { Injectable, Injector } from '@angular/core';
 import { NzMessageService, NzNotificationService } from 'ng-zorro-antd';
 import { SweetAlert } from './sweetalert2';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class NoticeService {
     constructor(private injector: Injector) {}
 

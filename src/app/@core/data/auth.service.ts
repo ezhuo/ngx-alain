@@ -6,7 +6,9 @@ import { StateService } from './state.service';
 import { HttpService } from '../net/http.service';
 import * as configInc from '../config.inc';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class AuthService {
     constructor(
         private http: HttpService,

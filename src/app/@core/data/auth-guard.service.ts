@@ -11,7 +11,9 @@ import {
 import { AuthService } from './auth.service';
 import { ConfigService } from './config.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class AuthGuard implements CanActivate, CanActivateChild, CanLoad {
   constructor(private injector: Injector) { }
 

@@ -7,7 +7,9 @@ import { ArrayService } from '@delon/util';
 
 import * as helpers from '../helpers';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class StateService {
     constructor(private injector: Injector) {}
 

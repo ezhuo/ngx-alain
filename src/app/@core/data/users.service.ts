@@ -5,7 +5,9 @@ import { User, SettingsService } from '@delon/theme';
 import { define, app_debug } from '../config.inc';
 import * as helper from '../helpers';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class UserService {
   private __api_dt: any = null;
   private __userInfo: any = {};

@@ -8,12 +8,13 @@ import { NoticeService } from '../utils/notice.service';
 import { http, app_debug } from '../config.inc';
 
 import { UserService } from './users.service';
-
-import { HttpService } from '../net';
+import { HttpService } from '../net/http.service';
 
 import * as helper from '../helpers';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class TokenService {
   protected __token = '';
   protected __isAuth: Boolean = false;

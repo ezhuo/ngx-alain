@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import * as config from '../config.inc';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class ConfigService {
     config: any = config;
     app_debug: any = config.app_debug;

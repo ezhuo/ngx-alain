@@ -6,7 +6,9 @@ import { ModalHelper, ModalHelperOptions } from '@delon/theme';
 /**
  * 对话框辅助类
  */
-@Injectable()
+@Injectable({
+    providedIn: 'root',
+})
 export class ModalService {
     constructor(
         private modalHelper: ModalHelper,
