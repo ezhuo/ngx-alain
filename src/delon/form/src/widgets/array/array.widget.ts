@@ -11,7 +11,7 @@ import { ArrayLayoutWidget } from '../../widget';
         <span class="optional">
           {{ ui.optional }}
           <nz-tooltip *ngIf="ui.optionalHelp" [nzTitle]="ui.optionalHelp">
-            <i nz-tooltip class="anticon anticon-question-circle-o"></i>
+            <i nz-tooltip nz-icon type="question-circle"></i>
           </nz-tooltip>
         </span>
       </label>
@@ -24,11 +24,11 @@ import { ArrayLayoutWidget } from '../../widget';
 
         <nz-row class="sf-array-container">
           <ng-container *ngFor="let i of formProperty.properties; let idx=index">
-            <nz-col [nzSpan]="arraySpan" *ngIf="i.visible" [attr.data-index]="idx" class="sf-array-item">
+            <nz-col *ngIf="i.visible && !i.ui.hidden" [nzSpan]="arraySpan" [attr.data-index]="idx" class="sf-array-item">
               <nz-card>
                 <sf-item [formProperty]="i"></sf-item>
                 <span *ngIf="removeTitle" class="remove" (click)="removeItem(idx)" [attr.title]="removeTitle">
-                  <i class="anticon anticon-delete"></i>
+                  <i nz-icon type="delete"></i>
                 </span>
               </nz-card>
             </nz-col>
@@ -41,7 +41,7 @@ import { ArrayLayoutWidget } from '../../widget';
       </div>
     </nz-col>
   </nz-form-item>
-  `
+  `,
 })
 export class ArrayWidget extends ArrayLayoutWidget implements OnInit {
   addTitle: string;
@@ -56,14 +56,18 @@ export class ArrayWidget extends ArrayLayoutWidget implements OnInit {
     );
   }
 
+  get l() {
+    return this.formProperty.root.widget.sfComp.locale;
+  }
+
   ngOnInit(): void {
     if (this.ui.grid && this.ui.grid.arraySpan)
       this.arraySpan = this.ui.grid.arraySpan;
 
-    this.addTitle = this.ui.addTitle || '添加';
+    this.addTitle = this.ui.addTitle || this.l['addText'];
     this.addType = this.ui.addType || 'dashed';
     this.removeTitle =
-      this.ui.removable === false ? null : this.ui.removeTitle || '移除';
+      this.ui.removable === false ? null : this.ui.removeTitle || this.l['removeText'];
   }
 
   addItem() {

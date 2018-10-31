@@ -12,8 +12,8 @@ import { ControlWidget } from '../../widget';
         [disabled]="disabled"
         [attr.disabled]="disabled"
         [nzSize]="ui.size"
-        [value]="value"
-        (input)="setValue($event.target?.value)"
+        [ngModel]="value"
+        (ngModelChange)="setValue($event)"
         [attr.maxLength]="schema.maxLength || null"
         [attr.type]="ui.type || 'text'"
         [attr.placeholder]="ui.placeholder"
@@ -50,5 +50,11 @@ export class StringWidget extends ControlWidget implements OnInit {
     )
       ? 'addon'
       : '';
+  }
+
+  reset(value: any) {
+    if (this.schema.format === 'color' && !value) {
+      this.setValue('#000000');
+    }
   }
 }

@@ -4,45 +4,46 @@ import {
   HostListener,
   OnInit,
   OnChanges,
-  SimpleChanges,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Renderer2,
   ElementRef,
+  TemplateRef,
 } from '@angular/core';
+
+import { InputNumber } from '@delon/util';
 
 @Component({
   selector: 'quick-menu',
-  template: `
-  <div class="ad-quick-menu__inner">
-    <div class="ad-quick-menu__ctrl" [ngStyle]="ctrlStyle">
-      <i [ngClass]="icon"></i>
-    </div>
-    <ng-content></ng-content>
-  </div>
-  `,
-  host: { '[class.ad-quick-menu]': 'true' },
+  templateUrl: './quick-menu.component.html',
+  host: { '[class.quick-menu]': 'true' },
   preserveWhitespaces: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class QuickMenuComponent implements OnInit, OnChanges {
-  // region: fields
+  // #region fields
 
+  _icon = 'question-circle';
+  _iconTpl: TemplateRef<any>;
   @Input()
-  icon:
-    | string
-    | string[]
-    | { [key: string]: string } = 'anticon anticon-question-circle-o';
+  set icon(value: string | TemplateRef<any>) {
+    if (value instanceof TemplateRef) {
+      this._icon = null;
+      this._iconTpl = value;
+    } else {
+      this._icon = value;
+    }
+  }
 
-  @Input() top = 120;
+  @Input() @InputNumber() top = 120;
 
-  @Input() width = 200;
+  @Input() @InputNumber() width = 200;
 
   @Input() bgColor = '#fff';
 
   @Input() borderColor = '#ddd';
 
-  // endregion
+  // #endregion
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -81,7 +82,7 @@ export class QuickMenuComponent implements OnInit, OnChanges {
     this.initFlag = true;
     this.setStyle();
   }
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     if (this.initFlag) this.setStyle();
   }
 }

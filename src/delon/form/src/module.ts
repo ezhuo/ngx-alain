@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgZorroAntdModule } from 'ng-zorro-antd';
 import { DelonUtilModule } from '@delon/util';
+import { DelonLocaleModule } from '@delon/theme';
 
 import { DelonFormConfig } from './config';
 import {
@@ -23,7 +24,7 @@ const COMPONENTS = [
   SFFixedDirective,
 ];
 
-// region: widgets
+// #region widgets
 
 import { WidgetRegistry } from './widget.factory';
 import { NzWidgetRegistry } from './widgets/nz-widget.registry';
@@ -75,10 +76,10 @@ const WIDGETS = [
   TextWidget,
 ];
 
-// endregion
+// #endregion
 
 @NgModule({
-  imports: [CommonModule, FormsModule, DelonUtilModule, NgZorroAntdModule],
+  imports: [CommonModule, FormsModule, DelonUtilModule, DelonLocaleModule, NgZorroAntdModule],
   declarations: [...COMPONENTS, ...WIDGETS],
   entryComponents: [...WIDGETS],
   exports: [...COMPONENTS],

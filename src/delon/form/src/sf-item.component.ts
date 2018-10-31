@@ -7,7 +7,6 @@ import {
   ViewContainerRef,
   ComponentRef,
   OnDestroy,
-  SimpleChanges,
 } from '@angular/core';
 import { FormProperty } from './model/form.property';
 import { Widget } from './widget';
@@ -25,14 +24,10 @@ export class SFItemComponent implements OnInit, OnChanges, OnDestroy {
   private ref: ComponentRef<any>;
   widget: Widget<any> = null;
 
-  // region: fields
-
   @Input() formProperty: FormProperty;
 
   @ViewChild('target', { read: ViewContainerRef })
   container: ViewContainerRef;
-
-  // endregion
 
   constructor(
     private widgetFactory: WidgetFactory,
@@ -58,10 +53,10 @@ export class SFItemComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
+  ngOnChanges(): void {
     this.ref = this.widgetFactory.createWidget(
       this.container,
-      this.formProperty.ui.widget || this.formProperty.schema.type,
+      (this.formProperty.ui.widget || this.formProperty.schema.type) as string,
     );
     this.onWidgetInstanciated(this.ref.instance);
   }

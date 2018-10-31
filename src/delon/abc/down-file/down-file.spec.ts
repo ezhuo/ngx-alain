@@ -10,7 +10,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import * as fs from 'file-saver';
 import { _HttpClient } from '@delon/theme';
 
-import { AdDownFileModule } from './down-file.module';
+import { DownFileModule } from './down-file.module';
 
 function genFile(ext: string, isRealFile = true): Blob {
   const blob = new Blob([
@@ -32,7 +32,7 @@ describe('abc: down-file', () => {
 
   beforeEach(() => {
     injector = TestBed.configureTestingModule({
-      imports: [HttpClientTestingModule, AdDownFileModule.forRoot()],
+      imports: [HttpClientTestingModule, DownFileModule.forRoot()],
       declarations: [TestComponent],
     });
   });
@@ -52,7 +52,7 @@ describe('abc: down-file', () => {
     beforeEach(() => createComp());
     ['xlsx', 'docx', 'pptx', 'pdf'].forEach(ext => {
       it(`should be down ${ext}`, () => {
-        spyOn(fs, 'saveAs');
+        spyOn(fs.default, 'saveAs');
         if (ext === 'docx') context.data = null;
         fixture.detectChanges();
         (dl.query(By.css('#down-' + ext))
@@ -61,14 +61,14 @@ describe('abc: down-file', () => {
           req.url.startsWith('/'),
         ) as TestRequest;
         ret.flush(genFile(ext));
-        expect(fs.saveAs).toHaveBeenCalled();
+        expect(fs.default.saveAs).toHaveBeenCalled();
       });
     });
 
     it('should be using header filename when repseon has [filename]', () => {
       let fn: string;
       const filename = 'newfile.docx';
-      spyOn(fs, 'saveAs').and.callFake(
+      spyOn(fs.default, 'saveAs').and.callFake(
         (body: any, fileName: string) => (fn = fileName),
       );
       context.fileName = null;
@@ -85,10 +85,9 @@ describe('abc: down-file', () => {
     });
 
     it('should be using header filename when repseon has [x-filename]', () => {
-      console.log(_http);
       let fn: string;
       const filename = 'x-newfile.docx';
-      spyOn(fs, 'saveAs').and.callFake(
+      spyOn(fs.default, 'saveAs').and.callFake(
         (body: any, fileName: string) => (fn = fileName),
       );
       context.fileName = null;
@@ -129,17 +128,17 @@ describe('abc: down-file', () => {
     });
 
     it('should be throw error when http status is not 200', () => {
-      spyOn(fs, 'saveAs');
+      spyOn(fs.default, 'saveAs');
       spyOn(context, 'error');
       expect(context.error).not.toHaveBeenCalled();
-      expect(fs.saveAs).not.toHaveBeenCalled();
+      expect(fs.default.saveAs).not.toHaveBeenCalled();
       (dl.query(By.css('#down-docx'))
         .nativeElement as HTMLButtonElement).click();
       const ret = httpBed.expectOne(req =>
         req.url.startsWith('/'),
       ) as TestRequest;
       ret.flush(null, { status: 201, statusText: '201' });
-      expect(fs.saveAs).not.toHaveBeenCalled();
+      expect(fs.default.saveAs).not.toHaveBeenCalled();
       expect(context.error).toHaveBeenCalled();
     });
   });
@@ -147,7 +146,7 @@ describe('abc: down-file', () => {
   it('should be support nativity HttpClient', () => {
     TestBed.overrideProvider(_HttpClient, { useFactory: () => null, deps: [] });
     createComp();
-    spyOn(fs, 'saveAs');
+    spyOn(fs.default, 'saveAs');
     const ext = 'docx';
     if (ext === 'docx') context.data = null;
     fixture.detectChanges();
@@ -157,14 +156,14 @@ describe('abc: down-file', () => {
       req.url.startsWith('/'),
     ) as TestRequest;
     ret.flush(genFile(ext));
-    expect(fs.saveAs).toHaveBeenCalled();
+    expect(fs.default.saveAs).toHaveBeenCalled();
   });
 
   it('should be using content-disposition filename', () => {
     createComp();
     let fn: string;
     const filename = 'newfile.docx';
-    spyOn(fs, 'saveAs').and.callFake(
+    spyOn(fs.default, 'saveAs').and.callFake(
       (body: any, fileName: string) => (fn = fileName),
     );
     context.fileName = null;

@@ -31,7 +31,7 @@ cacheService.set('/data/unit', [ '个', '件' ]);
 **安装**
 
 ```bash
-npm install --save @delon/cache
+yarn add @delon/cache
 ```
 
 **注册**
@@ -39,7 +39,7 @@ npm install --save @delon/cache
 在根模块 `AppModule` 导入 `DelonCacheModule`；
 
 ```ts
-import { DelonCacheModule } from '@delon/mock';
+import { DelonCacheModule } from '@delon/cache';
 
 @NgModule({
   imports: [

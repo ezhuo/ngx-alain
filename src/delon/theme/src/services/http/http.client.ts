@@ -38,7 +38,7 @@ export class _HttpClient {
   }
 
   parseParams(params: any): HttpParams {
-    let ret = new HttpParams();
+    const newParams = {};
     Object.keys(params).forEach(key => {
       let _data = params[key];
       // 忽略空值
@@ -47,9 +47,9 @@ export class _HttpClient {
       if (this.cog.dateValueHandling === 'timestamp' && _data instanceof Date) {
         _data = _data.valueOf();
       }
-      ret = ret.set(key, _data);
+      newParams[key] = _data;
     });
-    return ret;
+    return new HttpParams({ fromObject: newParams });
   }
 
   appliedUrl(url: string, params?: any) {
@@ -73,7 +73,7 @@ export class _HttpClient {
     setTimeout(() => (this._loading = false));
   }
 
-  // region: get
+  // #region get
 
   /**
    * GET：返回一个 `T` 类型
@@ -176,9 +176,9 @@ export class _HttpClient {
     );
   }
 
-  // endregion
+  // #endregion
 
-  // region: post
+  // #region post
 
   /**
    * POST：返回一个 `string` 类型
@@ -272,9 +272,9 @@ export class _HttpClient {
     );
   }
 
-  // endregion
+  // #endregion
 
-  // region: delete
+  // #region delete
 
   /**
    * DELETE：返回一个 `string` 类型
@@ -347,7 +347,7 @@ export class _HttpClient {
     );
   }
 
-  // endregion
+  // #endregion
 
   /**
    * `jsonp` 请求

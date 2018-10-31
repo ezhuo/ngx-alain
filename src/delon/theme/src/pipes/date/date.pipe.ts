@@ -1,10 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import * as format from 'date-fns/format';
-import * as distanceInWordsToNow from 'date-fns/distance_in_words_to_now';
+import { format, distanceInWordsToNow } from 'date-fns';
 
-/**
- * @see http://ng-alain.com/docs/service-pipe#%E6%97%A5%E6%9C%9F-_date
- */
 @Pipe({ name: '_date' })
 export class DatePipe implements PipeTransform {
   transform(
@@ -16,6 +12,9 @@ export class DatePipe implements PipeTransform {
         return distanceInWordsToNow(value, {
           locale: (window as any).__locale__,
         });
+      }
+      if (typeof value === 'string' && !isNaN(+value)) {
+        value = +value;
       }
       return format(value, formatString);
     } else {

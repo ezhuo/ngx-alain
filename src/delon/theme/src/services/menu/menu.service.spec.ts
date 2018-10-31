@@ -1,5 +1,5 @@
 import { Injector } from '@angular/core';
-import { TestBed, async, inject } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { filter } from 'rxjs/operators';
 
 import { ACLService } from '@delon/acl';
@@ -39,8 +39,8 @@ describe('Service: Menu', () => {
       text: 'text',
       link: '/demo1',
       badge: 10,
-      badge_dot: true,
-      badge_status: 'success',
+      badgeDot: true,
+      badgeStatus: 'success',
     },
     { text: 'text', externalLink: '//ng-alain.com' },
     { text: 'text', link: '/demo2', i18n: 'text' },
@@ -137,14 +137,14 @@ describe('Service: Menu', () => {
         srv.add(deepCopy(DATA));
         expect(srv.menus[0].children[1].children.length).toBe(1);
       });
-      it('should be use [shortcut_root: true]', () => {
+      it('should be use [shortcutRoot: true]', () => {
         const newMenus = <Menu[]>[
           {
             text: 'new menu',
             children: [
               { text: 'submenu1', link: '/' },
               { text: 'submenu2', link: '/' },
-              { text: 'sc', shortcut_root: true },
+              { text: 'sc', shortcutRoot: true },
             ],
           },
           {
@@ -197,14 +197,76 @@ describe('Service: Menu', () => {
       it('ng-alain #107', () => {
         srv.add(deepCopy(DATA));
         expect(
-          srv.menus[0].children.filter(w => w.shortcut_root === true).length,
+          srv.menus[0].children.filter(w => w.shortcutRoot === true).length,
         ).toBe(1);
         expect(srv.menus[0].children[1].children.length).toBe(1);
         srv.resume();
         expect(
-          srv.menus[0].children.filter(w => w.shortcut_root === true).length,
+          srv.menus[0].children.filter(w => w.shortcutRoot === true).length,
         ).toBe(1);
         expect(srv.menus[0].children[1].children.length).toBe(1);
+      });
+    });
+
+    describe('icon', () => {
+      it('should be null', () => {
+        srv.add([{
+          text: 'dashboard',
+          link: '/dashboard',
+          icon: null
+        }]);
+        const icon: any = srv.menus[0].icon;
+        expect(icon).toBeNull();
+      });
+      it('should be undefined', () => {
+        srv.add([{
+          text: 'dashboard',
+          link: '/dashboard',
+          icon: undefined
+        }]);
+        const icon: any = srv.menus[0].icon;
+        expect(icon).toBeUndefined();
+      });
+      it('should be type is string', () => {
+        srv.add([{
+          text: 'dashboard',
+          link: '/dashboard',
+          icon: 'aa'
+        }]);
+        const icon: any = srv.menus[0].icon;
+        expect(typeof icon).toBe('object');
+        expect(icon.type).toBe('class');
+      });
+      it('should be type is object', () => {
+        srv.add([{
+          text: 'dashboard',
+          link: '/dashboard',
+          icon: { type: 'icon', value: 'user' }
+        }]);
+        const icon: any = srv.menus[0].icon;
+        expect(typeof icon).toBe('object');
+        expect(icon.type).toBe('icon');
+      });
+      it('should be anticon anticon-user', () => {
+        srv.add([{
+          text: 'dashboard',
+          link: '/dashboard',
+          icon: `anticon anticon-user`
+        }]);
+        const icon: any = srv.menus[0].icon;
+        expect(typeof icon).toBe('object');
+        expect(icon.type).toBe('icon');
+        expect(icon.value).toBe('user');
+      });
+      it('should be image', () => {
+        srv.add([{
+          text: 'dashboard',
+          link: '/dashboard',
+          icon: `http://ng-alain.com/1.jpg`
+        }]);
+        const icon: any = srv.menus[0].icon;
+        expect(typeof icon).toBe('object');
+        expect(icon.type).toBe('img');
       });
     });
   });

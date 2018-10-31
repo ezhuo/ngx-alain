@@ -1,6 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import * as format from 'date-fns/format';
-import * as addSeconds from 'date-fns/add_seconds';
+import { format, addSeconds } from 'date-fns';
 
 @Component({
   selector: 'count-down',
@@ -13,7 +12,8 @@ import * as addSeconds from 'date-fns/add_seconds';
   preserveWhitespaces: false,
 })
 export class CountDownComponent {
-  @Input() config: any;
+  @Input()
+  config: any;
 
   /**
    * 目标时间
@@ -29,9 +29,12 @@ export class CountDownComponent {
     };
   }
 
-  @Output() begin = new EventEmitter();
-  @Output() notify = new EventEmitter<number>();
-  @Output() end = new EventEmitter();
+  @Output()
+  begin = new EventEmitter();
+  @Output()
+  notify = new EventEmitter<number>();
+  @Output()
+  end = new EventEmitter();
 
   _start() {
     this.begin.emit();

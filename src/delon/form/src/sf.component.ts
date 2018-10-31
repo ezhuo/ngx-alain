@@ -3,28 +3,22 @@ import {
   OnInit,
   OnChanges,
   OnDestroy,
-  SimpleChanges,
   Input,
-  SimpleChange,
   Output,
   EventEmitter,
   TemplateRef,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
 } from '@angular/core';
-import { toBoolean } from '@delon/util';
-import { deepCopy } from '@delon/util';
+import { Subscription } from 'rxjs';
+import { deepCopy, InputBoolean } from '@delon/util';
+import { DelonLocaleService } from '@delon/theme';
 
 import { DelonFormConfig } from './config';
 import { di, retrieveSchema, FORMATMAPS, resolveIf } from './utils';
 import { TerminatorService } from './terminator.service';
 import { SFSchema } from './schema/index';
-import {
-  SFUISchema,
-  SFUISchemaItem,
-  SFRenderSchema,
-  SFUISchemaItemRun,
-} from './schema/ui';
+import { SFUISchema, SFUISchemaItem, SFUISchemaItemRun } from './schema/ui';
 import { FormProperty } from './model/form.property';
 import { FormPropertyFactory } from './model/form.property.factory';
 import { SchemaValidatorFactory } from './validator.factory';
@@ -41,26 +35,8 @@ export function useFactory(
 
 @Component({
   selector: 'sf, [sf]',
-  template: `
-  <ng-template #con><ng-content></ng-content></ng-template>
-  <form nz-form [nzLayout]="layout" (submit)="onSubmit($event)" [attr.autocomplete]="autocomplete">
-    <sf-item [formProperty]="rootProperty"></sf-item>
-    <ng-container *ngIf="button !== 'none'; else con">
-      <nz-form-item [ngClass]="_btn.render.class" class="sf-btns" [fixed-label]="_btn.render.spanLabelFixed">
-        <nz-col class="ant-form-item-control-wrapper"
-          [nzSpan]="_btn.render.grid.span" [nzOffset]="_btn.render.grid.offset"
-          [nzXs]="_btn.render.grid.xs" [nzSm]="_btn.render.grid.sm" [nzMd]="_btn.render.grid.md"
-          [nzLg]="_btn.render.grid.lg" [nzXl]="_btn.render.grid.xl">
-          <div class="ant-form-item-control">
-            <ng-container *ngIf="button; else con">
-              <button type="submit" nz-button [nzType]="_btn.submit_type" [disabled]="liveValidate && !valid">{{_btn.submit}}</button>
-              <button *ngIf="_btn.reset" (click)="reset(true)" type="button" nz-button [nzType]="_btn.reset_type">{{_btn.reset}}</button>
-            </ng-container>
-          </div>
-        </nz-col>
-      </nz-form-item>
-    </ng-container>
-  </form>`,
+  templateUrl: './sf.component.html',
+  preserveWhitespaces: false,
   providers: [
     WidgetFactory,
     {
@@ -78,30 +54,37 @@ export function useFactory(
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SFComponent implements OnInit, OnChanges, OnDestroy {
-  rootProperty: FormProperty = null;
-  _formData: any;
-  _btn: SFButton;
-  _schema: SFSchema;
-  _ui: SFUISchema;
+  private i18n$: Subscription;
+  public locale: any = {};
   private _renders = new Map<string, TemplateRef<any>>();
   private _item: any;
   private _valid = true;
   private _defUi: SFUISchemaItem;
   private _inited = false;
 
-  // region: fields
+  rootProperty: FormProperty = null;
+  _formData: any;
+  _btn: SFButton;
+  _schema: SFSchema;
+  _ui: SFUISchema;
+
+  // #region fields
 
   /** 表单布局，等同 `nzLayout`，默认：horizontal */
-  @Input() layout: 'horizontal' | 'vertical' | 'inline' = 'horizontal';
+  @Input()
+  layout: 'horizontal' | 'vertical' | 'inline' = 'horizontal';
 
   /** JSON Schema */
-  @Input() schema: SFSchema;
+  @Input()
+  schema: SFSchema;
 
   /** UI Schema */
-  @Input() ui: SFUISchema;
+  @Input()
+  ui: SFUISchema;
 
   /** 表单默认值 */
-  @Input() formData: {};
+  @Input()
+  formData: {};
 
   /**
    * 按钮
@@ -109,7 +92,8 @@ export class SFComponent implements OnInit, OnChanges, OnDestroy {
    * - 值为 `none` 表示手动添加按钮，且不保留容器
    * - 使用固定 `label` 标签宽度时，若无 `render.class` 则默认为居中状态
    */
-  @Input() button: SFButton | 'none' = {};
+  @Input()
+  button: SFButton | 'none' = {};
 
   /**
    * 是否实时校验，默认：`true`
@@ -117,26 +101,17 @@ export class SFComponent implements OnInit, OnChanges, OnDestroy {
    * - `false` 提交时校验
    */
   @Input()
-  get liveValidate() {
-    return this._liveValidate;
-  }
-  set liveValidate(value: any) {
-    this._liveValidate = toBoolean(value);
-  }
-  private _liveValidate = true;
+  @InputBoolean()
+  liveValidate = true;
 
   /** 指定表单 `autocomplete` 值 */
-  @Input() autocomplete: 'on' | 'off';
+  @Input()
+  autocomplete: 'on' | 'off';
 
   /** 立即显示错误视觉 */
   @Input()
-  get firstVisual() {
-    return this._firstVisual;
-  }
-  set firstVisual(value: any) {
-    this._firstVisual = toBoolean(value);
-  }
-  private _firstVisual = true;
+  @InputBoolean()
+  firstVisual = true;
 
   /** 表单模式 */
   @Input()
@@ -163,18 +138,22 @@ export class SFComponent implements OnInit, OnChanges, OnDestroy {
   private _mode: 'default' | 'search' | 'edit';
 
   /** 数据变更时回调 */
-  @Output() formChange = new EventEmitter<{}>();
+  @Output()
+  formChange = new EventEmitter<{}>();
 
   /** 提交表单时回调 */
-  @Output() formSubmit = new EventEmitter<{}>();
+  @Output()
+  formSubmit = new EventEmitter<{}>();
 
   /** 重置表单时回调 */
-  @Output() formReset = new EventEmitter<{}>();
+  @Output()
+  formReset = new EventEmitter<{}>();
 
   /** 表单校验结果回调 */
-  @Output() formError = new EventEmitter<ErrorData[]>();
+  @Output()
+  formError = new EventEmitter<ErrorData[]>();
 
-  // endregion
+  // #endregion
 
   /** 表单校验状态 */
   get valid(): boolean {
@@ -199,10 +178,18 @@ export class SFComponent implements OnInit, OnChanges, OnDestroy {
     private terminator: TerminatorService,
     private options: DelonFormConfig,
     private cd: ChangeDetectorRef,
+    private i18n: DelonLocaleService,
   ) {
     this.liveValidate = options.liveValidate;
     this.firstVisual = options.firstVisual;
     this.autocomplete = options.autocomplete;
+    this.i18n$ = this.i18n.change.subscribe(() => {
+      this.locale = this.i18n.getData('sf');
+      if (this._inited) {
+        this.coverButtonProperty();
+        this.cd.detectChanges();
+      }
+    });
   }
 
   private coverProperty() {
@@ -264,6 +251,17 @@ export class SFComponent implements OnInit, OnChanges, OnDestroy {
           ui.spanControl = null;
           ui.offsetControl = null;
         }
+        if (ui.widget === 'date' && ui.end != null && parentSchema) {
+          const dateEndProperty = parentSchema.properties[ui.end];
+          if (dateEndProperty) {
+            dateEndProperty.ui = Object.assign({}, dateEndProperty.ui, {
+              hidden: true,
+            });
+          } else {
+            ui.end = '';
+          }
+        }
+        ui.hidden = typeof ui.hidden === 'boolean' ? ui.hidden : false;
 
         uiRes[uiKey] = ui;
         delete property.ui;
@@ -323,11 +321,18 @@ export class SFComponent implements OnInit, OnChanges, OnDestroy {
 
     this._schema = _schema;
 
-    if (this._ui.debug) di('cover schema & ui', this._ui, _schema);
+    if (this._ui.debug) {
+      di('cover schema & ui', this._ui, _schema);
+    }
   }
 
   private coverButtonProperty() {
-    this._btn = Object.assign({ render: {} }, this.options.button, this.button);
+    this._btn = Object.assign(
+      { render: {} },
+      this.locale,
+      this.options.button,
+      this.button,
+    );
     const firstKey = Object.keys(this._ui).find(w => w.startsWith('$'));
     if (this.layout === 'horizontal') {
       const btnUi = firstKey ? this._ui[firstKey] : this._defUi;
@@ -338,7 +343,7 @@ export class SFComponent implements OnInit, OnChanges, OnDestroy {
         };
       }
       // fixed label
-      if (!this._btn.render.spanLabelFixed) {
+      if (this._btn.render.spanLabelFixed == null) {
         this._btn.render.spanLabelFixed = btnUi.spanLabelFixed;
       }
       // 固定标签宽度时，若不指定样式，则默认居中
@@ -351,7 +356,9 @@ export class SFComponent implements OnInit, OnChanges, OnDestroy {
     } else {
       this._btn.render.grid = {};
     }
-    if (this._mode) this.mode = this._mode;
+    if (this._mode) {
+      this.mode = this._mode;
+    }
     if (this._ui.debug) di('button property', this._btn);
   }
 
@@ -360,9 +367,7 @@ export class SFComponent implements OnInit, OnChanges, OnDestroy {
     this.validator();
   }
 
-  ngOnChanges(
-    changes: { [P in keyof this]?: SimpleChange } & SimpleChanges,
-  ): void {
+  ngOnChanges(): void {
     this.refreshSchema();
   }
 
@@ -389,11 +394,6 @@ export class SFComponent implements OnInit, OnChanges, OnDestroy {
     });
   }
 
-  submit() {
-    if (!this.liveValidate) this.validator();
-    if (!this.valid) return;
-    this.formSubmit.emit(this.value);
-  }
   validator() {
     this.rootProperty._runValidation();
     const errors = this.rootProperty.errors;
@@ -457,5 +457,6 @@ export class SFComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     this.terminator.destroy();
+    this.i18n$.unsubscribe();
   }
 }

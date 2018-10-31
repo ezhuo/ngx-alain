@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { NzTreeNode } from 'ng-zorro-antd';
 import { ArrayService } from './array.service';
 import { deepCopy } from '../other/other';
-import { DelonUtilModule } from '../../util.module';
+import { DelonUtilModule } from '../util.module';
 import { DelonUtilConfig } from '../util.config';
 
 const MOCK_ARR: any[] = [
@@ -133,7 +133,7 @@ describe('utils: array', () => {
             [`${key}MapName`]: key,
           };
           const res = srv.arrToTreeNode(
-            [{ id: 1, parent_id: 0, title: 't1', [key]: true }],
+            [{ id: 1, parent_id: 0, title: 't1', [key]: true, isLeaf: key !== 'expanded' }],
             options,
           );
           page = new PageTreeNode(res);

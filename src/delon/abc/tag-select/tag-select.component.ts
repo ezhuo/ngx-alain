@@ -4,35 +4,51 @@ import {
   Input,
   Output,
   EventEmitter,
+  OnDestroy,
 } from '@angular/core';
-import { toBoolean } from '@delon/util';
+import { Subscription } from 'rxjs';
+
+import { InputBoolean } from '@delon/util';
+import { DelonLocaleService } from '@delon/theme';
 
 @Component({
   selector: 'tag-select',
   template: `
-    <ng-content></ng-content>
-    <a *ngIf="expandable" class="trigger" (click)="trigger()">{{expand ? '收起' : '展开'}}<i class="anticon anticon-{{expand ? 'up' : 'down'}} ml-sm"></i></a>`,
-  host: { '[class.ad-tag-select]': 'true' },
+  <ng-content></ng-content>
+  <a *ngIf="expandable" class="tag-select__trigger" (click)="trigger()">
+    {{expand ? locale.collapse : locale.expand}}<i nz-icon [type]="expand ? 'up' : 'down'" class="tag-select__trigger-icon"></i>
+  </a>`,
+  host: { '[class.tag-select]': 'true' },
   preserveWhitespaces: false,
 })
-export class TagSelectComponent {
+export class TagSelectComponent implements OnDestroy {
+  private i18n$: Subscription;
+  locale: any = {};
+
   /** 是否启用 `展开与收进` */
-  @HostBinding('class.has-expand')
   @Input()
-  get expandable() {
-    return this._expandable;
-  }
-  set expandable(value: any) {
-    this._expandable = toBoolean(value);
-  }
-  private _expandable = true;
+  @InputBoolean()
+  @HostBinding('class.tag-select__has-expand')
+  expandable = true;
 
-  @HostBinding('class.expanded') expand = false;
+  @HostBinding('class.tag-select__expanded')
+  expand = false;
 
-  @Output() change: EventEmitter<boolean> = new EventEmitter<boolean>();
+  @Output()
+  change: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  constructor(private i18n: DelonLocaleService) {
+    this.i18n$ = this.i18n.change.subscribe(
+      () => (this.locale = this.i18n.getData('tagSelect')),
+    );
+  }
 
   trigger() {
     this.expand = !this.expand;
     this.change.emit(this.expand);
+  }
+
+  ngOnDestroy() {
+    this.i18n$.unsubscribe();
   }
 }

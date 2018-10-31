@@ -1,17 +1,18 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { AlainThemeModule } from '@delon/theme';
 
 import { DownFileDirective } from './down-file.directive';
 
 const DIRECTIVES = [DownFileDirective];
 
 @NgModule({
-  imports: [CommonModule],
+  imports: [CommonModule, AlainThemeModule],
   declarations: [...DIRECTIVES],
   exports: [...DIRECTIVES],
 })
-export class AdDownFileModule {
+export class DownFileModule {
   static forRoot(): ModuleWithProviders {
-    return { ngModule: AdDownFileModule, providers: [] };
+    return { ngModule: DownFileModule, providers: [] };
   }
 }
