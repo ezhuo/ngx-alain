@@ -6,7 +6,7 @@ import {
     OnDestroy,
 } from '@angular/core';
 
-import { SimpleTableComponent } from '@delon/abc';
+import { STComponent } from '@delon/abc';
 import { SFComponent } from '@delon/form';
 
 import { IndexControl } from '@core';
@@ -18,10 +18,9 @@ import { DictEditComponent } from './modal/edit.component';
     templateUrl: `./index.component.html`,
     styleUrls: [`./index.component.less`],
 })
-export class DictComponent extends IndexControl
-    implements OnInit, OnDestroy {
+export class DictComponent extends IndexControl implements OnInit, OnDestroy {
     @ViewChild('st')
-    st: SimpleTableComponent;
+    st: STComponent;
 
     dictActive = null;
 
@@ -40,7 +39,7 @@ export class DictComponent extends IndexControl
     ngOnInit() {
         super.ngOnInit();
 
-        this.mainSchema = {
+        this.schemaData.main = {
             properties: {
                 type_name: {
                     type: 'string',
@@ -56,7 +55,7 @@ export class DictComponent extends IndexControl
                     minLength: 1,
                     ui: {
                         widget: 'string',
-                        autofocus: 'autofocus',
+                        autofocus: true,
                     },
                 },
                 code: {
@@ -91,7 +90,7 @@ export class DictComponent extends IndexControl
             },
         };
 
-        this.mainTableColumns = [
+        this.tableData.col = [
             { title: '名称', index: 'name' },
             { title: '值', index: 'code' },
             { title: '排序', index: 'order' },
@@ -154,7 +153,7 @@ export class DictComponent extends IndexControl
 
     dictTypeList() {
         this.freeData.dictTypeList = this.httpSrv
-            .get(this.primaryURL + '/tree/0')
+            .get(this.primaryData.url + '/tree/0')
             .subscribe((result: any) => {
                 let ac = { type: '-1' };
                 if (result && result.data && result.data.list) {
@@ -169,7 +168,7 @@ export class DictComponent extends IndexControl
 
     dictTypeClick($event, $value) {
         this.dictActive = $value;
-        this.url = this.primaryURL;
+        this.url = this.primaryData.url;
         this.mainTableParams.type = this.dictActive.type;
         this.st.reset();
     }

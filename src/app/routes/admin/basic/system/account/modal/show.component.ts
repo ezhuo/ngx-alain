@@ -16,10 +16,10 @@ export class AccountShowComponent extends ModalControl implements OnInit, OnDest
 
   ngOnInit() {
     super.ngOnInit();
-    delete this.mainSchema.properties.login_pwd;
-    delete this.mainSchema.properties.login_pwd2;
-    this.formData['org_id'] = this.formData['org_name'];
-    this.mainSchema = this.appBase.__schemaFormSetTexts({}, []);
+    delete this.schemaData.main.properties.login_pwd;
+    delete this.schemaData.main.properties.login_pwd2;
+    this.form.data['org_id'] = this.form.data['org_name'];
+    this.schemaData.main = this.appBase.__schemaFormSetTexts({}, []);
   }
 
   ngOnDestroy() {

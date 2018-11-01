@@ -16,17 +16,17 @@ export class AccountEditComponent extends ModalControl
 
     ngOnInit() {
         super.ngOnInit();
-        if (this.primaryValue) {
-            delete this.mainSchema.properties.login_pwd;
-            delete this.mainSchema.properties.login_pwd2;
-            this.formData['org_id'] = this.formData['org_name'];
+        if (this.primaryData.val) {
+            delete this.schemaData.main.properties.login_pwd;
+            delete this.schemaData.main.properties.login_pwd2;
+            this.form.data['org_id'] = this.form.data['org_name'];
         } else {
-            this.formData['org_id'] = this.modalParams.tree.origin.title;
+            this.form.data['org_id'] = this.modalParams.tree.origin.title;
         }
 
-        if (!this.userSrv.userInfo.is_group) {
-            this.formData['role_id'] = 10;
-            this.mainSchema.properties['role_id'].ui['widget'] = 'texts';
+        if (!this.userSrv.userInfo.is_group && !this.userSrv.userInfo.admin) {
+            this.form.data['role_id'] = 10;
+            this.schemaData.main.properties['role_id'].ui['widget'] = 'texts';
         }
     }
 
@@ -35,9 +35,9 @@ export class AccountEditComponent extends ModalControl
     }
 
     onSubmit($event: any) {
-        const formData = this.formatSubmitData($event.value, this.mainSchema);
+        const formData = this.formatSubmitData($event.value, this.schemaData.main);
         // 如果是新增状态，就添加所属机构值
-        if (!this.primaryValue) {
+        if (!this.primaryData.val) {
             formData['org_id'] = this.modalParams.tree.origin.org_id;
             formData['org_fdn'] = this.modalParams.tree.origin.key;
         } else {
@@ -45,7 +45,7 @@ export class AccountEditComponent extends ModalControl
             delete formData['org_id'];
         }
         this.httpSrv
-            .update(this.primaryURL, formData, this.primaryValue)
+            .update(this.primaryData.url, formData, this.primaryData.val)
             .subscribe(result => {
                 // console.log(result);
                 this.modalClose(result);

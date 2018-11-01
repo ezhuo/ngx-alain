@@ -27,12 +27,12 @@ export class RoleEditComponent extends ModalControl implements OnInit, OnDestroy
     }
 
     onSubmit($event: any) {
-        const formData = this.formatSubmitData($event.value, this.mainSchema);
+        const formData = this.formatSubmitData($event.value, this.schemaData.main);
         const arr = this.stateSrv.arraySrv.getKeysByTreeNode(this.tree.getCheckedNodeList());
         formData['menu_ids'] = arr.join(',');
         const arr2 = this.stateSrv.arraySrv.getKeysByTreeNode(this.tree.getHalfCheckedNodeList());
         formData['menu_all_ids'] = this.helpers.arrayUnique(arr2.concat(arr)).join(',');
-        this.httpSrv.update(this.primaryURL, formData, this.primaryValue).subscribe((result) => {
+        this.httpSrv.update(this.primaryData.url, formData, this.primaryData.val).subscribe((result) => {
             // console.log(result);
             this.modalClose(result);
         });
@@ -43,7 +43,7 @@ export class RoleEditComponent extends ModalControl implements OnInit, OnDestroy
     treeDataSelectKeys = [];
     treeDataCheckedKeys = [];
     gettreeData() {
-        this.freeData.menu = this.httpSrv.post('/menu/get_menu_list', { 'role_id': this.primaryValue }).subscribe((result: any) => {
+        this.freeData.menu = this.httpSrv.post('/menu/get_menu_list', { 'role_id': this.primaryData.val }).subscribe((result: any) => {
             result.data.list.forEach((node, idx) => {
                 // console.log(idx);
                 // if (idx === 0) {

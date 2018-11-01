@@ -13,7 +13,7 @@ import {
 } from '@delon/theme';
 import { DelonAuthModule } from '@delon/auth';
 import { CoreModule } from '@core/core.module';
-import { SharedModule } from '@shared';
+import { SharedModule } from '@shared/shared.module';
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { I18NService } from '@core/i18n/i18n.service';

@@ -18,7 +18,7 @@ export class SchemaShowComponent extends ModalControl implements OnInit {
     super.ngOnInit();
     console.log('ngOnInit', this);
 
-    this.mainSchema = this.appBase.__schemaFormSetTexts({
+    this.schemaData.main = this.appBase.__schemaFormSetTexts({
       properties: {
         agree: {
           type: 'string',

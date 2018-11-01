@@ -32,7 +32,7 @@ export class CacheComponent extends IndexControl
 
     clearCache() {
         this.freeData.cache = this.httpSrv
-            .post(this.primaryURL)
+            .post(this.primaryData.url)
             .subscribe((result: any) => {
                 this.iconType = 'success';
                 console.log(result);

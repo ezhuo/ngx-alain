@@ -133,6 +133,32 @@ export interface SFDataSchema {
   asyncData?: (input?: any) => Observable<SFSchemaEnumType[]>;
 }
 
+export interface SFEnumSchema {
+  /**
+   * 枚举，静态数据源，例如：`radio`、`checkbox` 等
+   *
+   * - `disabled` 属性表示：禁用状态
+   * - `label` 属性表示：文本
+   * - `value` 属性表示：返回值
+   * - 基础数据类型数组会自动转化成 `SFSchemaEnum` 数组格式
+   */
+  enum?: SFSchemaEnumType[];
+}
+
+export interface SFstyleSchema {
+  /**
+   * 当前控件的ngstyle
+   */
+  styleLabel?: Object;
+  styleControl?: Object;
+}
+
+export interface SFoptionsSchema {
+  /**
+   * 当前控件的一些属性
+   */
+  options?: Object;
+}
 /** 指定如何渲染 `Schema` */
 export interface SFUISchemaItem
   extends SFRenderSchema,
@@ -140,6 +166,9 @@ export interface SFUISchemaItem
     SFHorizontalLayoutSchema,
     SFDataSchema,
     SFInputSchema,
+    SFEnumSchema,
+    SFstyleSchema,
+    SFoptionsSchema,
     ErrorSchema {
   [key: string]: any;
 

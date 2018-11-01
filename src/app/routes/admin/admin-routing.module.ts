@@ -36,18 +36,9 @@ const routes: Routes = [
             path: 'widgets',
             loadChildren: './ngalain/widgets/widgets.module#WidgetsModule',
           },
-          {
-            path: 'style',
-            loadChildren: './ngalain/style/style.module#StyleModule',
-          },
-          {
-            path: 'delon',
-            loadChildren: './ngalain/delon/delon.module#DelonModule',
-          },
-          {
-            path: 'extras',
-            loadChildren: './ngalain/extras/extras.module#ExtrasModule',
-          },
+          { path: 'style', loadChildren: './ngalain/style/style.module#StyleModule' },
+          { path: 'delon', loadChildren: './ngalain/delon/delon.module#DelonModule' },
+          { path: 'extras', loadChildren: './ngalain/extras/extras.module#ExtrasModule' },
           { path: 'pro', loadChildren: './ngalain/pro/pro.module#ProModule' },
         ],
       },

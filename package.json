@@ -1,11 +1,11 @@
 {
   "name": "ngx-alain",
-  "version": "1.4.0",
+  "version": "2.0.0-rc.1",
   "description": "ng-zorro-antd admin panel front-end framework",
   "author": "cipchk",
-  "homepage": "https://cipchk.github.io/ng-alain/",
+  "homepage": "https://ng-alain.github.io/ng-alain/",
   "bugs": {
-    "url": "https://github.com/cipchk/ng-alain/issues"
+    "url": "https://github.com/ng-alain/ng-alain/issues"
   },
   "license": "MIT",
   "keywords": [],
@@ -27,7 +27,8 @@
     "tslint-check": "tslint-config-prettier-check ./tslint.json",
     "e2e": "ng e2e",
     "test": "ng test --watch",
-    "test-coverage": "ng test --code-coverage --watch=false"
+    "test-coverage": "ng test --code-coverage --watch=false",
+    "color-less": "node scripts/color-less.js"
   },
   "dependencies": {
     "@angular/animations": "^6.1.0",
@@ -45,10 +46,14 @@
     "@antv/data-set": "^0.8.8",
     "@antv/g2": "^3.0.11",
     "@antv/g2-plugin-slider": "^2.0.2",
+    "@ngx-translate/core": "^10.0.1",
+    "@ngx-translate/http-loader": "^3.0.1",
     "ajv": "^6.4.0",
     "file-saver": "^1.3.8",
-    "ng-zorro-antd": "1.5.0",
+    "ng-zorro-antd": "^1.7.0",
     "ngx-countdown": "^3.0.0",
+    "ngx-tinymce": "^2.0.0",
+    "ngx-ueditor": "^2.0.0",
     "screenfull": "^3.3.1",
     "qrious": "^4.0.2",
     "classlist.js": "^1.1.20150312",
@@ -98,6 +103,11 @@
     "stylelint-config-standard": "^18.2.0",
     "webpack-bundle-analyzer": "^2.11.2",
     "xlsx": "^0.12.12"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint-staged"
+    }
   },
   "lint-staged": {
     "*.{cmd,html,json,md,sh,txt,xml,yml}": [

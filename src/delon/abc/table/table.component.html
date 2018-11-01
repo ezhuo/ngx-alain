@@ -16,6 +16,7 @@
   [nzShowTotal]="totalTpl">
   <thead class="st__head">
     <tr>
+	    <th class="col-idx">#</th>
       <th *ngIf="expand" [nzShowExpand]="expand"></th>
       <th *ngFor="let c of _columns; let index=index" [nzWidth]="c.width" [nzLeft]="c._left" [nzRight]="c._right" [ngClass]="c.className"
         [attr.colspan]="c.colSpan" [attr.data-col]="c.indexKey"
@@ -74,6 +75,7 @@
   <tbody class="st__body">
     <ng-container *ngFor="let i of _data; let index=index">
       <tr [attr.data-index]="index" (click)="_rowClick($event, i, index)">
+		    <td class="td-idx"><span [innerHTML]='index+1'></span></td>
         <td *ngIf="expand" [nzShowExpand]="expand" [(nzExpand)]="i.expand"></td>
         <td *ngFor="let c of _columns; let cIdx=index" [nzLeft]="c._left" [nzRight]="c._right" [nzCheckbox]="c.type === 'checkbox'" [ngClass]="c.className"
           [attr.colspan]="c.colSpan">

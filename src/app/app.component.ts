@@ -1,46 +1,21 @@
-import {
-    Component,
-    HostBinding,
-    OnInit,
-    Renderer2,
-    ElementRef,
-    Injector,
-} from '@angular/core';
+import { Component, OnInit, Renderer2, ElementRef } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { SettingsService, TitleService } from '@delon/theme';
+import { TitleService } from '@delon/theme';
 import { VERSION as VERSION_ALAIN } from '@delon/theme';
-import { VERSION as VERSION_ZORRO } from 'ng-zorro-antd';
-import { StateService } from './@core';
+import { VERSION as VERSION_ZORRO, NzModalService } from 'ng-zorro-antd';
 
 @Component({
     selector: 'app-root',
     template: `<router-outlet></router-outlet>`,
 })
 export class AppComponent implements OnInit {
-    @HostBinding('class.layout-fixed')
-    get isFixed() {
-        return this.settings.layout.fixed;
-    }
-    @HostBinding('class.layout-boxed')
-    get isBoxed() {
-        return this.settings.layout.boxed;
-    }
-    @HostBinding('class.aside-collapsed')
-    get isCollapsed() {
-        return this.settings.layout.collapsed;
-    }
-    get stateSrv() {
-        return this.injector.get(StateService);
-    }
-
     constructor(
         el: ElementRef,
         renderer: Renderer2,
-        private settings: SettingsService,
         private router: Router,
         private titleSrv: TitleService,
-        private injector: Injector,
+        private modalSrv: NzModalService,
     ) {
         renderer.setAttribute(
             el.nativeElement,
@@ -59,7 +34,7 @@ export class AppComponent implements OnInit {
             .pipe(filter(evt => evt instanceof NavigationEnd))
             .subscribe(() => {
                 this.titleSrv.setTitle();
-                this.stateSrv.httpLoading = false;
+                this.modalSrv.closeAll();
             });
     }
 }

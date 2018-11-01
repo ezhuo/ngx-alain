@@ -4,7 +4,7 @@ import { Component } from '@angular/core';
   selector: 'header-icon',
   template: `
   <nz-dropdown nzTrigger="click" nzPlacement="bottomRight" (nzVisibleChange)="change()">
-    <div class="item" nz-dropdown>
+    <div class="alain-default__nav-item" nz-dropdown>
       <i class="anticon anticon-appstore-o"></i>
     </div>
     <div nz-menu class="wd-xl animated jello">
@@ -15,7 +15,7 @@ import { Component } from '@angular/core';
             <small>Calendar</small>
           </div>
           <div nz-col [nzSpan]="6">
-            <i class="anticon anticon-file bg-teal text-white"></i>
+            <i class="anticon anticon-file bg-geekblue text-white"></i>
             <small>Files</small>
           </div>
           <div nz-col [nzSpan]="6">

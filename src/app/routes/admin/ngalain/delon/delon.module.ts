@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SharedModule } from '@shared';
+import { SharedModule } from '@shared/shared.module';
 
 import { DelonRoutingModule } from './delon-routing.module';
 
-import { SimpleTableComponent } from './simple-table/simple-table.component';
+import { STComponent } from './simple-table/simple-table.component';
 import { UtilComponent } from './util/util.component';
 import { PrintComponent } from './print/print.component';
 import { ACLComponent } from './acl/acl.component';
@@ -21,7 +21,7 @@ import { DelonFormComponent } from './form/form.component';
 import { QRComponent } from './qr/qr.component';
 
 const COMPONENT = [
-  SimpleTableComponent,
+  STComponent,
   UtilComponent,
   PrintComponent,
   ACLComponent,

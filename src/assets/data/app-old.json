@@ -1,0 +1,283 @@
+{
+    "app": {
+        "name": "ngx-alain",
+        "short": "ngx-alain",
+        "description": "ngx-alain"
+    },
+    "menu": [{
+            "text": "隐藏菜单",
+            "group": true,
+            "hide": true,
+            "reuse": false,
+            "hideInBreadcrumb": true,
+            "children": [{
+                "text": "用户登录",
+                "hide": true,
+                "reuse": false,
+                "children": [{
+                        "text": "安全登录",
+                        "link": "/passport/login",
+                        "reuse": false
+                    },
+                    {
+                        "text": "安全锁定",
+                        "link": "/passport/lock",
+                        "reuse": false
+                    }
+                ]
+            }]
+        },
+        {
+            "text": "主业务",
+            "group": true,
+            "hideInBreadcrumb": true,
+            "children": [{
+                "text": "仪表盘",
+                "icon": "anticon anticon-dashboard",
+                "link": "/admin/dashboard"
+            }]
+        },
+        {
+            "text": "基础业务",
+            "group": true,
+            "hideInBreadcrumb": true,
+            "children": [{
+                "text": "schema-demo",
+                "link": "/admin/schema",
+                "icon": "anticon anticon-appstore-o",
+                "children": [{
+                    "text": "schema-demo",
+                    "link": "/admin/schema/schema-demo"
+                }]
+            }]
+        },
+        {
+            "text": "demo",
+            "group": true,
+            "hideInBreadcrumb": true,
+            "children": [
+
+                {
+                    "text": "仪表盘",
+                    "icon": "icon-speedometer",
+                    "children": [{
+                            "text": "仪表盘V1",
+                            "link": "/admin/demo/dashboard/v1"
+                        },
+                        {
+                            "text": "分析页",
+                            "link": "/admin/demo/dashboard/analysis"
+                        },
+                        {
+                            "text": "Monitor",
+                            "link": "/admin/demo/dashboard/monitor"
+                        },
+                        {
+                            "text": "Workplace",
+                            "link": "/admin/demo/dashboard/workplace"
+                        }
+                    ]
+                },
+                {
+                    "text": "小部件",
+                    "link": "/admin/demo/widgets",
+                    "icon": "icon-grid",
+                    "badge": 2
+                },
+                {
+                    "text": "样式",
+                    "icon": "icon-chemistry",
+                    "children": [{
+                            "text": "Typography",
+                            "link": "/admin/demo/style/typography",
+                            "shortcut": true
+                        },
+                        {
+                            "text": "Grid Masonry",
+                            "link": "/admin/demo/style/gridmasonry"
+                        },
+                        {
+                            "text": "Colors",
+                            "link": "/admin/demo/style/colors"
+                        }
+                    ]
+                },
+                {
+                    "text": "Delon",
+                    "icon": "icon-magic-wand",
+                    "children": [{
+                            "text": "Dynamic Form",
+                            "link": "/admin/demo/delon/form"
+                        },
+                        {
+                            "text": "Simple Table",
+                            "link": "/admin/demo/delon/simple-table"
+                        },
+                        {
+                            "text": "Util",
+                            "link": "/admin/demo/delon/util",
+                            "acl": "role-a"
+                        },
+                        {
+                            "text": "Print",
+                            "link": "/admin/demo/delon/print",
+                            "acl": "role-b"
+                        },
+                        {
+                            "text": "QR",
+                            "link": "/admin/demo/delon/qr"
+                        },
+                        {
+                            "text": "ACL",
+                            "link": "/admin/demo/delon/acl"
+                        },
+                        {
+                            "text": "Route Guard",
+                            "link": "/admin/demo/delon/guard"
+                        },
+                        {
+                            "text": "Cache",
+                            "link": "/admin/demo/delon/cache"
+                        },
+                        {
+                            "text": "Down File",
+                            "link": "/admin/demo/delon/downfile"
+                        },
+                        {
+                            "text": "Xlsx",
+                            "link": "/admin/demo/delon/xlsx"
+                        },
+                        {
+                            "text": "Zip",
+                            "link": "/admin/demo/delon/zip"
+                        }
+                    ]
+                },
+                {
+                    "text": "Pro Form Page",
+                    "link": "/admin/demo/pro/form",
+                    "icon": "icon-note",
+                    "hideInBreadcrumb": true,
+                    "children": [{
+                            "text": "Basic Form",
+                            "link": "/admin/demo/pro/form/basic-form",
+                            "shortcut": true
+                        },
+                        {
+                            "text": "Step Form",
+                            "link": "/admin/demo/pro/form/step-form"
+                        },
+                        {
+                            "text": "Advanced Form",
+                            "link": "/admin/demo/pro/form/advanced-form"
+                        }
+                    ]
+                },
+                {
+                    "text": "Pro List",
+                    "icon": "icon-grid",
+                    "hideInBreadcrumb": true,
+                    "children": [{
+                            "text": "Table List",
+                            "link": "/admin/demo/pro/list/table-list",
+                            "shortcut": true
+                        },
+                        {
+                            "text": "Basic List",
+                            "link": "/admin/demo/pro/list/basic-list"
+                        },
+                        {
+                            "text": "Card List",
+                            "link": "/admin/demo/pro/list/card-list"
+                        },
+                        {
+                            "text": "Search List",
+                            "children": [{
+                                    "link": "/admin/demo/pro/list/articles",
+                                    "text": "pro-search-article"
+                                },
+                                {
+                                    "link": "/admin/demo/pro/list/projects",
+                                    "text": "pro-search-project",
+                                    "shortcut": true
+                                },
+                                {
+                                    "link": "/admin/demo/pro/list/applications",
+                                    "text": "pro-search-app"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "text": "Pro Profile",
+                    "icon": "icon-book-open",
+                    "hideInBreadcrumb": true,
+                    "children": [{
+                            "text": "Basic",
+                            "link": "/admin/demo/pro/profile/basic"
+                        },
+                        {
+                            "text": "Advanced",
+                            "link": "/admin/demo/pro/profile/advanced",
+                            "shortcut": true
+                        }
+                    ]
+                },
+                {
+                    "text": "Pro Result",
+                    "icon": "icon-check",
+                    "hideInBreadcrumb": true,
+                    "children": [{
+                            "text": "Success",
+                            "link": "/admin/demo/pro/result/success"
+                        },
+                        {
+                            "text": "Fail",
+                            "link": "/admin/demo/pro/result/fail"
+                        }
+                    ]
+                },
+                {
+                    "text": "Pro Exception",
+                    "link": "/admin/demo/",
+                    "icon": "icon-fire",
+                    "children": [{
+                            "text": "403",
+                            "link": "/exception/403",
+                            "reuse": false
+                        },
+                        {
+                            "text": "404",
+                            "link": "/exception/404",
+                            "reuse": false
+                        },
+                        {
+                            "text": "500",
+                            "link": "/exception/500",
+                            "reuse": false
+                        }
+                    ]
+                },
+                {
+                    "text": "More Extras",
+                    "link": "/admin/demo/extras",
+                    "icon": "icon-cup",
+                    "children": [{
+                            "text": "Help Center",
+                            "link": "/admin/demo/extras/helpcenter"
+                        },
+                        {
+                            "text": "Settings",
+                            "link": "/admin/demo/extras/settings"
+                        },
+                        {
+                            "text": "Poi",
+                            "link": "/admin/demo/extras/poi"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

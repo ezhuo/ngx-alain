@@ -1,25 +1,20 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd';
-import { map } from 'rxjs/operators';
-import {
-  SimpleTableChange,
-  SimpleTableColumn,
-  SimpleTableButton,
-} from '@delon/abc';
+import { STColumn } from '@delon/abc';
 import { _HttpClient } from '@delon/theme';
 
 @Component({
   selector: 'app-simple-table',
   templateUrl: './simple-table.component.html',
 })
-export class SimpleTableComponent implements OnInit {
+export class STComponent implements OnInit {
   ps = 20;
   total = 200; // mock total
   args: any = { _allow_anonymous: true };
   url = `https://api.randomuser.me/?results=20`;
   events: any[] = [];
   scroll = { y: '230px' };
-  columns: SimpleTableColumn[] = [
+  columns: STColumn[] = [
     { title: 'id', index: 'id.value', type: 'checkbox' },
     { title: 'Avatar', index: 'picture.thumbnail', type: 'img', width: '80px' },
     {
@@ -45,7 +40,7 @@ export class SimpleTableComponent implements OnInit {
     {
       title: 'Actions',
       width: '120px',
-      buttons: <SimpleTableButton[]>[
+      buttons: [
         {
           text: 'Edit',
           click: (item: any) => this.message.info(`edit [${item.id.value}]`),

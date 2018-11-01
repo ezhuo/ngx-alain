@@ -1,9 +1,12 @@
-@import '../../../../../layout/style/delon';
+@import '../../../../../../styles/delon.less';
 :host ::ng-deep {
   .ant-carousel {
     .slick-dots {
       bottom: -10px;
-      li.slick-active button {
+      button {
+        background: @grey-10;
+      }
+      .slick-active button {
         background: @primary-color;
       }
     }

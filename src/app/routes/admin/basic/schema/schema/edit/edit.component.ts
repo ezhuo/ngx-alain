@@ -20,7 +20,7 @@ export class SchemaFormEditComponent extends ModalControl implements OnInit, OnD
 
   ngOnInit() {
     super.ngOnInit();
-    this.appBase.__formGroupFillData(this.validateForm, this.formData);
+    this.appBase.__formGroupFillData(this.validateForm, this.form.data);
   }
 
   ngOnDestroy() {
@@ -42,7 +42,7 @@ export class SchemaFormEditComponent extends ModalControl implements OnInit, OnD
     value.company_fdn = '1.';
 
     console.log(value);
-    this.httpSrv.update(this.primaryURL, value, this.primaryValue).subscribe((result) => {
+    this.httpSrv.update(this.primaryData.url, value, this.primaryData.val).subscribe((result) => {
       console.log(result);
       this.modalClose(result);
     });

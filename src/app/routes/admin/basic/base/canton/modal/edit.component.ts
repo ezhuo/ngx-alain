@@ -16,10 +16,10 @@ export class CantonEditComponent extends ModalControl
 
   ngOnInit() {
     super.ngOnInit();
-    if (!this.primaryValue) {
-      this.formData['parent_org_name'] = this.modalParams.tree.origin.title;
+    if (!this.primaryData.val) {
+      this.form.data['parent_org_name'] = this.modalParams.tree.origin.title;
     }
-    console.log(this.formData);
+    console.log(this.form.data);
   }
 
   ngOnDestroy() {
@@ -27,17 +27,17 @@ export class CantonEditComponent extends ModalControl
   }
 
   onSubmit($event: any) {
-    const formData = this.formatSubmitData($event.value, this.mainSchema);
+    const formData = this.formatSubmitData($event.value, this.schemaData.main);
     console.log(formData, $event.value);
     // 如果是新增状态，就添加所属机构值
-    if (!this.primaryValue) {
+    if (!this.primaryData.val) {
       formData['parent_id'] = this.modalParams.tree.origin.org_id;
     } else {
       // 编辑状态下不允许修改机构
       delete formData['parent_id'];
     }
     this.httpSrv
-      .update(this.primaryURL, formData, this.primaryValue)
+      .update(this.primaryData.url, formData, this.primaryData.val)
       .subscribe(result => {
         // console.log(result);
         this.modalClose(result);

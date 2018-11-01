@@ -16,20 +16,23 @@ npm run serve:hmr
 
 ## 二、delon修改的地方
 
-### 1. simple-table
+### 1. st
 ```
-1. 添加了表格序号
-2. 将http.helpers 修改为 httpService
+1. abc\table\table.component.html：添加了表格序号；
+2. table\table.component.ts：_btnClick 方法里添加：options.modalOptions = Object.assign(options.modalOptions || {}, { nzStyle: { top: '20px' } });
+3. table\table-data-source.ts： 将 _HttpClient 更换为 HttpService
 ```
 
 ### 2. title.service
 ```
-1. 添加了getTitle方法
+1. theme\src\services\title\title.service.ts：添加了getTitle方法
 ```
 
 ### 3. schema-form
 ```
-1. ui 部分添加了 : enum(主要是为了texts做为数据字典使用) , styleLabel(Label部分的style) , styleControl(Control的style)
+form\src\sf.component.ts：添加了 submit() 方法 
+form\src\sf-item-wrap.component.ts：添加了[ngStyle]="ui.styleLabel" 和 [ngStyle]="ui.styleControl"
+form\src\schema\ui.ts：添加了  SFEnumSchema , SFstyleSchema，SFoptionsSchema 接口
 ```
 
 ## 三、版本升级时出现的错误

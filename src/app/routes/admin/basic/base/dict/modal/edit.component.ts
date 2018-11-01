@@ -21,9 +21,9 @@ export class DictEditComponent extends ModalControl
 
   ngOnInit() {
     super.ngOnInit();
-    this.formData = Object.assign(
+    this.form.data = Object.assign(
       {},
-      this.formData,
+      this.form.data,
       this.modalParams.dictActive || {},
     );
   }
@@ -33,10 +33,10 @@ export class DictEditComponent extends ModalControl
   }
 
   onSubmit($event: any) {
-    const formData = this.formatSubmitData($event.value, this.mainSchema);
+    const formData = this.formatSubmitData($event.value, this.schemaData.main);
 
     this.freeData.save = this.httpSrv
-      .update(this.primaryURL, formData, this.primaryValue)
+      .update(this.primaryData.url, formData, this.primaryData.val)
       .subscribe(result => {
         this.modalClose(result);
       });

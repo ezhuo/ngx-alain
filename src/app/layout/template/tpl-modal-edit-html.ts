@@ -5,9 +5,9 @@ export const tplModalEditHTML = `
 
 <div class="sf-view">
 <sf #sf 
-    [schema]='mainSchema' 
-    [ui]='mainSchemaUi' 
-    [formData]='formData' 
+    [schema]='schemaData.main' 
+    [ui]='schemaData.mainUi' 
+    [formData]='form.data' 
     (formSubmit)='onSubmit(sf)' 
     [button]="'none'"></sf>
 </div>

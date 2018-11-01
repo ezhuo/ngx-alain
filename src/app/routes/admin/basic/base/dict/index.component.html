@@ -1,4 +1,4 @@
-<div class="content__title">
+<div class="alain-default__content-title">
   <h1>
     <span [innerHTML]="pageTitle"></span>
     <small></small>
@@ -27,7 +27,7 @@
   </div>
 
   <div nz-col nzSpan="17" nzLg="17" nzXs="24">
-    <simple-table #st class="simple-table" [data]="url" [columns]="mainTableColumns" [extraParams]="mainTableParams"></simple-table>
+    <st #st class="simple-table" [data]="url" [columns]="tableData.col" [req]="{params: mainTableParams}"></st>
   </div>
 
 

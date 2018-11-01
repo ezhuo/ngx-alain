@@ -3,24 +3,36 @@ import {
     Optional,
     SkipSelf,
     ModuleWithProviders,
-    LOCALE_ID,
     APP_INITIALIZER,
 } from '@angular/core';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { throwIfAlreadyLoaded } from './module-import-guard';
 import { StartupService } from './startup/startup.service';
-import { AuthInterceptor } from './net/http.interceptor';
+import { HttpAuthInterceptor } from './net/http.interceptor';
 
 // 中文设置
-import './i18n/zh_CN';
+import {
+    LANG_PROVIDES,
+    I18NSERVICE_PROVIDES,
+    I18NSERVICE_MODULES,
+} from './i18n';
 
+// #region Startup Service
 export function StartupServiceFactory(
     startupService: StartupService,
 ): Function {
     return () => startupService.load();
 }
-
+const APPINIT_PROVIDES = [
+    {
+        provide: APP_INITIALIZER,
+        useFactory: StartupServiceFactory,
+        deps: [StartupService],
+        multi: true,
+    },
+];
+// #endregion
 
 @NgModule({
     exports: [],
@@ -38,19 +50,12 @@ export class CoreModule {
         return <ModuleWithProviders>{
             ngModule: CoreModule,
             providers: [
-                {
-                    provide: LOCALE_ID,
-                    useValue: 'zh-Hans',
-                },
-                {
-                    provide: APP_INITIALIZER,
-                    useFactory: StartupServiceFactory,
-                    deps: [StartupService],
-                    multi: true,
-                },
+                ...LANG_PROVIDES,
+                ...I18NSERVICE_PROVIDES,
+                ...APPINIT_PROVIDES,
                 {
                     provide: HTTP_INTERCEPTORS,
-                    useClass: AuthInterceptor,
+                    useClass: HttpAuthInterceptor,
                     multi: true,
                 },
             ],

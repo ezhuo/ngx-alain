@@ -13,10 +13,11 @@ import { InjectorControl } from '@core';
 @Component({
     selector: 'header-search',
     template: `
-  <nz-input-group nzAddOnBeforeIcon="anticon anticon-search">
+  <nz-input-group [nzAddOnBeforeIcon]="focus ? 'anticon anticon-arrow-down' : 'anticon anticon-search'">
     <input nz-input [(ngModel)]="q" (focus)="qFocus()" (blur)="qBlur()" (keyup.enter)="onEnter()"
-      [placeholder]="'请输入物联网卡号'">
+      [placeholder]="'请查询'">
   </nz-input-group>
+
   `,
 })
 export class HeaderSearchComponent extends InjectorControl
@@ -25,10 +26,10 @@ export class HeaderSearchComponent extends InjectorControl
 
     qIpt: HTMLInputElement;
 
-    @HostBinding('class.header-search__focus')
+    @HostBinding('class.alain-default__search-focus')
     focus = false;
 
-    @HostBinding('class.header-search__toggled')
+    @HostBinding('class.alain-default__search-toggled')
     searchToggled = false;
 
     @Input()

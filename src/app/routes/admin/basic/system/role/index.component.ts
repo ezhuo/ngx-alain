@@ -6,7 +6,7 @@ import {
     OnDestroy,
 } from '@angular/core';
 
-import { SimpleTableComponent } from '@delon/abc';
+import { STComponent } from '@delon/abc';
 import { SFComponent } from '@delon/form';
 
 import { IndexControl } from '@core';
@@ -21,7 +21,7 @@ import { RoleEditComponent } from './modal/edit.component';
 export class RoleComponent extends IndexControl
     implements OnInit, OnDestroy {
     @ViewChild('st')
-    st: SimpleTableComponent;
+    st: STComponent;
     @ViewChild('sf')
     sf: SFComponent;
 
@@ -33,7 +33,7 @@ export class RoleComponent extends IndexControl
     ngOnInit() {
         super.ngOnInit();
 
-        this.searchSchema = {
+        this.schemaData.search = {
             properties: {
                 '%name%': {
                     type: 'string',
@@ -56,7 +56,7 @@ export class RoleComponent extends IndexControl
             ui: {},
         };
 
-        this.mainSchema = {
+        this.schemaData.main = {
             properties: {
                 name: {
                     type: 'string',
@@ -64,7 +64,7 @@ export class RoleComponent extends IndexControl
                     minLength: 1,
                     ui: {
                         widget: 'string',
-                        autofocus: 'autofocus',
+                        autofocus: true,
                     },
                 },
                 level: {
@@ -96,7 +96,7 @@ export class RoleComponent extends IndexControl
             },
         };
 
-        this.mainTableColumns = [
+        this.tableData.col = [
             { title: '名称', index: 'name' },
             {
                 title: '状态',

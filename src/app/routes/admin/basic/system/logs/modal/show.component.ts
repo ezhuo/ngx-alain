@@ -16,7 +16,7 @@ export class LogsShowComponent extends ModalControl implements OnInit, OnDestroy
 
   ngOnInit() {
     super.ngOnInit();
-    this.mainSchema = this.appBase.__schemaFormSetTexts({}, []);
+    this.schemaData.main = this.appBase.__schemaFormSetTexts({}, []);
   }
 
   ngOnDestroy() {

@@ -14,7 +14,7 @@ export class SchemaEditComponent extends ModalControl implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.mainSchema);
+    console.log(this.schemaData.main);
   }
 
   save() {

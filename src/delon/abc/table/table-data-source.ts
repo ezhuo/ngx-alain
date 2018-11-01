@@ -6,6 +6,7 @@ import { map, catchError } from 'rxjs/operators';
 
 import { deepGet } from '@delon/util';
 import { CNCurrencyPipe, DatePipe, YNPipe, _HttpClient } from '@delon/theme';
+import { HttpService } from '@core';
 
 import {
   STData,
@@ -43,7 +44,7 @@ export interface STDataSourceResult {
 @Injectable()
 export class STDataSource {
   constructor(
-    private http: _HttpClient,
+    private http: HttpService,
     @Host() private currenty: CNCurrencyPipe,
     @Host() private date: DatePipe,
     @Host() private yn: YNPipe,

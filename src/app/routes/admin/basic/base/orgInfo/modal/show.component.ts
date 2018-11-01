@@ -16,10 +16,10 @@ export class OrgInfoShowComponent extends ModalControl implements OnInit, OnDest
 
   ngOnInit() {
     super.ngOnInit();
-    this.formData['parent_id'] = this.formData['parent_name'];
-    this.formData['canton_fdn'] = this.formData['canton_text_name'];
-    delete this.mainSchema.properties.canton_fdn.ui['asyncData'];
-    this.mainSchema = this.appBase.__schemaFormSetTexts({}, []);
+    this.form.data['parent_id'] = this.form.data['parent_name'];
+    this.form.data['canton_fdn'] = this.form.data['canton_text_name'];
+    delete this.schemaData.main.properties.canton_fdn.ui['asyncData'];
+    this.schemaData.main = this.appBase.__schemaFormSetTexts({}, []);
   }
 
   ngOnDestroy() {

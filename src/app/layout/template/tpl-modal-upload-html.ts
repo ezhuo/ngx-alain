@@ -11,7 +11,7 @@ export const tplModalUploadHTML = `
                     [(nzFileList)]="fileList"
                     [nzAccept]="fileAccept">
             <button nz-button>
-                <i class="anticon anticon-upload"></i><span>文件上传</span>
+                <i nz-icon type="upload"></i><span>文件上传</span>
             </button>
         </nz-upload>
     </nz-form-control>

@@ -1,7 +1,7 @@
 import { TestBed, TestModuleMetadata } from '@angular/core/testing';
 import { setUpTestBed } from '@testing/common.spec';
 
-import { UserLockComponent } from '@layout/passport/lock/lock.component';
+import { UserLockComponent } from './lock.component';
 
 describe('Pages: lock', () => {
   setUpTestBed(<TestModuleMetadata>{

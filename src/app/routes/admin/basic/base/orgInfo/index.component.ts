@@ -6,9 +6,9 @@ import {
     OnDestroy,
 } from '@angular/core';
 
-import { SimpleTableComponent } from '@delon/abc';
+import { STComponent } from '@delon/abc';
 import { SFComponent } from '@delon/form';
-import { SimpleTableButton, SimpleTableColumn } from '@delon/abc';
+import { STColumnButton, STColumn } from '@delon/abc';
 
 import { IndexControl } from '@core';
 
@@ -25,7 +25,7 @@ import { NzFormatEmitEvent, NzTreeNode, NzTreeComponent } from 'ng-zorro-antd';
 export class OrgInfoComponent extends IndexControl
     implements OnInit, OnDestroy {
     @ViewChild('st')
-    st: SimpleTableComponent;
+    st: STComponent;
     @ViewChild('sf')
     sf: SFComponent;
     @ViewChild('tree')
@@ -40,7 +40,7 @@ export class OrgInfoComponent extends IndexControl
         super.ngOnInit();
         this.getTreeData();
 
-        this.searchSchema = {
+        this.schemaData.search = {
             properties: {
                 '%org_name%': {
                     type: 'string',
@@ -71,7 +71,7 @@ export class OrgInfoComponent extends IndexControl
             ui: {},
         };
 
-        this.mainSchema = {
+        this.schemaData.main = {
             properties: {
                 logo: {
                     type: 'string',
@@ -113,7 +113,7 @@ export class OrgInfoComponent extends IndexControl
                     minLength: 1,
                     ui: {
                         widget: 'string',
-                        autofocus: 'autofocus',
+                        autofocus: true,
                     },
                 },
                 org_corpname: {
@@ -233,7 +233,7 @@ export class OrgInfoComponent extends IndexControl
             },
         };
 
-        this.mainTableColumns = [
+        this.tableData.col = [
             { title: '简称', index: 'org_name', width: '100px' },
             { title: '全称', index: 'org_corpname', width: '100px' },
             { title: '联系人', index: 'linkman' },
@@ -268,8 +268,8 @@ export class OrgInfoComponent extends IndexControl
                         text: '操作',
                         iif: (
                             item: any,
-                            btn: SimpleTableButton,
-                            column: SimpleTableColumn,
+                            btn: STColumnButton,
+                            column: STColumn,
                         ): any => {
                             return this.userSrv.userInfo['is_group'];
                         },

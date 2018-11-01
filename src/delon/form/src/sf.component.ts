@@ -173,6 +173,12 @@ export class SFComponent implements OnInit, OnChanges, OnDestroy {
     this.formSubmit.emit(this.value);
   }
 
+  submit() {
+    if (!this.liveValidate) this.validator();
+    if (!this.valid) return;
+    this.formSubmit.emit(this.value);
+  }
+
   constructor(
     private formPropertyFactory: FormPropertyFactory,
     private terminator: TerminatorService,

@@ -616,6 +616,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
       const { modal } = btn;
       obj[modal.paramsName] = record;
       const options: ModalHelperOptions = Object.assign({}, modal);
+      options.modalOptions = Object.assign(options.modalOptions || {}, { nzStyle: { top: '20px' } });
       (this.modalHelper[
         btn.type === 'modal' ? 'create' : 'createStatic'
       ] as any)(

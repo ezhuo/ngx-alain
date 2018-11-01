@@ -1,304 +1,341 @@
 {
-  "app": {
-    "name": "ngx-alain",
-    "short": "ngx-alain",
-    "description": "ngx-alain"
-  },
-  "menu": [{
-      "text": "主导航",
-      "group": true,
-      "hideInBreadcrumb": true,
-      "children": [{
-        "text": "仪表盘",
-        "i18n": "dashboard",
-        "icon": "icon-speedometer",
-        "children": [{
-            "text": "仪表盘V1",
-            "link": "/app/admin/demo/dashboard/v1"
-          },
-          {
-            "text": "分析页",
-            "link": "/app/admin/demo/dashboard/analysis"
-          },
-          {
-            "text": "Monitor",
-            "link": "/app/admin/demo/dashboard/monitor"
-          },
-          {
-            "text": "Workplace",
-            "link": "/app/admin/demo/dashboard/workplace"
-          },
-          {
+    "app": {
+        "name": "ngx-alain",
+        "short": "ngx-alain",
+        "description": "ngx-alain"
+    },
+    "menu": [
+        {
+            "text": "主导航",
+            "group": true,
+            "hideInBreadcrumb": true,
+            "children": [{
+                "text": "仪表盘",
+                "i18n": "dashboard",
+                "icon": "anticon anticon-dashboard",
+                "children": [{
+                        "text": "仪表盘V1",
+                        "link": "/app/admin/demo/dashboard/v1"
+                    },
+                    {
+                        "text": "分析页",
+                        "link": "/app/admin/demo/dashboard/analysis"
+                    },
+                    {
+                        "text": "监控页",
+                        "link": "/app/admin/demo/dashboard/monitor"
+                    },
+                    {
+                        "text": "工作台",
+                        "link": "/app/admin/demo/dashboard/workplace"
+                    }
+                ]
+            }]
+        },
+        {
             "text": "小部件",
             "link": "/app/admin/demo/widgets",
-            "icon": "icon-grid",
+            "icon": "anticon anticon-appstore",
             "badge": 2
-          }
-        ]
-      }]
-    },
-    {
-      "text": "demo",
-      "group": true,
-      "hideInBreadcrumb": true,
-      "children": [{
-          "text": "样式",
-          "icon": "icon-chemistry",
-          "children": [{
-              "text": "Typography",
-              "link": "/app/admin/demo/style/typography",
-              "shortcut": true
-            },
-            {
-              "text": "Grid Masonry",
-              "link": "/app/admin/demo/style/gridmasonry"
-            },
-            {
-              "text": "Colors",
-              "link": "/app/admin/demo/style/colors"
-            }
-          ]
-        },
-        {
-          "text": "Delon",
-          "icon": "icon-magic-wand",
-          "children": [{
-              "text": "Dynamic Form",
-              "link": "/app/admin/demo/delon/form"
-            },
-            {
-              "text": "Simple Table",
-              "link": "/app/admin/demo/delon/simple-table"
-            },
-            {
-              "text": "Util",
-              "link": "/app/admin/demo/delon/util",
-              "acl": "role-a"
-            },
-            {
-              "text": "Print",
-              "link": "/app/admin/demo/delon/print",
-              "acl": "role-b"
-            },
-            {
-              "text": "QR",
-              "link": "/app/admin/demo/delon/qr"
-            },
-            {
-              "text": "ACL",
-              "link": "/app/admin/demo/delon/acl"
-            },
-            {
-              "text": "Route Guard",
-              "link": "/app/admin/demo/delon/guard"
-            },
-            {
-              "text": "Cache",
-              "link": "/app/admin/demo/delon/cache"
-            },
-            {
-              "text": "Down File",
-              "link": "/app/admin/demo/delon/downfile"
-            },
-            {
-              "text": "Xlsx",
-              "link": "/app/admin/demo/delon/xlsx"
-            },
-            {
-              "text": "Zip",
-              "link": "/app/admin/demo/delon/zip"
-            }
-          ]
-        },
-        {
-          "text": "Form Page",
-          "link": "/app/admin/demo/pro/form",
-          "icon": "icon-note",
-          "hideInBreadcrumb": true,
-          "children": [{
-              "text": "Basic Form",
-              "link": "/app/admin/demo/pro/form/basic-form",
-              "shortcut": true
-            },
-            {
-              "text": "Step Form",
-              "link": "/app/admin/demo/pro/form/step-form"
-            },
-            {
-              "text": "Advanced Form",
-              "link": "/app/admin/demo/pro/form/advanced-form"
-            }
-          ]
-        },
-        {
-          "text": "List",
-          "icon": "icon-grid",
-          "hideInBreadcrumb": true,
-          "children": [{
-              "text": "Table List",
-              "link": "/app/admin/demo/pro/list/table-list",
-              "shortcut": true
-            },
-            {
-              "text": "Basic List",
-              "link": "/app/admin/demo/pro/list/basic-list"
-            },
-            {
-              "text": "Card List",
-              "link": "/app/admin/demo/pro/list/card-list"
-            },
-            {
-              "text": "Search List",
-              "children": [{
-                  "link": "/app/admin/demo/pro/list/articles",
-                  "text": "pro-search-article"
-                },
-                {
-                  "link": "/app/admin/demo/pro/list/projects",
-                  "text": "pro-search-project",
-                  "shortcut": true
-                },
-                {
-                  "link": "/app/admin/demo/pro/list/applications",
-                  "text": "pro-search-app"
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "text": "Profile",
-          "icon": "icon-book-open",
-          "hideInBreadcrumb": true,
-          "children": [{
-              "text": "Basic",
-              "link": "/app/admin/demo/pro/profile/basic"
-            },
-            {
-              "text": "Advanced",
-              "link": "/app/admin/demo/pro/profile/advanced",
-              "shortcut": true
-            }
-          ]
-        },
-        {
-          "text": "Result",
-          "icon": "icon-check",
-          "hideInBreadcrumb": true,
-          "children": [{
-              "text": "Success",
-              "link": "/app/admin/demo/pro/result/success"
-            },
-            {
-              "text": "Fail",
-              "link": "/app/admin/demo/pro/result/fail"
-            }
-          ]
-        },
-        {
-          "text": "Exception",
-          "link": "/app/",
-          "icon": "icon-fire",
-          "children": [{
-              "text": "403",
-              "link": "/exception/403",
-              "reuse": false
-            },
-            {
-              "text": "404",
-              "link": "/exception/404",
-              "reuse": false
-            },
-            {
-              "text": "500",
-              "link": "/exception/500",
-              "reuse": false
-            }
-          ]
-        },
-        {
-          "text": "User",
-          "icon": "icon-user",
-          "children": [{
-              "text": "login",
-              "link": "/app/passport/login",
-              "reuse": false
-            },
-            {
-              "text": "register",
-              "link": "/app/passport/register",
-              "reuse": false
-            },
-            {
-              "text": "register result",
-              "link": "/app/passport/register-result",
-              "reuse": false
-            }
-          ]
-        },
-        {
-          "text": "Relation",
-          "link": "/data-v/relation",
-          "reuse": false
         }, {
-          "text": "Extras",
-          "link": "/app/admin/demo/extras",
-          "icon": "icon-cup",
-          "children": [{
-              "text": "Help Center",
-              "link": "/app/admin/demo/extras/helpcenter"
-            },
-            {
-              "text": "Settings",
-              "link": "/app/admin/demo/extras/settings"
-            },
-            {
-              "text": "Poi",
-              "link": "/app/admin/demo/extras/poi"
-            }
-          ]
+            "text": "demo",
+            "group": true,
+            "hideInBreadcrumb": true,
+            "children": [{
+                    "text": "样式",
+                    "i18n": "menu.style",
+                    "icon": "anticon anticon-info",
+                    "children": [{
+                            "text": "Typography",
+                            "link": "/app/admin/demo/style/typography",
+                            "i18n": "menu.style.typography",
+                            "shortcut": true
+                        },
+                        {
+                            "text": "Grid Masonry",
+                            "link": "/app/admin/demo/style/gridmasonry",
+                            "i18n": "menu.style.gridmasonry"
+                        },
+                        {
+                            "text": "Colors",
+                            "link": "/app/admin/demo/style/colors",
+                            "i18n": "menu.style.colors"
+                        }
+                    ]
+                },
+                {
+                    "text": "Delon",
+                    "i18n": "menu.delon",
+                    "icon": "anticon anticon-bulb",
+                    "children": [{
+                            "text": "Dynamic Form",
+                            "link": "/app/admin/demo/delon/form",
+                            "i18n": "menu.delon.form"
+                        },
+                        {
+                            "text": "Simple Table",
+                            "link": "/app/admin/demo/delon/simple-table",
+                            "i18n": "menu.delon.table"
+                        },
+                        {
+                            "text": "Util",
+                            "link": "/app/admin/demo/delon/util",
+                            "i18n": "menu.delon.util",
+                            "acl": "role-a"
+                        },
+                        {
+                            "text": "Print",
+                            "link": "/app/admin/demo/delon/print",
+                            "i18n": "menu.delon.print",
+                            "acl": "role-b"
+                        },
+                        {
+                            "text": "QR",
+                            "link": "/app/admin/demo/delon/qr",
+                            "i18n": "menu.delon.qr"
+                        },
+                        {
+                            "text": "ACL",
+                            "link": "/app/admin/demo/delon/acl",
+                            "i18n": "menu.delon.acl"
+                        },
+                        {
+                            "text": "Route Guard",
+                            "link": "/app/admin/demo/delon/guard",
+                            "i18n": "menu.delon.guard"
+                        },
+                        {
+                            "text": "Cache",
+                            "link": "/app/admin/demo/delon/cache",
+                            "i18n": "menu.delon.cache"
+                        },
+                        {
+                            "text": "Down File",
+                            "link": "/app/admin/demo/delon/downfile",
+                            "i18n": "menu.delon.downfile"
+                        },
+                        {
+                            "text": "Xlsx",
+                            "link": "/app/admin/demo/delon/xlsx",
+                            "i18n": "menu.delon.xlsx"
+                        },
+                        {
+                            "text": "Zip",
+                            "link": "/app/admin/demo/delon/zip",
+                            "i18n": "menu.delon.zip"
+                        }
+                    ]
+                },
+
+                {
+                    "text": "Form Page",
+                    "i18n": "menu.form",
+                    "link": "/app/admin/demo/pro/form",
+                    "icon": "anticon anticon-edit",
+                    "children": [{
+                            "text": "Basic Form",
+                            "link": "/app/admin/demo/pro/form/basic-form",
+                            "i18n": "menu.form.basicform",
+                            "shortcut": true
+                        },
+                        {
+                            "text": "Step Form",
+                            "link": "/app/admin/demo/pro/form/step-form",
+                            "i18n": "menu.form.stepform"
+                        },
+                        {
+                            "text": "Advanced Form",
+                            "link": "/app/admin/demo/pro/form/advanced-form",
+                            "i18n": "menu.form.advancedform"
+                        }
+                    ]
+                },
+                {
+                    "text": "List",
+                    "i18n": "menu.list",
+                    "icon": "anticon anticon-appstore-o",
+                    "children": [{
+                            "text": "Table List",
+                            "link": "/app/admin/demo/pro/list/table-list",
+                            "i18n": "menu.list.searchtable",
+                            "shortcut": true
+                        },
+                        {
+                            "text": "Basic List",
+                            "link": "/app/admin/demo/pro/list/basic-list",
+                            "i18n": "menu.list.basiclist"
+                        },
+                        {
+                            "text": "Card List",
+                            "link": "/app/admin/demo/pro/list/card-list",
+                            "i18n": "menu.list.cardlist"
+                        },
+                        {
+                            "text": "Search List",
+                            "i18n": "menu.list.searchlist",
+                            "children": [{
+                                    "link": "/app/admin/demo/pro/list/articles",
+                                    "i18n": "menu.list.searchlist.articles"
+                                },
+                                {
+                                    "link": "/app/admin/demo/pro/list/projects",
+                                    "i18n": "menu.list.searchlist.projects",
+                                    "shortcut": true
+                                },
+                                {
+                                    "link": "/app/admin/demo/pro/list/applications",
+                                    "i18n": "menu.list.searchlist.applications"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "text": "Profile",
+                    "i18n": "menu.profile",
+                    "icon": "anticon anticon-profile",
+                    "children": [{
+                            "text": "Basic",
+                            "link": "/app/admin/demo/pro/profile/basic",
+                            "i18n": "menu.profile.basic"
+                        },
+                        {
+                            "text": "Advanced",
+                            "link": "/app/admin/demo/pro/profile/advanced",
+                            "i18n": "menu.profile.advanced",
+                            "shortcut": true
+                        }
+                    ]
+                },
+                {
+                    "text": "Result",
+                    "i18n": "menu.result",
+                    "icon": "anticon anticon-check-circle-o",
+                    "children": [{
+                            "text": "Success",
+                            "link": "/app/admin/demo/pro/result/success",
+                            "i18n": "menu.result.success"
+                        },
+                        {
+                            "text": "Fail",
+                            "link": "/app/admin/demo/pro/result/fail",
+                            "i18n": "menu.result.fail"
+                        }
+                    ]
+                },
+                {
+                    "text": "Exception",
+                    "i18n": "menu.exception",
+                    "link": "/app/admin/demo/",
+                    "icon": "anticon anticon-exception",
+                    "children": [{
+                            "text": "403",
+                            "link": "/app/admin/demo/403",
+                            "i18n": "menu.exception.not-permission",
+                            "reuse": false
+                        },
+                        {
+                            "text": "404",
+                            "link": "/app/admin/demo/404",
+                            "i18n": "menu.exception.not-find",
+                            "reuse": false
+                        },
+                        {
+                            "text": "500",
+                            "link": "/app/admin/demo/500",
+                            "i18n": "menu.exception.server-error",
+                            "reuse": false
+                        }
+                    ]
+                },
+                {
+                    "text": "Account",
+                    "i18n": "menu.account",
+                    "icon": "anticon anticon-user",
+                    "children": [{
+                            "text": "center",
+                            "link": "/app/admin/demo/pro/account/center",
+                            "i18n": "menu.account.center"
+                        },
+                        {
+                            "text": "settings",
+                            "link": "/app/admin/demo/pro/account/settings",
+                            "i18n": "menu.account.settings"
+                        }
+                    ]
+                },
+                {
+                    "text": "Report",
+                    "i18n": "menu.report",
+                    "icon": "anticon anticon-cloud-o",
+                    "children": [{
+                        "text": "Relation",
+                        "link": "/app/admin/demo/data-v/relation",
+                        "i18n": "menu.report.relation",
+                        "reuse": false
+                    }]
+                },
+                {
+                    "text": "Extras",
+                    "i18n": "menu.extras",
+                    "link": "/app/admin/demo/extras",
+                    "icon": "anticon anticon-link",
+                    "children": [{
+                            "text": "Help Center",
+                            "link": "/app/admin/demo/extras/helpcenter",
+                            "i18n": "menu.extras.helpcenter"
+                        },
+                        {
+                            "text": "Settings",
+                            "link": "/app/admin/demo/extras/settings",
+                            "i18n": "menu.extras.settings"
+                        },
+                        {
+                            "text": "Poi",
+                            "link": "/app/admin/demo/extras/poi",
+                            "i18n": "menu.extras.poi"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "text": "基础业务",
+            "group": true,
+            "hideInBreadcrumb": true,
+            "children": [{
+                "text": "schema-demo",
+                "link": "/app/admin/schema",
+                "icon": "anticon anticon-info",
+                "children": [{
+                    "text": "schema-demo",
+                    "link": "/app/admin/schema/schema-demo"
+                }]
+            }, {
+                "text": "系统管理",
+                "link": "/app/admin/system",
+                "icon": "anticon anticon-info",
+                "children": [{
+                        "text": "用户管理",
+                        "link": "/app/admin/system/account"
+                    },
+                    {
+                        "text": "角色管理",
+                        "link": "/app/admin/system/role"
+                    }, {
+                        "text": "登录日志",
+                        "link": "/app/admin/system/loglogin"
+                    },
+                    {
+                        "text": "系统日志",
+                        "link": "/app/admin/system/logs"
+                    },
+                    {
+                        "text": "清除缓存",
+                        "link": "/app/admin/system/clearcache"
+                    }
+                ]
+            }]
         }
-      ]
-    },
-    {
-      "text": "基础业务",
-      "group": true,
-      "hideInBreadcrumb": true,
-      "children": [{
-        "text": "schema-demo",
-        "link": "/app/admin/schema",
-        "icon": "icon-cup",
-        "children": [
-          {
-            "text": "schema-demo",
-            "link": "/app/admin/schema/schema-demo"
-          }
-        ]
-      }, {
-        "text": "系统管理",
-        "link": "/app/admin/system",
-        "icon": "icon-settings",
-        "children": [{
-            "text": "用户管理",
-            "link": "/app/admin/system/account"
-          },
-          {
-            "text": "角色管理",
-            "link": "/app/admin/system/role"
-          }, {
-            "text": "登录日志",
-            "link": "/app/admin/system/loglogin"
-          },
-          {
-            "text": "系统日志",
-            "link": "/app/admin/system/logs"
-          },
-          {
-            "text": "清除缓存",
-            "link": "/app/admin/system/clearcache"
-          }
-        ]
-      }]
-    }
-  ]
+    ]
 }

@@ -2,7 +2,12 @@ import { Injectable, Injector } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError } from 'rxjs/operators';
 import { SettingsService, TitleService } from '@delon/theme';
+import { ACLService } from '@delon/acl';
 import { ConfigService, TokenService, StateService } from '../data';
+
+import { NzIconService } from 'ng-zorro-antd';
+import { ICONS_AUTO } from '../../../style-icons-auto';
+import { ICONS } from '../../../style-icons';
 
 /**
  * 用于应用启动时
@@ -12,7 +17,9 @@ import { ConfigService, TokenService, StateService } from '../data';
     providedIn: 'root',
 })
 export class StartupService {
-    constructor(private injector: Injector) {}
+    constructor(private injector: Injector) {
+        this.iconSrv.addIcon(...ICONS_AUTO, ...ICONS);
+    }
 
     get settingService() {
         return this.injector.get(SettingsService);
@@ -38,6 +45,14 @@ export class StartupService {
         return this.injector.get(StateService);
     }
 
+    get iconSrv() {
+        return this.injector.get(NzIconService);
+    }
+
+    get aclService() {
+        return this.injector.get(ACLService);
+    }
+
     load(): Promise<any> {
         const self = this;
         // only works with promises
@@ -59,6 +74,8 @@ export class StartupService {
                 const res: any = appData.app || self.configSrv.app;
                 // 应用信息：包括站点名、描述、年份
                 self.settingService.setApp(res);
+                // ACL：设置权限为全量
+                self.aclService.setFull(true);
                 // 设置页面标题的后缀
                 self.titleService.suffix = res.name;
                 if (res.name != self.configSrv.app.name) {

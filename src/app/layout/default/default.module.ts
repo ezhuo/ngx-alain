@@ -14,23 +14,37 @@ import { HeaderUserComponent } from './header/components/user.component';
 import { HeaderUserPwdComponent } from './header/components/user/pwd.component';
 import { HeaderUserInfoComponent } from './header/components/user/userInfo.component';
 
-const COMPONENTS = [LayoutDefaultComponent, HeaderComponent, SidebarComponent];
+import { SettingDrawerComponent } from './setting-drawer/setting-drawer.component';
+import { SettingDrawerItemComponent } from './setting-drawer/setting-drawer-item.component';
 
-const HEADERCOMPONENTS = [
-  HeaderSearchComponent,
-  HeaderUserComponent,
-  HeaderUserPwdComponent,
-  HeaderIconComponent,
-  HeaderTaskComponent,
+const SETTINGDRAWER = [SettingDrawerComponent, SettingDrawerItemComponent];
+
+const COMPONENTS = [
+    LayoutDefaultComponent,
+    HeaderComponent,
+    SidebarComponent,
+    ...SETTINGDRAWER,
 ];
 
-const entryComponents = [HeaderUserPwdComponent, HeaderUserInfoComponent];
+const HEADERCOMPONENTS = [
+    HeaderSearchComponent,
+    HeaderUserComponent,
+    HeaderUserPwdComponent,
+    HeaderIconComponent,
+    HeaderTaskComponent,
+];
+
+const entryComponents = [
+    HeaderUserPwdComponent,
+    HeaderUserInfoComponent,
+    ...SETTINGDRAWER,
+];
 
 @NgModule({
-  declarations: [...COMPONENTS, ...HEADERCOMPONENTS, ...entryComponents],
-  imports: [SharedModule, LayoutCommonModule],
-  exports: [...COMPONENTS, ...HEADERCOMPONENTS],
-  providers: [],
-  entryComponents: [...entryComponents],
+    declarations: [...COMPONENTS, ...HEADERCOMPONENTS, ...entryComponents],
+    imports: [SharedModule, LayoutCommonModule],
+    exports: [...COMPONENTS, ...HEADERCOMPONENTS],
+    providers: [],
+    entryComponents: [...entryComponents],
 })
 export class LayoutDefaultModule {}

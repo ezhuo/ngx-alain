@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 // delon
 import { AlainThemeModule } from '@delon/theme';
 import { DelonABCModule } from '@delon/abc';
+import { DelonChartModule } from '@delon/chart';
 import { DelonACLModule } from '@delon/acl';
 import { DelonFormModule } from '@delon/form';
 
@@ -24,6 +25,7 @@ const MODULES = [
     RouterModule,
     ReactiveFormsModule,
     DelonABCModule,
+    DelonChartModule,
     DelonACLModule,
     DelonFormModule,
 ];
