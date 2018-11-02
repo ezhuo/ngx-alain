@@ -2,7 +2,7 @@ import { Injectable, Injector } from '@angular/core';
 import { HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
 import { tap, catchError, switchMap } from 'rxjs/operators';
-import { api, app_debug } from '../config.inc';
+import { api, appDebug } from '../config.inc';
 import { CacheService } from '@delon/cache';
 import { UserService } from './../data/users.service';
 import { _HttpClient } from '@delon/theme';

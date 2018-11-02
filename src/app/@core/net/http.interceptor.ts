@@ -25,7 +25,7 @@ import * as helper from '../helpers';
 export class HttpAuthInterceptor implements HttpInterceptor {
   constructor(private injector: Injector) {}
 
-  NoticeMothed = 'msg';
+  noticeMothed = 'msg';
 
   get router() {
     return this.injector.get(Router);
@@ -50,22 +50,22 @@ export class HttpAuthInterceptor implements HttpInterceptor {
     let $message = '';
     try {
       // this.httpService.end();
-      const $http_code = event.status;
-      const $notice = 'info';
+      const $httpCode = event.status;
+      const $notice = 'Info';
       const data = event.body;
       this.noticeSrv.clear();
 
       if (helper.isObject(data.dt)) {
         this.userSrv.apiDt = data.dt || helper.getNow();
       }
-      if (configInc.http_code.hasOwnProperty($http_code)) {
-        $message += configInc.http_code[$http_code];
+      if (configInc.httpCode.hasOwnProperty($httpCode)) {
+        $message += configInc.httpCode[$httpCode];
       }
       if (helper.isObject(data) && data.message && authReq.method !== 'GET') {
         $message += data.message;
       }
 
-      switch ($http_code) {
+      switch ($httpCode) {
         case 200:
           break;
         case 201:
@@ -81,7 +81,7 @@ export class HttpAuthInterceptor implements HttpInterceptor {
       }
 
       if ($message && $notice) {
-        this.noticeSrv['msg_' + $notice]($message);
+        this.noticeSrv[this.noticeMothed + $notice]($message);
       }
     } catch (e) {
       console.error(e);
@@ -96,8 +96,8 @@ export class HttpAuthInterceptor implements HttpInterceptor {
     let $message = '';
     try {
       // this.httpService.end();
-      const $http_code = err.status;
-      let $notice = 'error';
+      const $httpCode = err.status;
+      let $notice = 'Error';
       const data = err.error;
       this.noticeSrv.clear();
 
@@ -113,14 +113,14 @@ export class HttpAuthInterceptor implements HttpInterceptor {
         return $msg_str;
       };
 
-      if (configInc.http_code.hasOwnProperty($http_code)) {
-        $message += configInc.http_code[$http_code];
+      if (configInc.httpCode.hasOwnProperty($httpCode)) {
+        $message += configInc.httpCode[$httpCode];
       }
       if (typeof data === 'object' && data.message) {
         $message += data.message;
       }
 
-      switch ($http_code) {
+      switch ($httpCode) {
         case 400:
           break;
         case 401:
@@ -135,6 +135,8 @@ export class HttpAuthInterceptor implements HttpInterceptor {
         case 403:
           break;
         case 404:
+          break;
+        case 405:
           break;
         case 406:
           break;
@@ -163,12 +165,12 @@ export class HttpAuthInterceptor implements HttpInterceptor {
           break;
       }
       if ($message && $notice) {
-        this.noticeSrv[this.NoticeMothed + `_` + $notice]($message);
+        this.noticeSrv[this.noticeMothed + $notice]($message);
       }
     } catch (e) {
       console.error(e);
     }
-    if (configInc.app_debug) console.log(err);
+    if (configInc.appDebug) console.log(err);
     return throwError(Object.assign(err, { message2: $message }));
   };
 
@@ -191,7 +193,7 @@ export class HttpAuthInterceptor implements HttpInterceptor {
     });
     return next.handle(authReq).pipe(
       mergeMap((event: any) => {
-        if (configInc.app_debug) console.log('http.interceptor:', event);
+        if (configInc.appDebug) console.log('http.interceptor:', event);
         // 允许统一对请求错误处理，这是因为一个请求若是业务上错误的情况下其HTTP请求的状态是200的情况下需要
         if (
           event instanceof HttpResponse &&
@@ -202,7 +204,7 @@ export class HttpAuthInterceptor implements HttpInterceptor {
         return of(event);
       }),
       catchError((err: HttpErrorResponse) => {
-        if (configInc.app_debug_error) console.error('http.interceptor:', err);
+        if (configInc.appDebugError) console.error('http.interceptor:', err);
         return this.httpResponseError(authReq, err);
       }),
     );

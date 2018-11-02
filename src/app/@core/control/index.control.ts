@@ -56,9 +56,9 @@ export class IndexControl extends AppControl implements OnInit, OnDestroy {
       }
     }
     return {
-      primaryData: {
-        key: this.primaryData.key,
-        url: this.primaryData.url,
+      dataSource: {
+        key: this.dataSource.key,
+        url: this.dataSource.url,
       },
       form: { data: frmData },
       schemaData: {
@@ -66,7 +66,7 @@ export class IndexControl extends AppControl implements OnInit, OnDestroy {
         mainOrder: this.helpers.deepExtend({}, this.schemaData.mainOrder),
         mainUi: this.helpers.deepExtend({}, this.schemaData.mainUi),
       },
-      modalParams: this.helpers.deepExtend({}, this.modalParams),
+      modalData: this.helpers.deepExtend({}, this.modalData),
     };
   }
 
@@ -76,7 +76,7 @@ export class IndexControl extends AppControl implements OnInit, OnDestroy {
    * @param searchData
    */
   searchSubmit(st: STComponent, searchData: any) {
-    // searchData = this.helpers.deepExtend({}, this.mainTableParams, searchData || {});
+    // searchData = this.helpers.deepExtend({}, this.tableParams, searchData || {});
     for (const idx of Object.keys(searchData)) {
       if (this.helpers.isEmpty(searchData[idx])) {
         delete searchData[idx];

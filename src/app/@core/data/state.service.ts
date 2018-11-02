@@ -125,7 +125,7 @@ export class StateService {
     sysDicDicUnshift(node: string, item: object): any {
         const result = (this.sysDicDic[node] || []).slice(0); // 复制数组
         result.unshift(item);
-        if (this.configSrv.app_debug)
+        if (this.configSrv.appDebug)
             console.log('sysDicDicUnshift:' + node, result);
         return result;
     }
@@ -141,7 +141,7 @@ export class StateService {
         for (const idx of result) {
             idx.value = parseFloat(idx.value);
         }
-        if (this.configSrv.app_debug)
+        if (this.configSrv.appDebug)
             console.log('sysDicDicFormatNumber:' + node, result);
         return result;
     }
@@ -186,7 +186,7 @@ export class StateService {
             if (!self[field]) {
                 continue;
             }
-            if (this.configSrv.app_debug) console.log('Destroy', self[field]);
+            if (this.configSrv.appDebug) console.log('Destroy', self[field]);
 
             for (const idx of Object.keys(self[field])) {
                 // 清空数据流

@@ -19,7 +19,7 @@ export class SchemaEditComponent extends ModalControl implements OnInit {
 
   save() {
     this.httpSrv.get('./assets/tmp/pois.json').subscribe(() => {
-      this.noticeSrv.msg_success('保存成功，只是模拟，实际未变更');
+      this.noticeSrv.msgSuccess('保存成功，只是模拟，实际未变更');
       this.modalRef.close(true);
       this.modalClose();
     });

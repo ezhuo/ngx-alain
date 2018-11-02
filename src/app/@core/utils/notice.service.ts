@@ -3,96 +3,96 @@ import { NzMessageService, NzNotificationService } from 'ng-zorro-antd';
 import { SweetAlert } from './sweetalert2';
 
 @Injectable({
-    providedIn: 'root',
+  providedIn: 'root',
 })
 export class NoticeService {
-    constructor(private injector: Injector) {}
+  constructor(private injector: Injector) {}
 
-    private __sweet: SweetAlert = new SweetAlert();
-    
-    private types: string[] = [
-        'default',
-        'info',
-        'success',
-        'warning',
-        'error',
-        'loading',
-    ];
+  private __sweet: SweetAlert = new SweetAlert();
 
-    get nzMsgSrv() {
-        return this.injector.get(NzMessageService);
-    }
+  private types: string[] = [
+    'default',
+    'info',
+    'success',
+    'warning',
+    'error',
+    'loading',
+  ];
 
-    get nzNoticeSrv() {
-        return this.injector.get(NzNotificationService);
-    }
+  get nzMsgSrv() {
+    return this.injector.get(NzMessageService);
+  }
 
-    get sweet() {
-        return this.__sweet;
-    }
+  get nzNoticeSrv() {
+    return this.injector.get(NzNotificationService);
+  }
 
-    private showNotice(type: string, title: string, body: string) {
-        return this.nzNoticeSrv.create(type, title, body);
-    }
+  get sweet() {
+    return this.__sweet;
+  }
 
-    private showMsg(type: string, title: string, body: string) {
-        return this.nzMsgSrv.create(type, body);
-    }
+  private showNotice(type: string, title: string, body: string) {
+    return this.nzNoticeSrv.create(type, title, body);
+  }
 
-    clear() {
-        this.nzNoticeSrv.remove();
-        this.nzMsgSrv.remove();
-    }
+  private showMsg(type: string, title: string, body: string) {
+    return this.nzMsgSrv.create(type, body);
+  }
 
-    notice_info(msg, title = '信息') {
-        return this.showNotice(this.types[1], title, msg);
-    }
+  clear() {
+    this.nzNoticeSrv.remove();
+    this.nzMsgSrv.remove();
+  }
 
-    notice_success(msg, title = '成功') {
-        return this.showNotice(this.types[2], title, msg);
-    }
+  noticeInfo(msg, title = '信息') {
+    return this.showNotice(this.types[1], title, msg);
+  }
 
-    notice_warning(msg, title = '警告') {
-        return this.showNotice(this.types[3], title, msg);
-    }
+  noticeSuccess(msg, title = '成功') {
+    return this.showNotice(this.types[2], title, msg);
+  }
 
-    notice_error(msg, title = '错误') {
-        return this.showNotice(this.types[4], title, msg);
-    }
+  noticeWarning(msg, title = '警告') {
+    return this.showNotice(this.types[3], title, msg);
+  }
 
-    notice_html(html) {
-        // return this.nzNoticeSrv.html(html);
-    }
+  noticeError(msg, title = '错误') {
+    return this.showNotice(this.types[4], title, msg);
+  }
 
-    notice_clear() {
-        return this.nzNoticeSrv.remove();
-    }
+  noticeHtml(html) {
+    // return this.nzNoticeSrv.html(html);
+  }
 
-    msg_info(msg, title = '信息') {
-        return this.showMsg(this.types[1], title, msg);
-    }
+  noticeClear() {
+    return this.nzNoticeSrv.remove();
+  }
 
-    msg_success(msg, title = '成功') {
-        return this.showMsg(this.types[2], title, msg);
-    }
+  msgInfo(msg, title = '信息') {
+    return this.showMsg(this.types[1], title, msg);
+  }
 
-    msg_warning(msg, title = '警告') {
-        return this.showMsg(this.types[3], title, msg);
-    }
+  msgSuccess(msg, title = '成功') {
+    return this.showMsg(this.types[2], title, msg);
+  }
 
-    msg_error(msg, title = '错误') {
-        return this.showMsg(this.types[4], title, msg);
-    }
+  msgWarning(msg, title = '警告') {
+    return this.showMsg(this.types[3], title, msg);
+  }
 
-    msg_loading(msg, title = '') {
-        return this.nzMsgSrv.loading(msg);
-    }
+  msgError(msg, title = '错误') {
+    return this.showMsg(this.types[4], title, msg);
+  }
 
-    msg_html(html) {
-        // return this.nzMsgSrv.html(html);
-    }
+  msgLoading(msg, title = '') {
+    return this.nzMsgSrv.loading(msg);
+  }
 
-    msg_clear() {
-        return this.nzMsgSrv.remove();
-    }
+  msgHtml(html) {
+    // return this.nzMsgSrv.html(html);
+  }
+
+  msgClear() {
+    return this.nzMsgSrv.remove();
+  }
 }

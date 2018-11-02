@@ -5,7 +5,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { MenuService, Menu } from '@delon/theme';
 
 import { NoticeService } from '../utils/notice.service';
-import { http, app_debug } from '../config.inc';
+import { http, appDebug } from '../config.inc';
 
 import { UserService } from './users.service';
 import { HttpService } from '../net/http.service';
@@ -103,7 +103,7 @@ export class TokenService {
     this.__isAuth =
       (this.tokenRead() || '').length > 10 &&
       !helper.isEmpty(this.userSrv.userInfo);
-    if (app_debug) console.log('isAuth', this.__isAuth);
+    if (appDebug) console.log('isAuth', this.__isAuth);
     return this.__isAuth;
   }
 
@@ -123,7 +123,7 @@ export class TokenService {
       // console.log(validate);
       validate = md5(validate);
     } catch (e) {
-      this.noticeSrv.msg_error('package build error');
+      this.noticeSrv.msgError('package build error');
       console.error(e);
     }
 

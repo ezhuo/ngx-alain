@@ -42,7 +42,7 @@ export class SchemaFormEditComponent extends ModalControl implements OnInit, OnD
     value.company_fdn = '1.';
 
     console.log(value);
-    this.httpSrv.update(this.primaryData.url, value, this.primaryData.val).subscribe((result) => {
+    this.httpSrv.update(this.dataSource.url, value, this.dataSource.val).subscribe((result) => {
       console.log(result);
       this.modalClose(result);
     });

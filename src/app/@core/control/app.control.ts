@@ -1,62 +1,62 @@
 import { OnInit, OnDestroy, Injector } from '@angular/core';
-
 import { InjectorControl } from './injector.control';
 import { AppFunc } from './app.func';
 import { AppCase } from './app.case';
-import { SchemaData, TableData, FormData, PrimaryData } from './app.interface';
+import {
+  SchemaData,
+  TableData,
+  FormData,
+  DataSource,
+  ModalData,
+  PageData,
+} from './app.interface';
+import * as config from '../config.inc';
 
 export class AppControl extends InjectorControl implements OnInit, OnDestroy {
-  constructor(protected injector: Injector) {
-    super(injector);
-    this.___appFunc = new AppFunc(this);
-    this.___appCase = new AppCase(this);
-  }
-
-  // ----------------------------------------
-
-  ngOnInit() {
-    super.ngOnInit();
-  }
-
-  ngOnDestroy() {
-    super.ngOnDestroy();
-    this.___appFunc = null;
-    this.___appCase = null;
-    // 清空其它的
-    for (const idx of Object.keys(this)) {
-      if (idx && idx.indexOf('___') > -1) {
-        this[idx] = null;
-      }
-    }
-  }
-
   /**
    * 基础处理类
    */
-  protected ___appFunc: AppFunc;
+  protected ___appFunc: AppFunc = new AppFunc(this);
 
   /**
    * 业务处理类
    */
-  protected ___appCase: AppCase;
+  protected ___appCase: AppCase = new AppCase(this);
 
   /**
    * 当前页面的参数
    */
-  protected ___pageParams: any = {};
+  protected ___pageData: PageData = { title: null };
 
   /**
    * modal对话框中的参数传递
    */
-  protected ___modalParams: any = {};
+  protected ____modalData: ModalData = {
+    button: {
+      submit: {
+        show: true,
+        title: '保存',
+      },
+      reset: {
+        show: true,
+        title: '重置',
+      },
+      close: {
+        show: true,
+        title: '关闭',
+      },
+    },
+    title: null,
+    data: null,
+  };
 
   /**
    * 与服务器数据交换
    * @protected
-   * @type {PrimaryData}
+   * @type {DataSource}
    * @memberof AppControl
    */
-  protected ___primaryData: PrimaryData = {
+  protected ___dataSource: DataSource = {
     url: '',
     key: 'id',
     val: null,
@@ -67,7 +67,11 @@ export class AppControl extends InjectorControl implements OnInit, OnDestroy {
    */
   protected ___tableData: TableData = {
     col: null,
-    params: {},
+    req: {
+      params: {
+        ps: config.define.tablePageSize,
+      },
+    },
   };
 
   /**
@@ -89,6 +93,28 @@ export class AppControl extends InjectorControl implements OnInit, OnDestroy {
 
   // --------------------------------------
 
+  constructor(protected injector: Injector) {
+    super(injector);
+  }
+
+  ngOnInit() {
+    super.ngOnInit();
+  }
+
+  ngOnDestroy() {
+    super.ngOnDestroy();
+    this.___appFunc = null;
+    this.___appCase = null;
+    // 清空其它的
+    for (const idx of Object.keys(this)) {
+      if (idx && idx.indexOf('___') > -1) {
+        this[idx] = null;
+      }
+    }
+  }
+
+  // ----------------------------------------
+
   get appCase() {
     return this.___appCase;
   }
@@ -97,39 +123,31 @@ export class AppControl extends InjectorControl implements OnInit, OnDestroy {
     return this.___appFunc;
   }
 
-  get pageParams() {
-    return this.___pageParams;
+  get pageData() {
+    return this.___pageData;
   }
 
   set pageTitle(value) {
-    this.___pageParams.title = value;
+    this.___pageData.title = value;
     this.titleSrv.default = value;
   }
 
   get pageTitle() {
     let next = this.activeRoute;
-    if (!this.___pageParams.title) {
+    if (!this.___pageData.title) {
       while (next.firstChild) next = next.firstChild;
       const data = (next.snapshot && next.snapshot.data) || {};
-      this.___pageParams.title = data.title;
+      this.___pageData.title = data.title;
     }
 
-    if (!this.___pageParams.title) {
+    if (!this.___pageData.title) {
       const menus = this.menuSrv.getPathByUrl(this.route.url);
       if (!menus || menus.length <= 0) return '';
       const item = menus[menus.length - 1];
-      this.___pageParams.title = item.text;
+      this.___pageData.title = item.text;
     }
 
-    return this.___pageParams.title;
-  }
-
-  get mainTableParams() {
-    this.tableData.params = this.tableData.params || {};
-    if (!this.tableData.params.hasOwnProperty('ps')) {
-      this.tableData.params.ps = this.configSrv.define.table_page_size;
-    }
-    return this.tableData.params;
+    return this.___pageData.title;
   }
 
   get schemaData() {
@@ -140,12 +158,12 @@ export class AppControl extends InjectorControl implements OnInit, OnDestroy {
     this.___schemaData = value;
   }
 
-  set modalParams(value) {
-    this.___modalParams = value;
+  set modalData(value: ModalData) {
+    this.____modalData = value;
   }
 
-  get modalParams() {
-    return this.___modalParams;
+  get modalData() {
+    return this.____modalData;
   }
 
   get tableData() {
@@ -156,6 +174,14 @@ export class AppControl extends InjectorControl implements OnInit, OnDestroy {
     this.___tableData = value;
   }
 
+  get tableParams() {
+    return this.tableData.req.params;
+  }
+
+  get tableReq() {
+    return this.tableData.req;
+  }
+
   get form() {
     return this.___formData;
   }
@@ -164,12 +190,12 @@ export class AppControl extends InjectorControl implements OnInit, OnDestroy {
     this.___formData = value;
   }
 
-  get primaryData() {
-    return this.___primaryData;
+  get dataSource() {
+    return this.___dataSource;
   }
 
-  set primaryData(value: PrimaryData) {
-    this.___primaryData = value;
+  set dataSource(value: DataSource) {
+    this.___dataSource = value;
   }
 
   // -- init -----------------------------------------
@@ -178,7 +204,7 @@ export class AppControl extends InjectorControl implements OnInit, OnDestroy {
    * 初始化
    */
   protected __init(url: string, key: any, params?: any) {
-    this.primaryData.url = url;
-    this.primaryData.key = key;
+    this.dataSource.url = url;
+    this.dataSource.key = key;
   }
 }

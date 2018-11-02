@@ -1,6 +1,6 @@
 import { FormGroup } from '@angular/forms';
 import { SFSchema, SFUISchema } from '@delon/form';
-import { STColumn } from '@delon/abc';
+import { STColumn, STReq } from '@delon/abc';
 
 export interface SchemaData {
   /**
@@ -38,7 +38,7 @@ export interface TableData {
   /**
    * 表格附加参数
    */
-  params?: any;
+  req?: STReq;
 }
 
 export interface FormData {
@@ -53,7 +53,10 @@ export interface FormData {
   data?: any;
 }
 
-export interface PrimaryData {
+/**
+ * 数据集传值
+ */
+export interface DataSource {
   /**
    * 主要的URL
    */
@@ -68,4 +71,26 @@ export interface PrimaryData {
    * 主键值
    */
   val?: any;
+}
+
+export interface ModalButtonConfig {
+  submit?: any;
+  reset?: any;
+  close?: any;
+}
+
+/**
+ * modal 对话框传值
+ */
+export interface ModalData {
+  button?: ModalButtonConfig;
+  title?: any;
+  data?: any;
+}
+
+/**
+ * 页面传值
+ */
+export interface PageData {
+  title?: any;
 }

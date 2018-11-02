@@ -13,23 +13,6 @@ export class AppFunc {
 
   constructor(appCtl: AppControl) {
     this.___appCtl = appCtl;
-
-    this.___appCtl.modalParams = {
-      button: {
-        submit: {
-          show: true,
-          title: '保存',
-        },
-        reset: {
-          show: true,
-          title: '重置',
-        },
-        close: {
-          show: true,
-          title: '关闭',
-        },
-      },
-    };
   }
 
   /**
@@ -55,12 +38,12 @@ export class AppFunc {
       __frmData = self.form.data;
     }
     if (!__primaryKey) {
-      __primaryKey = self.primaryData.key;
+      __primaryKey = self.dataSource.key;
     }
     if (!self.helpers.isEmpty(__frmData) && __primaryKey) {
       if (!self.helpers.isEmpty(__frmData.hasOwnProperty(__primaryKey))) {
         result = __frmData[__primaryKey];
-        self.primaryData.key = result;
+        self.dataSource.key = result;
       }
     }
     return result;

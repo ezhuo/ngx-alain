@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { User, SettingsService } from '@delon/theme';
 
-import { define, app_debug } from '../config.inc';
+import { define, appDebug } from '../config.inc';
 import * as helper from '../helpers';
 
 @Injectable({
@@ -22,7 +22,7 @@ export class UserService {
   set userInfo(dd: any) {
     this.__userInfo = dd;
     if (dd) {
-      this.__userInfo.avatar = define.user_images;
+      this.__userInfo.avatar = define.userImages;
       if (dd.images) {
         const pic = helper.parseJSON(dd.images) || [];
         if (pic && pic.length > 0) {
@@ -36,7 +36,7 @@ export class UserService {
       // 用户信息：包括姓名、头像、邮箱地址
       this.settingsService.setUser(this.__user);
     }
-    if (app_debug) console.log(this.__userInfo);
+    if (appDebug) console.log(this.__userInfo);
   }
 
   get userInfo() {

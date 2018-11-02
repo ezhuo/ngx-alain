@@ -12,7 +12,7 @@
 <form nz-form [nzLayout]="'inline'" class="search-form">
     <nz-form-item>
         <nz-form-control>
-            <nz-select [(ngModel)]="mainTableParams.s" name="s" [nzAllowClear]="false">
+            <nz-select [(ngModel)]="tableParams.s" name="s" [nzAllowClear]="false">
                 <nz-option nzValue="" nzLabel="状态不限"></nz-option>
                 <nz-option nzValue="1" nzLabel="正常"></nz-option>
                 <nz-option nzValue="2" nzLabel="已取消"></nz-option>
@@ -24,17 +24,17 @@
     </nz-form-item>
     <nz-form-item>
         <nz-form-control>
-            <input nz-input [(ngModel)]="mainTableParams.user_id" name="user_id" nzPlaceHolder="用户编号">
+            <input nz-input [(ngModel)]="tableParams.user_id" name="user_id" nzPlaceHolder="用户编号">
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>
         <nz-form-control>
-            <input nz-input [(ngModel)]="mainTableParams.q" name="q" nzPlaceHolder="门店、分店名称">
+            <input nz-input [(ngModel)]="tableParams.q" name="q" nzPlaceHolder="门店、分店名称">
         </nz-form-control>
     </nz-form-item>
     <nz-form-item>
         <nz-form-control>
-            <button nz-button (click)="st.reset(mainTableParams)">搜索</button>
+            <button nz-button (click)="st.reset(tableParams)">搜索</button>
         </nz-form-control>
     </nz-form-item>
 </form>
@@ -91,7 +91,7 @@
     </nz-form-item>
 </form>
 
-<st #st class="simple-table" [columns]="tableData.col" [data]="url" [req]="{params: mainTableParams}">
+<st #st class="simple-table" [columns]="tableData.col" [data]="url" [req]="tableReq">
     <ng-template st-row="custom" type="title" let-c>
         {{ c.title }}
         <nz-dropdown nzTrigger="click" [nzClickHide]="false">

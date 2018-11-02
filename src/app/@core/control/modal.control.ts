@@ -26,10 +26,10 @@ export class ModalControl extends AppControl implements OnInit, OnDestroy {
   }
 
   get modalTitle() {
-    if (this.modalParams.title) {
-      return this.modalParams.title;
+    if (this.modalData.title) {
+      return this.modalData.title;
     } else {
-      return this.primaryData.val ? '编辑' : '添加';
+      return this.dataSource.val ? '编辑' : '添加';
     }
   }
 

@@ -89,7 +89,7 @@ export class SchemaDemoComponent extends IndexControl implements OnInit {
     ) {
         super(injector);
 
-        this.mainTableParams.s = '';
+        this.tableParams.s = '';
         this.tableData.col = [
             { title: '编号', index: 'id', width: '100px' },
             { title: '门店名称', index: 'name' },
@@ -105,11 +105,11 @@ export class SchemaDemoComponent extends IndexControl implements OnInit {
                         component: SchemaEditComponent,
                         paramName: 'i',
                         click: () =>
-                            this.noticeSrv.msg_info('回调，重新发起列表刷新'),
+                            this.noticeSrv.msgInfo('回调，重新发起列表刷新'),
                     },
                     {
                         text: '图片',
-                        click: () => this.noticeSrv.msg_info('click photo'),
+                        click: () => this.noticeSrv.msgInfo('click photo'),
                     },
                     {
                         text: '更多',
@@ -117,32 +117,32 @@ export class SchemaDemoComponent extends IndexControl implements OnInit {
                             {
                                 text: '经营SKU',
                                 click: () =>
-                                    this.noticeSrv.msg_info('click sku'),
+                                    this.noticeSrv.msgInfo('click sku'),
                             },
                             {
                                 text: '经营SKU',
                                 click: () =>
-                                    this.noticeSrv.msg_info('click sku'),
+                                    this.noticeSrv.msgInfo('click sku'),
                             },
                             {
                                 text: '经营SKU',
                                 click: () =>
-                                    this.noticeSrv.msg_info('click sku'),
+                                    this.noticeSrv.msgInfo('click sku'),
                             },
                             {
                                 text: '经营SKU',
                                 click: () =>
-                                    this.noticeSrv.msg_info('click sku'),
+                                    this.noticeSrv.msgInfo('click sku'),
                             },
                             {
                                 text: '经营SKU',
                                 click: () =>
-                                    this.noticeSrv.msg_info('click sku'),
+                                    this.noticeSrv.msgInfo('click sku'),
                             },
                             {
                                 text: '经营SKU',
                                 click: () =>
-                                    this.noticeSrv.msg_info('click sku'),
+                                    this.noticeSrv.msgInfo('click sku'),
                             },
                         ],
                     },
@@ -362,14 +362,14 @@ export class SchemaDemoComponent extends IndexControl implements OnInit {
 
     ngOnInit() {
         super.ngOnInit();
-        console.log(this.mainTableParams);
+        console.log(this.tableParams);
     }
 
     addGroup() {
         this.modalSrv
             .static(SchemaFormEditComponent, { i: { id: 0 }, pp: this })
             .subscribe(() => {
-                this.noticeSrv.msg_info('回调，重新发起列表刷新');
+                this.noticeSrv.msgInfo('回调，重新发起列表刷新');
             });
     }
 
@@ -377,7 +377,7 @@ export class SchemaDemoComponent extends IndexControl implements OnInit {
         this.modalSrv
             .static(SchemaFormEditxComponent, { i: { id: 0 }, pp: this })
             .subscribe(() => {
-                this.noticeSrv.msg_info('回调，重新发起列表刷新');
+                this.noticeSrv.msgInfo('回调，重新发起列表刷新');
             });
     }
 
@@ -398,7 +398,7 @@ export class SchemaDemoComponent extends IndexControl implements OnInit {
             .static(SchemaShowComponent, this.formatModalParams())
             .subscribe(() => {
                 console.log(this.schemaData.main);
-                this.noticeSrv.msg_info('回调，重新发起列表刷新');
+                this.noticeSrv.msgInfo('回调，重新发起列表刷新');
             });
     }
 
@@ -412,7 +412,7 @@ export class SchemaDemoComponent extends IndexControl implements OnInit {
             .static(SchemaEditComponent, this.formatModalParams())
             .subscribe(() => {
                 console.log(this.schemaData.main);
-                this.noticeSrv.msg_info('回调，重新发起列表刷新');
+                this.noticeSrv.msgInfo('回调，重新发起列表刷新');
             });
     }
 

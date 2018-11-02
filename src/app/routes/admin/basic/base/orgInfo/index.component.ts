@@ -356,7 +356,7 @@ export class OrgInfoComponent extends IndexControl
         }
 
         if (node) {
-            this.modalParams.tree = node;
+            this.modalData.data = node;
             this.sf.value['org_fdn%'] = node.key;
         }
 

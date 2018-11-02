@@ -15,7 +15,7 @@ export const tplMainIndexTreeHTML =
   </div>
 </div>
 
-<sf #sf mode="search" [schema]="schemaData.search" [formData]="mainTableParams" (formSubmit)="st.reset($event)" (formReset)="st.reset(mainTableParams)" class="search-form" [button]="'none'">
+<sf #sf mode="search" [schema]="schemaData.search" [formData]="tableReq.params" (formSubmit)="st.reset($event)" (formReset)="st.reset(tableReq.params)" class="search-form" [button]="'none'">
   <nz-form-item class="sf-btns">
     <nz-form-control class="ant-form-item-control-wrapper">
       <div class="ant-form-item-control">
@@ -44,7 +44,7 @@ export const tplMainIndexTreeHTML =
     </nz-card>
   </div>
   <div nz-col nzSpan="20">
-    <st #st class="simple-table" [data]="primaryData.url" [columns]="tableData.col" [req]="{params: mainTableParams}"></st>
+    <st #st class="simple-table" [data]="dataSource.url" [columns]="tableData.col" [req]="tableReq"></st>
   </div>
 </div>
 

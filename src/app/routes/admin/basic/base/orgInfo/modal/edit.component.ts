@@ -16,10 +16,10 @@ export class OrgInfoEditComponent extends ModalControl
 
     ngOnInit() {
         super.ngOnInit();
-        if (!this.primaryData.val) {
+        if (!this.dataSource.val) {
             this.form.data[
                 'parent_org_name'
-            ] = this.modalParams.tree.origin.title;
+            ] = this.modalData.data.origin.title;
         }
         console.log(this.form.data);
     }
@@ -32,14 +32,14 @@ export class OrgInfoEditComponent extends ModalControl
         const formData = this.formatSubmitData($event.value, this.schemaData.main);
         console.log(formData, $event.value);
         // 如果是新增状态，就添加所属机构值
-        if (!this.primaryData.val) {
-            formData['parent_id'] = this.modalParams.tree.origin.org_id;
+        if (!this.dataSource.val) {
+            formData['parent_id'] = this.modalData.data.origin.org_id;
         } else {
             // 编辑状态下不允许修改机构
             delete formData['parent_id'];
         }
         this.httpSrv
-            .update(this.primaryData.url, formData, this.primaryData.val)
+            .update(this.dataSource.url, formData, this.dataSource.val)
             .subscribe(
                 result => {
                     this.modalClose(result);

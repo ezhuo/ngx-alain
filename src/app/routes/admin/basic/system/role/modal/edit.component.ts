@@ -32,7 +32,7 @@ export class RoleEditComponent extends ModalControl implements OnInit, OnDestroy
         formData['menu_ids'] = arr.join(',');
         const arr2 = this.stateSrv.arraySrv.getKeysByTreeNode(this.tree.getHalfCheckedNodeList());
         formData['menu_all_ids'] = this.helpers.arrayUnique(arr2.concat(arr)).join(',');
-        this.httpSrv.update(this.primaryData.url, formData, this.primaryData.val).subscribe((result) => {
+        this.httpSrv.update(this.dataSource.url, formData, this.dataSource.val).subscribe((result) => {
             // console.log(result);
             this.modalClose(result);
         });
@@ -43,7 +43,7 @@ export class RoleEditComponent extends ModalControl implements OnInit, OnDestroy
     treeDataSelectKeys = [];
     treeDataCheckedKeys = [];
     gettreeData() {
-        this.freeData.menu = this.httpSrv.post('/menu/get_menu_list', { 'role_id': this.primaryData.val }).subscribe((result: any) => {
+        this.freeData.menu = this.httpSrv.post('/menu/get_menu_list', { 'role_id': this.dataSource.val }).subscribe((result: any) => {
             result.data.list.forEach((node, idx) => {
                 // console.log(idx);
                 // if (idx === 0) {

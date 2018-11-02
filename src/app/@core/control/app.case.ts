@@ -44,9 +44,9 @@ export class AppCase {
     __options?: any,
   ) => {
     const self = this.appCtl;
-    __url = __url || self.primaryData.url;
+    __url = __url || self.dataSource.url;
     __body = __body || {};
-    __tableParams = __tableParams || self.mainTableParams;
+    __tableParams = __tableParams || self.tableParams;
     const pi = __tableParams.pi;
     const ps = __tableParams.ps;
     __options = __options || {
@@ -54,15 +54,27 @@ export class AppCase {
       sheetname: '数据导出',
     };
     if (!__st) {
-      return self.noticeSrv.notice_error('导出无效！');
+      return self.noticeSrv.noticeError('导出无效！');
     }
     __tableParams.pi = 1;
     __tableParams.ps = 10000;
-    // __st.export(__url + self.helpers.jsonToURL(__body), __options);
-    self.freeTimeOut.to = setTimeout(() => {
-      __tableParams.pi = pi;
-      __tableParams.ps = ps;
-    }, 0);
+    __body = Object.assign(__body, __tableParams);
+
+    const finallyFn = (res?: any) => {
+      self.freeTimeOut.to = setTimeout(() => {
+        __tableParams.pi = pi;
+        __tableParams.ps = ps;
+      }, 0);
+    };
+    self.httpSrv.get(__url, __body).subscribe(
+      (res: any) => {
+        if (res && res.data && res.data.list)
+          __st.export(res.data.list, __options);
+        finallyFn(res);
+      },
+      finallyFn,
+      finallyFn,
+    );
   };
 
   /**
@@ -70,7 +82,7 @@ export class AppCase {
    */
   exportXlsFromServer = (__url?: string, __body?: any, __options?: any) => {
     const self = this.appCtl;
-    __url = __url || self.primaryData.url;
+    __url = __url || self.dataSource.url;
     __body = __body || {};
     __options = __options || {
       filename: self.titleSrv.getTitle() || '数据导出',
@@ -137,11 +149,11 @@ export class AppCase {
       fileList[fileList.length - 1].thumbUrl = file.response.url;
       fileList[fileList.length - 1].url = file.response.url;
       console.log(file, fileList);
-      self.msgSrv.msg_success(`${file.name} 上传成功！`);
+      self.msgSrv.msgSuccess(`${file.name} 上传成功！`);
     } else if (status === 'error') {
       // 上传失败
       // console.log(file, fileList);
-      self.msgSrv.msg_error(`${file.name} 上传失败！`);
+      self.msgSrv.msgError(`${file.name} 上传失败！`);
     }
   };
 
@@ -197,15 +209,15 @@ export class AppCase {
     const self = this.appCtl;
     return new Promise((resolve, reject?: any) => {
       if (!__mainUrl) {
-        __mainUrl = self.primaryData.url;
+        __mainUrl = self.dataSource.url;
       }
       if (!__record) {
         __record = self.form.data;
       }
-      if (!__primaryKey) __primaryKey = self.primaryData.key;
+      if (!__primaryKey) __primaryKey = self.dataSource.key;
       const __id = self.appBase.__getPrimaryKeyValue(__record, __primaryKey);
       if (!__id) {
-        self.noticeSrv.notice_warning('删除无效！');
+        self.noticeSrv.noticeWarning('删除无效！');
         reject(false);
       } else {
         self.noticeSrv.sweet

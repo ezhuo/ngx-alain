@@ -32,7 +32,7 @@ export class AuthService {
       })
       .pipe(
         switchMap((data: any) => {
-          if (configInc.app_debug) console.log('auth.service:', data);
+          if (configInc.appDebug) console.log('auth.service:', data);
           // 登录成功
           if (this.tokenSrv.tokenWrite(data.data.token)) {
             this.loginSuccess(data);

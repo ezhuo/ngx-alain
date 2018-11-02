@@ -384,10 +384,10 @@ export class AccountComponent extends IndexControl
       if (sel.length > 0) node = sel[sel.length - 1];
     }
     if (node) {
-      this.modalParams.tree = node;
+      this.modalData.data = node;
       this.sf.value['org_fdn%'] = node.key;
     } else {
-      this.modalParams.tree = {
+      this.modalData.data = {
         origin: {
           title: this.userSrv.userInfo.org_name,
           key: this.userSrv.userInfo.org_fdn,

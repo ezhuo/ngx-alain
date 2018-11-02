@@ -6,7 +6,7 @@ import * as config from '../config.inc';
 })
 export class ConfigService {
     config: any = config;
-    app_debug: any = config.app_debug;
+    appDebug: any = config.appDebug;
     app: any = config.app;
     api: any = config.api;
     canton: any = config.canton;

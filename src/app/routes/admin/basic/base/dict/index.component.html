@@ -8,27 +8,15 @@
   </div>
 </div>
 
-<div nz-row nzGutter="24">
-
-  <div nz-col nzSpan="7" nzLg="7" nzXs="24">
-    <div style="background-color:#fff;">
-      <nz-list [nzDataSource]="dictTypeName" nzBordered nzSize="small" [nzHeader]="'数据字典'" [nzRenderItem]="item">
-        <ng-template #item let-item>
-          <nz-list-item [nzExtra]="extra" [class.active]="item['type']==dictActive['type']">
-            <ng-template #extra>
-              <div class="dictList" >
-                <span (click)="dictTypeClick($event ,item)">{{item['type_name']}}</span>
-              </div>
-            </ng-template>
-          </nz-list-item>
-        </ng-template>
-      </nz-list>
-    </div>
+<div class="main">
+  <div class="menu">
+    <ul nz-menu [nzMode]="'inline'">
+      <li *ngFor="let item of dictTypeName" nz-menu-item [nzSelected]="item.type==dictActive['type']" (click)="dictTypeClick(item)">
+        {{item.type_name}}
+      </li>
+    </ul>
   </div>
-
-  <div nz-col nzSpan="17" nzLg="17" nzXs="24">
-    <st #st class="simple-table" [data]="url" [columns]="tableData.col" [req]="{params: mainTableParams}"></st>
+  <div class="content">
+    <st #st class="simple-table" [data]="url" [columns]="tableData.col" [req]="tableReq"></st>
   </div>
-
-
 </div>

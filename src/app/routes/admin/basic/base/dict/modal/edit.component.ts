@@ -24,7 +24,7 @@ export class DictEditComponent extends ModalControl
     this.form.data = Object.assign(
       {},
       this.form.data,
-      this.modalParams.dictActive || {},
+      this.modalData.data || {},
     );
   }
 
@@ -36,7 +36,7 @@ export class DictEditComponent extends ModalControl
     const formData = this.formatSubmitData($event.value, this.schemaData.main);
 
     this.freeData.save = this.httpSrv
-      .update(this.primaryData.url, formData, this.primaryData.val)
+      .update(this.dataSource.url, formData, this.dataSource.val)
       .subscribe(result => {
         this.modalClose(result);
       });
