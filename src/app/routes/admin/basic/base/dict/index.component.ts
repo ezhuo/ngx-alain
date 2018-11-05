@@ -39,7 +39,7 @@ export class DictComponent extends IndexControl implements OnInit, OnDestroy {
   ngOnInit() {
     super.ngOnInit();
 
-    this.schemaData.main = {
+    this.schemaData.edit = {
       properties: {
         type_name: {
           type: 'string',

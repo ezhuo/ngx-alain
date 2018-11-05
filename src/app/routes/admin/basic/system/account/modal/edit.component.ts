@@ -16,8 +16,8 @@ export class AccountEditComponent extends ModalControl
   ngOnInit() {
     super.ngOnInit();
     if (this.dataSource.val) {
-      delete this.schemaData.main.properties.login_pwd;
-      delete this.schemaData.main.properties.login_pwd2;
+      delete this.schemaData.edit.properties.login_pwd;
+      delete this.schemaData.edit.properties.login_pwd2;
       this.form.data['org_id'] = this.form.data['org_name'];
     } else {
       if (this.modalData.data) {
@@ -29,7 +29,7 @@ export class AccountEditComponent extends ModalControl
 
     if (!this.userSrv.userInfo.is_group && !this.userSrv.userInfo.admin) {
       this.form.data['role_id'] = 10;
-      this.schemaData.main.properties['role_id'].ui['widget'] = 'texts';
+      this.schemaData.edit.properties['role_id'].ui['widget'] = 'texts';
     }
   }
 
@@ -38,7 +38,7 @@ export class AccountEditComponent extends ModalControl
   }
 
   onSubmit($event: any) {
-    const formData = this.formatSubmitData($event.value, this.schemaData.main);
+    const formData = this.formatSubmitData($event.value, this.schemaData.edit);
     // 如果是新增状态，就添加所属机构值
     if (!this.dataSource.val) {
       formData['org_id'] = this.modalData.data.origin.org_id;

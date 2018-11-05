@@ -154,7 +154,7 @@ export class SchemaDemoComponent extends IndexControl implements OnInit {
             },
         ];
 
-        this.schemaData.main = {
+        this.schemaData.edit = {
             properties: {
                 email: {
                     type: 'string',
@@ -397,7 +397,6 @@ export class SchemaDemoComponent extends IndexControl implements OnInit {
         this.modalSrv
             .static(SchemaShowComponent, this.formatModalParams())
             .subscribe(() => {
-                console.log(this.schemaData.main);
                 this.noticeSrv.msgInfo('回调，重新发起列表刷新');
             });
     }
@@ -411,7 +410,6 @@ export class SchemaDemoComponent extends IndexControl implements OnInit {
         this.modalSrv
             .static(SchemaEditComponent, this.formatModalParams())
             .subscribe(() => {
-                console.log(this.schemaData.main);
                 this.noticeSrv.msgInfo('回调，重新发起列表刷新');
             });
     }

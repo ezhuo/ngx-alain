@@ -57,8 +57,8 @@ export class AppFunc {
     mainSchema?: SFSchema,
   ) {
     const self = this.appCtl;
-    let newSchema = mainSchema || self.schemaData.main;
-    orderBy = orderBy || self.schemaData.mainOrder;
+    let newSchema = mainSchema || self.schemaData.edit;
+    orderBy = orderBy || self.schemaData.editOrder;
     if (!self.helpers.isEmpty(schema)) {
       newSchema = self.helpers.deepExtend({}, newSchema, schema);
     }
@@ -106,7 +106,7 @@ export class AppFunc {
       result = [].concat(fields);
     }
 
-    schema = schema || self.schemaData.main;
+    schema = schema || self.schemaData.edit;
     result.forEach(item => {
       if (schema.properties[item]) {
         schema.properties[item]['ui']['widget'] = 'texts';
@@ -121,8 +121,8 @@ export class AppFunc {
    */
   __schemaFormOrder(orderBy?: any[], mainSchema?: SFSchema): SFSchema {
     const self = this.appCtl;
-    orderBy = orderBy || self.schemaData.mainOrder;
-    mainSchema = mainSchema || self.schemaData.main;
+    orderBy = orderBy || self.schemaData.editOrder;
+    mainSchema = mainSchema || self.schemaData.edit;
     let newSchema: SFSchema = {};
     if (orderBy && !self.helpers.isEmpty(orderBy)) {
       newSchema = self.helpers.deepExtend({}, mainSchema);

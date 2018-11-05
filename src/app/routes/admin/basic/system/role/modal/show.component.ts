@@ -16,10 +16,10 @@ export class RoleShowComponent extends ModalControl implements OnInit, OnDestroy
 
   ngOnInit() {
     super.ngOnInit();
-    delete this.schemaData.main.properties.login_pwd;
-    delete this.schemaData.main.properties.login_pwd2;
+    delete this.schemaData.edit.properties.login_pwd;
+    delete this.schemaData.edit.properties.login_pwd2;
     this.form.data['org_id'] = this.form.data['org_name'];
-    this.schemaData.main = this.appBase.__schemaFormSetTexts({}, []);
+    this.schemaData.edit = this.appBase.__schemaFormSetTexts({}, []);
   }
 
   ngOnDestroy() {

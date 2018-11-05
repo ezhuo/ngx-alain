@@ -83,12 +83,17 @@ export class AppControl extends InjectorControl implements OnInit, OnDestroy {
   };
 
   protected ___schemaData: SchemaData = {
-    main: null,
-    mainOrder: null,
-    mainUi: null,
     search: null,
     searchOrder: null,
     searchUi: null,
+
+    edit: null,
+    editOrder: null,
+    editUi: null,
+
+    password: null,
+    passwordOrder: null,
+    passwordUi: null,
   };
 
   // --------------------------------------

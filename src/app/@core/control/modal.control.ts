@@ -40,7 +40,7 @@ export class ModalControl extends AppControl implements OnInit, OnDestroy {
   // ------------------
 
   formatSubmitData(formValue: any, schema?: any): object {
-    schema = schema || this.schemaData.main;
+    schema = schema || this.schemaData.edit;
     formValue = formValue || {};
     const prop = schema.properties;
     let widget = null;

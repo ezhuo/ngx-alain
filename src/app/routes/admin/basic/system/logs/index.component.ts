@@ -79,7 +79,8 @@ export class LogsComponent extends IndexControl implements OnInit, OnDestroy {
         },
         ui: {},
       },
-      main: {
+      
+      edit: {
         properties: {
           title: {
             type: 'string',

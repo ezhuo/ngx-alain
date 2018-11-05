@@ -72,7 +72,7 @@ export class OrgInfoComponent extends IndexControl
         ui: {},
       },
 
-      main: {
+      edit: {
         properties: {
           logo: {
             type: 'string',

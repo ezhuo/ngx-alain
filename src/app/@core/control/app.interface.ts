@@ -4,18 +4,6 @@ import { STColumn, STReq } from '@delon/abc';
 
 export interface SchemaData {
   /**
-   * 主要的动态表单数据
-   */
-  main?: SFSchema;
-  /**
-   * 当前编辑业务的数据结构的排序
-   */
-  mainOrder?: any[];
-  /**
-   * 当前编辑业务的数据结构的 UI
-   */
-  mainUi?: SFUISchema;
-  /**
    * 查询业务的数据结构
    */
   search?: SFSchema;
@@ -27,6 +15,32 @@ export interface SchemaData {
    * 查询业务的数据结构的 UI
    */
   searchUi?: SFUISchema;
+
+  /**
+   * 新增/编辑的动态表单数据
+   */
+  edit?: SFSchema;
+  /**
+   * 当前新增/编辑业务的数据结构的排序
+   */
+  editOrder?: any[];
+  /**
+   * 当前新增/编辑业务的数据结构的 UI
+   */
+  editUi?: SFUISchema;
+
+  /**
+   * 密码动态表单数据
+   */
+  password?: SFSchema;
+  /**
+   * 当前新增/编辑业务的数据结构的排序
+   */
+  passwordOrder?: any[];
+  /**
+   * 当前新增/编辑业务的数据结构的 UI
+   */
+  passwordUi?: SFUISchema;
 }
 
 export interface TableData {

@@ -35,42 +35,6 @@ export class AccountComponent extends IndexControl
     super.__init('/account', 'account_id');
   }
 
-  protected passwordSchema: SFSchema = {
-    properties: {
-      login_username: {
-        type: 'string',
-        title: '登录名',
-        minLength: 1,
-        ui: {
-          widget: 'text',
-        },
-      },
-      true_name: {
-        type: 'string',
-        title: '真实姓名',
-        minLength: 1,
-        ui: {
-          widget: 'text',
-        },
-      },
-      login_pwd: {
-        type: 'string',
-        title: '新密码',
-        minLength: 1,
-        ui: {
-          widget: 'text',
-        },
-      },
-    },
-    ui: {
-      spanLabel: 6,
-      spanControl: 18,
-      grid: {
-        span: 24,
-      },
-    },
-  };
-
   ngOnInit() {
     super.ngOnInit();
     this.getTreeData();
@@ -107,8 +71,9 @@ export class AccountComponent extends IndexControl
         },
         ui: {},
       },
+
       // 新增
-      main: {
+      edit: {
         properties: {
           images: {
             type: 'string',
@@ -247,6 +212,43 @@ export class AccountComponent extends IndexControl
           },
         },
       },
+
+      // 密码
+      password: {
+        properties: {
+          login_username: {
+            type: 'string',
+            title: '登录名',
+            minLength: 1,
+            ui: {
+              widget: 'text',
+            },
+          },
+          true_name: {
+            type: 'string',
+            title: '真实姓名',
+            minLength: 1,
+            ui: {
+              widget: 'text',
+            },
+          },
+          login_pwd: {
+            type: 'string',
+            title: '新密码',
+            minLength: 1,
+            ui: {
+              widget: 'text',
+            },
+          },
+        },
+        ui: {
+          spanLabel: 6,
+          spanControl: 18,
+          grid: {
+            span: 24,
+          },
+        },
+      },
     };
 
     this.tableData.col = [
@@ -294,13 +296,9 @@ export class AccountComponent extends IndexControl
               {
                 text: '重置密码',
                 type: 'modal',
-                schema: this.passwordSchema,
+                schema: this.schemaData.password,
                 component: AccountPwdComponent,
-                params: (record?: any): Object => {
-                  return this.formatModalParams.call(this, record, {
-                    schema: this.passwordSchema,
-                  });
-                },
+                params: this.formatModalParams.bind(this),
                 click: (record, btnRes) => {
                   if (btnRes) this.st.load();
                 },

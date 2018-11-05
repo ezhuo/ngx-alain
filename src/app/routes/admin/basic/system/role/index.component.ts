@@ -56,7 +56,7 @@ export class RoleComponent extends IndexControl
             ui: {},
         };
 
-        this.schemaData.main = {
+        this.schemaData.edit = {
             properties: {
                 name: {
                     type: 'string',

@@ -1,12 +1,12 @@
-export const tplModalEditHTML = `
+export const tplModalPasswordHTML = `
 <div class='modal-header'>
     <div class='modal-title'>{{  modalTitle }}</div>
 </div>
 
 <div class="sf-view">
 <sf #sf 
-    [schema]='schemaData.edit' 
-    [ui]='schemaData.editUi' 
+    [schema]='schemaData.password' 
+    [ui]='schemaData.passwordUi' 
     [formData]='form.data' 
     (formSubmit)='onSubmit(sf)' 
     [button]="'none'"></sf>

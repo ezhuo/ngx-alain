@@ -7,8 +7,8 @@ export const tplModalShowHTML =
 
   <div class="sf-view">
     <sf #sf 
-        [schema]='schemaData.main' 
-        [ui]='schemaData.mainUi' 
+        [schema]='schemaData.edit' 
+        [ui]='schemaData.editUi' 
         [formData]='form.data'
         [button]="'none'"></sf>
   </div>

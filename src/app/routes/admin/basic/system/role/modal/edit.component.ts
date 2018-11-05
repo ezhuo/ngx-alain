@@ -27,7 +27,7 @@ export class RoleEditComponent extends ModalControl implements OnInit, OnDestroy
     }
 
     onSubmit($event: any) {
-        const formData = this.formatSubmitData($event.value, this.schemaData.main);
+        const formData = this.formatSubmitData($event.value, this.schemaData.edit);
         const arr = this.stateSrv.arraySrv.getKeysByTreeNode(this.tree.getCheckedNodeList());
         formData['menu_ids'] = arr.join(',');
         const arr2 = this.stateSrv.arraySrv.getKeysByTreeNode(this.tree.getHalfCheckedNodeList());

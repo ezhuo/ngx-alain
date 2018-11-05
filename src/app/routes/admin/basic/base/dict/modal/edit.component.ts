@@ -33,7 +33,7 @@ export class DictEditComponent extends ModalControl
   }
 
   onSubmit($event: any) {
-    const formData = this.formatSubmitData($event.value, this.schemaData.main);
+    const formData = this.formatSubmitData($event.value, this.schemaData.edit);
 
     this.freeData.save = this.httpSrv
       .update(this.dataSource.url, formData, this.dataSource.val)

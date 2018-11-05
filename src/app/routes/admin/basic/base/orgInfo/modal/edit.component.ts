@@ -29,7 +29,7 @@ export class OrgInfoEditComponent extends ModalControl
     }
 
     onSubmit($event: any) {
-        const formData = this.formatSubmitData($event.value, this.schemaData.main);
+        const formData = this.formatSubmitData($event.value, this.schemaData.edit);
         console.log(formData, $event.value);
         // 如果是新增状态，就添加所属机构值
         if (!this.dataSource.val) {
