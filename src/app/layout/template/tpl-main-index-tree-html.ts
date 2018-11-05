@@ -11,7 +11,7 @@ export const tplMainIndexTreeHTML =
     <small></small>
   </h1>
   <div>
-  ${tplMainIndexActionHTML.event}
+    ${tplMainIndexActionHTML.event}
   </div>
 </div>
 

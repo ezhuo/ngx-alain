@@ -3,10 +3,10 @@
  * 有关模块注册指导原则请参考：https://github.com/ng-alain/ng-alain/issues/180
  */
 import {
-    NgModule,
-    Optional,
-    SkipSelf,
-    ModuleWithProviders,
+  NgModule,
+  Optional,
+  SkipSelf,
+  ModuleWithProviders,
 } from '@angular/core';
 import { throwIfAlreadyLoaded } from '@core/module-import-guard';
 
@@ -23,8 +23,8 @@ import { DelonMockModule } from '@delon/mock';
 import * as MOCKDATA from '../../_mock';
 import { environment } from '@env/environment';
 const MOCK_MODULES = !environment.production
-    ? [DelonMockModule.forRoot({ data: MOCKDATA })]
-    : [];
+  ? [DelonMockModule.forRoot({ data: MOCKDATA })]
+  : [];
 // #endregion
 
 // #region reuse-tab
@@ -42,11 +42,11 @@ const MOCK_MODULES = !environment.production
 import { RouteReuseStrategy } from '@angular/router';
 import { ReuseTabService, ReuseTabStrategy } from '@delon/abc/reuse-tab';
 const REUSETAB_PROVIDES = [
-    // {
-    //   provide: RouteReuseStrategy,
-    //   useClass: ReuseTabStrategy,
-    //   deps: [ReuseTabService],
-    // },
+  {
+    provide: RouteReuseStrategy,
+    useClass: ReuseTabStrategy,
+    deps: [ReuseTabService],
+  },
 ];
 // #endregion
 
@@ -54,72 +54,72 @@ const REUSETAB_PROVIDES = [
 
 import { PageHeaderConfig } from '@delon/abc';
 export function fnPageHeaderConfig(): PageHeaderConfig {
-    return Object.assign(new PageHeaderConfig(), { homeI18n: 'home' });
+  return Object.assign(new PageHeaderConfig(), { homeI18n: 'home' });
 }
 
 import { DelonAuthConfig } from '@delon/auth';
 export function fnDelonAuthConfig(): DelonAuthConfig {
-    return Object.assign(new DelonAuthConfig(), <DelonAuthConfig>{
-        login_url: '/passport/login',
-    });
+  return Object.assign(new DelonAuthConfig(), <DelonAuthConfig>{
+    login_url: '/passport/login',
+  });
 }
 
 import { DelonFormConfig } from '@delon/form';
 export function fnDelonFormConfig(): DelonFormConfig {
-    return Object.assign(new DelonFormConfig(), <DelonFormConfig>{
-        button: {
-            submit: '保存',
-            submit_type: 'primary',
-            reset: '重置',
-            reset_type: 'default',
-        },
-    });
+  return Object.assign(new DelonFormConfig(), <DelonFormConfig>{
+    button: {
+      submit: '保存',
+      submit_type: 'primary',
+      reset: '重置',
+      reset_type: 'default',
+    },
+  });
 }
 
 export function fnSTConfig(): STConfig {
-    return Object.assign(new STConfig(), <STConfig>{
-        modal: { size: 'lg' },
-        res: { reName: { list: 'data.list', total: 'data.total' } },
-        bordered: true,
-    });
+  return Object.assign(new STConfig(), <STConfig>{
+    modal: { size: 'lg' },
+    res: { reName: { list: 'data.list', total: 'data.total' } },
+    bordered: true,
+  });
 }
 
 const GLOBAL_CONFIG_PROVIDES = [
-    // TIPS：@delon/abc 有大量的全局配置信息，例如设置所有 `st` 的页码默认为 `20` 行
-    { provide: STConfig, useFactory: fnSTConfig },
-    { provide: PageHeaderConfig, useFactory: fnPageHeaderConfig },
-    { provide: DelonAuthConfig, useFactory: fnDelonAuthConfig },
-    { provide: DelonFormConfig, useFactory: fnDelonFormConfig },
+  // TIPS：@delon/abc 有大量的全局配置信息，例如设置所有 `st` 的页码默认为 `20` 行
+  { provide: STConfig, useFactory: fnSTConfig },
+  { provide: PageHeaderConfig, useFactory: fnPageHeaderConfig },
+  { provide: DelonAuthConfig, useFactory: fnDelonAuthConfig },
+  { provide: DelonFormConfig, useFactory: fnDelonFormConfig },
 ];
 
 // #endregion
 
 @NgModule({
-    imports: [
-        AlainThemeModule.forRoot(),
-        DelonABCModule.forRoot(),
-        DelonChartModule.forRoot(),
-        DelonAuthModule.forRoot(),
-        DelonACLModule.forRoot(),
-        DelonCacheModule.forRoot(),
-        DelonUtilModule.forRoot(),
-        // mock
-        ...MOCK_MODULES,
-    ],
+  imports: [
+    AlainThemeModule.forRoot(),
+    DelonABCModule.forRoot(),
+    DelonChartModule.forRoot(),
+    DelonAuthModule.forRoot(),
+    DelonACLModule.forRoot(),
+    DelonCacheModule.forRoot(),
+    DelonUtilModule.forRoot(),
+    // mock
+    ...MOCK_MODULES,
+  ],
 })
 export class DelonModule {
-    constructor(
-        @Optional()
-        @SkipSelf()
-        parentModule: DelonModule,
-    ) {
-        throwIfAlreadyLoaded(parentModule, 'DelonModule');
-    }
+  constructor(
+    @Optional()
+    @SkipSelf()
+    parentModule: DelonModule,
+  ) {
+    throwIfAlreadyLoaded(parentModule, 'DelonModule');
+  }
 
-    static forRoot(): ModuleWithProviders {
-        return {
-            ngModule: DelonModule,
-            providers: [...REUSETAB_PROVIDES, ...GLOBAL_CONFIG_PROVIDES],
-        };
-    }
+  static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: DelonModule,
+      providers: [...REUSETAB_PROVIDES, ...GLOBAL_CONFIG_PROVIDES],
+    };
+  }
 }

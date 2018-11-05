@@ -3,8 +3,6 @@ import {
   Input,
   Output,
   ElementRef,
-  Renderer,
-  HostListener,
   OnInit,
   OnDestroy,
   OnChanges,
@@ -12,6 +10,7 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { HttpService, helpers, NoticeService } from '@core';
+import { window } from 'rxjs/operators';
 
 @Directive({ selector: '[jstree]' })
 export class JsTreeDirective implements OnInit, OnDestroy, OnChanges {
@@ -19,6 +18,13 @@ export class JsTreeDirective implements OnInit, OnDestroy, OnChanges {
   data$: any = {};
   $container: any;
   private sweet: any;
+  private jstreeObj = null;
+
+  @Input('jstree')
+  treeData: any;
+
+  @Output('jstreeChange')
+  jstreeChange = new EventEmitter<any>();
 
   constructor(
     private eleRef: ElementRef,
@@ -28,12 +34,6 @@ export class JsTreeDirective implements OnInit, OnDestroy, OnChanges {
     this.$container = $(this.eleRef.nativeElement);
     this.sweet = this.msgService.sweet;
   }
-
-  @Input('jstree')
-  treeData: any;
-
-  @Output('jstreeChange')
-  jstreeChange = new EventEmitter<any>();
 
   ngOnInit() {}
 
@@ -64,12 +64,12 @@ export class JsTreeDirective implements OnInit, OnDestroy, OnChanges {
     this.$container.empty();
 
     if (helpers.isArray(op.data) && op.data.length > 0) {
-      this.tree_initUI();
+      this.jstreeObj = this.tree_initUI();
     } else {
       // 异步加载
       this.data$.get$ = this.http.get(op.api).subscribe((result: any) => {
         this.op.data = result.data.list;
-        this.tree_initUI();
+        this.jstreeObj = this.tree_initUI();
       });
     }
     this.tree_event();
@@ -77,18 +77,11 @@ export class JsTreeDirective implements OnInit, OnDestroy, OnChanges {
 
   tree_initUI() {
     const self = this;
-    try {
-      if (this.op.data[0].state) {
-        this.op.data[0].state.opened = true;
-      } else {
-        this.op.data[0].state = {
-          opened: true,
-        };
-      }
-    } catch (e) {
-      //
+    if (this.op.data.length > 0) {
+      this.op.data[0].state = this.op.data[0].state || {};
+      this.op.data[0].state['opened'] = true;
+      this.op.data[0].type = 'root';
     }
-
     const jstree_op = {
       core: {
         strings: {
@@ -102,19 +95,21 @@ export class JsTreeDirective implements OnInit, OnDestroy, OnChanges {
       },
       types: {
         root: {
-          icon: 'iconfont icon-folder icon-state-warning icon-lg',
+          icon: 'iconfont icon-home icon-state-warning icon-lg',
         },
         default: {
           icon: 'iconfont icon-folder icon-state-warning icon-lg',
+          valid_children: ['default', 'file', 'opened'],
         },
         opened: {
           icon: 'iconfont icon-folder-open icon-state-warning icon-lg',
         },
         file: {
           icon: 'iconfont icon-File icon-state-warning icon-lg',
+          valid_children: [],
         },
       },
-      plugins: [],
+      plugins: ['types'],
       contextmenu: {
         items: node => {
           const o: any = {
@@ -136,10 +131,8 @@ export class JsTreeDirective implements OnInit, OnDestroy, OnChanges {
       },
     };
 
-    if (this.op.type === 'view') {
-      jstree_op.plugins = ['types'];
-    } else {
-      jstree_op.plugins = ['contextmenu', 'types'];
+    if (this.op.type !== 'view') {
+      jstree_op.plugins.push('contextmenu');
     }
 
     return this.$container.jstree(jstree_op);
@@ -148,7 +141,6 @@ export class JsTreeDirective implements OnInit, OnDestroy, OnChanges {
   tree_event() {
     const self = this;
 
-    // 数据加载后
     this.$container.on('loaded.jstree', (e, data) => {
       // 全部展开
       if (self.op.open_all) {
@@ -163,14 +155,19 @@ export class JsTreeDirective implements OnInit, OnDestroy, OnChanges {
       }
     });
 
-    self.$container.on('select_node.jstree', (event, data) => {
+    this.$container.on('select_node.jstree', (event, data) => {
       this.jstreeChange.emit(data.node);
       if (self.op.clickNode) {
         return self.op.clickNode(data.node);
       }
     });
 
-    return void 0;
+    this.$container.on('open_node.jstree', (event, data) => {
+      data.instance.set_type(data.node, 'opened');
+    });
+    this.$container.on('close_node.jstree', (event, data) => {
+      data.instance.set_type(data.node, 'default');
+    });
   }
 
   tree_reg(label, action) {
