@@ -6,7 +6,7 @@ import * as screenfull from 'screenfull';
   template: `
     <div class="alain-default__nav-item">
       <i nz-icon [type]="status ? 'fullscreen' : 'fullscreen-exit'" class="alain-default__nav-item-icon"></i>
-        {{(status ? '退出全屏' : '全屏') }}
+        &nbsp;{{(status ? '退出全屏' : '全屏') }}&nbsp;
     </div>
   `,
   host: {

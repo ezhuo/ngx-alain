@@ -77,9 +77,17 @@
 <form nz-form [nzLayout]="'Horizontal'" class="search-form">
     <nz-form-item>
         <nz-form-control>
-            <nz-tree [(ngModel)]="nodes2" [nzShowLine]="true" [nzCheckable]="false" [nzShowExpand]="'false'" [nzDefaultExpandedKeys]="expandKeys" [nzDefaultCheckedKeys]="checkedKeys"
-                [nzDefaultSelectedKeys]="selectedKeys" [nzDefaultExpandAll]="true" (nzClick)="mouseAction('click',$event)" (nzDblClick)="mouseAction('dblclick', $event)" (nzContextMenu)="contextMenu2($event , contextTemplate)"
-                [ngModelOptions]="{standalone: true}">
+            <nz-tree 
+                    [(nzData)]="nodes2" 
+                    [nzShowLine]="true" 
+                    [nzCheckable]="false" 
+                    [nzDefaultExpandedKeys]="expandKeys" 
+                    [nzDefaultCheckedKeys]="checkedKeys"
+                    [nzDefaultSelectedKeys]="selectedKeys" 
+                    [nzDefaultExpandAll]="true" 
+                    (nzClick)="mouseAction('click',$event)" 
+                    (nzDblClick)="mouseAction('dblclick', $event)" 
+                    (nzContextMenu)="contextMenu2($event , contextTemplate)">
                 <ng-template #contextTemplate>
                     <ul nz-menu nzInDropDown>
                         <li nz-menu-item (click)="selectDropdown()">新建文件</li>

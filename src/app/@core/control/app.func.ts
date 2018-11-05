@@ -1,8 +1,6 @@
 import { AppControl } from './app.control';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-
-import { STColumn, STComponent } from '@delon/abc';
-import { SFSchema, SFUISchema, SFSchemaEnumType } from '@delon/form';
+import { FormGroup } from '@angular/forms';
+import { SFSchema } from '@delon/form';
 
 export class AppFunc {
   private ___appCtl: AppControl = null;

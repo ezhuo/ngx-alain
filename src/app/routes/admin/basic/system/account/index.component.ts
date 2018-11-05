@@ -8,20 +8,13 @@ import {
 
 import { STComponent } from '@delon/abc';
 import { SFComponent } from '@delon/form';
-
 import { IndexControl } from '@core';
-
 import { AccountEditComponent } from './modal/edit.component';
 import { AccountShowComponent } from './modal/show.component';
 import { AccountPwdComponent } from './modal/pwd.component';
-
 import { NzFormatEmitEvent, NzTreeNode, NzTreeComponent } from 'ng-zorro-antd';
-
 import { FormProperty, PropertyGroup } from '@delon/form';
-
 import { SFSchema } from '@delon/form';
-
-import { of } from 'rxjs';
 
 @Component({
   selector: 'app-system-account',
@@ -80,7 +73,7 @@ export class AccountComponent extends IndexControl
 
   ngOnInit() {
     super.ngOnInit();
-    this.gettreeData();
+    this.getTreeData();
 
     this.schemaData = {
       // 查询
@@ -358,12 +351,17 @@ export class AccountComponent extends IndexControl
   treeData = [];
   treeDataExpandKeys = [];
   treeDataSelectKeys = [];
-  gettreeData() {
+  getTreeData() {
+    if (this.freeData.company) {
+      this.freeData.company.unsubscribe();
+    }
     this.freeData.company = this.httpSrv
       .get('/orginfo/tree')
       .subscribe((result: any) => {
         result.data.list.forEach((node, idx) => {
-          console.log(idx);
+          this.treeData = [];
+          this.treeDataExpandKeys = [];
+          this.treeDataSelectKeys = [];
           if (idx === 0) {
             this.treeDataExpandKeys.push(node.key);
             this.treeDataSelectKeys.push(node.key);

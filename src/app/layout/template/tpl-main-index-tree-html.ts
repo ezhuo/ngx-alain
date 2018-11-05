@@ -37,8 +37,12 @@ export const tplMainIndexTreeHTML =
   <div nz-col nzSpan="4">
     <nz-card>
       <p>
-        <nz-tree [(ngModel)]="treeCompany" [nzShowLine]="true" [nzShowExpand]="'false'" [nzDefaultExpandedKeys]="treeCompanyExpandKeys" (nzClick)="mouseTreeAction('click',$event)" (nzContextMenu)="mouseTreeAction('click',$event)"
-          [ngModelOptions]="{standalone: true}">
+        <nz-tree 
+          [(nzData)]="treeCompany" 
+          [nzShowLine]="true" 
+          [nzDefaultExpandedKeys]="treeCompanyExpandKeys" 
+          (nzClick)="mouseTreeAction('click',$event)" 
+          (nzContextMenu)="mouseTreeAction('click',$event)">
         </nz-tree>
       </p>
     </nz-card>

@@ -29,8 +29,13 @@
     <div nz-col [nzSpan]="userSrv.userInfo.is_group?'4':'24'" [nzLg]="userSrv.userInfo.is_group?'4':'24'" nzXs="24" *ngIf="userSrv.userInfo.is_group">
         <nz-card>
             <p>
-                <nz-tree #tree [(ngModel)]="treeData" [nzShowLine]="true" [nzShowExpand]="'false'" [nzDefaultExpandedKeys]="treeDataExpandKeys" [nzDefaultSelectedKeys]="treeDataSelectKeys" (nzClick)="mouseTreeAction('click',$event)"
-                    (nzContextMenu)="mouseTreeAction('click',$event)" [ngModelOptions]="{standalone: true}">
+                <nz-tree #tree 
+                    [(nzData)]="treeData" 
+                    [nzShowLine]="true" 
+                    [nzDefaultExpandedKeys]="treeDataExpandKeys" 
+                    [nzDefaultSelectedKeys]="treeDataSelectKeys" 
+                    (nzClick)="mouseTreeAction('click',$event)"
+                    (nzContextMenu)="mouseTreeAction('click',$event)">
                 </nz-tree>
             </p>
         </nz-card>

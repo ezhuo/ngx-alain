@@ -1,6 +1,6 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { Component, DebugElement } from '@angular/core';
-import { addSeconds } from 'date-fns';
+import addSeconds from 'date-fns/add_seconds';
 import { CountDownModule } from './count-down.module';
 
 describe('abc: count-down', () => {
@@ -75,7 +75,10 @@ describe('abc: count-down', () => {
 class TestComponent {
   config: any;
   target: number | Date;
-  notify(val: number) {}
-  begin() {}
-  end() {}
+  notify(val: number) {
+  }
+  begin() {
+  }
+  end() {
+  }
 }

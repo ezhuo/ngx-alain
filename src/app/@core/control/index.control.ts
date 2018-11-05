@@ -24,7 +24,7 @@ export class IndexControl extends AppControl implements OnInit, OnDestroy {
   }
 
   /**
-   * 模态数据格式化
+   * 向模态对话框传递数据过程中的数据格式化
    * @param record
    */
   formatModalParams(record?: any, params?: any): Object {
@@ -34,8 +34,6 @@ export class IndexControl extends AppControl implements OnInit, OnDestroy {
     );
     const frmData = this.helpers.deepExtend({}, record || this.form.data || {});
     const prop = mSchema.properties;
-    // console.log(record);
-    // 将数据格式化后，传入到modal中
     let oldwidget = '';
     for (const idx of Object.keys(prop)) {
       if (!(prop[idx] && prop[idx].ui)) {
@@ -55,17 +53,18 @@ export class IndexControl extends AppControl implements OnInit, OnDestroy {
         }
       }
     }
+    const newSchemaData = Object.assign(this.schemaData, {
+      main: mSchema,
+      mainOrder: this.schemaData.mainOrder,
+      mainUi: this.schemaData.mainUi,
+    });
     return {
       dataSource: {
         key: this.dataSource.key,
         url: this.dataSource.url,
       },
       form: { data: frmData },
-      schemaData: {
-        main: mSchema,
-        mainOrder: this.helpers.deepExtend({}, this.schemaData.mainOrder),
-        mainUi: this.helpers.deepExtend({}, this.schemaData.mainUi),
-      },
+      schemaData: this.helpers.deepExtend({}, newSchemaData),
       modalData: this.helpers.deepExtend({}, this.modalData),
     };
   }

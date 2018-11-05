@@ -30,11 +30,11 @@ export class CountDownComponent {
   }
 
   @Output()
-  begin = new EventEmitter();
+  readonly begin = new EventEmitter();
   @Output()
-  notify = new EventEmitter<number>();
+  readonly notify = new EventEmitter<number>();
   @Output()
-  end = new EventEmitter();
+  readonly end = new EventEmitter();
 
   _start() {
     this.begin.emit();

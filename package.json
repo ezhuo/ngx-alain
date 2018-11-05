@@ -1,6 +1,6 @@
 {
   "name": "ngx-alain",
-  "version": "2.0.0-rc.1",
+  "version": "2.0.0-rc.2",
   "description": "ng-zorro-antd admin panel front-end framework",
   "author": "cipchk",
   "homepage": "https://ng-alain.github.io/ng-alain/",
@@ -63,7 +63,8 @@
     "blueimp-md5": "^2.10.0",
     "sweetalert2": "^7.22.2",
     "ng2-ckeditor": "^1.2.1",
-    "ngx-infinite-scroll": "^6.0.1"
+    "ngx-infinite-scroll": "^6.0.1",
+    "socket.io": "^2.1.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.8.0",

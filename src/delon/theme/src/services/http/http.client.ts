@@ -274,7 +274,7 @@ export class _HttpClient {
 
   // #endregion
 
-  // #region: delete
+  // #region delete
 
   /**
    * DELETE：返回一个 `string` 类型

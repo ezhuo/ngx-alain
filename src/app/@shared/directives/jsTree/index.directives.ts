@@ -102,16 +102,16 @@ export class JsTreeDirective implements OnInit, OnDestroy, OnChanges {
       },
       types: {
         root: {
-          icon: 'anticon anticon-folder icon-state-warning icon-lg',
-        },
-        opened: {
-          icon: 'anticon anticon-folder-open icon-state-warning icon-lg',
+          icon: 'iconfont icon-folder icon-state-warning icon-lg',
         },
         default: {
-          icon: 'anticon anticon-folder icon-state-warning icon-lg',
+          icon: 'iconfont icon-folder icon-state-warning icon-lg',
+        },
+        opened: {
+          icon: 'iconfont icon-folder-open icon-state-warning icon-lg',
         },
         file: {
-          icon: 'anticon anticon-file icon-state-warning icon-lg',
+          icon: 'iconfont icon-File icon-state-warning icon-lg',
         },
       },
       plugins: [],

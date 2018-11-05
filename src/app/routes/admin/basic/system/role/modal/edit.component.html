@@ -12,16 +12,14 @@
     <nz-card style="width:100%;">
         
       <nz-tree #tree
-          [(ngModel)]="treeData"
+          [(nzData)]="treeData"
           [nzShowLine]="true" 
           [nzCheckable]="true"
           [nzMultiple]="true"
-          [nzShowExpand]="true"
           [nzDefaultExpandedKeys]="treeDataExpandKeys"
           [nzDefaultCheckedKeys]="treeDataCheckedKeys"
           [nzDefaultSelectedKeys]="treeDataSelectKeys"
-          [nzDefaultExpandAll]="false"
-          [ngModelOptions]="{standalone: true}">
+          [nzDefaultExpandAll]="false">
       </nz-tree>
 
     </nz-card>
