@@ -163,10 +163,14 @@ export class JsTreeDirective implements OnInit, OnDestroy, OnChanges {
     });
 
     this.$container.on('open_node.jstree', (event, data) => {
-      data.instance.set_type(data.node, 'opened');
+      if (data.instance.get_type(data.node) != 'root') {
+        data.instance.set_type(data.node, 'opened');
+      }
     });
     this.$container.on('close_node.jstree', (event, data) => {
-      data.instance.set_type(data.node, 'default');
+      if (data.instance.get_type(data.node) != 'root') {
+        data.instance.set_type(data.node, 'default');
+      }
     });
   }
 
