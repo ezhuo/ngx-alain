@@ -20,17 +20,16 @@ import {
   ScrollService,
 } from '@delon/theme';
 
-import { ModalService } from '../utils/modal.service';
-import { NoticeService } from '../utils/notice.service';
+import {
+  AuthService,
+  TokenService,
+  StateService,
+  ConfigService,
+  UserService,
+} from '../data';
 
-import { AuthService } from '../data/auth.service';
-import { TokenService } from '../data/token.service';
-import { StateService } from '../data/state.service';
-import { ConfigService } from '../data/config.service';
-import { UserService } from '../data/users.service';
-
-import { HttpService } from '../net/http.service';
-
+import { ModalService, NoticeService } from '../utils';
+import { HttpService } from '../net';
 import * as helpers from '../helpers';
 
 export class InjectorControl implements OnInit, OnDestroy {

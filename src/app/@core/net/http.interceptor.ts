@@ -11,13 +11,10 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import { Router } from '@angular/router';
-
 import { Observable, of, throwError } from 'rxjs';
 import { mergeMap, catchError } from 'rxjs/operators';
-
 import { NoticeService } from '../utils/notice.service';
-import { TokenService } from '../data/token.service';
-import { UserService } from '../data/users.service';
+import { TokenService, UserService } from '../data';
 import * as configInc from '../config.inc';
 import * as helper from '../helpers';
 
