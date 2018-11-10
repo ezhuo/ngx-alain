@@ -71,26 +71,20 @@ export class STColumnSource {
       }
 
       if (item.pop === true) {
-        item._type = 'pop';
-        if (typeof item.popTitle === 'undefined') {
-          item.popTitle = popTitle;
-        }
+        item.popTitle = item.popTitle || popTitle;
+      } else {
+        item.pop = false;
       }
+
       if (item.icon) {
-        item._type = 'icon';
         item.icon = Object.assign(
           {},
           btnIcon,
           typeof item.icon === 'string' ? { type: item.icon } : item.icon,
         );
       }
-      if (item.children && item.children.length > 0) {
-        item._type = 'sub';
-        item.children = this.btnCoerce(item.children);
-      }
-      if (!item._type) {
-        item._type = '';
-      }
+
+      item.children = item.children && item.children.length > 0 ? this.btnCoerce(item.children) : [];
 
       // i18n
       if (item.i18n && this.i18nSrv) {
@@ -233,6 +227,7 @@ export class STColumnSource {
     if (!list || list.length === 0)
       throw new Error(`[st]: the columns property muse be define!`);
 
+    const { noIndex } = this.cog;
     let checkboxCount = 0;
     let radioCount = 0;
     const columns: STColumn[] = [];
@@ -251,6 +246,10 @@ export class STColumnSource {
       // title
       if (item.i18n && this.i18nSrv) {
         item.title = this.i18nSrv.fanyi(item.i18n);
+      }
+      // no
+      if (item.type === 'no') {
+        item.noIndex = item.noIndex == null ? noIndex : item.noIndex;
       }
       // checkbox
       if (item.selections == null) {

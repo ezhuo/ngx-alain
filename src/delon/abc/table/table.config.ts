@@ -6,6 +6,7 @@ import {
   STColumnButtonModalConfig,
   STColumnButtonDrawerConfig,
   STIcon,
+  STRowClassName,
 } from './table.interfaces';
 
 export class STConfig {
@@ -102,4 +103,13 @@ export class STConfig {
     theme: 'outline',
     spin: false,
   };
+  /**
+   * 行号索引，默认：`1`
+   * - 计算规则为：`index + noIndex`
+   */
+  noIndex? = 1;
+  /**
+   * 表格行的类名
+   */
+  rowClassName?: STRowClassName;
 }

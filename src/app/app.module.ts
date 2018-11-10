@@ -7,7 +7,6 @@ import { DelonModule } from './delon.module';
 import { CoreModule } from '@core';
 
 import { SharedModule, JsonSchemaModule, ThirdComponentModule } from '@shared';
-
 import { LayoutFullScreenModule } from '@layout';
 
 import { AppRoutingModule } from './app-routing.module';

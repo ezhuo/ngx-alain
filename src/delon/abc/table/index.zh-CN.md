@@ -35,7 +35,7 @@ config: STConfig
 
 ## API
 
-### Input & Output
+### STComponent
 
 参数 | 说明 | 类型 | 默认值
 ----|------|-----|------
@@ -49,6 +49,7 @@ config: STConfig
 `[noResult]` | 无数据时显示内容 | `string,TemplateRef<void>` | -
 `[bordered]` | 是否显示边框 | `boolean` | `false`
 `[size]` | table大小 | `small,middle,default` | `default`
+`[rowClassName]` | 表格行的类名 | `(record: STData, index: number) => string` | -
 `[loading]` | 页面是否加载中 | `boolean` | `false`
 `[loadingDelay]` | 延迟显示加载效果的时间（防止闪烁） | `number` | `0`
 `[scroll]` | 横向或纵向支持滚动，也可用于指定滚动区域的宽高度：`{ x: "300px", y: "300px" }` | `{ y?: string; x?: string }` | -
@@ -74,6 +75,7 @@ config: STConfig
 `load(pi = 1, extraParams?: any, options?: STLoadOptions)` | 加载指定页
 `reload(extraParams?: any, options?: STLoadOptions)` | 刷新当前页
 `reset(extraParams?: any, options?: STLoadOptions)` | 重置且重新设置 `pi` 为 `1`，包含单多选、排序、过滤状态（同默认状态一并清除）
+`removeRow(data: STData | STData[])` | 移除行
 `clearCheck()` | 清除所有 `checkbox`
 `clearRadio()` | 清除所有 `radio`
 `export(newData?: any[], opt?: STExportOptions)` | 导出Excel，确保已经导入 `XlsxModule`
@@ -199,7 +201,7 @@ class TestComponent {
 ----|------|-----|------
 `[title]` | 列名 | `string` | -
 `[i18n]` | 列名i18n | `string` | -
-`[type]` | `checkbox` 多选；`radio` 单选；`link` 链接，可触发 `click`；`img` 图像且居中；`number` 数字且居右；`currency` 货币且居右；`date` 日期格式且居中；`badge` [徽标](https://ng.ant.design/components/badge/zh)；`tag` [标签](https://ng.ant.design/components/tag/zh)；`yn` 将`boolean`类型徽章化 [document](/theme/yn) | `string` | -
+`[type]` | `no` 行号<br>`checkbox` 多选<br>`radio` 单选<br>`link` 链接，可触发 `click`<br>`img` 图像且居中<br>`number` 数字且居右<br>`currency` 货币且居右<br>`date` 日期格式且居中<br>`badge` [徽标](https://ng.ant.design/components/badge/zh)<br>`tag` [标签](https://ng.ant.design/components/tag/zh)<br>`yn` 将`boolean`类型徽章化 [document](/theme/yn) | `string` | -
 `[index]` | 列数据在数据项中对应的 key，支持 `a.b.c` 的嵌套写法 | `string, string[]` | -
 `[render]` | 自定义渲染ID | `string` | -
 `[renderTitle]` | 标题自定义渲染ID | `string` | -
@@ -218,9 +220,10 @@ class TestComponent {
 `[yn]` | 当 `type=yn` 有效 | `STColumnYn` | -
 `[exported]` | 是否允许导出 | `boolean` | `true`
 `[acl]` | ACL权限，等同 `can()` 参数值 | `ACLCanType` | -
-`[click]` | 链接回调 | `(record: any, instance?: STComponent) => void` | -
+`[click]` | 链接回调 | `(record: STData, instance?: STComponent) => void` | -
 `[badge]` | 徽标配置项 | `STColumnBadge` | -
 `[tag]` | 徽标配置项 | `STColumnTag` | -
+`[noIndex]` | 行号索引开始值 | `STColumnTag` | `1`
 
 ### STColumnSort
 
@@ -236,7 +239,7 @@ class TestComponent {
 参数 | 说明 | 类型 | 默认值
 ----|------|-----|------
 `[menus]` | 表头的筛选菜单项，至少一项才会生效 | `STColumnFilterMenu[]` | -
-`[fn]` | 本地数据的筛选函数 | `(filter: STColumnFilterMenu, record: any) => boolean` | -
+`[fn]` | 本地数据的筛选函数 | `(filter: STColumnFilterMenu, record: STData) => boolean` | -
 `[default]` | 标识数据是否经过过滤，筛选图标会高亮 | `boolean` | -
 `[icon]` | 自定义 fiter 图标 | `string` | `filter`
 `[multiple]` | 是否多选 | `boolean` | `true`
@@ -258,19 +261,19 @@ class TestComponent {
 
 参数 | 说明 | 类型 | 默认值
 ----|------|-----|------
-`[text]` | 文本 | `string` | -
-`[icon]` | 图标 | `string | STIcon` | -
+`[text]` | 文本与图标共存 | `string` | -
+`[icon]` | 图标与文本共存 | `string | STIcon` | -
 `[i18n]` | 文本i18n | `string` | -
-`[format]` | 格式化文本 | `(record: any, btn: STColumnButton) => string` | -
+`[format]` | 格式化文本 | `(record: STData, btn: STColumnButton) => string` | -
 `[type]` | 按钮类型 | `none,del,modal,static,drawer,link` | -
-`[click]` | 点击回调；**函数：** `type=modal` 只会在 `确认` 时触发且 `modal` 参数有效<br>**reload：** 重新刷新当前页<br>**load：** 重新加载数据，并重置页码为：`1` | `(record: any, modal?: any, instance?: STComponent) => void | reload` | -
+`[click]` | 点击回调；**函数：** `type=modal` 只会在 `确认` 时触发且 `modal` 参数有效<br>**reload：** 重新刷新当前页<br>**load：** 重新加载数据，并重置页码为：`1` | `(record: STData, modal?: any, instance?: STComponent) => void | reload` | -
 `[pop]` | 是否需要气泡确认框 | `string` | -
 `[popTitle]` | 气泡确认框内容 | `string` | 确认删除吗？
 `[modal]` | 模态框配置 | `STColumnButtonModal` | -
 `[drawer]` | 抽屉配置 | `STColumnButtonDrawer` | -
 `[children]` | 下拉菜单，当存在时以 `dropdown` 形式渲染；只支持一级 | `STColumnButton[]` | -
 `[acl]` | ACL权限，等同 `can()` 参数值 | `ACLCanType` | -
-`[iif]` | 自定义条件表达式 | `boolean` | `() => true`
+`[iif]` | 自定义条件表达式 | `(item: STData, btn: STColumnButton, column: STColumn) => boolean` | `() => true`
 
 ### STIcon
 
@@ -287,7 +290,7 @@ class TestComponent {
 参数 | 说明 | 类型 | 默认值
 ----|------|-----|------
 `[component]` | 目标组件对象，务必在 `entryComponents` 注册 | `any` | -
-`[params]` | 目标组件的接收参数对象 | `(record: any) => Object` | -
+`[params]` | 目标组件的接收参数对象 | `(record: STData) => Object` | -
 `[paramsName]` | 目标组件的接收参数名 | `string` | record
 `[size]` | 对话框大小 | `sm, md, lg, xl, '', number` | `lg`
 `[exact]` | 是否精准（默认：`true`），若返回值非空值（`null`或`undefined`）视为成功，否则视为错误 | `boolean` | `true`
@@ -300,7 +303,7 @@ class TestComponent {
 ----|------|-----|------
 `[title]` | 标题 | `any` | -
 `[component]` | 目标组件对象，务必在 `entryComponents` 注册 | `any` | -
-`[params]` | 目标组件的接收参数对象 | `(record: any) => Object` | -
+`[params]` | 目标组件的接收参数对象 | `(record: STData) => Object` | -
 `[paramsName]` | 目标组件的接收参数名 | `string` | record
 `[size]` | 抽屉大小 | `sm, md, lg, xl, number` | `md`
 `[drawerOptions]` | 抽屉 [NzDrawerOptions](https://ng.ant.design/components/drawer/zh#nzdraweroptions) 参数 | `any` | -

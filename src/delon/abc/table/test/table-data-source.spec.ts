@@ -3,10 +3,7 @@ import { DecimalPipe } from '@angular/common';
 import { CNCurrencyPipe, DatePipe, YNPipe } from '@delon/theme';
 import { deepCopy } from '@delon/util';
 
-import {
-  STDataSource,
-  STDataSourceOptions,
-} from '../table-data-source';
+import { STDataSource, STDataSourceOptions } from '../table-data-source';
 import { STConfig } from '../table.config';
 import { STColumnFilterMenu } from '../table.interfaces';
 import { of, throwError } from 'rxjs';
@@ -76,7 +73,7 @@ describe('abc: table: data-souce', () => {
       datePipe,
       ynPipe,
       decimalPipe,
-      new MockDomSanitizer() as any
+      new MockDomSanitizer() as any,
     );
   }
 
@@ -495,9 +492,7 @@ describe('abc: table: data-souce', () => {
         });
       });
       it(`should be re-name`, (done: () => void) => {
-        options.columns[0].filter.reName = (
-          list: STColumnFilterMenu[],
-        ) => {
+        options.columns[0].filter.reName = (list: STColumnFilterMenu[]) => {
           return { id: list.map(i => i.value + '1').join(',') };
         };
         srv.process(options).then(res => {
@@ -533,6 +528,24 @@ describe('abc: table: data-souce', () => {
         srv.process(options).then(res => {
           expect(res.list[0]._values[0]).toBe(`name 1`);
           done();
+        });
+      });
+      describe('via no', () => {
+        it('with start 1', (done: () => void) => {
+          options.columns[0].type = 'no';
+          options.columns[0].noIndex = 1;
+          srv.process(options).then(res => {
+            expect(res.list[0]._values[0]).toBe(1);
+            done();
+          });
+        });
+        it('with start 0', (done: () => void) => {
+          options.columns[0].type = 'no';
+          options.columns[0].noIndex = 0;
+          srv.process(options).then(res => {
+            expect(res.list[0]._values[0]).toBe(0);
+            done();
+          });
         });
       });
       describe('via img', () => {
@@ -584,6 +597,14 @@ describe('abc: table: data-souce', () => {
           expect(ynPipe.transform).toHaveBeenCalled();
           done();
         });
+      });
+    });
+    it('#rowClassName', (done: () => void) => {
+      options.rowClassName = () => `aaa`;
+      options.data = genData();
+      srv.process(options).then(res => {
+        expect(res.list[0]._rowClassName).toBe('aaa');
+        done();
       });
     });
   });

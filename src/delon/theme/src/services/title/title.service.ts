@@ -129,7 +129,6 @@ export class TitleService implements OnDestroy {
       this._default ||
       this.title.getTitle();
   }
-
   ngOnDestroy(): void {
     if (this.i18n$) this.i18n$.unsubscribe();
   }

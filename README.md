@@ -19,8 +19,9 @@ npm run serve:hmr
 ### 1. st
 ```
 1. abc\table\table.component.html：添加了表格序号；
-2. table\table.component.ts：_btnClick 方法里添加：options.modalOptions = Object.assign(options.modalOptions || {}, { nzStyle: { top: '20px' } });
-3. table\table-data-source.ts： 将 _HttpClient 更换为 HttpService
+2. abc\table\style\index.less：添加了表格序号样式；
+3. table\table.component.ts：_btnClick 方法里添加：options.modalOptions = Object.assign(options.modalOptions || {}, { nzStyle: { top: '20px' } });
+4. table\table-data-source.ts： 将 _HttpClient 更换为 HttpService
 ```
 
 ### 2. title.service

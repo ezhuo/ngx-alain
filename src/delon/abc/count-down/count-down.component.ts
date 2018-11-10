@@ -12,8 +12,7 @@ import { format, addSeconds } from 'date-fns';
   preserveWhitespaces: false,
 })
 export class CountDownComponent {
-  @Input()
-  config: any;
+  @Input() config: any;
 
   /**
    * 目标时间
@@ -29,12 +28,9 @@ export class CountDownComponent {
     };
   }
 
-  @Output()
-  readonly begin = new EventEmitter();
-  @Output()
-  readonly notify = new EventEmitter<number>();
-  @Output()
-  readonly end = new EventEmitter();
+  @Output() readonly begin = new EventEmitter();
+  @Output() readonly notify = new EventEmitter<number>();
+  @Output() readonly end = new EventEmitter();
 
   _start() {
     this.begin.emit();
