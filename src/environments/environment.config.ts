@@ -1,5 +1,5 @@
 import { App } from '@delon/theme';
-import { Canton, Router, Define } from '@core/config.inc';
+import { Canton, Router, Define } from '@core';
 
 export const appDebug = true;
 export const appDebugError = true;

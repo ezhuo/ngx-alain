@@ -12,7 +12,13 @@ import { ReuseTabService } from '@delon/abc';
 })
 export class UserLoginComponent extends InjectorControl
   implements OnInit, OnDestroy {
-  form: FormGroup;
+  form: FormGroup = this.FormBuilder.group({
+    account: [null, [Validators.required, Validators.minLength(1)]],
+    password: [null, Validators.required],
+    mobile: [null, [Validators.required, Validators.pattern(/^1\d{10}$/)]],
+    captcha: [null, [Validators.required]],
+    remember: [true],
+  });
   error = '';
   type = 0;
   login$: any;
@@ -30,14 +36,6 @@ export class UserLoginComponent extends InjectorControl
 
   constructor(protected injector: Injector) {
     super(injector);
-
-    this.form = this.FormBuilder.group({
-      account: [null, [Validators.required, Validators.minLength(1)]],
-      password: [null, Validators.required],
-      mobile: [null, [Validators.required, Validators.pattern(/^1\d{10}$/)]],
-      captcha: [null, [Validators.required]],
-      remember: [true],
-    });
     this.modalSrv.closeAll();
   }
 

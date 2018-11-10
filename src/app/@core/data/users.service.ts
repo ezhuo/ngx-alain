@@ -3,22 +3,23 @@ import { Observable, of } from 'rxjs';
 import { User, SettingsService } from '@delon/theme';
 import { define, appDebug } from '../config.inc';
 import * as helper from '../helpers';
+import { UserInfo } from '@core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private __api_dt: any = null;
-  private __userInfo: any = {};
+  private __userInfo: UserInfo = { id: 0 };
   private __user: User = {};
 
-  constructor(private settingsService: SettingsService) { }
+  constructor(private settingsService: SettingsService) {}
 
-  getUser(): Observable<any> {
+  getUser(): Observable<UserInfo> {
     return of(this.__userInfo);
   }
 
-  set userInfo(dd: any) {
+  set userInfo(dd: UserInfo) {
     this.__userInfo = dd;
     if (dd) {
       this.__userInfo.avatar = define.userImages;
@@ -38,11 +39,11 @@ export class UserService {
     if (appDebug) console.log(this.__userInfo);
   }
 
-  get userInfo() {
+  get userInfo(): UserInfo {
     return this.__userInfo;
   }
 
-  get user() {
+  get user(): User {
     return this.__user;
   }
 

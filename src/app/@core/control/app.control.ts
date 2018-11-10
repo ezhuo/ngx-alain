@@ -9,7 +9,7 @@ import {
   DataSource,
   ModalData,
   PageData,
-} from './app.interface';
+} from '../model';
 import * as config from '../config.inc';
 
 export class AppControl extends InjectorControl implements OnInit, OnDestroy {
