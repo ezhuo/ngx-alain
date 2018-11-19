@@ -21,33 +21,38 @@ export class DashboardAnalysisComponent implements OnInit {
     .fill({})
     .map((item, i) => {
       return {
-        title: this.i18n.fanyi('app.analysis.test', { no: i }),
+        title: { no: i },
         total: 323234,
       };
+      // return {
+      //   title: this.i18n.fanyi('app.analysis.test', { no: i }),
+      //   total: 323234,
+      // };
     });
+  // titleMap = {
+  //   y1: this.i18n.fanyi('app.analysis.traffic'),
+  //   y2: this.i18n.fanyi('app.analysis.payments'),
+  // };
   titleMap = {
-    y1: this.i18n.fanyi('app.analysis.traffic'),
-    y2: this.i18n.fanyi('app.analysis.payments'),
+    y1: 333,
+    y2: 334,
   };
   searchColumn: STColumn[] = [
-    { title: '排名', i18n: 'app.analysis.table.rank', index: 'index' },
+    { title: '排名', index: 'index' },
     {
       title: '搜索关键词',
-      i18n: 'app.analysis.table.search-keyword',
       index: 'keyword',
       click: (item: any) => this.msg.success(item.keyword),
     },
     {
       type: 'number',
       title: '用户数',
-      i18n: 'app.analysis.table.users',
       index: 'count',
       sorter: (a, b) => a.count - b.count,
     },
     {
       type: 'number',
       title: '周涨幅',
-      i18n: 'app.analysis.table.weekly-range',
       index: 'range',
       render: 'range',
       sorter: (a, b) => a.range - b.range,
@@ -56,8 +61,7 @@ export class DashboardAnalysisComponent implements OnInit {
 
   constructor(
     private http: _HttpClient,
-    public msg: NzMessageService,
-    private i18n: I18NService,
+    public msg: NzMessageService, // private i18n: I18NService,
   ) {}
 
   ngOnInit() {
@@ -94,6 +98,5 @@ export class DashboardAnalysisComponent implements OnInit {
   }
 
   _activeTab = 0;
-  _tabChange(value: any) {
-  }
+  _tabChange(value: any) {}
 }

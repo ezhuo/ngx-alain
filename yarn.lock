@@ -5410,7 +5410,7 @@ neo-async@^2.5.0:
   version "2.6.0"
   resolved "http://registry.npm.taobao.org/neo-async/download/neo-async-2.6.0.tgz#b9d15e4d71c6762908654b5183ed38b753340835"
 
-ng-zorro-antd@^1.7.0:
+ng-zorro-antd@^1.8.0:
   version "1.8.0"
   resolved "http://registry.npm.taobao.org/ng-zorro-antd/download/ng-zorro-antd-1.8.0.tgz#a7864611df1018dbb25ce763d73c8f98f96f6ee8"
   dependencies:
@@ -7375,7 +7375,7 @@ socket.io-parser@~3.2.0:
     debug "~3.1.0"
     isarray "2.0.1"
 
-socket.io@2.1.1, socket.io@~2.1.1:
+socket.io@2.1.1, socket.io@^2.1.1:
   version "2.1.1"
   resolved "http://registry.npm.taobao.org/socket.io/download/socket.io-2.1.1.tgz#a069c5feabee3e6b214a75b40ce0652e1cfb9980"
   dependencies:
