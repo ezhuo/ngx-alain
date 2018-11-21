@@ -1,4 +1,4 @@
-> 基于 ng-alain 1.4.0 ng-zorro
+> 基于 ng-alain 2.0.0 ng-zorro
 
 ## 一、执行
 
