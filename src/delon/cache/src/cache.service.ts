@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { addSeconds } from 'date-fns';
+import {addSeconds} from 'date-fns';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { tap, map } from 'rxjs/operators';
 
@@ -204,12 +204,14 @@ export class CacheService implements OnDestroy {
       : this.store.get(this.options.prefix + key);
     if (!value || (value.e && value.e > 0 && value.e < new Date().valueOf())) {
       if (isPromise) {
-        return this.http.get(key).pipe(
-          map((ret: any) =>
-            this._deepGet(ret, this.options.reName as string[], null),
-          ),
-          tap(v => this.set(key, v)),
-        );
+        return this.http
+          .get(key)
+          .pipe(
+            map((ret: any) =>
+              this._deepGet(ret, this.options.reName as string[], null),
+            ),
+            tap(v => this.set(key, v)),
+          );
       }
       return null;
     }

@@ -16,6 +16,7 @@ import {
   STColumn,
   STMultiSort,
   STRowClassName,
+  STSingleSort,
 } from './table.interfaces';
 import { STSortMap } from './table-column-source';
 
@@ -28,6 +29,7 @@ export interface STDataSourceOptions {
   res?: STRes;
   page?: STPage;
   columns?: STColumn[];
+  singleSort?: STSingleSort;
   multiSort?: STMultiSort;
   rowClassName?: STRowClassName;
 }
@@ -196,14 +198,14 @@ export class STDataSource {
         ret = this.yn.transform(value === col.yn.truth, col.yn.yes, col.yn.no);
         break;
     }
-    return ret;
+    return ret == null ? '' : ret;
   }
 
   private getByHttp(
     url: string,
     options: STDataSourceOptions,
   ): Observable<any> {
-    const { req, page, pi, ps, multiSort, columns } = options;
+    const { req, page, pi, ps, singleSort, multiSort, columns } = options;
     const method = (req.method || 'GET').toUpperCase();
     const params: any = Object.assign(
       {
@@ -211,7 +213,7 @@ export class STDataSource {
         [req.reName.ps]: ps,
       },
       req.params,
-      this.getReqSortMap(multiSort, columns),
+      this.getReqSortMap(singleSort, multiSort, columns),
       this.getReqFilterMap(columns),
     );
     let reqOptions: any = {
@@ -256,6 +258,7 @@ export class STDataSource {
   }
 
   getReqSortMap(
+    singleSort: STSingleSort,
     multiSort: STMultiSort,
     columns: STColumn[],
   ): { [key: string]: string } {
@@ -275,8 +278,13 @@ export class STDataSource {
       };
     } else {
       const mapData = sortList[0];
-      ret[mapData.key] =
-        (sortList[0].reName || {})[mapData.default] || mapData.default;
+      let sortFiled = mapData.key;
+      let sortValue = (sortList[0].reName || {})[mapData.default] || mapData.default;
+      if (singleSort) {
+        sortValue = sortFiled + (singleSort.nameSeparator || '.') + sortValue;
+        sortFiled = singleSort.key || 'sort';
+      }
+      ret[sortFiled] = sortValue;
     }
     return ret;
   }

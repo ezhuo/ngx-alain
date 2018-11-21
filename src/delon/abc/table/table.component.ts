@@ -29,7 +29,6 @@ import {
   ALAIN_I18N_TOKEN,
   AlainI18NService,
   DrawerHelper,
-  DrawerHelperOptions,
   DelonLocaleService,
 } from '@delon/theme';
 import {
@@ -52,11 +51,11 @@ import {
   STReq,
   STError,
   STChangeType,
-  STChangeRowClick,
   STRes,
   STPage,
   STLoadOptions,
   STRowClassName,
+  STSingleSort,
 } from './table.interfaces';
 import { STConfig } from './table.config';
 import { STExport } from './table-export';
@@ -180,6 +179,14 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   /** 纵向支持滚动，也可用于指定滚动区域的高度：`{ y: '300px', x: '300px' }` */
   @Input()
   scroll: { y?: string; x?: string };
+  /**
+   * 单排序规则
+   * - 若不指定，则返回：`columnName=ascend|descend`
+   * - 若指定，则返回：`sort=columnName.(ascend|descend)`
+   */
+  @Input()
+  singleSort: STSingleSort = null;
+  private _multiSort: STMultiSort;
   /** 是否多排序，当 `sort` 多个相同值时自动合并，建议后端支持时使用 */
   @Input()
   get multiSort() {
@@ -199,7 +206,6 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
       typeof value === 'object' ? value : {},
     );
   }
-  private _multiSort: STMultiSort;
   @Input()
   rowClassName: STRowClassName;
   /** `header` 标题 */
@@ -237,54 +243,8 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   // #endregion
 
-  // #region compatible
-
-  /**
-   * checkbox变化时回调，参数为当前所选清单
-   * @deprecated 使用 `change` 替代
-   * @deprecated as of v3
-   */
-  @Output()
-  readonly checkboxChange = new EventEmitter<STData[]>();
-  /**
-   * radio变化时回调，参数为当前所选
-   * @deprecated 使用 `change` 替代
-   * @deprecated as of v3
-   */
-  @Output()
-  readonly radioChange = new EventEmitter<STData>();
-  /**
-   * 排序回调
-   * @deprecated 使用 `change` 替代
-   * @deprecated as of v3
-   */
-  @Output()
-  readonly sortChange = new EventEmitter<any>();
-  /**
-   * 过滤变化时回调
-   * @deprecated 使用 `change` 替代
-   * @deprecated as of v3
-   */
-  @Output()
-  readonly filterChange = new EventEmitter<STColumn>();
-  /**
-   * 行单击回调
-   * @deprecated 使用 `change` 替代
-   * @deprecated as of v3
-   */
-  @Output()
-  readonly rowClick = new EventEmitter<STChangeRowClick>();
-  /**
-   * 行双击回调
-   * @deprecated 使用 `change` 替代
-   * @deprecated as of v3
-   */
-  @Output()
-  readonly rowDblClick = new EventEmitter<STChangeRowClick>();
-  //#endregion
-
   constructor(
-    private cd: ChangeDetectorRef,
+    private cdRef: ChangeDetectorRef,
     private cog: STConfig,
     private router: Router,
     private el: ElementRef,
@@ -304,7 +264,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
       this.locale = this.delonI18n.getData('st');
       if (this._columns.length > 0) {
         this.page = this.clonePage;
-        this.cd.detectChanges();
+        this.cd();
       }
     });
     Object.assign(this, deepCopy(cog));
@@ -313,6 +273,10 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
         .pipe(filter(() => this._columns.length > 0))
         .subscribe(() => this.updateColumns());
     }
+  }
+
+  cd() {
+    this.cdRef.detectChanges();
   }
 
   renderTotal(total: string, range: string[]) {
@@ -340,7 +304,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   //#region data
 
   private _load() {
-    const { pi, ps, data, req, res, page, total, multiSort, rowClassName } = this;
+    const { pi, ps, data, req, res, page, total, singleSort, multiSort, rowClassName } = this;
     this.loading = true;
     return this.dataSource
       .process({
@@ -352,6 +316,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
         res,
         page,
         columns: this._columns,
+        singleSort,
         multiSort,
         rowClassName
       })
@@ -374,6 +339,23 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
         this.loading = false;
         this.error.emit({ type: 'req', error });
       });
+  }
+
+  /** 清空所有数据 */
+  clear(cleanStatus = true) {
+    if (cleanStatus) {
+      this.clearStatus();
+    }
+    this._data.length = 0;
+    this.cd();
+  }
+
+  /** 清空所有状态 */
+  clearStatus() {
+    return this.clearCheck()
+      .clearRadio()
+      .clearFilter()
+      .clearSort();
   }
 
   /**
@@ -412,11 +394,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
    * @param extraParams 重新指定 `extraParams` 值
    */
   reset(extraParams?: any, options?: STLoadOptions) {
-    this.clearCheck()
-      .clearRadio()
-      .clearFilter()
-      .clearSort();
-    this.load(1, extraParams, options);
+    this.clearStatus().load(1, extraParams, options);
   }
 
   private _toTop() {
@@ -457,12 +435,8 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
       const data = { e, item, index };
       if (this.rowClickCount === 1) {
         this.changeEmit('click', data);
-        // @deprecated as of v3
-        this.rowClick.emit(data);
       } else {
         this.changeEmit('dblClick', data);
-        // @deprecated as of v3
-        this.rowDblClick.emit(data);
       }
       this.rowClickCount = 0;
     }, this.rowClickTime);
@@ -478,7 +452,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
         .filter(pos => pos !== -1)
         .forEach(pos => this._data.splice(pos, 1));
 
-    this.cd.detectChanges();
+    this.cd();
   }
 
   //#endregion
@@ -496,16 +470,15 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
     this._load();
     const res = {
       value,
-      map: this.dataSource.getReqSortMap(this.multiSort, this._columns),
+      map: this.dataSource.getReqSortMap(this.singleSort, this.multiSort, this._columns),
       column: col,
     };
     this.changeEmit('sort', res);
-    // @deprecated as of v3
-    this.sortChange.emit(res);
   }
 
   clearSort() {
     this._columns.forEach(item => (item._sort.default = null));
+    return this;
   }
 
   //#endregion
@@ -516,8 +489,6 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
     col.filter.default = col.filter.menus.findIndex(w => w.checked) !== -1;
     this._load();
     this.changeEmit('filter', col);
-    // @deprecated as of v3
-    this.filterChange.emit(col);
   }
 
   _filterConfirm(col: STColumn) {
@@ -560,7 +531,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
       checkedList.length > 0 && checkedList.length === validData.length;
     const allUnChecked = validData.every(value => !value.checked);
     this._indeterminate = !this._allChecked && !allUnChecked;
-    this.cd.detectChanges();
+    this.cd();
     return this;
   }
 
@@ -583,8 +554,6 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   _checkNotify(): this {
     const res = this._data.filter(w => !w.disabled && w.checked === true);
     this.changeEmit('checkbox', res);
-    // @deprecated as of v3
-    this.checkboxChange.emit(res);
     return this;
   }
 
@@ -596,8 +565,6 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   clearRadio(): this {
     this._data.filter(w => w.checked).forEach(item => (item.checked = false));
     this.changeEmit('radio', null);
-    // @deprecated as of v3
-    this.radioChange.emit(null);
     return this;
   }
 
@@ -606,8 +573,6 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
     this._data.filter(w => !w.disabled).forEach(i => (i.checked = false));
     item.checked = checked;
     this.changeEmit('radio', item);
-    // @deprecated as of v3
-    this.radioChange.emit(item);
     return this;
   }
 
@@ -678,7 +643,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   _btnText(record: any, btn: STColumnButton) {
     if (btn.format) return btn.format(record, btn);
-    return btn.text;
+    return btn.text || '';
   }
 
   _validBtns(item: STData, col: STColumn): STColumnButton[] {

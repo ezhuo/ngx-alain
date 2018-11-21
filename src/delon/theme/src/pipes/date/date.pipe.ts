@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { format, distanceInWordsToNow } from 'date-fns';
+import {format , distanceInWordsToNow} from 'date-fns';
 
 @Pipe({ name: '_date' })
 export class DatePipe implements PipeTransform {

@@ -53,6 +53,7 @@ config: STConfig
 `[loading]` | 页面是否加载中 | `boolean` | `false`
 `[loadingDelay]` | 延迟显示加载效果的时间（防止闪烁） | `number` | `0`
 `[scroll]` | 横向或纵向支持滚动，也可用于指定滚动区域的宽高度：`{ x: "300px", y: "300px" }` | `{ y?: string; x?: string }` | -
+`[singleSort]` | 单排序规则<br>若不指定，则返回：`columnName=ascend|descend`<br>若指定，则返回：`sort=columnName.(ascend|descend)` | `STSingleSort` | `null`
 `[multiSort]` | 是否多排序，当 `sort` 多个相同值时自动合并，建议后端支持时使用 | `boolean, STMultiSort` | `false`
 `[rowClickTime]` | 行单击多少时长之类为双击（单位：毫秒） | `number` | `200`
 `[header]` | 表格标题 | `string,TemplateRef<void>` | -
@@ -61,12 +62,6 @@ config: STConfig
 `[expand]` | 当前列是否包含展开按钮，当数据源中包括 `expand` 表示展开状态 | `TemplateRef<void>` | -
 `(change)` | 变化时回调，包括：`pi`、`ps`、`checkbox`、`radio`、`sort`、`filter`、`click`、`dblClick` 变动 | `EventEmitter<STChange>` | -
 `(error)` | 异常时回调 | `EventEmitter<STError>` | -
-(deprecated)`(sortChange)` | 排序回调 | `EventEmitter` | -
-(deprecated)`(checkboxChange)` | checkbox变化时回调，参数为当前所选清单 | `EventEmitter` | -
-(deprecated)`(radioChange)` | radio变化时回调，参数为当前所选 | `EventEmitter` | -
-(deprecated)`(filterChange)` | Filter回调 | `EventEmitter` | -
-(deprecated)`(rowClick)` | 行单击回调 | `EventEmitter<STRowClick>` | -
-(deprecated)`(rowDblClick)` | 行双击回调 | `EventEmitter<STRowClick>` | -
 
 ### 组件方法
 
@@ -76,6 +71,8 @@ config: STConfig
 `reload(extraParams?: any, options?: STLoadOptions)` | 刷新当前页
 `reset(extraParams?: any, options?: STLoadOptions)` | 重置且重新设置 `pi` 为 `1`，包含单多选、排序、过滤状态（同默认状态一并清除）
 `removeRow(data: STData | STData[])` | 移除行
+`clear(cleanStatus = true)` | 清空所有数据
+`clearStatus()` | 清空所有状态（包含单多选、排序、过滤状态）
 `clearCheck()` | 清除所有 `checkbox`
 `clearRadio()` | 清除所有 `radio`
 `export(newData?: any[], opt?: STExportOptions)` | 导出Excel，确保已经导入 `XlsxModule`
@@ -178,6 +175,13 @@ class TestComponent {
 `[sheetname]` | 工作薄名称 | `string` | `Sheet1`
 `[filename]` | 保存的文件名 | `string` | `export.xslx`
 `[callback]` | 保存前的回调 | `(wb: WorkBook) => void` | -
+
+### STMultiSort
+
+参数 | 说明 | 类型 | 默认值
+----|------|-----|------
+`[key]` | 请求参数名 | `string` | `sort`
+`[nameSeparator]` | 列名与状态间分隔符 | `string` | `.`
 
 ### STMultiSort
 

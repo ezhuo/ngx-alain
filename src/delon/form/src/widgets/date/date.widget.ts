@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { format } from 'date-fns';
+import {format} from 'date-fns';
 import { ControlWidget } from '../../widget';
 import { toBool } from '../../utils';
 import { FormProperty } from '../../model/form.property';
