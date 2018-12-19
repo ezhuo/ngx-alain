@@ -1,11 +1,11 @@
-import { Injectable, Inject, Injector } from '@angular/core';
+import { Inject, Injectable, Injector } from '@angular/core';
 import { CanActivate, CanActivateChild, CanLoad } from '@angular/router';
-import { DA_SERVICE_TOKEN, ITokenService } from '../interface';
-import { JWTTokenModel } from './jwt.model';
 import { DelonAuthConfig } from '../../auth.config';
 import { CheckJwt, ToLogin } from '../helper';
+import { DA_SERVICE_TOKEN, ITokenService } from '../interface';
+import { JWTTokenModel } from './jwt.model';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class JWTGuard implements CanActivate, CanActivateChild, CanLoad {
   private cog: DelonAuthConfig;
   constructor(
@@ -13,7 +13,7 @@ export class JWTGuard implements CanActivate, CanActivateChild, CanLoad {
     private injector: Injector,
     cog: DelonAuthConfig,
   ) {
-    this.cog = Object.assign(new DelonAuthConfig(), cog);
+    this.cog = { ...new DelonAuthConfig(), ...cog };
   }
 
   private process(): boolean {

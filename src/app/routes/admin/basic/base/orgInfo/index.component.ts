@@ -4,6 +4,7 @@ import {
   Injector,
   OnInit,
   OnDestroy,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 
 import { STComponent } from '@delon/abc';
@@ -21,6 +22,7 @@ import { NzFormatEmitEvent, NzTreeNode, NzTreeComponent } from 'ng-zorro-antd';
   selector: 'app-base-orgInfo',
   templateUrl: `./index.component.html`,
   styleUrls: [`./index.component.less`],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrgInfoComponent extends IndexControl
   implements OnInit, OnDestroy {
@@ -258,8 +260,7 @@ export class OrgInfoComponent extends IndexControl
           {
             text: '查看',
             type: 'modal',
-            component: OrgInfoShowComponent,
-            params: this.formatModalParams.bind(this),
+            modal: this.modalTable(OrgInfoShowComponent),
           },
           {
             text: '操作',
@@ -270,8 +271,7 @@ export class OrgInfoComponent extends IndexControl
               {
                 text: '编辑',
                 type: 'modal',
-                component: OrgInfoEditComponent,
-                params: this.formatModalParams.bind(this),
+                modal: this.modalTable(OrgInfoEditComponent),
                 click: (record, btnRes) => {
                   if (btnRes) this.refresh();
                 },
@@ -302,13 +302,13 @@ export class OrgInfoComponent extends IndexControl
 
   add() {
     this.treeSelectNodeEvent();
-    this.freeData.add = this.modalSrv
-      .static(OrgInfoEditComponent, this.formatModalParams())
-      .subscribe(result => {
+    this.freeData.add = this.modalEditStatic(OrgInfoEditComponent).subscribe(
+      result => {
         if (result) {
           this.refresh();
         }
-      });
+      },
+    );
   }
 
   treeData = [];
@@ -331,6 +331,7 @@ export class OrgInfoComponent extends IndexControl
           }
           this.treeData.push(new NzTreeNode(node));
         });
+        this.cdr.detectChanges();
       });
   }
 
@@ -351,6 +352,7 @@ export class OrgInfoComponent extends IndexControl
     }
 
     this.searchSubmit(this.st, this.sf.value);
+    this.cdr.detectChanges();
   }
 
   refresh() {

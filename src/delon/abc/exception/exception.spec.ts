@@ -1,10 +1,11 @@
-import { Component, DebugElement, ViewChild, Injector } from '@angular/core';
+import { Component, DebugElement, Injector, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { DelonLocaleModule, en_US, zh_CN, DelonLocaleService } from '@delon/theme';
+import { configureTestSuite, createTestContext } from '@delon/testing';
+import { en_US, DelonLocaleModule, DelonLocaleService } from '@delon/theme';
 
-import { ExceptionModule } from './exception.module';
 import { ExceptionComponent } from './exception.component';
+import { ExceptionModule } from './exception.module';
 
 describe('abc: exception', () => {
   let injector: Injector;
@@ -12,18 +13,19 @@ describe('abc: exception', () => {
   let dl: DebugElement;
   let context: TestComponent;
 
-  beforeEach(() => {
+  configureTestSuite(() => {
     injector = TestBed.configureTestingModule({
-      imports: [ExceptionModule.forRoot(), DelonLocaleModule],
+      imports: [ExceptionModule, DelonLocaleModule],
       declarations: [TestComponent],
     });
-    fixture = TestBed.createComponent(TestComponent);
-    dl = fixture.debugElement;
-    context = fixture.componentInstance;
+  });
+
+  beforeEach(() => {
+    ({ fixture, dl, context } = createTestContext(TestComponent));
     fixture.detectChanges();
   });
 
-  afterAll(() => context.comp.ngOnDestroy());
+  afterEach(() => context.comp.ngOnDestroy());
 
   [403, 404, 500].forEach((type: any) => {
     it(`#type=${type}`, () => {

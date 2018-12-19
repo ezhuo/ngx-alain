@@ -1,24 +1,24 @@
 import {
-  Component,
-  Input,
-  TemplateRef,
-  OnChanges,
-  ElementRef,
-  Renderer2,
-  ContentChild,
-  Host,
-  Optional,
   AfterViewInit,
-  ChangeDetectorRef,
   ChangeDetectionStrategy,
-  OnDestroy,
+  ChangeDetectorRef,
+  Component,
+  ContentChild,
+  ElementRef,
+  Host,
   HostBinding,
+  Input,
+  OnChanges,
+  OnDestroy,
+  Optional,
+  Renderer2,
+  TemplateRef,
 } from '@angular/core';
-import { NgModel, FormControlName, NgControl } from '@angular/forms';
+import { FormControlName, NgModel } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
 import { ResponsiveService } from '@delon/theme';
-import { deepGet, InputNumber, InputBoolean } from '@delon/util';
+import { deepGet, InputBoolean, InputNumber } from '@delon/util';
 
 import { SEContainerComponent } from './edit-container.component';
 
@@ -28,16 +28,13 @@ let nextUniqueId = 0;
 @Component({
   selector: 'se',
   templateUrl: './edit.component.html',
-  preserveWhitespaces: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SEComponent implements OnChanges, AfterViewInit, OnDestroy {
   private el: HTMLElement;
   private status$: Subscription;
-  @ContentChild(NgModel)
-  private readonly ngModel: NgModel;
-  @ContentChild(FormControlName)
-  private readonly formControlName: FormControlName;
+  @ContentChild(NgModel) private readonly ngModel: NgModel;
+  @ContentChild(FormControlName) private readonly formControlName: FormControlName;
   private clsMap: string[] = [];
   private inited = false;
   private onceFlag = false;
@@ -46,40 +43,15 @@ export class SEComponent implements OnChanges, AfterViewInit, OnDestroy {
 
   // #region fields
 
-  @Input()
-  optional: string;
-
-  @Input()
-  optionalHelp: string;
-
-  @Input()
-  error: string;
-
-  @Input()
-  extra: string;
-
-  _label = '';
-  _labelTpl: TemplateRef<any>;
-  @Input()
-  set label(value: string | TemplateRef<any>) {
-    if (value instanceof TemplateRef) {
-      this._label = null;
-      this._labelTpl = value;
-    } else {
-      this._label = value;
-    }
-  }
-
-  @Input()
-  @InputNumber(null)
-  col: number;
-
-  @Input()
-  @InputBoolean()
-  required = false;
-
-  @Input()
-  controlClass: string = '';
+  @Input() optional: string;
+  @Input() optionalHelp: string;
+  @Input() error: string;
+  @Input() extra: string;
+  @Input() label: string | TemplateRef<void>;
+  @Input() @InputNumber(null) col: number;
+  @Input() @InputBoolean() required = false;
+  @Input() controlClass: string = '';
+  @Input() @InputBoolean(null) line: boolean;
 
   @Input()
   set id(value: string) {
@@ -89,10 +61,6 @@ export class SEComponent implements OnChanges, AfterViewInit, OnDestroy {
 
   _id = `_se-${nextUniqueId++}`;
   _autoId = true;
-
-  @Input()
-  @InputBoolean(null)
-  line: boolean;
 
   // #endregion
 
@@ -111,18 +79,16 @@ export class SEComponent implements OnChanges, AfterViewInit, OnDestroy {
     return this.invalid && this.parent.size !== 'compact' && !!this.error;
   }
 
-  private get ngControl(): NgControl {
+  private get ngControl(): NgModel | FormControlName {
     return this.ngModel || this.formControlName;
   }
 
   constructor(
-    @Optional()
-    @Host()
-    private parent: SEContainerComponent,
-    private rep: ResponsiveService,
     el: ElementRef,
+    @Optional() @Host() private parent: SEContainerComponent,
+    private rep: ResponsiveService,
     private ren: Renderer2,
-    private cd: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef,
   ) {
     if (parent == null) {
       throw new Error(`[se] must include 'se-container' component`);
@@ -131,20 +97,17 @@ export class SEComponent implements OnChanges, AfterViewInit, OnDestroy {
   }
 
   private setClass(): this {
-    const { el, ren, clsMap, col, parent, cd } = this;
+    const { el, ren, clsMap, col, parent, cdr } = this;
     this.labelWidth = parent.labelWidth;
     clsMap.forEach(cls => ren.removeClass(el, cls));
     clsMap.length = 0;
-    const repCls =
-      parent.nzLayout === 'horizontal'
-        ? this.rep.genCls(col != null ? col : parent.col)
-        : [];
+    const repCls = parent.nzLayout === 'horizontal' ? this.rep.genCls(col != null ? col : parent.colInCon || parent.col) : [];
     clsMap.push(`ant-form-item`, ...repCls, `${prefixCls}__item`);
     if (this.line || parent.line) {
       clsMap.push(`${prefixCls}__line`);
     }
     clsMap.forEach(cls => ren.addClass(el, cls));
-    cd.detectChanges();
+    cdr.detectChanges();
     return this;
   }
 
@@ -152,19 +115,19 @@ export class SEComponent implements OnChanges, AfterViewInit, OnDestroy {
     if (!this.ngControl || this.status$) return;
 
     this.status$ = this.ngControl.statusChanges.subscribe(res => {
+      if (this.ngControl.isDisabled) {
+        return ;
+      }
       const status = res !== 'VALID';
       if (!this.onceFlag || this.invalid === status) {
         this.onceFlag = true;
         return;
       }
       this.invalid = status;
-      this.cd.detectChanges();
+      this.cdr.detectChanges();
     });
     if (this._autoId) {
-      const control = deepGet(
-        this.ngControl.valueAccessor,
-        '_elementRef.nativeElement',
-      ) as HTMLElement;
+      const control = deepGet(this.ngControl.valueAccessor, '_elementRef.nativeElement') as HTMLElement;
       if (control) {
         control.id = this._id;
       }

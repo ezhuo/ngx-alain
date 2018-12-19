@@ -1,24 +1,24 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Injector } from '@angular/core';
 import {
-  TestBed,
+  discardPeriodicTasks,
   fakeAsync,
   tick,
-  discardPeriodicTasks,
+  TestBed,
 } from '@angular/core/testing';
-import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { DefaultUrlSerializer, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
-import { Router, DefaultUrlSerializer } from '@angular/router';
-import { DOCUMENT } from '@angular/platform-browser';
 
+import { DOCUMENT } from '@angular/common';
 import { DelonAuthConfig } from '../auth.config';
-import { SimpleTokenModel } from '../token/simple/simple.model';
+import { DelonAuthModule } from '../auth.module';
 import {
   DA_SERVICE_TOKEN,
-  ITokenService,
   ITokenModel,
+  ITokenService,
 } from '../token/interface';
+import { SimpleTokenModel } from '../token/simple/simple.model';
 import { SocialService } from './social.service';
-import { DelonAuthModule } from '../auth.module';
 
 const mockRouter = {
   url: '',
@@ -63,7 +63,7 @@ describe('auth: social.service', () => {
       imports: [
         HttpClientTestingModule,
         RouterTestingModule.withRoutes([]),
-        DelonAuthModule.forRoot(),
+        DelonAuthModule,
       ],
       providers: [
         SocialService,
@@ -102,7 +102,7 @@ describe('auth: social.service', () => {
             injector.get(DA_SERVICE_TOKEN).set(item.model);
             return { closed: true };
           });
-          srv.login(item.url).subscribe(res => {});
+          srv.login(item.url).subscribe(res => { });
           tick(130);
           expect(window.open).toHaveBeenCalled();
           const token = injector.get(DA_SERVICE_TOKEN).get();
@@ -122,22 +122,20 @@ describe('auth: social.service', () => {
           injector.get(DA_SERVICE_TOKEN).set(null);
           return { closed: true };
         });
-        srv.login(MockAuth0.url).subscribe(res => {});
+        srv.login(MockAuth0.url).subscribe(res => { });
         tick(130);
         expect(window.open).toHaveBeenCalled();
         discardPeriodicTasks();
       }),
     );
 
-    it(
-      `can't get model until closed`,
-      fakeAsync(() => {
+    it('can\'t get model until closed', fakeAsync(() => {
         spyOn(srv, 'ngOnDestroy');
         spyOn(window, 'open').and.callFake(() => {
           injector.get(DA_SERVICE_TOKEN).set(null);
           return { closed: false };
         });
-        srv.login(MockAuth0.url).subscribe(res => {});
+        srv.login(MockAuth0.url).subscribe(res => { });
         tick(130);
         expect(window.open).toHaveBeenCalled();
         expect(srv.ngOnDestroy).not.toHaveBeenCalled();

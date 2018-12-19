@@ -1,27 +1,13 @@
-import {
-  Component,
-  DebugElement,
-  ViewChild,
-  CUSTOM_ELEMENTS_SCHEMA,
-  Injector,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  fakeAsync,
-  tick,
-} from '@angular/core/testing';
-import { By, DOCUMENT } from '@angular/platform-browser';
-import {
-  RouterModule,
-  Router,
-  ActivationEnd,
-} from '@angular/router';
-import { APP_BASE_HREF } from '@angular/common';
+import { APP_BASE_HREF, DOCUMENT } from '@angular/common';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, DebugElement, Injector, ViewChild } from '@angular/core';
+import { fakeAsync, tick, ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
+import { ActivationEnd, Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { BehaviorSubject } from 'rxjs';
 
-import { FullContentModule } from './full-content.module';
 import { FullContentComponent } from './full-content.component';
+import { FullContentModule } from './full-content.module';
 import { FullContentService } from './full-content.service';
 
 describe('abc: full-content', () => {
@@ -35,7 +21,7 @@ describe('abc: full-content', () => {
 
   beforeEach(() => {
     injector = TestBed.configureTestingModule({
-      imports: [FullContentModule.forRoot(), RouterModule.forRoot([])],
+      imports: [FullContentModule, RouterTestingModule.withRoutes([])],
       declarations: [TestComponent],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [{ provide: APP_BASE_HREF, useValue: '/' }],
@@ -52,9 +38,7 @@ describe('abc: full-content', () => {
     el = dl.query(By.css('full-content')).nativeElement as HTMLElement;
   }
 
-  afterEach(() => {
-    context.comp.ngOnDestroy();
-  });
+  afterEach(() => context && context.comp && context.comp.ngOnDestroy());
 
   describe('#fullscreen', () => {
     beforeEach(() => createComp());
@@ -122,24 +106,21 @@ describe('abc: full-content', () => {
       fixture.detectChanges();
       expect(context.fullscreen).toBe(false);
     });
-    it(
-      'should be recalculate height when trigger resize',
-      fakeAsync(() => {
-        createComp();
-        const bodyHeight = 10;
-        spyOn(bodyEl, 'getBoundingClientRect').and.returnValue({
-          height: bodyHeight,
-        });
-        expect(bodyEl.getBoundingClientRect).not.toHaveBeenCalled();
-        window.dispatchEvent(new Event('resize'));
-        fixture.detectChanges();
-        tick(210);
-        expect(bodyEl.getBoundingClientRect).toHaveBeenCalled();
-        expect(context.comp._height).toBe(
-          bodyHeight - el.getBoundingClientRect().top - context.padding,
-        );
-      }),
-    );
+    it('should be recalculate height when trigger resize', fakeAsync(() => {
+      createComp();
+      const bodyHeight = 10;
+      spyOn(bodyEl, 'getBoundingClientRect').and.returnValue({
+        height: bodyHeight,
+      });
+      expect(bodyEl.getBoundingClientRect).not.toHaveBeenCalled();
+      window.dispatchEvent(new Event('resize'));
+      fixture.detectChanges();
+      tick(210);
+      expect(bodyEl.getBoundingClientRect).toHaveBeenCalled();
+      expect(context.comp._height).toBe(
+        bodyHeight - el.getBoundingClientRect().top - context.padding,
+      );
+    }));
     it('should be clear class when go to other route', () => {
       const eventsSub = new BehaviorSubject<any>(null);
       class MockRouter {
@@ -158,6 +139,26 @@ describe('abc: full-content', () => {
       eventsSub.next(new ActivationEnd(null));
       eventsSub.complete();
       expect(bodyEl.classList.contains('full-content')).toBe(false);
+    });
+    it('should be attach class when back route', () => {
+      const eventsSub = new BehaviorSubject<any>(null);
+      class MockRouter {
+        events = eventsSub;
+      }
+      TestBed.overrideProvider(Router, {
+        useFactory: () => {
+          return new MockRouter();
+        },
+        deps: [],
+      });
+      createComp();
+
+      bodyEl.classList.remove('full-content__body');
+
+      eventsSub.next(new ActivationEnd(null));
+      eventsSub.complete();
+
+      expect(bodyEl.classList.contains('full-content__body')).toBe(true);
     });
   });
 });
@@ -178,5 +179,5 @@ class TestComponent {
   fullscreen: boolean = false;
   hideTitle: boolean;
   padding = 24;
-  change() {}
+  change() { }
 }

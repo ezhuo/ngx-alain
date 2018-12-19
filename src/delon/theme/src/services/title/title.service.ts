@@ -1,29 +1,24 @@
+import { DOCUMENT } from '@angular/common';
 import {
-  Injectable,
   Inject,
-  Optional,
+  Injectable,
   Injector,
   OnDestroy,
+  Optional,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { DOCUMENT } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
+import { AlainI18NService, ALAIN_I18N_TOKEN } from '../i18n/i18n';
 import { MenuService } from '../menu/menu.service';
-import { ALAIN_I18N_TOKEN, AlainI18NService } from '../i18n/i18n';
 
-/**
- * 设置标题
- * @see https://ng-alain.com/docs/service#TitleService
- */
 @Injectable({ providedIn: 'root' })
 export class TitleService implements OnDestroy {
   private _prefix = '';
   private _suffix = '';
   private _separator = ' - ';
   private _reverse = false;
-  private _default = 'Not Page Name';
   private i18n$: Subscription;
 
   constructor(
@@ -33,10 +28,12 @@ export class TitleService implements OnDestroy {
     @Optional()
     @Inject(ALAIN_I18N_TOKEN)
     private i18nSrv: AlainI18NService,
+    // tslint:disable-next-line:no-any
     @Inject(DOCUMENT) private doc: any,
   ) {
-    if (this.i18nSrv)
+    if (this.i18nSrv) {
       this.i18n$ = this.i18nSrv.change.subscribe(() => this.setTitle());
+    }
   }
 
   /** 设置分隔符 */
@@ -60,9 +57,7 @@ export class TitleService implements OnDestroy {
   }
 
   /** 设置默认标题名 */
-  set default(value: string) {
-    this._default = value;
-  }
+  default = `Not Page Name`;
 
   private getByElement(): string {
     const el =
@@ -102,7 +97,7 @@ export class TitleService implements OnDestroy {
         this.getByRoute() ||
         this.getByMenu() ||
         this.getByElement() ||
-        this._default;
+        this.default;
     }
     if (title && !Array.isArray(title)) {
       title = [title];
@@ -126,9 +121,17 @@ export class TitleService implements OnDestroy {
     return this.getByRoute() ||
       this.getByMenu() ||
       this.getByElement() ||
-      this._default ||
+      this.default ||
       this.title.getTitle();
   }
+  
+  /**
+   * 设置国际化标题
+   */
+  setTitleByI18n(key: string, params?: {}) {
+    this.setTitle(this.i18nSrv.fanyi(key, params));
+  }
+
   ngOnDestroy(): void {
     if (this.i18n$) this.i18n$.unsubscribe();
   }

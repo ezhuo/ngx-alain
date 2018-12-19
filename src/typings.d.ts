@@ -6,4 +6,11 @@ declare var md5: any;
 
 declare var $: any;
 
-declare var assetsHelper : any;
+declare var assetsHelper: any;
+
+// G2
+declare var G2: any;
+
+declare var DataSet: any;
+
+declare var Slider: any;

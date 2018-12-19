@@ -1,7 +1,7 @@
 import { AppControl } from './app.control';
 import { of } from 'rxjs';
-
 import { STComponent } from '@delon/abc';
+import * as helpers from '../helpers';
 
 export class AppCase {
   private ___appCtl: AppControl = null;
@@ -119,7 +119,7 @@ export class AppCase {
     }
     link.target = '_blank';
     link.href =
-      self.configSrv.api.base + __url + self.helpers.jsonToURL(__body);
+      self.configSrv.api.base + __url + helpers.jsonToURL(__body);
     document.body.appendChild(link);
     console.log(link.href, header.get('validate'));
     link.click();

@@ -1,7 +1,9 @@
 import { OnInit, OnDestroy, Injector } from '@angular/core';
-import { STComponent } from '@delon/abc';
+import { STComponent, STColumnButtonModal, STData } from '@delon/abc';
 import { AppControl } from './app.control';
-import { SFSchema, SFUISchema } from '@delon/form';
+import { SFSchema } from '@delon/form';
+import { ModalOptionsForService } from 'ng-zorro-antd';
+import { Observable } from 'rxjs';
 
 export class IndexControl extends AppControl implements OnInit, OnDestroy {
   constructor(protected injector: Injector) {
@@ -24,65 +26,49 @@ export class IndexControl extends AppControl implements OnInit, OnDestroy {
     return super.__init(url, key, params);
   }
 
+
   /**
-   * 向模态对话框传递数据过程中的数据格式化
-   * @param record
+   * modal 对话框 ，在表格中弹出时的 数据整理
+   * @memberof IndexControl
    */
-  formatModalParams(record?: any, params?: any): Object {
-    // 克隆一份数据
-    const newFrmData = this.helpers.deepExtend(
-      {},
-      record || this.form.data || {},
-    );
-    // 克隆一份结构
-    const newSchemaData = this.helpers.deepExtend({}, this.schemaData);
-
-    // 格式化数据
-    const __formatData = (mSchema: SFSchema, frmData: any) => {
-      const prop = mSchema.properties;
-      let oldwidget: any = '';
-      for (const idx of Object.keys(prop)) {
-        if (!(prop[idx] && prop[idx].ui)) {
-          continue;
-        }
-        if (this.helpers.isString(prop[idx].ui)) {
-          oldwidget = prop[idx].ui;
-        } else {
-          oldwidget = prop[idx]['ui']['widget'];
-        }
-        if (frmData && frmData[idx] && !this.helpers.isEmpty(frmData[idx])) {
-          if (oldwidget.indexOf('upload') > -1) {
-            frmData[idx] = this.helpers.formatUploadFilesToObject(frmData[idx]);
-          }
-          if (oldwidget.indexOf('cascader') > -1) {
-            frmData[idx] = this.helpers.formatCascaderToObject(frmData[idx]);
-          }
-        }
-      }
-      return frmData;
-    };
-
-    Object.keys(newSchemaData).forEach((value, index) => {
-      if (newSchemaData[value] && newSchemaData[value]['properties'])
-        __formatData(newSchemaData[value], newFrmData);
+  public modalTable = (
+    component: any,
+    params?: STColumnButtonModal,
+    options?: ModalOptionsForService,
+  ): STColumnButtonModal => {
+    params = params || {};
+    params.component = component;
+    params.params = this.appBase.__formatModalParams;
+    params.modalOptions = this.helpers.deepExtend(options || {}, {
+      nzStyle: { top: '20px' },
     });
-    return {
-      dataSource: {
-        key: this.dataSource.key,
-        url: this.dataSource.url,
-      },
-      form: { data: newFrmData },
-      schemaData: newSchemaData,
-      modalData: this.helpers.deepExtend({}, this.modalData),
-    };
-  }
+    return params;
+  };
+
+  /**
+   * modal 对话框 ，不在表格中弹出时的 数据整理
+   * @memberof IndexControl
+   */
+  public modalEditStatic = (
+    comp: any,
+    params?: any,
+    size: 'sm' | 'md' | 'lg' | 'xl' | '' | number = 'lg',
+    options?: any,
+  ): Observable<any> => {
+    return this.modalSrv.static(
+      comp,
+      this.helpers.deepExtend(params || {}, this.appBase.__formatModalParams()),
+      size,
+      options,
+    );
+  };
 
   /**
    * 查询提交
    * @param st
    * @param searchData
    */
-  searchSubmit(st: STComponent, searchData: any) {
+  public searchSubmit = (st: STComponent, searchData: any) => {
     // searchData = this.helpers.deepExtend({}, this.tableParams, searchData || {});
     for (const idx of Object.keys(searchData)) {
       if (this.helpers.isEmpty(searchData[idx])) {
@@ -90,5 +76,5 @@ export class IndexControl extends AppControl implements OnInit, OnDestroy {
       }
     }
     return st.reset(searchData);
-  }
+  };
 }

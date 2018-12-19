@@ -1,4 +1,4 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, ChangeDetectorRef } from '@angular/core';
 import { HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
 import { tap, catchError, switchMap } from 'rxjs/operators';
@@ -28,6 +28,10 @@ export class HttpService {
   }
   get userSrv() {
     return this.injector.get(UserService);
+  }
+
+  get cdr() {
+    return this.injector.get(ChangeDetectorRef);
   }
 
   /** 是否正在加载中 */

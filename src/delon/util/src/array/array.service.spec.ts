@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { NzTreeNode } from 'ng-zorro-antd';
-import { ArrayService } from './array.service';
 import { deepCopy } from '../other/other';
-import { DelonUtilModule } from '../util.module';
 import { DelonUtilConfig } from '../util.config';
+import { DelonUtilModule } from '../util.module';
+import { ArrayService } from './array.service';
 
 const MOCK_ARR: any[] = [
   { id: 1, pid: 0, name: 'name1', other: 'value1', halfChecked: true },
@@ -20,7 +20,7 @@ describe('utils: array', () => {
   describe('#treeToArr', () => {
     beforeEach(() => {
       srv = TestBed.configureTestingModule({
-        imports: [DelonUtilModule.forRoot()],
+        imports: [DelonUtilModule],
       }).get(ArrayService);
     });
     it('should be tree to array', () => {
@@ -69,7 +69,7 @@ describe('utils: array', () => {
   describe('#arrToTree', () => {
     beforeEach(() => {
       srv = TestBed.configureTestingModule({
-        imports: [DelonUtilModule.forRoot()],
+        imports: [DelonUtilModule],
       }).get(ArrayService);
     });
     it('should be array to tree', () => {
@@ -92,7 +92,7 @@ describe('utils: array', () => {
   describe('[NzTreeNode]', () => {
     beforeEach(() => {
       srv = TestBed.configureTestingModule({
-        imports: [DelonUtilModule.forRoot()],
+        imports: [DelonUtilModule],
       }).get(ArrayService);
       page = new PageTreeNode();
     });
@@ -200,7 +200,7 @@ describe('utils: array', () => {
   describe('[config]', () => {
     beforeEach(() => {
       srv = TestBed.configureTestingModule({
-        imports: [DelonUtilModule.forRoot()],
+        imports: [DelonUtilModule],
         providers: [
           {
             provide: DelonUtilConfig,
@@ -230,16 +230,16 @@ describe('utils: array', () => {
       this.data = data
         ? data
         : srv.arrToTreeNode(deepCopy(MOCK_ARR), {
-            parentIdMapName: 'pid',
-            titleMapName: 'name',
-          });
+          parentIdMapName: 'pid',
+          titleMapName: 'name',
+        });
     }
     check(path: string, field: string, value: any): this {
       const pathArr = path.split('/');
-      let firstIdx = +pathArr[0];
+      const firstIdx = +pathArr[0];
       let item = firstIdx >= this.data.length ? null : this.data[firstIdx];
       if (pathArr.length > 1) {
-        let secondIdx = +pathArr[1];
+        const secondIdx = +pathArr[1];
         item =
           secondIdx >= (this.data as any)[firstIdx].children
             ? null

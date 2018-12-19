@@ -1,12 +1,11 @@
-import { TestBed } from '@angular/core/testing';
 import { Injector } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { of } from 'rxjs';
 import { ACLGuard } from './acl-guard';
+import { DelonACLModule } from './acl.module';
 import { ACLService } from './acl.service';
 import { ACLType } from './acl.type';
-import { DelonACLConfig } from './acl.config';
-import { DelonACLModule } from './acl.module';
 
 describe('acl: guard', () => {
   let injector: Injector;
@@ -15,18 +14,18 @@ describe('acl: guard', () => {
 
   beforeEach(() => {
     injector = TestBed.configureTestingModule({
-      imports: [RouterTestingModule.withRoutes([]), DelonACLModule.forRoot()],
+      imports: [RouterTestingModule.withRoutes([]), DelonACLModule],
     });
     srv = injector.get(ACLGuard);
     acl = injector.get(ACLService);
-    acl.set(<ACLType>{
+    acl.set({
       role: ['user'],
       ability: [1, 2, 3],
-    });
+    } as ACLType);
   });
 
   it(`should load route when no-specify permission`, (done: () => void) => {
-    srv.canActivate(<any>{}, null).subscribe(res => {
+    srv.canActivate({} as any, null).subscribe(res => {
       expect(res).toBeTruthy();
       done();
     });
@@ -35,11 +34,11 @@ describe('acl: guard', () => {
   it(`should load route when specify permission`, (done: () => void) => {
     srv
       .canActivate(
-        <any>{
+        {
           data: {
             guard: 'user',
           },
-        },
+        } as any,
         null,
       )
       .subscribe(res => {
@@ -51,11 +50,11 @@ describe('acl: guard', () => {
   it(`should unable load route if no-permission`, (done: () => void) => {
     srv
       .canActivate(
-        <any>{
+        {
           data: {
             guard: 'admin',
           },
-        },
+        } as any,
         null,
       )
       .subscribe(res => {
@@ -67,11 +66,11 @@ describe('acl: guard', () => {
   it(`should load route via Observable`, (done: () => void) => {
     srv
       .canActivate(
-        <any>{
+        {
           data: {
             guard: of('user'),
           },
-        },
+        } as any,
         null,
       )
       .subscribe(res => {
@@ -83,11 +82,11 @@ describe('acl: guard', () => {
   it(`should load route using ability`, (done: () => void) => {
     srv
       .canActivate(
-        <any>{
+        {
           data: {
             guard: of(1),
           },
-        },
+        } as any,
         null,
       )
       .subscribe(res => {
@@ -99,11 +98,11 @@ describe('acl: guard', () => {
   it(`should unable load route using ability`, (done: () => void) => {
     srv
       .canActivate(
-        <any>{
+        {
           data: {
             guard: of(10),
           },
-        },
+        } as any,
         null,
       )
       .subscribe(res => {
@@ -115,11 +114,11 @@ describe('acl: guard', () => {
   describe(`#canLoad`, () => {
     it(`should be can load when has [user] role`, (done: () => void) => {
       srv
-        .canLoad(<any>{
+        .canLoad({
           data: {
             guard: of('user'),
           },
-        })
+        } as any)
         .subscribe(res => {
           expect(res).toBeTruthy();
           done();
@@ -127,11 +126,11 @@ describe('acl: guard', () => {
     });
     it(`should be can load when is null`, (done: () => void) => {
       srv
-        .canLoad(<any>{
+        .canLoad({
           data: {
             guard: null,
           },
-        })
+        } as any)
         .subscribe(res => {
           expect(res).toBeTruthy();
           done();
@@ -142,11 +141,11 @@ describe('acl: guard', () => {
   it(`#canActivateChild`, (done: () => void) => {
     srv
       .canActivateChild(
-        <any>{
+        {
           data: {
             guard: of('user'),
           },
-        },
+        } as any,
         null,
       )
       .subscribe(res => {

@@ -1,14 +1,14 @@
+import { DOCUMENT } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Title, DOCUMENT } from '@angular/platform-browser';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 
-import { MenuService } from '../menu/menu.service';
-import { Menu } from '../menu/interface';
-import { AlainI18NService, AlainI18NServiceFake } from '../i18n/i18n';
-import { TitleService } from './title.service';
 import { AlainThemeModule } from '../../theme.module';
-import { ALAIN_I18N_TOKEN } from '../i18n/i18n';
+import { AlainI18NService, AlainI18NServiceFake, ALAIN_I18N_TOKEN } from '../i18n/i18n';
+import { Menu } from '../menu/interface';
+import { MenuService } from '../menu/menu.service';
+import { TitleService } from './title.service';
 
 describe('Service: Title', () => {
   let getPathByUrlData: any;
@@ -40,14 +40,16 @@ describe('Service: Title', () => {
   const notPageName = 'Not Page Name';
 
   function genModule(providers: any[] = [], loadI18n = true) {
-    const i18nProvider: any[] = loadI18n ? [ { provide: ALAIN_I18N_TOKEN, useClass: AlainI18NServiceFake } ] : [];
+    const i18nProvider: any[] = loadI18n
+      ? [{ provide: ALAIN_I18N_TOKEN, useClass: AlainI18NServiceFake }]
+      : [];
     TestBed.configureTestingModule({
       imports: [AlainThemeModule, RouterTestingModule],
       providers: [
         TitleService,
         MenuService,
         { provide: Title, useClass: TestTitleService },
-        ...i18nProvider
+        ...i18nProvider,
       ].concat(providers),
     });
     title = TestBed.get(Title);
@@ -64,6 +66,7 @@ describe('Service: Title', () => {
     it('should set the default empty title', () => {
       srv.suffix = alain;
       srv.setTitle();
+      // tslint:disable-next-line:prefer-template
       expect(title.setTitle).toHaveBeenCalledWith(notPageName + ' - ' + alain);
     });
 
@@ -197,6 +200,7 @@ describe('Service: Title', () => {
       genModule([], false);
       srv.suffix = alain;
       srv.setTitle();
+      // tslint:disable-next-line:prefer-template
       expect(title.setTitle).toHaveBeenCalledWith(notPageName + ' - ' + alain);
     });
     it('should be reset title when i18n has changed', () => {
@@ -204,6 +208,14 @@ describe('Service: Title', () => {
       spyOn(srv, 'setTitle');
       i18n.use('en');
       expect(srv.setTitle).toHaveBeenCalled();
+    });
+    it('#setTitleByI18n', () => {
+      genModule([], true);
+      srv.suffix = alain;
+      const key = 'aa';
+      srv.setTitleByI18n(key);
+      // tslint:disable-next-line:prefer-template
+      expect(title.setTitle).toHaveBeenCalledWith(key + ' - ' + alain);
     });
   });
 });

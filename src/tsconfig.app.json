@@ -6,45 +6,16 @@
     "module": "es2015",
     "types": ["node"],
     "paths": {
-      "@delon/*": [
-        "./delon/*"
-      ],
-      "@shared": [
-        "app/@shared"
-      ],
-      "@shared/*": [
-        "app/@shared/*"
-      ],
-      "@core": [
-        "app/@core/"
-      ],
-      "@core/*": [
-        "app/@core/*"
-      ],
-      "@testing": [
-        "testing/"
-      ],
-      "@testing/*": [
-        "testing/*"
-      ],
-      "@env": [
-        "environments/"
-      ],
-      "@env/*": [
-        "environments/*"
-      ],
-      "@layout": [
-        "app/layout/"
-      ],
-      "@layout/*": [
-        "app/layout/*"
-      ],
-      "@routes": [
-        "app/routes/"
-      ],
-      "@routes/*": [
-        "app/routes/*"
-      ]
+      "@delon/*": ["./delon/*"],
+      "@env/*": ["environments/*"],
+      "@routes/*": ["app/routes/*"],
+
+      "@shared": ["app/@shared"],
+      "@shared/*": ["app/@shared/*"],
+      "@core": ["app/@core/"],
+      "@core/*": ["app/@core/*"],
+      "@layout": ["app/layout/"],
+      "@layout/*": ["app/layout/*"],
     }
   },
   "exclude": [

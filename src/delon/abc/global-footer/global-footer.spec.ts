@@ -1,18 +1,18 @@
+import { APP_BASE_HREF } from '@angular/common';
 import {
   Component,
-  DebugElement,
   CUSTOM_ELEMENTS_SCHEMA,
+  DebugElement,
   Injector,
 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { APP_BASE_HREF } from '@angular/common';
 import { WINDOW } from '@delon/theme';
 
+import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { GlobalFooterModule } from './global-footer.module';
 import { GlobalFooterLink } from './global-footer.types';
-import { RouterTestingModule } from '@angular/router/testing';
-import { Router } from '@angular/router';
 
 class MockWindow {
   open() {}
@@ -39,7 +39,7 @@ describe('abc: global-footer', () => {
     injector = TestBed.configureTestingModule({
       imports: [
         RouterTestingModule.withRoutes([]),
-        GlobalFooterModule.forRoot(),
+        GlobalFooterModule,
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       declarations: [TestComponent],

@@ -1,30 +1,31 @@
 import { Component, DebugElement, TemplateRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { configureTestSuite, createTestContext } from '@delon/testing';
 
-import { ResultModule } from './result.module';
 import { ResultComponent } from './result.component';
+import { ResultModule } from './result.module';
 
 describe('abc: result', () => {
   let fixture: ComponentFixture<TestComponent>;
   let dl: DebugElement;
   let context: TestComponent;
 
-  beforeEach(() => {
+  configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [ResultModule.forRoot()],
+      imports: [ResultModule],
       declarations: [TestComponent],
     });
-    fixture = TestBed.createComponent(TestComponent);
-    dl = fixture.debugElement;
-    context = fixture.componentInstance;
+  });
+
+  beforeEach(() => {
+    ({ fixture, dl, context } = createTestContext(TestComponent));
     fixture.detectChanges();
   });
 
   function isText(cls: string, value: any) {
     const el = dl.query(By.css(cls)).nativeElement as HTMLElement;
-    if (el) return el.innerText.trim();
-    return '';
+    expect(el ? el.innerText.trim() : '').toBe(value);
   }
 
   function isExists(cls: string, stauts: boolean = true) {

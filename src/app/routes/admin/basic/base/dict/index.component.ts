@@ -103,9 +103,7 @@ export class DictComponent extends IndexControl implements OnInit, OnDestroy {
           {
             text: '编辑',
             type: 'modal',
-            component: DictEditComponent,
-            modal: { size: 'md' },
-            params: this.formatModalParams.bind(this),
+            modal: this.modalTable(DictEditComponent, { size: 'md' }),
             click: (record, btnRes) => {
               console.log(btnRes);
               if (btnRes) this.st.load();
@@ -139,13 +137,15 @@ export class DictComponent extends IndexControl implements OnInit, OnDestroy {
 
   add() {
     this.modalData.data = this.dictActive;
-    this.freeData.add = this.modalSrv
-      .static(DictEditComponent, this.formatModalParams(), 'md')
-      .subscribe(result => {
-        if (result) {
-          this.st.load();
-        }
-      });
+    this.freeData.add = this.modalEditStatic(
+      DictEditComponent,
+      null,
+      'md',
+    ).subscribe(result => {
+      if (result) {
+        this.st.load();
+      }
+    });
   }
 
   dictTypeList() {

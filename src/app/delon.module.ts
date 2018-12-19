@@ -11,12 +11,6 @@ import {
 import { throwIfAlreadyLoaded } from '@core/module-import-guard';
 
 import { AlainThemeModule } from '@delon/theme';
-import { DelonABCModule, STConfig } from '@delon/abc';
-import { DelonChartModule } from '@delon/chart';
-import { DelonAuthModule } from '@delon/auth';
-import { DelonACLModule } from '@delon/acl';
-import { DelonCacheModule } from '@delon/cache';
-import { DelonUtilModule } from '@delon/util';
 
 // #region mock
 import { DelonMockModule } from '@delon/mock';
@@ -76,6 +70,7 @@ export function fnDelonFormConfig(): DelonFormConfig {
   });
 }
 
+import { STConfig } from '@delon/abc';
 export function fnSTConfig(): STConfig {
   return Object.assign(new STConfig(), <STConfig>{
     modal: { size: 'lg' },
@@ -97,12 +92,6 @@ const GLOBAL_CONFIG_PROVIDES = [
 @NgModule({
   imports: [
     AlainThemeModule.forRoot(),
-    DelonABCModule.forRoot(),
-    DelonChartModule.forRoot(),
-    DelonAuthModule.forRoot(),
-    DelonACLModule.forRoot(),
-    DelonCacheModule.forRoot(),
-    DelonUtilModule.forRoot(),
     // mock
     ...MOCK_MODULES,
   ],

@@ -2,6 +2,8 @@
 order: 1
 title: Getting Started
 type: Documents
+module: DelonUtilModule
+config: DelonUtilConfig
 ---
 
 `@delon/util` is a collection of tool functions.
@@ -21,7 +23,7 @@ import { DelonUtilModule } from '@delon/util';
 
 @NgModule({
   imports: [
-    DelonUtilModule.forRoot()
+    DelonUtilModule
   ]
 })
 export class AppModule { }
@@ -52,24 +54,5 @@ export class DelonModule {
       ]
     };
   }
-}
-```
-
-## FAQ
-
-### How to call in an HTML template
-
-```ts
-import { Component } from '@angular/core';
-import { yuan } from '@delon/util';
-
-@Component({
-  selector: 'app-demo',
-  template: `
-  {{yuan(11111)}}
-  `
-})
-export class DemoComponent {
-  yuan = yuan;
 }
 ```

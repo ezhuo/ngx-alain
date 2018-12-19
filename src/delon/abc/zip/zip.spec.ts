@@ -1,8 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { LazyService } from '@delon/util';
-import { HttpClient } from '@angular/common/http';
-import { of, throwError } from 'rxjs';
 import * as fs from 'file-saver';
+import { of, throwError } from 'rxjs';
 import { ZipModule } from './zip.module';
 import { ZipService } from './zip.service';
 
@@ -40,7 +40,7 @@ describe('abc: zip', () => {
   let srv: ZipService;
   function genModule() {
     const injector = TestBed.configureTestingModule({
-      imports: [ZipModule.forRoot()],
+      imports: [ZipModule],
       providers: [
         { provide: HttpClient, useClass: MockHttpClient },
         { provide: LazyService, useClass: MockLazyService },

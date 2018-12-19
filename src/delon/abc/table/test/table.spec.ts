@@ -1,49 +1,50 @@
-import { Injector, Component, DebugElement, ViewChild } from '@angular/core';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { By } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import {
-  TestBed,
-  ComponentFixture,
-  fakeAsync,
-  discardPeriodicTasks,
-  tick,
-} from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { RouterTestingModule } from '@angular/router/testing';
+import { Component, DebugElement, Injector, ViewChild } from '@angular/core';
+import {
+  discardPeriodicTasks,
+  fakeAsync,
+  tick,
+  ComponentFixture,
+  TestBed,
+} from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { Router } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
 import { of, Observable, Subject } from 'rxjs';
 
-import { NgZorroAntdModule, NzPaginationComponent } from 'ng-zorro-antd';
-import { ModalHelper, ALAIN_I18N_TOKEN, DatePipe } from '@delon/theme';
-import { deepCopy, deepGet } from '@delon/util';
-import {
+import { en_US, zh_CN, ALAIN_I18N_TOKEN,
+  DatePipe,
   DelonLocaleModule,
-  en_US,
-  zh_CN,
   DelonLocaleService,
+  ModalHelper,
 } from '@delon/theme';
+import { deepCopy, deepGet } from '@delon/util';
+import { NgZorroAntdModule, NzPaginationComponent } from 'ng-zorro-antd';
 
+import { configureTestSuite, createTestContext, dispatchDropDown } from '@delon/testing';
 import {
-  STColumn,
-  STMultiSort,
-  STColumnBadge,
-  STColumnTag,
-  STPage,
-  STRes,
-  STColumnFilter,
+  AlainI18NService,
+  AlainI18NServiceFake,
+} from '../../../theme/src/services/i18n/i18n';
+import { STDataSource } from '../table-data-source';
+import { STExport } from '../table-export';
+import { STComponent } from '../table.component';
+import { STConfig } from '../table.config';
+import {
   STChange,
+  STColumn,
+  STColumnBadge,
+  STColumnFilter,
+  STColumnTag,
+  STMultiSort,
+  STPage,
+  STReq,
+  STRes,
 } from '../table.interfaces';
 import { STModule } from '../table.module';
-import { STComponent } from '../table.component';
-import {
-  AlainI18NServiceFake,
-  AlainI18NService,
-} from '../../../theme/src/services/i18n/i18n';
-import { dispatchDropDown } from '../../../testing';
-import { STExport } from '../table-export';
-import { STDataSource } from '../table-data-source';
 
 const MOCKDATE = new Date();
 const MOCKIMG = `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+P+/HgAFhAJ/wlseKgAAAABJRU5ErkJggg==`;
@@ -76,7 +77,7 @@ const PS = 3;
 const DEFAULTCOUNT = PS + 1;
 const USERS: any[] = genData(DEFAULTCOUNT);
 
-let i18nResult = 'zh';
+const i18nResult = 'zh';
 class MockI18NServiceFake extends AlainI18NServiceFake {
   fanyi(key: string) {
     return i18nResult;
@@ -90,32 +91,42 @@ describe('abc: table', () => {
   let dl: DebugElement;
   let page: PageObject;
   let comp: STComponent;
+  let i18nSrv: AlainI18NService;
 
   function genModule(other: {
     template?: string;
     i18n?: boolean;
     minColumn?: boolean;
     providers?: any[];
+    createComp?: boolean;
   }) {
+    other = {
+      template: '',
+      i18n: false,
+      minColumn: false,
+      providers: [],
+      createComp: true,
+      ...other,
+    };
     const imports = [
       NoopAnimationsModule,
       CommonModule,
       FormsModule,
       HttpClientTestingModule,
       RouterTestingModule.withRoutes([]),
-      NgZorroAntdModule.forRoot(),
-      STModule.forRoot(),
+      NgZorroAntdModule,
+      STModule,
       DelonLocaleModule,
     ];
     const providers = [];
-    if (other.providers && other.providers.length) {
+    if (other.providers.length > 0) {
       providers.push(...other.providers);
     }
     if (other.i18n) {
-      providers.push(<any>{
+      providers.push({
         provide: ALAIN_I18N_TOKEN,
         useClass: MockI18NServiceFake,
-      });
+      } as any);
     }
     injector = TestBed.configureTestingModule({
       imports,
@@ -123,11 +134,19 @@ describe('abc: table', () => {
       providers,
     });
     if (other.template) TestBed.overrideTemplate(TestComponent, other.template);
+    // ALAIN_I18N_TOKEN 默认为 root 会导致永远都会存在
+    i18nSrv = injector.get(ALAIN_I18N_TOKEN);
+    if (other.createComp) {
+      createComp(other.minColumn);
+    }
+  }
+
+  function createComp(minColumn = false) {
     fixture = TestBed.createComponent(TestComponent);
     dl = fixture.debugElement;
     context = dl.componentInstance;
     context.data = deepCopy(USERS);
-    if (other.minColumn) {
+    if (minColumn) {
       context.columns = [{ title: '', index: 'id' }];
     }
     page = new PageObject();
@@ -138,12 +157,6 @@ describe('abc: table', () => {
   describe('[property]', () => {
     describe('#columns', () => {
       beforeEach(() => genModule({}));
-      it('should be render', (done: () => void) => {
-        page.newColumn([{ title: '', index: 'id' }]).then(() => {
-          page.expectCell('1');
-          done();
-        });
-      });
       describe('[type]', () => {
         describe(`with checkbox`, () => {
           it(`should be render checkbox`, (done: () => void) => {
@@ -866,26 +879,47 @@ describe('abc: table', () => {
       });
     });
     describe('#multiSort', () => {
-      beforeEach(() => genModule({ minColumn: true }));
       it('with true', () => {
+        genModule({ minColumn: true });
         context.multiSort = true;
         fixture.detectChanges();
         const ms: STMultiSort = comp.multiSort;
         expect(typeof ms).toBe('object');
-        expect(ms.key).toBe('sort');
       });
       it('with false', () => {
+        genModule({ minColumn: true });
         context.multiSort = false;
         fixture.detectChanges();
         const ms: STMultiSort = comp.multiSort;
         expect(ms).toBeNull();
       });
       it('with object', () => {
+        genModule({ minColumn: true });
         context.multiSort = { key: 'aa' };
         fixture.detectChanges();
         const ms: STMultiSort = comp.multiSort;
         expect(typeof ms).toBe('object');
         expect(ms.key).toBe('aa');
+      });
+      it('should default is mulit sorting by config', () => {
+        genModule({
+          minColumn: true, providers: [{
+            provide: STConfig,
+            useValue: Object.assign(new STConfig(), { multiSort: { global: true } } as STConfig),
+          }],
+        });
+        const ms: STMultiSort = comp.multiSort;
+        expect(ms).not.toBeUndefined();
+      });
+      it('should default non-mulit sorting by config', () => {
+        genModule({
+          minColumn: true, providers: [{
+            provide: STConfig,
+            useValue: Object.assign(new STConfig(), { multiSort: { global: false } } as STConfig),
+          }],
+        });
+        const ms: STMultiSort = comp.multiSort;
+        expect(ms).toBeUndefined();
       });
     });
     describe('#showTotal', () => {
@@ -1103,6 +1137,15 @@ describe('abc: table', () => {
         expect(comp.req.params.a).toBe(1);
         expect(comp.req.params.b).toBe(2);
       });
+      it('can\'t contaminate raw data', () => {
+        const params: any = { a: 1 };
+        context.req = { params };
+        fixture.detectChanges();
+        comp.load(1, { b: 2 }, { merge: true });
+        expect(comp.req.params.a).toBe(1);
+        expect(comp.req.params.b).toBe(2);
+        expect(params.b).toBeUndefined();
+      });
     });
     describe('#reload', () => {
       beforeEach(() => genModule({ minColumn: true }));
@@ -1184,6 +1227,7 @@ describe('abc: table', () => {
       beforeEach(() => {
         genModule({ minColumn: true, providers: [STExport] });
         fixture.detectChanges();
+        // tslint:disable-next-line:no-string-literal
         exportSrv = comp['exportSrv'];
         spyOn(exportSrv, 'export');
       });
@@ -1288,7 +1332,6 @@ describe('abc: table', () => {
       fixture.detectChanges();
       tick(100);
       expect(page._changeData.type).toBe('dblClick');
-      console.log('2', page._changeData);
     }));
     it('should be ingore input', fakeAsync(() => {
       expect(context.change).not.toHaveBeenCalled();
@@ -1303,11 +1346,9 @@ describe('abc: table', () => {
   });
 
   describe('[i18n]', () => {
-    let i18nSrv: AlainI18NService;
     let curLang = 'en';
     beforeEach(() => {
       genModule({ i18n: true });
-      i18nSrv = injector.get(ALAIN_I18N_TOKEN);
       spyOn(i18nSrv, 'fanyi').and.callFake(() => curLang);
     });
     it('should working', (done: () => void) => {
@@ -1335,7 +1376,8 @@ describe('abc: table', () => {
   describe('[data source]', () => {
     it('should only restore data', () => {
       genModule({ minColumn: true });
-      let dataSource: STDataSource = comp['dataSource'];
+      // tslint:disable-next-line:no-string-literal
+      const dataSource: STDataSource = comp['dataSource'];
       spyOn(dataSource, 'process').and.callFake(() => Promise.resolve({}));
       fixture.detectChanges();
       expect(comp.ps).toBe(PS);
@@ -1698,7 +1740,7 @@ class TestComponent {
   comp: STComponent;
   data: string | any[] | Observable<any[]> = deepCopy(USERS);
   res: STRes = {};
-  req: STRes = {};
+  req: STReq = {};
   columns: STColumn[];
   ps = PS;
   pi: number;
@@ -1715,6 +1757,6 @@ class TestComponent {
   rowClickTime = 200;
   responsiveHideHeaderFooter = false;
 
-  error() {}
-  change() {}
+  error() { }
+  change() { }
 }

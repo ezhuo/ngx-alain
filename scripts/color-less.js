@@ -8,10 +8,11 @@ const target = path.join(root, 'src/assets/alain-default.less');
 
 const content = `
 @import 'src/delon/theme/styles/index';
-@import 'src/delon/theme/styles/layout/default/index';
-@import 'src/delon/theme/styles/layout/fullscreen/index';
 @import 'src/delon/abc/index';
 @import 'src/delon/chart/index';
+@import 'src/delon/theme/styles/layout/default/index';
+@import 'src/delon/theme/styles/layout/fullscreen/index';
+
 
 @import 'src/styles/index';
 @import 'src/styles/theme';

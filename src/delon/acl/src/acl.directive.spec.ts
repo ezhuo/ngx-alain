@@ -1,9 +1,9 @@
-import {
-  TestBed,
-  ComponentFixtureAutoDetect,
-  ComponentFixture,
-} from '@angular/core/testing';
 import { Component, DebugElement } from '@angular/core';
+import {
+  ComponentFixture,
+  ComponentFixtureAutoDetect,
+  TestBed,
+} from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { DelonACLModule } from './acl.module';
@@ -18,7 +18,7 @@ describe('acl: directive', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [TestComponent],
-      imports: [DelonACLModule.forRoot()],
+      imports: [DelonACLModule],
       providers: [{ provide: ComponentFixtureAutoDetect, useValue: true }],
     });
     fixture = TestBed.createComponent(TestComponent);
@@ -62,5 +62,5 @@ describe('acl: directive', () => {
 class TestComponent {
   role = 'admin';
   ability = 1;
-  constructor(public srv: ACLService) {}
+  constructor(public srv: ACLService) { }
 }

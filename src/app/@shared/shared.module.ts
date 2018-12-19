@@ -11,12 +11,24 @@ import { DelonFormModule } from '@delon/form';
 
 import { ModalService } from '@core';
 import { Directives } from './directives/public-array';
+
 // region: third libs
+import { NgZorroAntdModule } from 'ng-zorro-antd';
+import { CountdownModule } from 'ngx-countdown';
+// import { UEditorModule } from 'ngx-ueditor';
+// import { NgxTinymceModule } from 'ngx-tinymce';
+import { CKEditorModule } from 'ng2-ckeditor';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
-import { ThirdComponentModuleList } from './third-component.module';
-
-const THIRDMODULES = [...ThirdComponentModuleList];
-// endregion
+const THIRDMODULES = [
+    NgZorroAntdModule,
+    CountdownModule,
+    // UEditorModule,
+    // NgxTinymceModule,
+    CKEditorModule,
+    InfiniteScrollModule,
+];
+// endregion third
 
 // region: your Modules & componets & directives & providers
 const MODULES = [

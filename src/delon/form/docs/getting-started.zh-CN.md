@@ -2,6 +2,8 @@
 order: 1
 title: 开始使用
 type: Documents
+module: DelonFormModule
+config: DelonFormConfig
 ---
 
 @delon/form 是一个基于 [JSON Schema](http://json-schema.org/) 标准的动态构建表单。
@@ -152,15 +154,30 @@ export class HomeComponent {
 | `(formReset)`    | 重置表单时回调                  | `EventEmitter<{}>`          | -            |
 | `(formError)`    | 表单校验结果回调                | `EventEmitter<ErrorData[]>` | -            |
 
+### SFButton
+
+| 参数       | 说明         | 类型     | 默认值 |
+|------------|------------|----------|------|
+| `[submit]` | 提交按钮文本 | `string` | `提交` |
+| `[submit_type]` | 提交按钮类型 | `string` | `primary` |
+| `[reset]` | 重置按钮文本 | `string` | `重置` |
+| `[reset_type]` | 重置按钮类型 | `string` | `default` |
+| `[search]` | 搜索按钮文本 | `string` | `搜索` |
+| `[edit]` | 编辑按钮文本 | `string` | `保存` |
+| `[render]` | 按钮样式 | `SFRenderButton` | - |
+
 ### 组件方法
 
-| 参数          | 说明             | 返回值    |
-|---------------|------------------|-----------|
-| `valid`         | 表单是否有效     | `boolean` |
-| `value`         | 表单值         | `any`     |
-| `refreshSchema` | 刷新 JSON Schema | `void`    |
-| `reset`         | 重置表单         | `void`    |
-| `validator`     | 手动校验一次表单         | `void`    |
+| 参数            | 说明                                                  | 返回值         |
+|-----------------|-----------------------------------------------------|----------------|
+| `valid`         | 表单是否有效                                          | `boolean`      |
+| `value`         | 表单值                                                | `any`          |
+| `refreshSchema` | 刷新 JSON Schema                                      | `void`         |
+| `reset`         | 重置表单                                              | `void`         |
+| `validator`     | 手动校验一次表单                                      | `void`         |
+| `getProperty`   | 根据路径获取表单元素属性                              | `FormProperty` |
+| `getValue`      | 根据路径获取表单元素当前值                            | `any`          |
+| `setValue`      | 根据路径设置某个表单元素属性值，若路径不存在会产生异常 | `this`         |
 
 ### 按钮说明
 
@@ -168,7 +185,7 @@ export class HomeComponent {
 
 - 值为 `null` 或 `undefined` 表示手动添加按钮，但保留容器
 - 值为 `none` 表示手动添加按钮，且不保留容器
-- 使用固定 `label` 标签宽度时，若无 `render.class` 则默认为居中状态
+- 使用 `spanLabelFixed` 固定标签宽度时，若无 `render.class` 则默认为居中状态
 
 **自定义**
 
@@ -176,8 +193,8 @@ export class HomeComponent {
 
 ```html
 <sf #sf [button]="null">
-    <button type="submit" nz-button [disabled]="!sf.valid">保存</button>
-    <button (click)="sf.reset()" type="button" nz-button>重置</button>
+  <button type="submit" nz-button [disabled]="!sf.valid">保存</button>
+  <button (click)="sf.reset()" type="button" nz-button>重置</button>
 </sf>
 ```
 

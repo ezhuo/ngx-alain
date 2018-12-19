@@ -1,5 +1,5 @@
 ---
-order: 4
+order: 2
 title: Schema
 type: Documents
 ---
@@ -95,8 +95,6 @@ JSON Schema 有完整的对每个属性的规范描述，`@delon/form` 当前是
 **关于exclusiveMinimum和exclusiveMaximum**
 
 `sf` 的实现机制导致无法很好的处理 `type` 类型的错误捕获，因此默认情况下 `sf` 是忽略了所有 `type` （见 [config.ts](https://github.com/ng-alain/delon/blob/master/packages/form/src/config.ts#L12)）类型错误，而这两种都错误都会被认为 `type` 类型错误，从而倒置触发无效检查的原因。（更多细节请参考 [#676](https://github.com/ng-alain/ng-alain/issues/676#issuecomment-420208459)）
-
-> TODO: 改进校验机制。
 
 ### 字符串类型
 

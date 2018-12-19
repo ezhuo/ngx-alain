@@ -6,6 +6,7 @@ import {
   AfterViewInit,
   OnInit,
   OnDestroy,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 
 import { InjectorControl } from '@core';
@@ -13,12 +14,22 @@ import { InjectorControl } from '@core';
 @Component({
   selector: 'header-search',
   template: `
-  <nz-input-group [nzAddOnBeforeIcon]="focus ? 'anticon anticon-arrow-down' : 'anticon anticon-search'">
-    <input nz-input [(ngModel)]="q" (focus)="qFocus()" (blur)="qBlur()" (keyup.enter)="onEnter()"
-      [placeholder]="'请查询'">
-  </nz-input-group>
-
+    <nz-input-group
+      [nzAddOnBeforeIcon]="
+        focus ? 'anticon anticon-arrow-down' : 'anticon anticon-search'
+      "
+    >
+      <input
+        nz-input
+        [(ngModel)]="q"
+        (focus)="qFocus()"
+        (blur)="qBlur()"
+        (keyup.enter)="onEnter()"
+        [placeholder]="'请查询'"
+      />
+    </nz-input-group>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderSearchComponent extends InjectorControl
   implements OnInit, OnDestroy, AfterViewInit {

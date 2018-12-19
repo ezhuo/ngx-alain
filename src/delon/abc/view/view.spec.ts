@@ -1,7 +1,7 @@
 import { Component, DebugElement, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { REP_MAX } from '@delon/theme/src/services/responsive/responsive';
+import { REP_MAX } from '@delon/theme';
 
 import { SVComponent } from './view.component';
 import { SVModule } from './view.module';
@@ -16,7 +16,7 @@ describe('abc: view', () => {
 
   function genModule(template?: string) {
     TestBed.configureTestingModule({
-      imports: [SVModule.forRoot()],
+      imports: [SVModule],
       declarations: [TestComponent],
     });
     if (template) {
@@ -213,7 +213,7 @@ class TestComponent {
   parent_gutter: number = 32;
   parent_col: number = 3;
   parent_default: boolean = true;
-  parent_title = "title";
+  parent_title = 'title';
 
   label: string;
   content = '1';

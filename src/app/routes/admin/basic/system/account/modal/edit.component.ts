@@ -1,4 +1,10 @@
-import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Injector,
+  OnInit,
+  OnDestroy,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ModalControl } from '@core';
 import { tplModalEditHTML } from '@layout';
 
@@ -6,6 +12,7 @@ import { tplModalEditHTML } from '@layout';
   selector: 'app-account-edit',
   template: tplModalEditHTML,
   styles: [``],
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class AccountEditComponent extends ModalControl
   implements OnInit, OnDestroy {
@@ -38,7 +45,10 @@ export class AccountEditComponent extends ModalControl
   }
 
   onSubmit($event: any) {
-    const formData = this.formatSubmitData($event.value, this.schemaData.edit);
+    const formData = this.appBase.__formatSubmitData(
+      $event.value,
+      this.schemaData.edit,
+    );
     // 如果是新增状态，就添加所属机构值
     if (!this.dataSource.val) {
       formData['org_id'] = this.modalData.data.origin.org_id;

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NzMessageService } from 'ng-zorro-antd';
-import { copy, format, yuan } from '@delon/util';
+import { copy, format } from '@delon/util';
+import { yuan } from '@core/helpers';
 
 @Component({
   selector: 'app-util',

@@ -7,7 +7,7 @@ import { _HttpClient } from '@delon/theme';
   selector: 'app-simple-table',
   templateUrl: './simple-table.component.html',
 })
-export class STComponent implements OnInit {
+export class SimpleTableComponent implements OnInit {
   ps = 20;
   total = 200; // mock total
   args: any = { _allow_anonymous: true };

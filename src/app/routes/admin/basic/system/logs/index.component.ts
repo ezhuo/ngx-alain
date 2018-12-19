@@ -79,7 +79,7 @@ export class LogsComponent extends IndexControl implements OnInit, OnDestroy {
         },
         ui: {},
       },
-      
+
       edit: {
         properties: {
           title: {
@@ -203,8 +203,7 @@ export class LogsComponent extends IndexControl implements OnInit, OnDestroy {
           {
             text: '查看',
             type: 'modal',
-            component: LogsShowComponent,
-            params: this.formatModalParams.bind(this),
+            modal: this.modalTable(LogsShowComponent),
           },
         ],
       },

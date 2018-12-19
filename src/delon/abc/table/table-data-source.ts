@@ -1,24 +1,24 @@
-import { Injectable, Host } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { Host, Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { of, Observable } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
+import { _HttpClient, CNCurrencyPipe, DatePipe, YNPipe } from '@delon/theme';
 import { deepGet } from '@delon/util';
-import { CNCurrencyPipe, DatePipe, YNPipe, _HttpClient } from '@delon/theme';
 import { HttpService } from '@core';
 
+import { STSortMap } from './table-column-source';
 import {
+  STColumn,
   STData,
+  STMultiSort,
   STPage,
   STReq,
   STRes,
-  STColumn,
-  STMultiSort,
   STRowClassName,
   STSingleSort,
 } from './table.interfaces';
-import { STSortMap } from './table-column-source';
 
 export interface STDataSourceOptions {
   pi?: number;
@@ -49,12 +49,12 @@ export interface STDataSourceResult {
 export class STDataSource {
   constructor(
     private http: HttpService,
-    @Host() private currenty: CNCurrencyPipe,
-    @Host() private date: DatePipe,
-    @Host() private yn: YNPipe,
-    @Host() private number: DecimalPipe,
+    @Host() private currentyPipe: CNCurrencyPipe,
+    @Host() private datePipe: DatePipe,
+    @Host() private ynPipe: YNPipe,
+    @Host() private numberPipe: DecimalPipe,
     private dom: DomSanitizer,
-  ) {}
+  ) { }
 
   process(options: STDataSourceOptions): Promise<STDataSourceResult> {
     return new Promise((resolvePromise, rejectPromise) => {
@@ -68,7 +68,7 @@ export class STDataSource {
       if (typeof data === 'string') {
         isRemote = true;
         data$ = this.getByHttp(data, options).pipe(
-          map((result: any) => {
+          map((result) => {
             // list
             let ret = deepGet(result, res.reName.list as string[], []);
             if (ret == null || !Array.isArray(ret)) {
@@ -79,7 +79,7 @@ export class STDataSource {
               res.reName.total &&
               deepGet(result, res.reName.total as string[], null);
             retTotal = resultTotal == null ? total || 0 : +resultTotal;
-            return <STData[]>ret;
+            return ret as STData[];
           }),
           catchError(err => {
             rejectPromise(err);
@@ -166,9 +166,9 @@ export class STDataSource {
     });
   }
 
-  private get(item: any, col: STColumn, idx: number) {
+  private get(item: STData, col: STColumn, idx: number) {
     if (col.format) {
-      const formatRes = col.format(item, col) as string;
+      const formatRes = col.format(item, col);
       if (~formatRes.indexOf('<')) {
         return this.dom.bypassSecurityTrustHtml(formatRes);
       }
@@ -186,16 +186,16 @@ export class STDataSource {
         ret = value ? `<img src="${value}" class="img">` : '';
         break;
       case 'number':
-        ret = this.number.transform(value, col.numberDigits);
+        ret = this.numberPipe.transform(value, col.numberDigits);
         break;
       case 'currency':
-        ret = this.currenty.transform(value);
+        ret = this.currentyPipe.transform(value);
         break;
       case 'date':
-        ret = this.date.transform(value, col.dateFormat);
+        ret = this.datePipe.transform(value, col.dateFormat);
         break;
       case 'yn':
-        ret = this.yn.transform(value === col.yn.truth, col.yn.yes, col.yn.no);
+        ret = this.ynPipe.transform(value === col.yn.truth, col.yn.yes, col.yn.no);
         break;
     }
     return ret == null ? '' : ret;
@@ -204,18 +204,17 @@ export class STDataSource {
   private getByHttp(
     url: string,
     options: STDataSourceOptions,
-  ): Observable<any> {
+  ): Observable<{}> {
     const { req, page, pi, ps, singleSort, multiSort, columns } = options;
     const method = (req.method || 'GET').toUpperCase();
-    const params: any = Object.assign(
-      {
-        [req.reName.pi]: page.zeroIndexed ? pi - 1 : pi,
-        [req.reName.ps]: ps,
-      },
-      req.params,
-      this.getReqSortMap(singleSort, multiSort, columns),
-      this.getReqFilterMap(columns),
-    );
+    const params = {
+      [req.reName.pi]: page.zeroIndexed ? pi - 1 : pi,
+      [req.reName.ps]: ps,
+      ...req.params,
+      ...this.getReqSortMap(singleSort, multiSort, columns),
+      ...this.getReqFilterMap(columns),
+    };
+    // tslint:disable-next-line:no-any
     let reqOptions: any = {
       params,
       body: req.body,
@@ -223,7 +222,7 @@ export class STDataSource {
     };
     if (method === 'POST' && req.allInBody === true) {
       reqOptions = {
-        body: Object.assign({}, req.body, params),
+        body: { ...req.body, ...params },
         headers: req.headers,
       };
     }
@@ -267,14 +266,20 @@ export class STDataSource {
     if (!multiSort && sortList.length === 0) return ret;
 
     if (multiSort) {
+      const ms = {
+        key: 'sort',
+        separator: '-',
+        nameSeparator: '.',
+        ...multiSort,
+      };
       sortList.forEach(item => {
         ret[item.key] = (item.reName || {})[item.default] || item.default;
       });
       // 合并处理
       ret = {
-        [multiSort.key]: Object.keys(ret)
-          .map(key => key + multiSort.nameSeparator + ret[key])
-          .join(multiSort.separator),
+        [ms.key]: Object.keys(ret)
+          .map(key => key + ms.nameSeparator + ret[key])
+          .join(ms.separator),
       };
     } else {
       const mapData = sortList[0];
@@ -297,13 +302,13 @@ export class STDataSource {
     let ret = {};
     columns.filter(w => w.filter && w.filter.default === true).forEach(col => {
       const values = col.filter.menus.filter(f => f.checked === true);
-      let obj: Object = {};
+      let obj: {} = {};
       if (col.filter.reName) {
         obj = col.filter.reName(col.filter.menus, col);
       } else {
         obj[col.filter.key] = values.map(i => i.value).join(',');
       }
-      ret = Object.assign(ret, obj);
+      ret = { ...ret, ...obj };
     });
     return ret;
   }

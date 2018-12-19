@@ -4,6 +4,7 @@ import {
   Injector,
   OnInit,
   OnDestroy,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 
 import { STComponent } from '@delon/abc';
@@ -14,12 +15,12 @@ import { AccountShowComponent } from './modal/show.component';
 import { AccountPwdComponent } from './modal/pwd.component';
 import { NzFormatEmitEvent, NzTreeNode, NzTreeComponent } from 'ng-zorro-antd';
 import { FormProperty, PropertyGroup } from '@delon/form';
-import { SFSchema } from '@delon/form';
 
 @Component({
   selector: 'app-system-account',
   templateUrl: `./index.component.html`,
   styleUrls: [`./index.component.less`],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountComponent extends IndexControl
   implements OnInit, OnDestroy {
@@ -277,8 +278,7 @@ export class AccountComponent extends IndexControl
           {
             text: '查看',
             type: 'modal',
-            component: AccountShowComponent,
-            params: this.formatModalParams.bind(this),
+            modal: this.modalTable(AccountShowComponent),
           },
           {
             text: '操作',
@@ -286,8 +286,7 @@ export class AccountComponent extends IndexControl
               {
                 text: '编辑',
                 type: 'modal',
-                component: AccountEditComponent,
-                params: this.formatModalParams.bind(this),
+                modal: this.modalTable(AccountEditComponent),
                 click: (record, btnRes) => {
                   console.log(btnRes);
                   if (btnRes) this.st.load();
@@ -297,8 +296,7 @@ export class AccountComponent extends IndexControl
                 text: '重置密码',
                 type: 'modal',
                 schema: this.schemaData.password,
-                component: AccountPwdComponent,
-                params: this.formatModalParams.bind(this),
+                modal: this.modalTable(AccountPwdComponent),
                 click: (record, btnRes) => {
                   if (btnRes) this.st.load();
                 },
@@ -337,13 +335,13 @@ export class AccountComponent extends IndexControl
 
   add() {
     this.treeSelectNodeEvent();
-    this.freeData.add = this.modalSrv
-      .static(AccountEditComponent, this.formatModalParams())
-      .subscribe(result => {
+    this.freeData.add = this.modalEditStatic(AccountEditComponent).subscribe(
+      result => {
         if (result) {
           this.st.load();
         }
-      });
+      },
+    );
   }
 
   treeData = [];
@@ -366,6 +364,7 @@ export class AccountComponent extends IndexControl
           }
           this.treeData.push(new NzTreeNode(node));
         });
+        this.cdr.detectChanges();
       });
   }
 
@@ -393,5 +392,6 @@ export class AccountComponent extends IndexControl
     }
 
     this.searchSubmit(this.st, this.sf.value);
+    this.cdr.detectChanges();
   }
 }

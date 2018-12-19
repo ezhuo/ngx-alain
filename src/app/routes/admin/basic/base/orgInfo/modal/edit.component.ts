@@ -1,52 +1,58 @@
-import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Injector,
+  OnInit,
+  OnDestroy,
+} from '@angular/core';
 
 import { ModalControl } from '@core';
 import { tplModalEditHTML } from '@layout';
 
 @Component({
-    selector: 'app-orginfo-edit',
-    template: tplModalEditHTML,
-    styles: [``],
+  selector: 'app-orginfo-edit',
+  template: tplModalEditHTML,
+  styles: [``],
 })
 export class OrgInfoEditComponent extends ModalControl
-    implements OnInit, OnDestroy {
-    constructor(protected injector: Injector) {
-        super(injector);
-    }
+  implements OnInit, OnDestroy {
+  constructor(protected injector: Injector) {
+    super(injector);
+  }
 
-    ngOnInit() {
-        super.ngOnInit();
-        if (!this.dataSource.val) {
-            this.form.data[
-                'parent_org_name'
-            ] = this.modalData.data.origin.title;
-        }
-        console.log(this.form.data);
+  ngOnInit() {
+    super.ngOnInit();
+    if (!this.dataSource.val) {
+      this.form.data['parent_org_name'] = this.modalData.data.origin.title;
     }
+    console.log(this.form.data);
+  }
 
-    ngOnDestroy() {
-        super.ngOnDestroy();
-    }
+  ngOnDestroy() {
+    super.ngOnDestroy();
+  }
 
-    onSubmit($event: any) {
-        const formData = this.formatSubmitData($event.value, this.schemaData.edit);
-        console.log(formData, $event.value);
-        // 如果是新增状态，就添加所属机构值
-        if (!this.dataSource.val) {
-            formData['parent_id'] = this.modalData.data.origin.org_id;
-        } else {
-            // 编辑状态下不允许修改机构
-            delete formData['parent_id'];
-        }
-        this.httpSrv
-            .update(this.dataSource.url, formData, this.dataSource.val)
-            .subscribe(
-                result => {
-                    this.modalClose(result);
-                },
-                err => {
-                     console.log(err);
-                },
-            );
+  onSubmit($event: any) {
+    const formData = this.appBase.__formatSubmitData(
+      $event.value,
+      this.schemaData.edit,
+    );
+    console.log(formData, $event.value);
+    // 如果是新增状态，就添加所属机构值
+    if (!this.dataSource.val) {
+      formData['parent_id'] = this.modalData.data.origin.org_id;
+    } else {
+      // 编辑状态下不允许修改机构
+      delete formData['parent_id'];
     }
+    this.httpSrv
+      .update(this.dataSource.url, formData, this.dataSource.val)
+      .subscribe(
+        result => {
+          this.modalClose(result);
+        },
+        err => {
+          console.log(err);
+        },
+      );
+  }
 }

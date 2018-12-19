@@ -127,7 +127,7 @@ class TestComponent {
 `[showSize]` | 是否显示分页器中改变页数 | `boolean` | `false`
 `[pageSizes]` | 分页器中每页显示条目数下拉框值 | `number[]` | `[10, 20, 30, 40, 50]`
 `[showQuickJumper]` | 是否显示分页器中快速跳转 | `boolean` | `false`
-`[total]` | 是否显示总数据量，字符串表示自定义模板（支持三个变量名：`total` 表示数据总量、`range[0]` 和 `range[1]` 表示当前数据范围；**变量名**统一使用双引号包裹） | `boolean, string` | `false`
+`[total]` | 是否显示总数据量，字符串表示自定义模板（支持三个变量名：`total` 表示数据总量、`range[0]` 和 `range[1]` 表示当前数据范围；**变量名**统一使用双花括号包裹） | `boolean, string` | `false`
 `[toTop]` | 切换分页时返回顶部 | `boolean` | `true`
 `[toTopOffset]` | 返回顶部偏移值 | `number` | `100`
 
@@ -181,15 +181,9 @@ class TestComponent {
 参数 | 说明 | 类型 | 默认值
 ----|------|-----|------
 `[key]` | 请求参数名 | `string` | `sort`
-`[nameSeparator]` | 列名与状态间分隔符 | `string` | `.`
-
-### STMultiSort
-
-参数 | 说明 | 类型 | 默认值
-----|------|-----|------
-`[key]` | 请求参数名 | `string` | `sort`
 `[separator]` | 不同属性间分隔符 | `string` | `-`
 `[nameSeparator]` | 列名与状态间分隔符 | `string` | `.`
+`[global]` | 是否全局多排序模式<br>`true` 表示所有 `st` 默认为多排序<br>`false` 表示需要为每个 `st` 添加 `multiSort` 才会视为多排序模式 | `boolean` | `true`
 
 ### STData
 
@@ -295,7 +289,7 @@ class TestComponent {
 ----|------|-----|------
 `[component]` | 目标组件对象，务必在 `entryComponents` 注册 | `any` | -
 `[params]` | 目标组件的接收参数对象 | `(record: STData) => Object` | -
-`[paramsName]` | 目标组件的接收参数名 | `string` | record
+`[paramsName]` | 目标组件的接收参数名，若目标组件接收值为空时，检查 [delon.module.ts](https://github.com/ng-alain/ng-alain/blob/master/src/app/delon.module.ts#L69) 全局设置 | `string` | record
 `[size]` | 对话框大小 | `sm, md, lg, xl, '', number` | `lg`
 `[exact]` | 是否精准（默认：`true`），若返回值非空值（`null`或`undefined`）视为成功，否则视为错误 | `boolean` | `true`
 `[includeTabs]` | 是否包裹标签页，修复模态包含标签间距问题 | `boolean` | -
@@ -308,7 +302,7 @@ class TestComponent {
 `[title]` | 标题 | `any` | -
 `[component]` | 目标组件对象，务必在 `entryComponents` 注册 | `any` | -
 `[params]` | 目标组件的接收参数对象 | `(record: STData) => Object` | -
-`[paramsName]` | 目标组件的接收参数名 | `string` | record
+`[paramsName]` | 目标组件的接收参数名，若目标组件接收值为空时，检查 [delon.module.ts](https://github.com/ng-alain/ng-alain/blob/master/src/app/delon.module.ts#L69) 全局设置 | `string` | record
 `[size]` | 抽屉大小 | `sm, md, lg, xl, number` | `md`
 `[drawerOptions]` | 抽屉 [NzDrawerOptions](https://ng.ant.design/components/drawer/zh#nzdraweroptions) 参数 | `any` | -
 

@@ -1,5 +1,5 @@
 ---
-order: 0
+order: 1
 title: Tooltip
 ---
 
@@ -7,7 +7,7 @@ title: Tooltip
 
 ```ts
 import { Component, OnInit } from '@angular/core';
-import format from 'date-fns/format';
+import * as format from 'date-fns/format';
 
 @Component({
   selector: 'app-demo',

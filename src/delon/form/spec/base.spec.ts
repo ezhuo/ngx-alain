@@ -1,25 +1,26 @@
-import { Component, ViewChild, DebugElement } from '@angular/core';
+import { Component, DebugElement, ViewChild } from '@angular/core';
 import {
-  TestBed,
-  ComponentFixture,
-  tick,
   discardPeriodicTasks,
+  tick,
+  ComponentFixture,
+  TestBed,
 } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
-import { deepGet, deepCopy } from '@delon/util';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { AlainThemeModule } from '@delon/theme';
+import { deepCopy, deepGet } from '@delon/util';
 
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { configureTestSuite, dispatchFakeEvent, typeInElement } from '@delon/testing';
+import { ErrorData } from '../src/errors';
+import { SFButton } from '../src/interface';
+import { DelonFormModule } from '../src/module';
 import { SFSchema } from '../src/schema';
 import { SFUISchema } from '../src/schema/ui';
-import { SFButton } from '../src/interface';
-import { ErrorData } from '../src/errors';
-import { DelonFormModule } from '../src/module';
 import { SFComponent } from '../src/sf.component';
-import { dispatchFakeEvent, typeInElement } from '../../testing';
 
 export const SCHEMA = {
-  user: <SFSchema>{
+  user: {
     properties: {
       name: {
         type: 'string',
@@ -29,7 +30,7 @@ export const SCHEMA = {
       },
     },
     required: ['name', 'pwd'],
-  },
+  } as SFSchema,
 };
 
 let fixture: ComponentFixture<TestFormComponent>;
@@ -41,9 +42,11 @@ export function builder(options?: {
   ingoreAntd?: boolean;
   imports?: any[];
 }) {
-  options = Object.assign({ detectChanges: true }, options);
+  options = { detectChanges: true, ...options };
   TestBed.configureTestingModule({
-    imports: [NoopAnimationsModule, AlainThemeModule.forRoot(), DelonFormModule.forRoot()].concat(options.imports || []),
+    imports: [
+      NoopAnimationsModule, AlainThemeModule.forRoot(), DelonFormModule.forRoot(),
+    ].concat(options.imports || []),
     declarations: [TestFormComponent],
   });
   if (options.template) {
@@ -68,8 +71,27 @@ export function builder(options?: {
   };
 }
 
+export function configureSFTestSuite() {
+  configureTestSuite(() => {
+    TestBed.configureTestingModule({
+      imports: [NoopAnimationsModule, AlainThemeModule.forRoot(), DelonFormModule.forRoot(), HttpClientTestingModule],
+      declarations: [TestFormComponent],
+    });
+  });
+}
+
 export class SFPage {
-  constructor(private comp: SFComponent) {}
+  constructor(private comp: SFComponent) { }
+
+  prop(_dl: DebugElement, _context: TestFormComponent, _fixture: ComponentFixture<TestFormComponent>) {
+    dl = _dl;
+    context = _context;
+    fixture = _fixture;
+    spyOn(context, 'formChange');
+    spyOn(context, 'formSubmit');
+    spyOn(context, 'formReset');
+    spyOn(context, 'formError');
+  }
 
   getDl(cls: string): DebugElement {
     return dl.query(By.css(cls));
@@ -139,9 +161,10 @@ export class SFPage {
 
   /** 强制指定 `a` 节点 */
   chainSchema(schema: SFSchema, overObject: SFSchema): this {
-    context.schema = Object.assign({}, deepCopy(schema), {
+    context.schema = {
+      ...deepCopy(schema),
       properties: { a: overObject },
-    });
+    };
     fixture.detectChanges();
     return this;
   }
@@ -277,8 +300,8 @@ export class TestFormComponent {
   autocomplete: 'on' | 'off';
   firstVisual = true;
 
-  formChange(value: {}) {}
-  formSubmit(value: {}) {}
-  formReset(value: {}) {}
-  formError(value: ErrorData[]) {}
+  formChange(value: {}) { }
+  formSubmit(value: {}) { }
+  formReset(value: {}) { }
+  formError(value: ErrorData[]) { }
 }

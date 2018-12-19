@@ -145,7 +145,7 @@ export class InjectorControl implements OnInit, OnDestroy {
     return this.injector.get(TokenService);
   }
 
-  get cdRef() {
+  get cdr() {
     return this.injector.get(ChangeDetectorRef);
   }
 

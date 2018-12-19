@@ -1,10 +1,11 @@
 import {
+  ChangeDetectionStrategy,
   Component,
-  Host,
   ElementRef,
-  Renderer2,
+  Host,
   OnInit,
   Optional,
+  Renderer2,
 } from '@angular/core';
 import { SVContainerComponent } from './view-container.component';
 
@@ -14,14 +15,13 @@ import { SVContainerComponent } from './view-container.component';
   host: {
     '[class.sv__title]': 'true',
   },
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SVTitleComponent implements OnInit {
   private el: HTMLElement;
   constructor(
-    @Host()
-    @Optional()
-    private parent: SVContainerComponent,
     el: ElementRef,
+    @Host() @Optional() private parent: SVContainerComponent,
     private ren: Renderer2,
   ) {
     if (parent == null) {

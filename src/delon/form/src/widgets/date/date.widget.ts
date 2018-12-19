@@ -1,100 +1,20 @@
 import { Component, OnInit } from '@angular/core';
-import {format} from 'date-fns';
-import { ControlWidget } from '../../widget';
-import { toBool } from '../../utils';
+import * as format from 'date-fns/format';
+import { SFValue } from '../../interface';
 import { FormProperty } from '../../model/form.property';
+import { toBool } from '../../utils';
+import { ControlWidget } from '../../widget';
 
 @Component({
   selector: 'sf-date',
-  template: `
-  <sf-item-wrap [id]="id" [schema]="schema" [ui]="ui" [showError]="showError" [error]="error" [showTitle]="schema.title">
-    <ng-container [ngSwitch]="mode">
-
-      <nz-month-picker *ngSwitchCase="'month'"
-        [nzDisabled]="disabled"
-        [nzSize]="ui.size"
-        [nzFormat]="displayFormat"
-        [(ngModel)]="displayValue"
-        (ngModelChange)="_change($event)"
-        [nzAllowClear]="i.allowClear"
-        [nzClassName]="ui.className"
-        [nzDisabledDate]="ui.disabledDate"
-        [nzLocale]="ui.locale"
-        [nzPlaceHolder]="ui.placeholder"
-        [nzPopupStyle]="ui.popupStyle"
-        [nzDropdownClassName]="ui.dropdownClassName"
-        (nzOnOpenChange)="_openChange($event)"
-        [nzRenderExtraFooter]="ui.renderExtraFooter"
-      ></nz-month-picker>
-
-      <nz-week-picker *ngSwitchCase="'week'"
-        [nzDisabled]="disabled"
-        [nzSize]="ui.size"
-        [nzFormat]="displayFormat"
-        [(ngModel)]="displayValue"
-        (ngModelChange)="_change($event)"
-        [nzAllowClear]="i.allowClear"
-        [nzClassName]="ui.className"
-        [nzDisabledDate]="ui.disabledDate"
-        [nzLocale]="ui.locale"
-        [nzPlaceHolder]="ui.placeholder"
-        [nzPopupStyle]="ui.popupStyle"
-        [nzDropdownClassName]="ui.dropdownClassName"
-        (nzOnOpenChange)="_openChange($event)"
-      ></nz-week-picker>
-
-      <nz-range-picker *ngSwitchCase="'range'"
-        [nzDisabled]="disabled"
-        [nzSize]="ui.size"
-        [nzFormat]="displayFormat"
-        [(ngModel)]="displayValue"
-        (ngModelChange)="_change($event)"
-        [nzAllowClear]="i.allowClear"
-        [nzClassName]="ui.className"
-        [nzDisabledDate]="ui.disabledDate"
-        [nzLocale]="ui.locale"
-        [nzPlaceHolder]="ui.placeholder"
-        [nzPopupStyle]="ui.popupStyle"
-        [nzDropdownClassName]="ui.dropdownClassName"
-        (nzOnOpenChange)="_openChange($event)"
-        [nzDisabledTime]="ui.disabledTime"
-        [nzRenderExtraFooter]="ui.renderExtraFooter"
-        [nzRanges]="ui.ranges"
-        [nzShowTime]="ui.showTime"
-        (nzOnOk)="_ok($event)"
-      ></nz-range-picker>
-
-      <nz-date-picker *ngSwitchDefault
-        [nzDisabled]="disabled"
-        [nzSize]="ui.size"
-        [nzFormat]="displayFormat"
-        [(ngModel)]="displayValue"
-        (ngModelChange)="_change($event)"
-        [nzAllowClear]="i.allowClear"
-        [nzClassName]="ui.className"
-        [nzDisabledDate]="ui.disabledDate"
-        [nzLocale]="ui.locale"
-        [nzPlaceHolder]="ui.placeholder"
-        [nzPopupStyle]="ui.popupStyle"
-        [nzDropdownClassName]="ui.dropdownClassName"
-        (nzOnOpenChange)="_openChange($event)"
-        [nzDisabledTime]="ui.disabledTime"
-        [nzRenderExtraFooter]="ui.renderExtraFooter"
-        [nzShowTime]="ui.showTime"
-        [nzShowToday]="i.showToday"
-        (nzOnOk)="_ok($event)"
-      ></nz-date-picker>
-    </ng-container>
-
-  </sf-item-wrap>
-  `,
-  preserveWhitespaces: false,
+  templateUrl: './date.widget.html',
 })
 export class DateWidget extends ControlWidget implements OnInit {
   mode: string;
   displayValue: Date | Date[] = null;
   displayFormat: string;
   format: string;
+  // tslint:disable-next-line:no-any
   i: any;
   flatRange = false;
 
@@ -117,11 +37,7 @@ export class DateWidget extends ControlWidget implements OnInit {
     } else {
       this.displayFormat = ui.displayFormat;
     }
-    this.format = ui.format
-      ? ui.format
-      : this.schema.type === 'number'
-        ? 'x'
-        : 'YYYY-MM-DD HH:mm:ss';
+    this.format = ui.format ? ui.format : this.schema.type === 'number' ? 'x' : 'YYYY-MM-DD HH:mm:ss';
     // 公共API
     this.i = {
       allowClear: toBool(ui.allowClear, true),
@@ -130,7 +46,7 @@ export class DateWidget extends ControlWidget implements OnInit {
     };
   }
 
-  reset(value: any) {
+  reset(value: SFValue) {
     value = this.toDate(value);
     if (this.flatRange) {
       this.displayValue = value == null ? [] : [value, this.toDate(this.endProperty.formData)];
@@ -146,9 +62,7 @@ export class DateWidget extends ControlWidget implements OnInit {
       return;
     }
 
-    const res = Array.isArray(value)
-      ? value.map(d => format(d, this.format))
-      : format(value, this.format);
+    const res = Array.isArray(value) ? value.map(d => format(d, this.format)) : format(value, this.format);
 
     if (this.flatRange) {
       this.setEnd(res[1]);
@@ -162,6 +76,7 @@ export class DateWidget extends ControlWidget implements OnInit {
     if (this.ui.onOpenChange) this.ui.onOpenChange(status);
   }
 
+  // tslint:disable-next-line:no-any
   _ok(value: any) {
     if (this.ui.onOk) this.ui.onOk(value);
   }
@@ -170,11 +85,11 @@ export class DateWidget extends ControlWidget implements OnInit {
     return this.formProperty.parent.properties[this.ui.end];
   }
 
-  private setEnd(value: any) {
+  private setEnd(value: string) {
     this.endProperty.setValue(value, true);
   }
 
-  private toDate(value: any) {
+  private toDate(value: SFValue) {
     if (typeof value === 'number' || (typeof value === 'string' && !isNaN(+value))) {
       value = new Date(+value);
     }

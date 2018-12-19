@@ -1,4 +1,10 @@
-import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Injector,
+  OnInit,
+  OnDestroy,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 import { ModalControl } from '@core';
 import { tplModalPasswordHTML } from '@layout';
@@ -7,6 +13,7 @@ import { tplModalPasswordHTML } from '@layout';
   selector: 'app-account-pwd',
   template: tplModalPasswordHTML,
   styles: [``],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountPwdComponent extends ModalControl
   implements OnInit, OnDestroy {
@@ -26,7 +33,7 @@ export class AccountPwdComponent extends ModalControl
   }
 
   onSubmit($event: any) {
-    const formData = this.formatSubmitData(
+    const formData = this.appBase.__formatSubmitData(
       $event.value,
       this.schemaData.password,
     );

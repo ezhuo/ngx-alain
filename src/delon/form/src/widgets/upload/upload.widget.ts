@@ -1,8 +1,9 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { deepGet } from '@delon/util';
-import { UploadFile, UploadChangeParam, NzModalService } from 'ng-zorro-antd';
-import { ControlWidget } from '../../widget';
+import { NzModalService, UploadChangeParam, UploadFile } from 'ng-zorro-antd';
+import { SFValue } from '../../interface';
 import { getData, toBool } from '../../utils';
+import { ControlWidget } from '../../widget';
 
 @Component({
   selector: 'sf-upload',
@@ -48,9 +49,9 @@ import { getData, toBool } from '../../utils';
 
   </sf-item-wrap>
   `,
-  preserveWhitespaces: false,
 })
 export class UploadWidget extends ControlWidget implements OnInit {
+  // tslint:disable-next-line:no-any
   i: any;
   fileList: UploadFile[] = [];
   btnType = '';
@@ -80,8 +81,7 @@ export class UploadWidget extends ControlWidget implements OnInit {
       this.i.listType = null;
       this.btnType = 'drag';
       this.i.text = this.ui.text || `单击或拖动文件到该区域上传`;
-      this.i.hint =
-        this.ui.hint || `支持单个或批量，严禁上传公司数据或其他安全文件`;
+      this.i.hint = this.ui.hint || `支持单个或批量，严禁上传公司数据或其他安全文件`;
     }
   }
 
@@ -91,7 +91,7 @@ export class UploadWidget extends ControlWidget implements OnInit {
     this.notify(args.fileList);
   }
 
-  reset(value: any) {
+  reset(value: SFValue) {
     getData(this.schema, this.ui, this.formProperty.formData).subscribe(
       list => {
         this.fileList = list as UploadFile[];
@@ -114,10 +114,9 @@ export class UploadWidget extends ControlWidget implements OnInit {
   handlePreview = (file: UploadFile) => {
     this.modalSrv
       .create({
-        nzContent: `<img src="${file.url ||
-          file.thumbUrl}" class="img-fluid" />`,
+        nzContent: `<img src="${file.url || file.thumbUrl}" class="img-fluid" />`,
         nzFooter: null,
       })
       .afterClose.subscribe(() => this.detectChanges());
-  };
+  }
 }

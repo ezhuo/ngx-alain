@@ -1,21 +1,18 @@
 import { Injector } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { DelonAuthConfig } from '../auth.config';
-import { DA_STORE_TOKEN } from '../store/interface';
-import { LocalStorageStore } from '../store/local-storage.service';
-import { TokenService } from './token.service';
 import { DA_SERVICE_TOKEN, ITokenModel, ITokenService } from './interface';
 import { JWTTokenModel } from './jwt/jwt.model';
 
 describe('auth: token.service', () => {
   let injector: Injector;
   let service: ITokenService;
-  const VALUE: ITokenModel = <ITokenModel>{
+  const VALUE: ITokenModel = {
     token: 'token data',
-  };
-  const JWTVALUE: ITokenModel = <ITokenModel>{
+  } as ITokenModel;
+  const JWTVALUE: ITokenModel = {
     token: `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ`,
-  };
+  } as ITokenModel;
 
   beforeEach(() => {
     let data = {};
@@ -28,7 +25,7 @@ describe('auth: token.service', () => {
     });
     spyOn(localStorage, 'setItem').and.callFake(
       (key: string, value: string): string => {
-        return (data[key] = <string>value);
+        return (data[key] = value as string);
       },
     );
     spyOn(localStorage, 'clear').and.callFake(() => {
@@ -41,8 +38,6 @@ describe('auth: token.service', () => {
           provide: DelonAuthConfig,
           useValue: { store_key: 'token', login_url: '/login' },
         },
-        { provide: DA_STORE_TOKEN, useClass: LocalStorageStore },
-        { provide: DA_SERVICE_TOKEN, useClass: TokenService },
       ],
     });
 

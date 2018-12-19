@@ -1,15 +1,16 @@
-import { Component, DebugElement, ViewChild, Injector } from '@angular/core';
+import { Component, DebugElement, Injector, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { configureTestSuite, createTestContext } from '@delon/testing';
 import {
-  DelonLocaleModule,
   en_US,
   zh_CN,
+  DelonLocaleModule,
   DelonLocaleService,
 } from '@delon/theme';
 
-import { TagSelectModule } from './tag-select.module';
 import { TagSelectComponent } from './tag-select.component';
+import { TagSelectModule } from './tag-select.module';
 
 describe('abc: tag-select', () => {
   let injector: Injector;
@@ -17,18 +18,19 @@ describe('abc: tag-select', () => {
   let dl: DebugElement;
   let context: TestComponent;
 
-  beforeEach(() => {
+  configureTestSuite(() => {
     injector = TestBed.configureTestingModule({
-      imports: [TagSelectModule.forRoot(), DelonLocaleModule],
+      imports: [TagSelectModule, DelonLocaleModule],
       declarations: [TestComponent],
     });
-    fixture = TestBed.createComponent(TestComponent);
-    dl = fixture.debugElement;
-    context = fixture.componentInstance;
+  });
+
+  beforeEach(() => {
+    ({ fixture, dl, context } = createTestContext(TestComponent));
     fixture.detectChanges();
   });
 
-  afterAll(() => context.comp.ngOnDestroy());
+  afterEach(() => context.comp.ngOnDestroy());
 
   describe('#expandable', () => {
     it('with true', () => {

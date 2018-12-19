@@ -1,13 +1,14 @@
 import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
+  ElementRef,
+  Host,
+  HostBinding,
   Input,
   OnChanges,
-  ElementRef,
-  Renderer2,
-  Host,
   Optional,
-  AfterViewInit,
-  HostBinding,
+  Renderer2,
 } from '@angular/core';
 
 import { ResponsiveService } from '@delon/theme';
@@ -19,17 +20,17 @@ const prefixCls = `sg`;
 
 @Component({
   selector: 'sg',
-  template: `<ng-content></ng-content>`,
-  preserveWhitespaces: false,
+  template: `
+    <ng-content></ng-content>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SGComponent implements OnChanges, AfterViewInit {
   private el: HTMLElement;
   private clsMap: string[] = [];
   private inited = false;
 
-  @Input()
-  @InputNumber(null)
-  col: number;
+  @Input() @InputNumber(null) col: number;
 
   @HostBinding('style.padding-left.px')
   get paddingLeft(): number {
@@ -42,12 +43,10 @@ export class SGComponent implements OnChanges, AfterViewInit {
   }
 
   constructor(
-    @Optional()
-    @Host()
-    private parent: SGContainerComponent,
-    private rep: ResponsiveService,
     el: ElementRef,
     private ren: Renderer2,
+    @Optional() @Host() private parent: SGContainerComponent,
+    private rep: ResponsiveService,
   ) {
     if (parent == null) {
       throw new Error(`[sg] must include 'sg-container' component`);
@@ -60,7 +59,7 @@ export class SGComponent implements OnChanges, AfterViewInit {
     clsMap.forEach(cls => ren.removeClass(el, cls));
     clsMap.length = 0;
     clsMap.push(
-      ...this.rep.genCls(col != null ? col : parent.col),
+      ...this.rep.genCls(col != null ? col : parent.colInCon || parent.col),
       `${prefixCls}__item`,
     );
     clsMap.forEach(cls => ren.addClass(el, cls));

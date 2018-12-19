@@ -6,35 +6,37 @@ import { VERSION as VERSION_ALAIN } from '@delon/theme';
 import { VERSION as VERSION_ZORRO, NzModalService } from 'ng-zorro-antd';
 
 @Component({
-    selector: 'app-root',
-    template: `<router-outlet></router-outlet>`,
+  selector: 'app-root',
+  template: `<router-outlet></router-outlet>`,
 })
 export class AppComponent implements OnInit {
-    constructor(
-        el: ElementRef,
-        renderer: Renderer2,
-        private router: Router,
-        private titleSrv: TitleService,
-        private modalSrv: NzModalService,
-    ) {
-        renderer.setAttribute(
-            el.nativeElement,
-            'ng-alain-version',
-            VERSION_ALAIN.full,
-        );
-        renderer.setAttribute(
-            el.nativeElement,
-            'ng-zorro-version',
-            VERSION_ZORRO.full,
-        );
-    }
+  constructor(
+    el: ElementRef,
+    renderer: Renderer2,
+    private router: Router,
+    private titleSrv: TitleService,
+    private modalSrv: NzModalService,
+  ) {
+    // Turn off G2 tracking
+    if (typeof G2 !== 'undefined') G2.track(false);
+    renderer.setAttribute(
+      el.nativeElement,
+      'ng-alain-version',
+      VERSION_ALAIN.full,
+    );
+    renderer.setAttribute(
+      el.nativeElement,
+      'ng-zorro-version',
+      VERSION_ZORRO.full,
+    );
+  }
 
-    ngOnInit() {
-        this.router.events
-            .pipe(filter(evt => evt instanceof NavigationEnd))
-            .subscribe(() => {
-                this.titleSrv.setTitle();
-                this.modalSrv.closeAll();
-            });
-    }
+  ngOnInit() {
+    this.router.events
+      .pipe(filter(evt => evt instanceof NavigationEnd))
+      .subscribe(() => {
+        this.titleSrv.setTitle();
+        this.modalSrv.closeAll();
+      });
+  }
 }

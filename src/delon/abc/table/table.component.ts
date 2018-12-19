@@ -1,88 +1,28 @@
-import {
-  Component,
-  Inject,
-  Input,
-  Output,
-  OnDestroy,
-  OnChanges,
-  SimpleChanges,
-  EventEmitter,
-  Renderer2,
-  ElementRef,
-  TemplateRef,
-  SimpleChange,
-  Optional,
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-} from '@angular/core';
 import { DecimalPipe, DOCUMENT } from '@angular/common';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, Input, OnChanges, OnDestroy, Optional, Output, Renderer2, SimpleChange, SimpleChanges, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable, Subscription, of } from 'rxjs';
-import { filter } from 'rxjs/operators';
-import {
-  CNCurrencyPipe,
-  DatePipe,
-  YNPipe,
-  ModalHelper,
-  ModalHelperOptions,
-  ALAIN_I18N_TOKEN,
-  AlainI18NService,
-  DrawerHelper,
-  DelonLocaleService,
-} from '@delon/theme';
-import {
-  deepCopy,
-  toBoolean,
-  updateHostClass,
-  InputBoolean,
-  InputNumber,
-} from '@delon/util';
+import { AlainI18NService, ALAIN_I18N_TOKEN, CNCurrencyPipe, DatePipe, DelonLocaleService, DrawerHelper, ModalHelper, ModalHelperOptions, YNPipe } from '@delon/theme';
+import { deepCopy, deepMerge, toBoolean, updateHostClass, InputBoolean, InputNumber } from '@delon/util';
+import { of, Observable, Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 
-import {
-  STColumn,
-  STChange,
-  STColumnSelection,
-  STColumnFilterMenu,
-  STData,
-  STColumnButton,
-  STExportOptions,
-  STMultiSort,
-  STReq,
-  STError,
-  STChangeType,
-  STRes,
-  STPage,
-  STLoadOptions,
-  STRowClassName,
-  STSingleSort,
-} from './table.interfaces';
-import { STConfig } from './table.config';
-import { STExport } from './table-export';
 import { STColumnSource } from './table-column-source';
-import { STRowSource } from './table-row.directive';
 import { STDataSource } from './table-data-source';
+import { STExport } from './table-export';
+import { STRowSource } from './table-row.directive';
+import { STConfig } from './table.config';
+import { STChange, STChangeType, STColumn, STColumnButton, STColumnFilterMenu, STColumnSelection, STData, STError, STExportOptions, STLoadOptions, STMultiSort, STPage, STReq, STRes, STRowClassName, STSingleSort } from './table.interfaces';
 
 @Component({
   selector: 'st',
   templateUrl: './table.component.html',
-  providers: [
-    STDataSource,
-    STRowSource,
-    STColumnSource,
-    STExport,
-    CNCurrencyPipe,
-    DatePipe,
-    YNPipe,
-    DecimalPipe,
-  ],
-  preserveWhitespaces: false,
+  providers: [ STDataSource, STRowSource, STColumnSource, STExport, CNCurrencyPipe, DatePipe, YNPipe, DecimalPipe ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
-  private i18n$: Subscription;
-  private delonI18n$: Subscription;
+  private unsubscribe$ = new Subject<void>();
   private totalTpl = ``;
+  // tslint:disable-next-line:no-any
   private locale: any = {};
   private clonePage: STPage;
   _data: STData[] = [];
@@ -93,9 +33,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   // #region fields
 
-  /** 数据源 */
-  @Input()
-  data: string | STData[] | Observable<STData[]>;
+  @Input() data: string | STData[] | Observable<STData[]>;
   /** 请求体配置 */
   @Input()
   get req() {
@@ -103,7 +41,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
   set req(value: STReq) {
     const { req } = this.cog;
-    const item = Object.assign({}, req, value);
+    const item = { ...req, ...value };
     if (item.reName == null) {
       item.reName = deepCopy(req.reName);
     }
@@ -117,8 +55,8 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
   set res(value: STRes) {
     const { res } = this.cog;
-    const item = Object.assign({}, res, value);
-    item.reName = Object.assign({}, res.reName, item.reName);
+    const item = { ...res, ...value };
+    item.reName = { ...res.reName, ...item.reName };
     if (!Array.isArray(item.reName.list))
       item.reName.list = item.reName.list.split('.');
     if (!Array.isArray(item.reName.total))
@@ -126,21 +64,10 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
     this._res = item;
   }
   private _res: STRes;
-  /** 列描述  */
-  @Input()
-  columns: STColumn[] = [];
-  /** 每页数量，当设置为 `0` 表示不分页，默认：`10` */
-  @Input()
-  @InputNumber()
-  ps = 10;
-  /** 当前页码 */
-  @Input()
-  @InputNumber()
-  pi = 1;
-  /** 数据总量 */
-  @Input()
-  @InputNumber()
-  total = 0;
+  @Input() columns: STColumn[] = [];
+  @Input() @InputNumber() ps = 10;
+  @Input() @InputNumber() pi = 1;
+  @Input() @InputNumber() total = 0;
   /** 分页器配置 */
   @Input()
   get page() {
@@ -149,7 +76,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   set page(value: STPage) {
     this.clonePage = value;
     const { page } = this.cog;
-    const item = Object.assign({}, deepCopy(page), value);
+    const item = { ...deepCopy(page), ...value };
     const { total } = item;
     if (typeof total === 'string' && total.length) {
       this.totalTpl = total;
@@ -162,132 +89,112 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
   private _page: STPage;
   /** 是否显示Loading */
-  @Input()
-  @InputBoolean()
-  loading = false;
+  @Input() @InputBoolean() loading = false;
   /** 延迟显示加载效果的时间（防止闪烁） */
-  @Input()
-  @InputNumber()
-  loadingDelay = 0;
+  @Input() @InputNumber() loadingDelay = 0;
   /** 是否显示边框 */
-  @Input()
-  @InputBoolean()
-  bordered = false;
+  @Input() @InputBoolean() bordered = false;
   /** table大小 */
-  @Input()
-  size: 'small' | 'middle' | 'default';
+  @Input() size: 'small' | 'middle' | 'default';
   /** 纵向支持滚动，也可用于指定滚动区域的高度：`{ y: '300px', x: '300px' }` */
-  @Input()
-  scroll: { y?: string; x?: string };
+  @Input() scroll: { y?: string; x?: string };
   /**
    * 单排序规则
    * - 若不指定，则返回：`columnName=ascend|descend`
    * - 若指定，则返回：`sort=columnName.(ascend|descend)`
    */
-  @Input()
-  singleSort: STSingleSort = null;
+  @Input() singleSort: STSingleSort = null;
   private _multiSort: STMultiSort;
   /** 是否多排序，当 `sort` 多个相同值时自动合并，建议后端支持时使用 */
   @Input()
   get multiSort() {
     return this._multiSort;
   }
+  // tslint:disable-next-line:no-any
   set multiSort(value: any) {
     if (typeof value === 'boolean' && !toBoolean(value)) {
       this._multiSort = null;
       return;
     }
-    this._multiSort = Object.assign(
-      <STMultiSort>{
-        key: 'sort',
-        separator: '-',
-        nameSeparator: '.',
-      },
-      typeof value === 'object' ? value : {},
-    );
+    this._multiSort = {
+      ...(typeof value === 'object' ? value : {}),
+    };
   }
-  @Input()
-  rowClassName: STRowClassName;
+  @Input() rowClassName: STRowClassName;
   /** `header` 标题 */
-  @Input()
-  header: string | TemplateRef<void>;
+  @Input() header: string | TemplateRef<void>;
   /** `footer` 底部 */
-  @Input()
-  footer: string | TemplateRef<void>;
+  @Input() footer: string | TemplateRef<void>;
   /** 额外 `body` 内容 */
-  @Input()
-  body: TemplateRef<void>;
+  @Input() body: TemplateRef<void>;
   /** `expand` 可展开，当数据源中包括 `expand` 表示展开状态 */
-  @Input()
-  expand: TemplateRef<{ $implicit: any; column: STColumn }>;
-  @Input()
-  noResult: string | TemplateRef<void>;
-  @Input()
-  widthConfig: string[];
+  @Input() expand: TemplateRef<{ $implicit: {}; column: STColumn }>;
+  @Input() noResult: string | TemplateRef<void>;
+  @Input() widthConfig: string[];
+  /** 行单击多少时长之类为双击（单位：毫秒），默认：`200` */
+  @Input() @InputNumber() rowClickTime = 200;
+  @Input() @InputBoolean() responsiveHideHeaderFooter: boolean;
   /** 请求异常时回调 */
-  @Output()
-  readonly error = new EventEmitter<STError>();
+  @Output() readonly error = new EventEmitter<STError>();
   /**
    * 变化时回调，包括：`pi`、`ps`、`checkbox`、`radio`、`sort`、`filter`、`click`、`dblClick` 变动
    */
-  @Output()
-  readonly change = new EventEmitter<STChange>();
-  /** 行单击多少时长之类为双击（单位：毫秒），默认：`200` */
-  @Input()
-  @InputNumber()
-  rowClickTime = 200;
-
-  @Input()
-  @InputBoolean()
-  responsiveHideHeaderFooter: boolean;
+  @Output() readonly change = new EventEmitter<STChange>();
 
   // #endregion
 
   constructor(
-    private cdRef: ChangeDetectorRef,
+    @Optional() @Inject(ALAIN_I18N_TOKEN) i18nSrv: AlainI18NService,
+    private cdr: ChangeDetectorRef,
     private cog: STConfig,
     private router: Router,
     private el: ElementRef,
     private renderer: Renderer2,
     private exportSrv: STExport,
-    @Optional()
-    @Inject(ALAIN_I18N_TOKEN)
-    i18nSrv: AlainI18NService,
     private modalHelper: ModalHelper,
     private drawerHelper: DrawerHelper,
+    // tslint:disable-next-line:no-any
     @Inject(DOCUMENT) private doc: any,
     private columnSource: STColumnSource,
     private dataSource: STDataSource,
     private delonI18n: DelonLocaleService,
   ) {
-    this.delonI18n$ = this.delonI18n.change.subscribe(() => {
+    const copyCog = { ...cog };
+    delete copyCog.multiSort;
+    deepMerge(this, copyCog);
+    if (cog.multiSort && cog.multiSort.global !== false) {
+      this.multiSort = { ...cog.multiSort };
+    }
+
+    this.delonI18n.change.pipe(takeUntil(this.unsubscribe$)).subscribe(() => {
       this.locale = this.delonI18n.getData('st');
       if (this._columns.length > 0) {
         this.page = this.clonePage;
         this.cd();
       }
     });
-    Object.assign(this, deepCopy(cog));
-    if (i18nSrv) {
-      this.i18n$ = i18nSrv.change
-        .pipe(filter(() => this._columns.length > 0))
-        .subscribe(() => this.updateColumns());
-    }
+
+    i18nSrv.change
+      .pipe(
+        takeUntil(this.unsubscribe$),
+        filter(() => this._columns.length > 0),
+      ).subscribe(() => this.updateColumns());
   }
 
   cd() {
-    this.cdRef.detectChanges();
+    this.cdr.detectChanges();
   }
 
   renderTotal(total: string, range: string[]) {
     return this.totalTpl
       ? this.totalTpl
-          .replace('{{total}}', total)
-          .replace('{{range[0]}}', range[0])
-          .replace('{{range[1]}}', range[1])
+        .replace('{{total}}', total)
+        .replace('{{range[0]}}', range[0])
+        .replace('{{range[1]}}', range[1])
       : '';
   }
 
+  // tslint:disable-next-line:no-any
   private changeEmit(type: STChangeType, data?: any) {
     const res: STChange = {
       type,
@@ -318,7 +225,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
         columns: this._columns,
         singleSort,
         multiSort,
-        rowClassName
+        rowClassName,
       })
       .then(result => {
         this.loading = false;
@@ -365,12 +272,12 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
    * @param extraParams 重新指定 `extraParams` 值
    * @param options 选项
    */
-  load(pi = 1, extraParams?: any, options?: STLoadOptions) {
+  load(pi = 1, extraParams?: {}, options?: STLoadOptions) {
     if (pi !== -1) this.pi = pi;
     if (typeof extraParams !== 'undefined') {
       this._req.params =
         options && options.merge
-          ? Object.assign(this._req.params, extraParams)
+          ? { ...this._req.params, ...extraParams }
           : extraParams;
     }
     this._change('pi');
@@ -380,7 +287,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
    * 重新刷新当前页
    * @param extraParams 重新指定 `extraParams` 值
    */
-  reload(extraParams?: any, options?: STLoadOptions) {
+  reload(extraParams?: {}, options?: STLoadOptions) {
     this.load(-1, extraParams, options);
   }
 
@@ -393,7 +300,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
    *
    * @param extraParams 重新指定 `extraParams` 值
    */
-  reset(extraParams?: any, options?: STLoadOptions) {
+  reset(extraParams?: {}, options?: STLoadOptions) {
     this.clearStatus().load(1, extraParams, options);
   }
 
@@ -445,12 +352,12 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   /** 移除某行数据 */
   removeRow(data: STData | STData[]) {
     if (!Array.isArray(data)) {
-      data = [ data ];
+      data = [data];
     }
 
     (data as STData[]).map(item => this._data.indexOf(item))
-        .filter(pos => pos !== -1)
-        .forEach(pos => this._data.splice(pos, 1));
+      .filter(pos => pos !== -1)
+      .forEach(pos => this._data.splice(pos, 1));
 
     this.cd();
   }
@@ -459,6 +366,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   //#region sort
 
+  // tslint:disable-next-line:no-any
   sort(col: STColumn, idx: number, value: any) {
     if (this.multiSort) {
       col._sort.default = value;
@@ -527,8 +435,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   private _refCheck(): this {
     const validData = this._data.filter(w => !w.disabled);
     const checkedList = validData.filter(w => w.checked === true);
-    this._allChecked =
-      checkedList.length > 0 && checkedList.length === validData.length;
+    this._allChecked = checkedList.length > 0 && checkedList.length === validData.length;
     const allUnChecked = validData.every(value => !value.checked);
     this._indeterminate = !this._allChecked && !allUnChecked;
     this.cd();
@@ -586,31 +493,26 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
       e.preventDefault();
     }
     if (btn.type === 'modal' || btn.type === 'static') {
-      const obj = {};
       const { modal } = btn;
-      obj[modal.paramsName] = record;
-      const options: ModalHelperOptions = Object.assign({}, modal);
-      options.modalOptions = Object.assign(options.modalOptions || {}, { nzStyle: { top: '20px' } });
-      (this.modalHelper[
-        btn.type === 'modal' ? 'create' : 'createStatic'
-      ] as any)(
+      const obj = { [modal.paramsName]: record };
+      // tslint:disable-next-line:no-any
+      (this.modalHelper[btn.type === 'modal' ? 'create' : 'createStatic'] as any)(
         modal.component,
-        Object.assign(obj, modal.params && modal.params(record)),
-        options,
+        { ...obj, ...(modal.params && modal.params(record)) },
+        { ...modal },
       )
         .pipe(filter(w => typeof w !== 'undefined'))
         .subscribe(res => this.btnCallback(record, btn, res));
       return;
     } else if (btn.type === 'drawer') {
-      const obj = {};
       const { drawer } = btn;
-      obj[drawer.paramsName] = record;
+      const obj = { [drawer.paramsName]: record };
       this.drawerHelper
         .create(
           drawer.title,
           drawer.component,
-          Object.assign(obj, drawer.params && drawer.params(record)),
-          Object.assign({}, drawer),
+          { ...obj, ...(drawer.params && drawer.params(record)) },
+          { ...drawer },
         )
         .pipe(filter(w => typeof w !== 'undefined'))
         .subscribe(res => this.btnCallback(record, btn, res));
@@ -625,6 +527,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
     this.btnCallback(record, btn);
   }
 
+  // tslint:disable-next-line:no-any
   private btnCallback(record: STData, btn: STColumnButton, modal?: any) {
     if (!btn.click) return;
     if (typeof btn.click === 'string') {
@@ -641,7 +544,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
     }
   }
 
-  _btnText(record: any, btn: STColumnButton) {
+  _btnText(record: STData, btn: STColumnButton) {
     if (btn.format) return btn.format(record, btn);
     return btn.text || '';
   }
@@ -659,13 +562,16 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
    * @param newData 重新指定数据，例如希望导出所有数据非常有用
    * @param opt 额外参数
    */
-  export(newData?: any[], opt?: STExportOptions) {
-    (newData ? of(newData) : of(this._data)).subscribe((res: any[]) =>
+  export(newData?: STData[], opt?: STExportOptions) {
+    (newData ? of(newData) : of(this._data)).subscribe((res: STData[]) =>
       this.exportSrv.export(
-        Object.assign({}, opt, <STExportOptions>{
-          _d: res,
-          _c: this._columns,
-        }),
+        {
+          ...opt,
+          ...{
+            _d: res,
+            _c: this._columns,
+          },
+        },
       ),
     );
   }
@@ -701,7 +607,8 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.delonI18n$.unsubscribe();
-    if (this.i18n$) this.i18n$.unsubscribe();
+    const { unsubscribe$ } = this;
+    unsubscribe$.next();
+    unsubscribe$.complete();
   }
 }

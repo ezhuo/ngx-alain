@@ -25,6 +25,10 @@
               "src/styles.less"
             ],
             "scripts": [
+              "node_modules/@antv/g2/dist/g2.min.js",
+              "node_modules/@antv/data-set/dist/data-set.min.js",
+              "node_modules/@antv/g2-plugin-slider/dist/g2-plugin-slider.min.js",
+              "node_modules/ajv/dist/ajv.bundle.js",
               "node_modules/qrious/dist/qrious.min.js",
               "node_modules/sweetalert2/dist/sweetalert2.js",
               "node_modules/blueimp-md5/js/md5.min.js"
@@ -89,8 +93,7 @@
               "node_modules/ajv/dist/ajv.bundle.js",
               "node_modules/qrious/dist/qrious.min.js"
             ],
-            "styles": [
-            ],
+            "styles": [],
             "assets": [
               "src/assets"
             ]
@@ -111,15 +114,20 @@
       }
     },
     "ngx-alain-e2e": {
-      "root": "",
-      "sourceRoot": "",
+      "root": "e2e/",
       "projectType": "application",
+      "prefix": "",
       "architect": {
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
-            "protractorConfig": "./protractor.conf.js",
+            "protractorConfig": "e2e/protractor.conf.js",
             "devServerTarget": "ngx-alain:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "ng-alain:serve:production"
+            }
           }
         },
         "lint": {

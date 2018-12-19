@@ -1,60 +1,78 @@
-import { Component, Injector, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import {
+  Component,
+  Injector,
+  OnInit,
+  OnDestroy,
+  ViewChild,
+} from '@angular/core';
 
 import { ModalControl } from '@core';
 
 import { NzFormatEmitEvent, NzTreeNode, NzTreeComponent } from 'ng-zorro-antd';
 
 @Component({
-    selector: 'app-system-role-edit',
-    templateUrl: `./edit.component.html`,
-    styles: [``]
+  selector: 'app-system-role-edit',
+  templateUrl: `./edit.component.html`,
+  styles: [``],
 })
-export class RoleEditComponent extends ModalControl implements OnInit, OnDestroy {
+export class RoleEditComponent extends ModalControl
+  implements OnInit, OnDestroy {
+  @ViewChild('tree') tree: NzTreeComponent;
 
-    @ViewChild('tree') tree: NzTreeComponent;
+  constructor(protected injector: Injector) {
+    super(injector);
+  }
 
-    constructor(protected injector: Injector) {
-        super(injector);
-    }
+  ngOnInit() {
+    super.ngOnInit();
+    this.gettreeData();
+  }
 
-    ngOnInit() {
-        super.ngOnInit();
-        this.gettreeData();
-    }
+  ngOnDestroy() {
+    super.ngOnDestroy();
+  }
 
-    ngOnDestroy() {
-        super.ngOnDestroy();
-    }
+  onSubmit($event: any) {
+    const formData = this.appBase.__formatSubmitData(
+      $event.value,
+      this.schemaData.edit,
+    );
+    const arr = this.stateSrv.arraySrv.getKeysByTreeNode(
+      this.tree.getCheckedNodeList(),
+    );
+    formData['menu_ids'] = arr.join(',');
+    const arr2 = this.stateSrv.arraySrv.getKeysByTreeNode(
+      this.tree.getHalfCheckedNodeList(),
+    );
+    formData['menu_all_ids'] = this.helpers
+      .arrayUnique(arr2.concat(arr))
+      .join(',');
+    this.httpSrv
+      .update(this.dataSource.url, formData, this.dataSource.val)
+      .subscribe(result => {
+        // console.log(result);
+        this.modalClose(result);
+      });
+  }
 
-    onSubmit($event: any) {
-        const formData = this.formatSubmitData($event.value, this.schemaData.edit);
-        const arr = this.stateSrv.arraySrv.getKeysByTreeNode(this.tree.getCheckedNodeList());
-        formData['menu_ids'] = arr.join(',');
-        const arr2 = this.stateSrv.arraySrv.getKeysByTreeNode(this.tree.getHalfCheckedNodeList());
-        formData['menu_all_ids'] = this.helpers.arrayUnique(arr2.concat(arr)).join(',');
-        this.httpSrv.update(this.dataSource.url, formData, this.dataSource.val).subscribe((result) => {
-            // console.log(result);
-            this.modalClose(result);
+  treeData = [];
+  treeDataExpandKeys = [];
+  treeDataSelectKeys = [];
+  treeDataCheckedKeys = [];
+  gettreeData() {
+    this.freeData.menu = this.httpSrv
+      .post('/menu/get_menu_list', { role_id: this.dataSource.val })
+      .subscribe((result: any) => {
+        result.data.list.forEach((node, idx) => {
+          // console.log(idx);
+          // if (idx === 0) {
+          //     this.treeDataExpandKeys.push(node.key);
+          //     this.treeDataSelectKeys.push(node.key);
+          // }
+          this.treeData.push(new NzTreeNode(node));
         });
-    }
 
-    treeData = [];
-    treeDataExpandKeys = [];
-    treeDataSelectKeys = [];
-    treeDataCheckedKeys = [];
-    gettreeData() {
-        this.freeData.menu = this.httpSrv.post('/menu/get_menu_list', { 'role_id': this.dataSource.val }).subscribe((result: any) => {
-            result.data.list.forEach((node, idx) => {
-                // console.log(idx);
-                // if (idx === 0) {
-                //     this.treeDataExpandKeys.push(node.key);
-                //     this.treeDataSelectKeys.push(node.key);
-                // }
-                this.treeData.push(new NzTreeNode(node));
-            });
-
-            this.treeDataCheckedKeys = result.data.sel;
-        });
-    }
-
+        this.treeDataCheckedKeys = result.data.sel;
+      });
+  }
 }

@@ -23,11 +23,12 @@ export class DashboardMonitorComponent implements OnInit, OnDestroy {
     start: null,
     end: null,
   };
+  percent = null;
 
   constructor(
     private http: _HttpClient,
     public msg: NzMessageService,
-    private cd: ChangeDetectorRef,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -39,28 +40,20 @@ export class DashboardMonitorComponent implements OnInit, OnDestroy {
         ].value = 1000;
         this.tags = tags.list;
         this.loading = false;
-        this.cd.detectChanges();
+        this.cdr.detectChanges();
       },
     );
 
     // active chart
-    this.genActiveData();
-    this.activeTime$ = setInterval(() => this.genActiveData(), 1000 * 2);
+    this.refData();
+    this.activeTime$ = setInterval(() => this.refData(), 1000 * 2);
   }
 
   // region: active chart
 
   activeTime$: any;
 
-  activeYAxis = {
-    tickCount: 3,
-    tickLine: false,
-    labels: false,
-    title: false,
-    line: false,
-  };
-
-  activeData: any[] = [];
+  activeData: any[];
 
   activeStat = {
     max: 0,
@@ -69,7 +62,7 @@ export class DashboardMonitorComponent implements OnInit, OnDestroy {
     t2: '',
   };
 
-  genActiveData() {
+  refData() {
     const activeData = [];
     for (let i = 0; i < 24; i += 1) {
       activeData.push({
@@ -80,12 +73,12 @@ export class DashboardMonitorComponent implements OnInit, OnDestroy {
     this.activeData = activeData;
     // stat
     this.activeStat.max = [...activeData].sort()[activeData.length - 1].y + 200;
-    this.activeStat.min = [...activeData].sort()[
-      Math.floor(activeData.length / 2)
-    ].y;
+    this.activeStat.min = [...activeData].sort()[Math.floor(activeData.length / 2)].y;
     this.activeStat.t1 = activeData[Math.floor(activeData.length / 2)].x;
     this.activeStat.t2 = activeData[activeData.length - 1].x;
-    this.cd.detectChanges();
+    // percent
+    this.percent = Math.floor(Math.random() * 100);
+    this.cdr.detectChanges();
   }
 
   // endregion

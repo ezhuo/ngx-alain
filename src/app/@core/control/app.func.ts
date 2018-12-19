@@ -1,6 +1,8 @@
 import { AppControl } from './app.control';
 import { FormGroup } from '@angular/forms';
 import { SFSchema } from '@delon/form';
+import { STData } from '@delon/abc';
+import * as helpers from '../helpers';
 
 export class AppFunc {
   private ___appCtl: AppControl = null;
@@ -38,10 +40,9 @@ export class AppFunc {
     if (!__primaryKey) {
       __primaryKey = self.dataSource.key;
     }
-    if (!self.helpers.isEmpty(__frmData) && __primaryKey) {
-      if (!self.helpers.isEmpty(__frmData.hasOwnProperty(__primaryKey))) {
+    if (!helpers.isEmpty(__frmData) && __primaryKey) {
+      if (!helpers.isEmpty(__frmData.hasOwnProperty(__primaryKey))) {
         result = __frmData[__primaryKey];
-        self.dataSource.key = result;
       }
     }
     return result;
@@ -59,12 +60,12 @@ export class AppFunc {
     const self = this.appCtl;
     let newSchema = mainSchema || self.schemaData.edit;
     orderBy = orderBy || self.schemaData.editOrder;
-    if (!self.helpers.isEmpty(schema)) {
-      newSchema = self.helpers.deepExtend({}, newSchema, schema);
+    if (!helpers.isEmpty(schema)) {
+      newSchema = helpers.deepExtend({}, newSchema, schema);
     }
 
     // 排序
-    if (orderBy && !self.helpers.isEmpty(orderBy)) {
+    if (orderBy && !helpers.isEmpty(orderBy)) {
       newSchema = this.__schemaFormOrder(orderBy, newSchema);
     }
 
@@ -74,7 +75,7 @@ export class AppFunc {
       if (!prop[idx]) {
         continue;
       }
-      if (!prop[idx].ui || self.helpers.isString(prop[idx].ui)) {
+      if (!prop[idx].ui || helpers.isString(prop[idx].ui)) {
         old = prop[idx].ui;
         prop[idx].ui = {};
       } else {
@@ -100,7 +101,7 @@ export class AppFunc {
   __schemaFormFieldsSetTexts(fields: string | string[], schema?: SFSchema) {
     const self = this.appCtl;
     let result: string[] = [];
-    if (this.appCtl.helpers.isString(fields)) {
+    if (helpers.isString(fields)) {
       result.push(<string>fields);
     } else {
       result = [].concat(fields);
@@ -124,8 +125,8 @@ export class AppFunc {
     orderBy = orderBy || self.schemaData.editOrder;
     mainSchema = mainSchema || self.schemaData.edit;
     let newSchema: SFSchema = {};
-    if (orderBy && !self.helpers.isEmpty(orderBy)) {
-      newSchema = self.helpers.deepExtend({}, mainSchema);
+    if (orderBy && !helpers.isEmpty(orderBy)) {
+      newSchema = helpers.deepExtend({}, mainSchema);
       newSchema.properties = {};
       orderBy.forEach(item => {
         newSchema.properties[item] = mainSchema.properties[item];
@@ -136,4 +137,100 @@ export class AppFunc {
     }
     return newSchema;
   }
+
+  /**
+   * 向模态对话框传递数据过程中的数据格式化
+   * @param record
+   */
+  public __formatModalParams = (record?: STData, params?: any): Object => {
+    const self = this.appCtl;
+    // 保留最原始的数据
+    const srcData = record || self.form.data || {};
+
+    // 克隆一份新数据，为新的对话框里数据处理使用
+    const newFrmData = helpers.deepExtend({}, srcData);
+
+    // 克隆一份结构
+    const newSchemaData = helpers.deepExtend({}, self.schemaData);
+
+    // 格式化数据
+    const __formatData = (mSchema: SFSchema, frmData: any) => {
+      const prop = mSchema.properties;
+      let oldwidget: any = '';
+      for (const idx of Object.keys(prop)) {
+        if (!(prop[idx] && prop[idx].ui)) {
+          continue;
+        }
+        if (helpers.isString(prop[idx].ui)) {
+          oldwidget = prop[idx].ui;
+        } else {
+          oldwidget = prop[idx]['ui']['widget'];
+        }
+        if (frmData && frmData[idx] && !helpers.isEmpty(frmData[idx])) {
+          if (oldwidget.indexOf('upload') > -1) {
+            frmData[idx] = helpers.formatUploadFilesToObject(frmData[idx]);
+          }
+          if (oldwidget.indexOf('cascader') > -1) {
+            frmData[idx] = helpers.formatCascaderToObject(frmData[idx]);
+          }
+        }
+      }
+      return frmData;
+    };
+
+    // 逐条数据格式化
+    Object.keys(newSchemaData).forEach((value, index) => {
+      if (newSchemaData[value] && newSchemaData[value]['properties'])
+        __formatData(newSchemaData[value], newFrmData);
+    });
+
+    return {
+      // 数据源
+      dataSource: {
+        key: self.dataSource.key,
+        url: self.dataSource.url,
+        val: self.appBase.__getPrimaryKeyValue(srcData, self.dataSource.key),
+      },
+      // 动态表单里的新数据
+      form: { data: newFrmData },
+      // 动态表单结构
+      schemaData: newSchemaData,
+      // modal 对话框的参数设置
+      modalData: helpers.deepExtend({}, self.modalData),
+    };
+  };
+
+  public __formatSubmitData = (formValue: any, schema?: any): object => {
+    const self = this.appCtl;
+    schema = schema || self.schemaData.edit;
+    formValue = formValue || {};
+    const prop = schema.properties;
+    let widget = null;
+    for (const idx of Object.keys(formValue)) {
+      if (
+        formValue[idx] &&
+        (helpers.isArray(formValue[idx]) ||
+          helpers.isObject(formValue[idx]))
+      ) {
+        if (prop && prop[idx] && prop[idx].ui) {
+          if (helpers.isString(prop[idx].ui)) {
+            widget = prop[idx].ui;
+          } else {
+            widget = prop[idx].ui.widget;
+          }
+          if (widget.indexOf('upload') > -1) {
+            formValue[idx] = helpers.formatUploadFilesToString(
+              formValue[idx],
+            );
+          }
+          if (widget.indexOf('cascader') > -1) {
+            formValue[idx] = helpers.formatCascaderToString(
+              formValue[idx],
+            );
+          }
+        }
+      }
+    }
+    return formValue;
+  };
 }

@@ -58,7 +58,8 @@ export class TokenService {
         throw new Error('token is empty');
       }
       this.__token = token;
-      if (helper.isEmpty(this.userSrv.userInfo)) {
+      this.userSrv.userInfo = this.userSrv.userInfo || { id: 0 };
+      if (helper.isEmpty(this.userSrv.userInfo['id'])) {
         const userInfo = this.__jwtHelper.decodeToken(token);
         this.userSrv.userInfo = userInfo;
       }

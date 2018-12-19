@@ -1,4 +1,10 @@
-import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  Injector,
+  OnInit,
+  OnDestroy,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 import { ModalControl } from '@core';
 import { tplModalShowHTML } from '@layout';
@@ -6,10 +12,11 @@ import { tplModalShowHTML } from '@layout';
 @Component({
   selector: 'app-account-edit',
   template: tplModalShowHTML,
-  styles: [``]
+  styles: [``],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OrgInfoShowComponent extends ModalControl implements OnInit, OnDestroy {
-
+export class OrgInfoShowComponent extends ModalControl
+  implements OnInit, OnDestroy {
   constructor(protected injector: Injector) {
     super(injector);
   }
@@ -25,5 +32,4 @@ export class OrgInfoShowComponent extends ModalControl implements OnInit, OnDest
   ngOnDestroy() {
     super.ngOnDestroy();
   }
-
 }

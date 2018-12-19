@@ -127,7 +127,7 @@ Property | Description | Type | Default
 `[showSize]` | Determine whether `ps` can be changed | `boolean` | `false`
 `[pageSizes]` | Specify the sizeChanger options | `number[]` | `[10, 20, 30, 40, 50]`
 `[showQuickJumper]` | Determine whether you can jump to pages directly | `boolean` | `false`
-`[total]` | To display the total number and range, support custom string template (Three variable names: `total` for total data, `range[0]` and `range[1]` for current data range; **Variable name** must be double quotes wrapper) | `boolean, string` | `false`
+`[total]` | To display the total number and range, support custom string template (Three variable names: `total` for total data, `range[0]` and `range[1]` for current data range; **Variable name** must be double curly braces wrapper) | `boolean, string` | `false`
 `[toTop]` | To top when pager changed | `boolean` | `true`
 `[toTopOffset]` | To top offset value | `number` | `100`
 
@@ -190,6 +190,7 @@ Property | Description | Type | Default
 `[key]` | Request parameter name | `string` | `sort`
 `[separator]` | Separator between attributes | `string` | `-`
 `[nameSeparator]` | Column name and state separator | `string` | `.`
+`[global]` | Whether global multi sort mode<br>`true` all `st` defaults multi-sort<br>`false` all `st` non-multiple sorting, just only configurable for rule | `boolean` | `true`
 
 ### STData
 
@@ -294,7 +295,7 @@ Property | Description | Type | Default
 -------- | ----------- | ---- | -------
 `[component]` | Modal component class, be sure to register in `entryComponents` | `any` | -
 `[params]` | Dialog parameter | `(record: STData) => Object` | -
-`[paramsName]` | Receive parameter name of the target component | `string` | record
+`[paramsName]` | Receive parameter name of the target component, If target component receive value is null, pls check [delon.module.ts](https://github.com/ng-alain/ng-alain/blob/master/src/app/delon.module.ts#L69) Global settings | `string` | record
 `[size]` | Size of modal | `sm, md, lg, xl, '', number` | `lg`
 `[exact]` | Exact match return value, default is `true`, If the return value is not null (`null` or `undefined`) is considered successful, otherwise it is considered error. | `boolean` | `true`
 `[includeTabs]` | Whether to wrap the nz-tabset, fix content spacing problem | `boolean` | -
@@ -307,7 +308,7 @@ Property | Description | Type | Default
 `[title]` | Title of drawer | `string` | -
 `[component]` | Drawer component class, be sure to register in `entryComponents` | `any` | -
 `[params]` | Dialog parameter | `(record: STData) => Object` | -
-`[paramsName]` | Receive parameter name of the target component | `string` | record
+`[paramsName]` | Receive parameter name of the target component, If target component receive value is null, pls check [delon.module.ts](https://github.com/ng-alain/ng-alain/blob/master/src/app/delon.module.ts#L69) Global settings | `string` | record
 `[size]` | Size of drawer | `sm, md, lg, xl, number` | `md`
 `[drawerOptions]` | nz-drawer raw parameters [NzDrawerOptions](https://ng.ant.design/components/drawer/zh#nzdraweroptions) | `any` | -
 

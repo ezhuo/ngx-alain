@@ -2,6 +2,8 @@
 order: 1
 title: Getting Started
 type: Documents
+module: DelonFormModule
+config: DelonFormConfig
 ---
 
 @delon/form is a dynamic build form based on the [JSON Schema](http://json-schema.org/) standard.
@@ -150,15 +152,30 @@ export class HomeComponent {
 | `(formReset)`    | Callback when resetting the form         | `EventEmitter<{}>`           | -            |
 | `(formError)`    | Callback when form check                 | `EventEmitter<ErrorData[]>`  | -            |
 
+### SFButton
+
+| Property        | Description           | Type             | Default   |
+|-----------------|-----------------------|------------------|-----------|
+| `[submit]`      | Submit text of button | `string`         | `提交`    |
+| `[submit_type]` | Submit type of button | `string`         | `primary` |
+| `[reset]`       | Reset text of button  | `string`         | `重置`    |
+| `[reset_type]`  | Reset type of button  | `string`         | `default` |
+| `[search]`      | Search text of button | `string`         | `搜索`    |
+| `[edit]`        | Edit text of button   | `string`         | `保存`    |
+| `[render]`      | Button layout         | `SFRenderButton` | -         |
+
 ### Methods
 
-| Method Name       | Description                   | Return Value |
-|-------------------|-------------------------------|--------------|
-| `valid`           | Form is valid                 | `boolean`    |
-| `value`           | The current value of the form | `any`        |
-| `refreshSchema()` | Refresh JSON Schema           | `void`       |
-| `reset()`         | Resets the form               | `void`       |
-| `validator()`     | Manually verify a form        | `void`       |
+| Method Name     | Description                                                 | Return Value   |
+|-----------------|-------------------------------------------------------------|----------------|
+| `valid`         | Form is valid                                               | `boolean`      |
+| `value`         | The current value of the form                               | `any`          |
+| `refreshSchema` | Refresh JSON Schema                                         | `void`         |
+| `reset`         | Resets the form                                             | `void`         |
+| `validator`     | Manually verify a form                                      | `void`         |
+| `getProperty`   | Get a form property via path                                | `FormProperty` |
+| `getValue`      | Get value via path                                          | `any`          |
+| `setValue`      | Set value via path, shoudl be throw error when invalid path | `this`         |
 
 ### Button
 
