@@ -2,7 +2,6 @@ import {
   Component,
   Injector,
   OnInit,
-  OnDestroy,
   ChangeDetectionStrategy,
 } from '@angular/core';
 
@@ -33,7 +32,6 @@ export class OrgInfoEditComponent extends ModalControl implements OnInit {
       $event.value,
       this.schemaData.edit,
     );
-    // console.log(formData, $event.value);
     // 如果是新增状态，就添加所属机构值
     if (!this.dataSource.val) {
       formData['parent_id'] = this.modalData.data.origin.org_id;

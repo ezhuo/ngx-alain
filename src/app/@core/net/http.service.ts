@@ -1,8 +1,8 @@
-import { Injectable, Injector, ChangeDetectorRef } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
 import { tap, catchError, switchMap } from 'rxjs/operators';
-import { api, appDebug } from '../config.inc';
+import { api } from '../config.inc';
 import { UserService } from './../data/users.service';
 import { CacheService } from '@delon/cache';
 import { _HttpClient } from '@delon/theme';
@@ -28,10 +28,6 @@ export class HttpService {
   }
   get userSrv() {
     return this.injector.get(UserService);
-  }
-
-  get cdr() {
-    return this.injector.get(ChangeDetectorRef);
   }
 
   /** 是否正在加载中 */

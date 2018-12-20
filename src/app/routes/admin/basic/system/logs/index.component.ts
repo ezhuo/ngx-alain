@@ -3,7 +3,6 @@ import {
   ViewChild,
   Injector,
   OnInit,
-  OnDestroy,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { STComponent } from '@delon/abc';
