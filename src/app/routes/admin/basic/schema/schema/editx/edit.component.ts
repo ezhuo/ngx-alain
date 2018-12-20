@@ -1,9 +1,15 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Injector,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ModalControl } from '@core';
 
 @Component({
   selector: 'app-schema-edit',
   templateUrl: './edit.component.html',
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class SchemaFormEditxComponent extends ModalControl implements OnInit {
   i: any;

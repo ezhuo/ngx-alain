@@ -98,8 +98,8 @@ export class AppControl extends InjectorControl implements OnInit, OnDestroy {
 
   // --------------------------------------
 
-  constructor(protected injector: Injector) {
-    super(injector);
+  constructor(protected injector: Injector, protected child?: Function) {
+    super(injector, child);
   }
 
   ngOnInit() {
@@ -208,8 +208,14 @@ export class AppControl extends InjectorControl implements OnInit, OnDestroy {
   /**
    * 初始化
    */
-  protected __init(url: string, key: any, params?: any) {
-    this.dataSource.url = url;
-    this.dataSource.key = key;
+  protected __init__(
+    child: Object | Function,
+    dataSource?: DataSource,
+    params?: any,
+  ): void {
+    super.__init__(child, dataSource, params);
+    if (!this.helpers.isEmpty(dataSource)) {
+      this.dataSource = Object.assign(this.dataSource, dataSource);
+    }
   }
 }

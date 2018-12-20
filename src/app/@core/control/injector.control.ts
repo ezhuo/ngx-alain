@@ -4,6 +4,7 @@ import {
   Injector,
   ElementRef,
   ChangeDetectorRef,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import {
   FormGroup,
@@ -28,12 +29,16 @@ import {
   UserService,
 } from '../data';
 
+import { ComponentData } from '../model';
+
 import { ModalService, NoticeService } from '../utils';
 import { HttpService } from '../net';
 import * as helpers from '../helpers';
 
 export class InjectorControl implements OnInit, OnDestroy {
-  constructor(protected injector: Injector) {}
+  constructor(protected injector: Injector, protected child?: any) {
+    this.__init__(child);
+  }
 
   ngOnInit() {}
 
@@ -65,6 +70,14 @@ export class InjectorControl implements OnInit, OnDestroy {
    */
   protected ___freeTimeInterval: any = {};
 
+  /**
+   * 组件的原数据
+   * @protected
+   * @type {ComponentData}
+   * @memberof InjectorControl
+   */
+  protected ___componentData: ComponentData = { meta: null };
+
   get freeData() {
     return this.___freeData;
   }
@@ -75,6 +88,10 @@ export class InjectorControl implements OnInit, OnDestroy {
 
   get freeTimeInterval() {
     return this.___freeTimeInterval;
+  }
+
+  get componentData() {
+    return this.___componentData;
   }
 
   get route() {
@@ -168,4 +185,34 @@ export class InjectorControl implements OnInit, OnDestroy {
   get helpers() {
     return helpers;
   }
+
+  protected __init__(
+    child: Object | Function,
+    dataSource?: any,
+    params?: any,
+  ): void {
+    if (!helpers.isEmpty(child)) {
+      const obj = helpers.isObject(child) ? <any>child.constructor : child;
+      if (obj && !helpers.isEmpty(obj.__annotations__)) {
+        this.componentData.meta = obj.__annotations__[0];
+      }
+      this.componentData.name = obj.name;
+      if (this.configSrv.appDebug)
+        console.log(
+          '[LOG] __init__ >> ' + this.componentData.name + ' ：',
+          this.componentData.meta,
+        );
+    }
+  }
+
+  public detectChanges = () => {
+    if (!helpers.isEmpty(this.componentData.meta)) {
+      if (
+        this.componentData.meta.changeDetection ==
+        ChangeDetectionStrategy.OnPush
+      ) {
+        this.cdr.detectChanges();
+      }
+    }
+  };
 }

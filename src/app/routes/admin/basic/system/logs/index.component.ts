@@ -4,6 +4,7 @@ import {
   Injector,
   OnInit,
   OnDestroy,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { STComponent } from '@delon/abc';
 import { SFComponent } from '@delon/form';
@@ -14,8 +15,9 @@ import { LogsShowComponent } from './modal/show.component';
   selector: 'app-system-logs',
   templateUrl: `./index.component.html`,
   styleUrls: [`./index.component.less`],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LogsComponent extends IndexControl implements OnInit, OnDestroy {
+export class LogsComponent extends IndexControl implements OnInit {
   @ViewChild('st')
   st: STComponent;
   @ViewChild('sf')
@@ -23,7 +25,10 @@ export class LogsComponent extends IndexControl implements OnInit, OnDestroy {
 
   constructor(protected injector: Injector) {
     super(injector);
-    super.__init(this.activeRoute.routeConfig.data.url || '/logs', 'id');
+    super.__init__(this, {
+      url: this.activeRoute.routeConfig.data.url || '/logs',
+      key: 'id',
+    });
   }
 
   ngOnInit() {
@@ -208,9 +213,5 @@ export class LogsComponent extends IndexControl implements OnInit, OnDestroy {
         ],
       },
     ];
-  }
-
-  ngOnDestroy() {
-    super.ngOnDestroy();
   }
 }

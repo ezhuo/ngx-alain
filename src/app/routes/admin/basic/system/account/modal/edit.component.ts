@@ -2,7 +2,6 @@ import {
   Component,
   Injector,
   OnInit,
-  OnDestroy,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { ModalControl } from '@core';
@@ -14,10 +13,10 @@ import { tplModalEditHTML } from '@layout';
   styles: [``],
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class AccountEditComponent extends ModalControl
-  implements OnInit, OnDestroy {
+export class AccountEditComponent extends ModalControl implements OnInit {
   constructor(protected injector: Injector) {
     super(injector);
+    super.__init__(this);
   }
 
   ngOnInit() {
@@ -40,11 +39,8 @@ export class AccountEditComponent extends ModalControl
     }
   }
 
-  ngOnDestroy() {
-    super.ngOnDestroy();
-  }
-
   onSubmit($event: any) {
+    this.cdr.detectChanges();
     const formData = this.appBase.__formatSubmitData(
       $event.value,
       this.schemaData.edit,

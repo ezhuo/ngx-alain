@@ -3,18 +3,16 @@ import {
   ViewChild,
   Injector,
   OnInit,
-  OnDestroy,
   ChangeDetectionStrategy,
 } from '@angular/core';
 
 import { STComponent } from '@delon/abc';
-import { SFComponent } from '@delon/form';
+import { FormProperty, PropertyGroup, SFComponent } from '@delon/form';
 import { IndexControl } from '@core';
 import { AccountEditComponent } from './modal/edit.component';
 import { AccountShowComponent } from './modal/show.component';
 import { AccountPwdComponent } from './modal/pwd.component';
 import { NzFormatEmitEvent, NzTreeNode, NzTreeComponent } from 'ng-zorro-antd';
-import { FormProperty, PropertyGroup } from '@delon/form';
 
 @Component({
   selector: 'app-system-account',
@@ -22,8 +20,7 @@ import { FormProperty, PropertyGroup } from '@delon/form';
   styleUrls: [`./index.component.less`],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccountComponent extends IndexControl
-  implements OnInit, OnDestroy {
+export class AccountComponent extends IndexControl implements OnInit {
   @ViewChild('st')
   st: STComponent;
   @ViewChild('sf')
@@ -33,7 +30,7 @@ export class AccountComponent extends IndexControl
 
   constructor(protected injector: Injector) {
     super(injector);
-    super.__init('/account', 'account_id');
+    super.__init__(this, { url: '/account', key: 'account_id' });
   }
 
   ngOnInit() {
@@ -327,10 +324,6 @@ export class AccountComponent extends IndexControl
         ],
       },
     ];
-  }
-
-  ngOnDestroy() {
-    super.ngOnDestroy();
   }
 
   add() {

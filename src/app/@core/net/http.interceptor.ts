@@ -167,7 +167,7 @@ export class HttpAuthInterceptor implements HttpInterceptor {
     } catch (e) {
       console.error(e);
     }
-    if (configInc.appDebug) console.log(err);
+    if (configInc.appDebug) console.error('[HTTP] >> interceptor >> ：' , err);
     return throwError(Object.assign(err, { message2: $message }));
   };
 
@@ -190,7 +190,7 @@ export class HttpAuthInterceptor implements HttpInterceptor {
     });
     return next.handle(authReq).pipe(
       mergeMap((event: any) => {
-        if (configInc.appDebug) console.log('http.interceptor:', event);
+        if (configInc.appDebug) console.log('[HTTP] >> interceptor >>：', event);
         // 允许统一对请求错误处理，这是因为一个请求若是业务上错误的情况下其HTTP请求的状态是200的情况下需要
         if (
           event instanceof HttpResponse &&
@@ -201,7 +201,7 @@ export class HttpAuthInterceptor implements HttpInterceptor {
         return of(event);
       }),
       catchError((err: HttpErrorResponse) => {
-        if (configInc.appDebugError) console.error('http.interceptor:', err);
+        if (configInc.appDebugError) console.error('[HTTP] >> interceptor >>：', err);
         return this.httpResponseError(authReq, err);
       }),
     );

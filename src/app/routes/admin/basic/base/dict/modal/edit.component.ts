@@ -3,7 +3,7 @@ import {
   Injector,
   OnInit,
   OnDestroy,
-  ViewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 
 import { ModalControl } from '@core';
@@ -12,11 +12,12 @@ import { ModalControl } from '@core';
   selector: 'app-system-role-edit',
   templateUrl: `./edit.component.html`,
   styles: [``],
+  changeDetection: ChangeDetectionStrategy.Default,
 })
-export class DictEditComponent extends ModalControl
-  implements OnInit, OnDestroy {
+export class DictEditComponent extends ModalControl implements OnInit {
   constructor(protected injector: Injector) {
     super(injector);
+    super.__init__(this);
   }
 
   ngOnInit() {
@@ -28,12 +29,11 @@ export class DictEditComponent extends ModalControl
     );
   }
 
-  ngOnDestroy() {
-    super.ngOnDestroy();
-  }
-
   onSubmit($event: any) {
-    const formData = this.appBase.__formatSubmitData($event.value, this.schemaData.edit);
+    const formData = this.appBase.__formatSubmitData(
+      $event.value,
+      this.schemaData.edit,
+    );
 
     this.freeData.save = this.httpSrv
       .update(this.dataSource.url, formData, this.dataSource.val)

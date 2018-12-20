@@ -1,4 +1,9 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Injector,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 
 import { ModalControl } from '@core';
 import { tplModalShowHTML } from '@layout';
@@ -7,9 +12,9 @@ import { tplModalShowHTML } from '@layout';
   selector: 'app-extras-show',
   template: tplModalShowHTML,
   styles: [``],
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class SchemaShowComponent extends ModalControl implements OnInit {
-
   constructor(protected injector: Injector) {
     super(injector);
   }
@@ -18,19 +23,20 @@ export class SchemaShowComponent extends ModalControl implements OnInit {
     super.ngOnInit();
     console.log('ngOnInit', this);
 
-    this.schemaData.edit = this.appBase.__schemaFormSetTexts({
-      properties: {
-        agree: {
-          type: 'string',
-          title: '是否同意'
-        }
+    this.schemaData.edit = this.appBase.__schemaFormSetTexts(
+      {
+        properties: {
+          agree: {
+            type: 'string',
+            title: '是否同意',
+          },
+        },
+        ui: {
+          spanLabel: 5,
+          spanControl: 19,
+        },
       },
-      'ui': {
-        spanLabel: 5,
-        spanControl: 19,
-      }
-    }, ['name', 'email', 'age', 'content']);
-
+      ['name', 'email', 'age', 'content'],
+    );
   }
-
 }

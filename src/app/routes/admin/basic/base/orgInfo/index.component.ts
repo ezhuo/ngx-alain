@@ -3,19 +3,15 @@ import {
   ViewChild,
   Injector,
   OnInit,
-  OnDestroy,
   ChangeDetectionStrategy,
 } from '@angular/core';
 
 import { STComponent } from '@delon/abc';
 import { SFComponent } from '@delon/form';
 import { STColumnButton, STColumn } from '@delon/abc';
-
 import { IndexControl } from '@core';
-
 import { OrgInfoEditComponent } from './modal/edit.component';
 import { OrgInfoShowComponent } from './modal/show.component';
-
 import { NzFormatEmitEvent, NzTreeNode, NzTreeComponent } from 'ng-zorro-antd';
 
 @Component({
@@ -24,8 +20,7 @@ import { NzFormatEmitEvent, NzTreeNode, NzTreeComponent } from 'ng-zorro-antd';
   styleUrls: [`./index.component.less`],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OrgInfoComponent extends IndexControl
-  implements OnInit, OnDestroy {
+export class OrgInfoComponent extends IndexControl implements OnInit {
   @ViewChild('st')
   st: STComponent;
   @ViewChild('sf')
@@ -35,7 +30,10 @@ export class OrgInfoComponent extends IndexControl
 
   constructor(protected injector: Injector) {
     super(injector);
-    super.__init('/orginfo', 'org_id');
+    super.__init__(this, {
+      url: '/orginfo',
+      key: 'org_id',
+    });
   }
 
   ngOnInit() {
@@ -296,10 +294,6 @@ export class OrgInfoComponent extends IndexControl
     ];
   }
 
-  ngOnDestroy() {
-    super.ngOnDestroy();
-  }
-
   add() {
     this.treeSelectNodeEvent();
     this.freeData.add = this.modalEditStatic(OrgInfoEditComponent).subscribe(
@@ -331,7 +325,7 @@ export class OrgInfoComponent extends IndexControl
           }
           this.treeData.push(new NzTreeNode(node));
         });
-        this.cdr.detectChanges();
+        this.detectChanges();
       });
   }
 
@@ -352,7 +346,7 @@ export class OrgInfoComponent extends IndexControl
     }
 
     this.searchSubmit(this.st, this.sf.value);
-    this.cdr.detectChanges();
+    this.detectChanges();
   }
 
   refresh() {

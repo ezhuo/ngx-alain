@@ -15,10 +15,10 @@ import { tplModalShowHTML } from '@layout';
   styles: [``],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OrgInfoShowComponent extends ModalControl
-  implements OnInit, OnDestroy {
+export class OrgInfoShowComponent extends ModalControl implements OnInit {
   constructor(protected injector: Injector) {
     super(injector);
+    super.__init__(this);
   }
 
   ngOnInit() {
@@ -27,9 +27,5 @@ export class OrgInfoShowComponent extends ModalControl
     this.form.data['canton_fdn'] = this.form.data['canton_text_name'];
     delete this.schemaData.edit.properties.canton_fdn.ui['asyncData'];
     this.schemaData.edit = this.appBase.__schemaFormSetTexts({}, []);
-  }
-
-  ngOnDestroy() {
-    super.ngOnDestroy();
   }
 }

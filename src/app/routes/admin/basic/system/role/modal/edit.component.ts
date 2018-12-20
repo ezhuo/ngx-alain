@@ -4,16 +4,16 @@ import {
   OnInit,
   OnDestroy,
   ViewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
-
 import { ModalControl } from '@core';
-
-import { NzFormatEmitEvent, NzTreeNode, NzTreeComponent } from 'ng-zorro-antd';
+import { NzTreeNode, NzTreeComponent } from 'ng-zorro-antd';
 
 @Component({
   selector: 'app-system-role-edit',
   templateUrl: `./edit.component.html`,
   styles: [``],
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class RoleEditComponent extends ModalControl
   implements OnInit, OnDestroy {
@@ -21,6 +21,7 @@ export class RoleEditComponent extends ModalControl
 
   constructor(protected injector: Injector) {
     super(injector);
+    super.__init__(this);
   }
 
   ngOnInit() {
@@ -64,11 +65,6 @@ export class RoleEditComponent extends ModalControl
       .post('/menu/get_menu_list', { role_id: this.dataSource.val })
       .subscribe((result: any) => {
         result.data.list.forEach((node, idx) => {
-          // console.log(idx);
-          // if (idx === 0) {
-          //     this.treeDataExpandKeys.push(node.key);
-          //     this.treeDataSelectKeys.push(node.key);
-          // }
           this.treeData.push(new NzTreeNode(node));
         });
 

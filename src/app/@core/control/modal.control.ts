@@ -3,8 +3,8 @@ import { NzModalRef } from 'ng-zorro-antd';
 import { AppControl } from './app.control';
 
 export class ModalControl extends AppControl implements OnInit, OnDestroy {
-  constructor(protected injector: Injector) {
-    super(injector);
+  constructor(protected injector: Injector, protected child?: Function) {
+    super(injector, child);
   }
 
   get modalRef() {
@@ -32,11 +32,5 @@ export class ModalControl extends AppControl implements OnInit, OnDestroy {
     }
   }
 
-  protected __init(url: string, key: any, params?: any) {
-    super.__init(url, key, params);
-  }
-
   // ------------------
-
-
 }

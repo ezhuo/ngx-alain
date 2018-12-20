@@ -2,7 +2,6 @@ import {
   Component,
   Injector,
   OnInit,
-  OnDestroy,
   ChangeDetectionStrategy,
 } from '@angular/core';
 
@@ -15,8 +14,7 @@ import { tplModalShowHTML } from '@layout';
   styles: [``],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccountShowComponent extends ModalControl
-  implements OnInit, OnDestroy {
+export class AccountShowComponent extends ModalControl implements OnInit {
   constructor(protected injector: Injector) {
     super(injector);
   }
@@ -27,9 +25,5 @@ export class AccountShowComponent extends ModalControl
     delete this.schemaData.edit.properties.login_pwd2;
     this.form.data['org_id'] = this.form.data['org_name'];
     this.schemaData.edit = this.appBase.__schemaFormSetTexts({}, []);
-  }
-
-  ngOnDestroy() {
-    super.ngOnDestroy();
   }
 }

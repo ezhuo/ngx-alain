@@ -1,4 +1,4 @@
-import { Component, OnInit, Injector } from '@angular/core';
+import { Component, OnInit, Injector,ChangeDetectionStrategy } from '@angular/core';
 import { ModalControl } from '@core';
 import { tplModalEditHTML } from '@layout';
 
@@ -6,6 +6,7 @@ import { tplModalEditHTML } from '@layout';
   selector: 'app-extras-show',
   template: tplModalEditHTML,
   styles: [``],
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class SchemaEditComponent extends ModalControl implements OnInit {
 

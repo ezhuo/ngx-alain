@@ -2,6 +2,9 @@ import { FormGroup } from '@angular/forms';
 import { SFSchema, SFUISchema } from '@delon/form';
 import { STColumn, STReq } from '@delon/abc';
 
+/**
+ * 动态表单结构
+ */
 export interface SchemaData {
   /**
    * 查询业务的数据结构
@@ -43,6 +46,9 @@ export interface SchemaData {
   passwordUi?: SFUISchema;
 }
 
+/**
+ * 表格结构
+ */
 export interface TableData {
   /**
    * 主要表单的列
@@ -55,6 +61,9 @@ export interface TableData {
   req?: STReq;
 }
 
+/**
+ * 表单数据
+ */
 export interface FormData {
   /**
    * 主要表单
@@ -87,6 +96,9 @@ export interface DataSource {
   val?: any;
 }
 
+/**
+ * 对话框中的按钮参数
+ */
 export interface ModalButtonConfig {
   submit?: any;
   reset?: any;
@@ -106,5 +118,16 @@ export interface ModalData {
  * 页面传值
  */
 export interface PageData {
+  // 页面标题
   title?: any;
+}
+
+/**
+ * 页面传值
+ */
+export interface ComponentData {
+  //组件名称
+  name?: string;
+  //元数据
+  meta?: any;
 }

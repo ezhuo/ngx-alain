@@ -3,22 +3,20 @@ import {
   ViewChild,
   Injector,
   OnInit,
-  OnDestroy,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 
 import { STComponent } from '@delon/abc';
-import { SFComponent } from '@delon/form';
-
 import { IndexControl } from '@core';
-
 import { DictEditComponent } from './modal/edit.component';
 
 @Component({
   selector: 'app-base-dict',
   templateUrl: `./index.component.html`,
   styleUrls: [`./index.component.less`],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DictComponent extends IndexControl implements OnInit, OnDestroy {
+export class DictComponent extends IndexControl implements OnInit {
   @ViewChild('st')
   st: STComponent;
 
@@ -26,10 +24,10 @@ export class DictComponent extends IndexControl implements OnInit, OnDestroy {
 
   constructor(protected injector: Injector) {
     super(injector);
-    super.__init(
-      '/' + this.activeRoute.routeConfig.data.url || '/dictdic',
-      'dic_id',
-    );
+    super.__init__(this, {
+      url: '/' + this.activeRoute.routeConfig.data.url || '/dictdic',
+      key: 'dic_id',
+    });
     this.tableParams.ps = 100;
   }
 
@@ -131,10 +129,6 @@ export class DictComponent extends IndexControl implements OnInit, OnDestroy {
     this.dictTypeList();
   }
 
-  ngOnDestroy() {
-    super.ngOnDestroy();
-  }
-
   add() {
     this.modalData.data = this.dictActive;
     this.freeData.add = this.modalEditStatic(
@@ -168,5 +162,6 @@ export class DictComponent extends IndexControl implements OnInit, OnDestroy {
     this.url = this.dataSource.url;
     this.tableParams.type = this.dictActive.type;
     this.st.reset();
+    this.detectChanges();
   }
 }

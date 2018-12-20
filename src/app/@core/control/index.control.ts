@@ -1,13 +1,12 @@
 import { OnInit, OnDestroy, Injector } from '@angular/core';
-import { STComponent, STColumnButtonModal, STData } from '@delon/abc';
-import { AppControl } from './app.control';
-import { SFSchema } from '@delon/form';
+import { STComponent, STColumnButtonModal } from '@delon/abc';
 import { ModalOptionsForService } from 'ng-zorro-antd';
 import { Observable } from 'rxjs';
+import { AppControl } from './app.control';
 
 export class IndexControl extends AppControl implements OnInit, OnDestroy {
-  constructor(protected injector: Injector) {
-    super(injector);
+  constructor(protected injector: Injector, protected child?: Function) {
+    super(injector, child);
   }
 
   ngOnInit() {
@@ -21,11 +20,6 @@ export class IndexControl extends AppControl implements OnInit, OnDestroy {
   ngOnDestroy() {
     super.ngOnDestroy();
   }
-
-  protected __init(url: string, key: any, params?: any) {
-    return super.__init(url, key, params);
-  }
-
 
   /**
    * modal 对话框 ，在表格中弹出时的 数据整理

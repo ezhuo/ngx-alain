@@ -10,6 +10,7 @@ import {
   EventEmitter,
   OnInit,
   OnDestroy,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { STComponent, STColumn } from '@delon/abc';
 
@@ -28,6 +29,7 @@ import {
 @Component({
   selector: 'com-account',
   templateUrl: './index.component.html',
+  changeDetection: ChangeDetectionStrategy.Default,
 })
 export class SchemaDemoComponent extends IndexControl implements OnInit {
   @ViewChild('st')

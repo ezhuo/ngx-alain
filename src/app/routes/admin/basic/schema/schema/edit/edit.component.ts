@@ -1,12 +1,19 @@
-import { Component, OnInit, OnDestroy, Injector } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  Injector,
+  ChangeDetectionStrategy,
+} from '@angular/core';
 import { ModalControl } from '@core';
 
 @Component({
   selector: 'com-schema-edit',
   templateUrl: './edit.component.html',
+  changeDetection: ChangeDetectionStrategy.Default,
 })
-export class SchemaFormEditComponent extends ModalControl implements OnInit, OnDestroy {
-
+export class SchemaFormEditComponent extends ModalControl
+  implements OnInit, OnDestroy {
   validateForm: any;
 
   constructor(protected injector: Injector) {
@@ -42,11 +49,11 @@ export class SchemaFormEditComponent extends ModalControl implements OnInit, OnD
     value.company_fdn = '1.';
 
     console.log(value);
-    this.httpSrv.update(this.dataSource.url, value, this.dataSource.val).subscribe((result) => {
-      console.log(result);
-      this.modalClose(result);
-    });
-
-  }
-
+    this.httpSrv
+      .update(this.dataSource.url, value, this.dataSource.val)
+      .subscribe(result => {
+        console.log(result);
+        this.modalClose(result);
+      });
+  };
 }

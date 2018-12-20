@@ -36,7 +36,7 @@ export class UserService {
       // 用户信息：包括姓名、头像、邮箱地址
       this.settingsService.setUser(this.__user);
     }
-    if (appDebug) console.log(this.__userInfo);
+    if (appDebug) console.log('[LOG] >> USERINFO >> ：', this.__userInfo);
   }
 
   get userInfo(): UserInfo {

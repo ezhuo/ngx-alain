@@ -1,4 +1,4 @@
-> 基于 ng-alain 2.0.0 ng-zorro
+> 基于 ng-alain 7.0.0 ng-zorro 7.0.0
 
 ## 一、执行
 
@@ -43,9 +43,9 @@ npm run serve:hmr
 ### 3. schema-form
 
 ```
-form\src\sf.component.ts：添加了 submit() 方法
-form\src\sf-item-wrap.component.ts：添加了[ngStyle]="ui.styleLabel" 和 [ngStyle]="ui.styleControl"
-form\src\schema\ui.ts：添加了 SFEnumSchema , SFstyleSchema，SFoptionsSchema 接口
+1. form\src\sf.component.ts：添加了 submit() 方法
+2. form\src\sf-item-wrap.component.ts：添加了[ngStyle]="ui.styleLabel" 和 [ngStyle]="ui.styleControl"
+3. form\src\schema\ui.ts：添加了 SFEnumSchema , SFstyleSchema，SFoptionsSchema 接口
 ```
 
 ## 四、版本升级时出现的错误
@@ -54,8 +54,4 @@ form\src\schema\ui.ts：添加了 SFEnumSchema , SFstyleSchema，SFoptionsSchema
 
 ```
 有可能是升级了大版本号，只是更改了 package.json，但没有更改 package-lock.json，二者版本出现了不一致，则需要把 package-lock.json 删除重新生成。
-```
-
-```
-
 ```

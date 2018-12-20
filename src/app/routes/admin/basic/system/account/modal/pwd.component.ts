@@ -2,10 +2,8 @@ import {
   Component,
   Injector,
   OnInit,
-  OnDestroy,
   ChangeDetectionStrategy,
 } from '@angular/core';
-
 import { ModalControl } from '@core';
 import { tplModalPasswordHTML } from '@layout';
 
@@ -13,10 +11,9 @@ import { tplModalPasswordHTML } from '@layout';
   selector: 'app-account-pwd',
   template: tplModalPasswordHTML,
   styles: [``],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.Default,
 })
-export class AccountPwdComponent extends ModalControl
-  implements OnInit, OnDestroy {
+export class AccountPwdComponent extends ModalControl implements OnInit {
   constructor(protected injector: Injector) {
     super(injector);
   }
@@ -26,10 +23,6 @@ export class AccountPwdComponent extends ModalControl
     this.modalData.button.reset.show = false;
     this.modalData.button.submit.title = '重置密码';
     this.form.data['login_pwd'] = '123456';
-  }
-
-  ngOnDestroy() {
-    super.ngOnDestroy();
   }
 
   onSubmit($event: any) {

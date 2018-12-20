@@ -36,6 +36,7 @@ export class UserLoginComponent extends InjectorControl
 
   constructor(protected injector: Injector) {
     super(injector);
+    super.__init__(this);
     this.modalSrv.closeAll();
   }
 

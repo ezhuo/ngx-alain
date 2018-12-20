@@ -3,6 +3,7 @@ import {
   Injector,
   OnInit,
   OnDestroy,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 
 import { ModalControl } from '@core';
@@ -12,11 +13,12 @@ import { tplModalEditHTML } from '@layout';
   selector: 'app-orginfo-edit',
   template: tplModalEditHTML,
   styles: [``],
+  changeDetection: ChangeDetectionStrategy.Default,
 })
-export class OrgInfoEditComponent extends ModalControl
-  implements OnInit, OnDestroy {
+export class OrgInfoEditComponent extends ModalControl implements OnInit {
   constructor(protected injector: Injector) {
     super(injector);
+    super.__init__(this);
   }
 
   ngOnInit() {
@@ -24,11 +26,6 @@ export class OrgInfoEditComponent extends ModalControl
     if (!this.dataSource.val) {
       this.form.data['parent_org_name'] = this.modalData.data.origin.title;
     }
-    console.log(this.form.data);
-  }
-
-  ngOnDestroy() {
-    super.ngOnDestroy();
   }
 
   onSubmit($event: any) {
@@ -36,7 +33,7 @@ export class OrgInfoEditComponent extends ModalControl
       $event.value,
       this.schemaData.edit,
     );
-    console.log(formData, $event.value);
+    // console.log(formData, $event.value);
     // 如果是新增状态，就添加所属机构值
     if (!this.dataSource.val) {
       formData['parent_id'] = this.modalData.data.origin.org_id;

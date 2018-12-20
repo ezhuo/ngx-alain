@@ -3,22 +3,21 @@ import {
   ViewChild,
   Injector,
   OnInit,
-  OnDestroy,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 
 import { STComponent } from '@delon/abc';
 import { SFComponent } from '@delon/form';
-
 import { IndexControl } from '@core';
-
 import { RoleEditComponent } from './modal/edit.component';
 
 @Component({
   selector: 'app-system-role',
   templateUrl: `./index.component.html`,
   styleUrls: [`./index.component.less`],
+  changeDetection: ChangeDetectionStrategy.Default,
 })
-export class RoleComponent extends IndexControl implements OnInit, OnDestroy {
+export class RoleComponent extends IndexControl implements OnInit {
   @ViewChild('st')
   st: STComponent;
   @ViewChild('sf')
@@ -26,7 +25,7 @@ export class RoleComponent extends IndexControl implements OnInit, OnDestroy {
 
   constructor(protected injector: Injector) {
     super(injector);
-    super.__init('/role', 'role_id');
+    super.__init__(this, { url: '/role', key: 'role_id' });
   }
 
   ngOnInit() {
@@ -142,10 +141,6 @@ export class RoleComponent extends IndexControl implements OnInit, OnDestroy {
         ],
       },
     ];
-  }
-
-  ngOnDestroy() {
-    super.ngOnDestroy();
   }
 
   add() {

@@ -12,7 +12,6 @@ import { DictComponent } from './dict/index.component';
 import { DictEditComponent } from './dict/modal/edit.component';
 
 import { CantonComponent } from './canton/index.component';
-import { CantonEditComponent } from './canton/modal/edit.component';
 
 const routes: Routes = [
     {
@@ -49,7 +48,6 @@ export const entryComponents = [
     OrgInfoShowComponent,
 
     DictEditComponent,
-    CantonEditComponent,
 ];
 
 @NgModule({
