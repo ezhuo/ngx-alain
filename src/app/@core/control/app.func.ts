@@ -18,7 +18,7 @@ export class AppFunc {
   /**
    * 表单初始化
    */
-  __formGroupFillData(__frmGroup?: FormGroup, __frmData?: Object): void {
+  __formGroupFillData = (__frmGroup?: FormGroup, __frmData?: Object): void => {
     const self = this.appCtl;
     if (!__frmGroup === null) __frmGroup = self.form.group;
     for (const idx of Object.keys(__frmData)) {
@@ -26,7 +26,7 @@ export class AppFunc {
         __frmGroup.controls[idx].setValue(__frmData[idx]);
       }
     }
-  }
+  };
 
   /**
    * 获取主键值
@@ -52,11 +52,11 @@ export class AppFunc {
    * 动态表单设置
    * @param mainSchema
    */
-  __schemaFormSetTexts(
+  __schemaFormSetTexts = (
     schema?: SFSchema,
     orderBy?: any[],
     mainSchema?: SFSchema,
-  ) {
+  ) => {
     const self = this.appCtl;
     let newSchema = mainSchema || self.schemaData.edit;
     orderBy = orderBy || self.schemaData.editOrder;
@@ -93,12 +93,15 @@ export class AppFunc {
     }
 
     return newSchema;
-  }
+  };
 
   /**
    * 字段时行设置
    */
-  __schemaFormFieldsSetTexts(fields: string | string[], schema?: SFSchema) {
+  __schemaFormFieldsSetTexts = (
+    fields: string | string[],
+    schema?: SFSchema,
+  ) => {
     const self = this.appCtl;
     let result: string[] = [];
     if (helpers.isString(fields)) {
@@ -113,14 +116,14 @@ export class AppFunc {
         schema.properties[item]['ui']['widget'] = 'texts';
       }
     });
-  }
+  };
 
   /**
    * 表单排序
    * @param orderBy
    * @param mainSchema
    */
-  __schemaFormOrder(orderBy?: any[], mainSchema?: SFSchema): SFSchema {
+  __schemaFormOrder = (orderBy?: any[], mainSchema?: SFSchema): SFSchema => {
     const self = this.appCtl;
     orderBy = orderBy || self.schemaData.editOrder;
     mainSchema = mainSchema || self.schemaData.edit;
@@ -136,7 +139,7 @@ export class AppFunc {
       newSchema = mainSchema;
     }
     return newSchema;
-  }
+  };
 
   /**
    * 向模态对话框传递数据过程中的数据格式化
@@ -209,8 +212,7 @@ export class AppFunc {
     for (const idx of Object.keys(formValue)) {
       if (
         formValue[idx] &&
-        (helpers.isArray(formValue[idx]) ||
-          helpers.isObject(formValue[idx]))
+        (helpers.isArray(formValue[idx]) || helpers.isObject(formValue[idx]))
       ) {
         if (prop && prop[idx] && prop[idx].ui) {
           if (helpers.isString(prop[idx].ui)) {
@@ -219,14 +221,10 @@ export class AppFunc {
             widget = prop[idx].ui.widget;
           }
           if (widget.indexOf('upload') > -1) {
-            formValue[idx] = helpers.formatUploadFilesToString(
-              formValue[idx],
-            );
+            formValue[idx] = helpers.formatUploadFilesToString(formValue[idx]);
           }
           if (widget.indexOf('cascader') > -1) {
-            formValue[idx] = helpers.formatCascaderToString(
-              formValue[idx],
-            );
+            formValue[idx] = helpers.formatCascaderToString(formValue[idx]);
           }
         }
       }

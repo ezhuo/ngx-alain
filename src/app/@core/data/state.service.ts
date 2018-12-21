@@ -181,11 +181,9 @@ export class StateService {
    */
   destroy(self: object, keys: any[] | any) {
     let name = '';
-    if (
-      self['componentData'] &&
-      self['componentData']['name']
-    )
+    if (self['componentData'] && self['componentData']['name'])
       name = self['componentData']['name'];
+
     for (const field of keys) {
       if (!self[field]) {
         continue;

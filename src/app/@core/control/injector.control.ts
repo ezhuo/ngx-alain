@@ -30,7 +30,6 @@ import {
 } from '../data';
 
 import { ComponentData } from '../model';
-
 import { ModalService, NoticeService } from '../utils';
 import { HttpService } from '../net';
 import * as helpers from '../helpers';
@@ -76,7 +75,7 @@ export class InjectorControl implements OnInit, OnDestroy {
    * @type {ComponentData}
    * @memberof InjectorControl
    */
-  protected ___componentData: ComponentData = { meta: null };
+  protected ___componentData: ComponentData = { name: null, meta: null };
 
   get freeData() {
     return this.___freeData;
@@ -186,11 +185,7 @@ export class InjectorControl implements OnInit, OnDestroy {
     return helpers;
   }
 
-  protected __init__(
-    child: Object | Function,
-    dataSource?: any,
-    params?: any,
-  ): void {
+  protected __init__(child: Object | Function, dataSource?: any, params?: any) {
     if (!helpers.isEmpty(child)) {
       const obj = helpers.isObject(child) ? <any>child.constructor : child;
       if (obj && !helpers.isEmpty(obj.__annotations__)) {
@@ -203,6 +198,7 @@ export class InjectorControl implements OnInit, OnDestroy {
           this.componentData.meta,
         );
     }
+    return null;
   }
 
   public detectChanges = () => {

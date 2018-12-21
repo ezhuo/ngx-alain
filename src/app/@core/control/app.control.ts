@@ -213,9 +213,9 @@ export class AppControl extends InjectorControl implements OnInit, OnDestroy {
     dataSource?: DataSource,
     params?: any,
   ): void {
-    super.__init__(child, dataSource, params);
     if (!this.helpers.isEmpty(dataSource)) {
       this.dataSource = Object.assign(this.dataSource, dataSource);
     }
+    return super.__init__(child, dataSource, params);
   }
 }

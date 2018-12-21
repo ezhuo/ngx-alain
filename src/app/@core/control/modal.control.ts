@@ -1,6 +1,7 @@
 import { OnInit, OnDestroy, Injector } from '@angular/core';
 import { NzModalRef } from 'ng-zorro-antd';
 import { AppControl } from './app.control';
+import { DataSource } from '../model';
 
 export class ModalControl extends AppControl implements OnInit, OnDestroy {
   constructor(protected injector: Injector, protected child?: Function) {
@@ -17,6 +18,14 @@ export class ModalControl extends AppControl implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     super.ngOnDestroy();
+  }
+
+  protected __init__(
+    child: Object | Function,
+    dataSource?: DataSource,
+    params?: any,
+  ) {
+    return super.__init__(child, dataSource, params);
   }
 
   modalClose(result?: any) {
