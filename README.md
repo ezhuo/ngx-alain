@@ -1,4 +1,6 @@
-> 基于 ng-alain 7.0.0 ng-zorro 7.0.0
+> 基于 angular7 ， ng-alain 7.0.0 ， ng-zorro 7.0.0
+
+> 感觉好用的朋友，麻烦请您留下您的star再走，谢谢！
 
 ## 一、执行
 
