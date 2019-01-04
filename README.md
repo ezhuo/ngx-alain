@@ -16,12 +16,36 @@ npm run serve:hmr
 ## 二、目录说明
 
 ```
-- src\app\@core 工具类、基础页面类（可继承）、http 拦截器等
-- src\app\@shared 共享模块，每个业务模块都需要导入
-- src\app\layout 公共布局类
-- src\app\routes 业务组件类
-- src\styles 样式类
-- src\delon delon 类
+src
+├─app\@core 核心控制
+│       ├─control 基础页面类，使用者可继承
+│       ├─data 权限控制、用户、状态类
+│       ├─helpers 工具类
+│       ├─i18n 语言类
+│       ├─model 数据定义接口
+│       ├─net http和拦截器
+│       ├─startup 初始化服务
+│       ├─utils 提醒等工具
+│
+├─app\@shared 共享模块
+│       ├─ directives 全局指令
+│       ├─ json-schema 自定义动态表单
+│
+├─app\layout 公共布局类
+│       ├─ common 公共布局组件
+│       ├─ default admin后台布局
+│       ├─ exception 异常布局
+│       ├─ fullscreen 全屏布局
+│       ├─ home 前台公共布局
+│       ├─ passport 后台登录布局
+│       ├─ template 公共HTML模板
+│
+├─app\routes 业务组件类
+│       ├─ admin 后台业务页面
+│       ├─ home 前台业务页面
+│
+├─styles 全局样式类
+├─delon delon 类 （直接集成delon的目的是为了可以个性化，方便项目扩展）
 ```
 
 ## 三、delon 修改的地方
@@ -46,12 +70,4 @@ npm run serve:hmr
 1. form\src\sf.component.ts：添加了 submit() 方法
 2. form\src\sf-item-wrap.component.ts：添加了[ngStyle]="ui.styleLabel" 和 [ngStyle]="ui.styleControl"
 3. form\src\schema\ui.ts：添加了 SFEnumSchema , SFstyleSchema，SFoptionsSchema 接口
-```
-
-## 四、版本升级时出现的错误
-
-### 1. 安装的时候出现 Cannot find module 'webpack'
-
-```
-有可能是升级了大版本号，只是更改了 package.json，但没有更改 package-lock.json，二者版本出现了不一致，则需要把 package-lock.json 删除重新生成。
 ```
