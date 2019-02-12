@@ -1,4 +1,4 @@
-import { DOCUMENT, LocationStrategy } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -13,10 +13,10 @@ import {
   Renderer2,
 } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { filter, takeUntil } from 'rxjs/operators';
 
-import { Menu, MenuService, SettingsService } from '@delon/theme';
+import { Menu, MenuService, SettingsService, WINDOW } from '@delon/theme';
 import { InputBoolean } from '@delon/util';
 
 import { Nav } from './sidebar-nav.types';
@@ -31,39 +31,34 @@ const FLOATINGCLS = 'sidebar-nav__floating';
 })
 export class SidebarNavComponent implements OnInit, OnDestroy {
   private bodyEl: HTMLBodyElement;
-  private change$: Subscription;
+  private unsubscribe$ = new Subject<void>();
   /** @inner */
   floatingEl: HTMLDivElement;
   list: Nav[] = [];
 
+  @Input() @InputBoolean() disabledAcl = false;
   @Input() @InputBoolean() autoCloseUnderPad = true;
+  @Input() @InputBoolean() recursivePath = true;
   @Output() readonly select = new EventEmitter<Menu>();
-
-  constructor(
-    private menuSrv: MenuService,
-    private settings: SettingsService,
-    private router: Router,
-    private locationStrategy: LocationStrategy,
-    private render: Renderer2,
-    private cdr: ChangeDetectorRef,
-    // tslint:disable-next-line:no-any
-    @Inject(DOCUMENT) private doc: any,
-  ) { }
 
   get collapsed() {
     return this.settings.layout.collapsed;
   }
 
-  ngOnInit() {
-    this.bodyEl = this.doc.querySelector('body');
-    this.menuSrv.openedByUrl(this.router.url);
-    this.genFloatingContainer();
-    this.change$ = this.menuSrv.change.subscribe(res => {
-      this.list = res;
-      this.cdr.detectChanges();
-    });
-    this.installUnderPad();
+  private get _d() {
+    return this.menuSrv.menus;
   }
+
+  constructor(
+    private menuSrv: MenuService,
+    private settings: SettingsService,
+    private router: Router,
+    private render: Renderer2,
+    private cdr: ChangeDetectorRef,
+    // tslint:disable-next-line:no-any
+    @Inject(DOCUMENT) private doc: any,
+    @Inject(WINDOW) private win: Window,
+  ) {}
 
   private floatingAreaClickHandle(e: MouseEvent) {
     e.stopPropagation();
@@ -71,21 +66,14 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
     if (linkNode.nodeName !== 'A') {
       return false;
     }
-    let url: string = linkNode.getAttribute('href');
-    if (url && url.startsWith('#')) {
-      url = url.slice(1);
-    }
-    if (linkNode.dataset!.type === 'external') {
-      return true;
-    }
-
-    // 如果配置了bashHref 则去掉baseHref
-    const baseHerf = this.locationStrategy.getBaseHref();
-    if (baseHerf) {
-      url = url.slice(baseHerf.length);
-    }
-    this.router.navigateByUrl(url);
-    this.onSelect(this.menuSrv.getPathByUrl(url).pop());
+    const id = +linkNode.dataset!.id;
+    let item: Nav;
+    this.menuSrv.visit(this._d, i => {
+      if (!item && i.__id === id) {
+        item = i;
+      }
+    });
+    this.to(item);
     this.hideAll();
     e.preventDefault();
     return false;
@@ -93,10 +81,7 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
 
   private clearFloatingContainer() {
     if (!this.floatingEl) return;
-    this.floatingEl.removeEventListener(
-      'click',
-      this.floatingAreaClickHandle.bind(this),
-    );
+    this.floatingEl.removeEventListener('click', this.floatingAreaClickHandle.bind(this));
     // fix ie: https://github.com/ng-alain/delon/issues/52
     if (this.floatingEl.hasOwnProperty('remove')) {
       this.floatingEl.remove();
@@ -109,19 +94,13 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
     this.clearFloatingContainer();
     this.floatingEl = this.render.createElement('div');
     this.floatingEl.classList.add(FLOATINGCLS + '-container');
-    this.floatingEl.addEventListener(
-      'click',
-      this.floatingAreaClickHandle.bind(this),
-      false,
-    );
+    this.floatingEl.addEventListener('click', this.floatingAreaClickHandle.bind(this), false);
     this.bodyEl.appendChild(this.floatingEl);
   }
 
   private genSubNode(linkNode: HTMLLinkElement, item: Nav): HTMLUListElement {
     const id = `_sidebar-nav-${item.__id}`;
-    const node = linkNode.nextElementSibling.cloneNode(
-      true,
-    ) as HTMLUListElement;
+    const node = linkNode.nextElementSibling.cloneNode(true) as HTMLUListElement;
     node.id = id;
     node.classList.add(FLOATINGCLS);
     node.addEventListener(
@@ -147,14 +126,8 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
   private calPos(linkNode: HTMLLinkElement, node: HTMLUListElement) {
     const rect = linkNode.getBoundingClientRect();
     // bug: https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/14721015/
-    const scrollTop = Math.max(
-      this.doc.documentElement.scrollTop,
-      this.bodyEl.scrollTop,
-    );
-    const docHeight = Math.max(
-      this.doc.documentElement.clientHeight,
-      this.bodyEl.clientHeight,
-    );
+    const scrollTop = Math.max(this.doc.documentElement.scrollTop, this.bodyEl.scrollTop);
+    const docHeight = Math.max(this.doc.documentElement.clientHeight, this.bodyEl.clientHeight);
     let offsetHeight = 0;
     if (docHeight < rect.top + node.clientHeight) {
       offsetHeight = rect.top + node.clientHeight - docHeight;
@@ -176,12 +149,23 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
     this.calPos(linkNode as HTMLLinkElement, subNode);
   }
 
-  onSelect(item: Menu) {
+  to(item: Menu) {
     this.select.emit(item);
+    if (item.disabled) return;
+
+    if (item.externalLink) {
+      if (item.target === '_blank') {
+        this.win.open(item.externalLink);
+      } else {
+        this.win.location.href = item.externalLink;
+      }
+      return false;
+    }
+    this.router.navigateByUrl(item.link);
   }
 
   toggleOpen(item: Nav) {
-    this.menuSrv.visit((i, p) => {
+    this.menuSrv.visit(this._d, (i, p) => {
       if (i !== item) i._open = false;
     });
     let pItem = item.__parent;
@@ -206,9 +190,40 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
     this.hideAll();
   }
 
+  ngOnInit() {
+    const { doc, router, unsubscribe$, menuSrv, cdr } = this;
+    this.bodyEl = doc.querySelector('body');
+    menuSrv.openedByUrl(router.url, this.recursivePath);
+    this.genFloatingContainer();
+    menuSrv.change.pipe(takeUntil(unsubscribe$)).subscribe(data => {
+      menuSrv.visit(data, i => {
+        if (i._aclResult) return;
+        if (this.disabledAcl) {
+          i.disabled = true;
+        } else {
+          i._hidden = true;
+        }
+      });
+      this.list = menuSrv.menus;
+      cdr.detectChanges();
+    });
+    router.events
+      .pipe(
+        takeUntil(unsubscribe$),
+        filter(e => e instanceof NavigationEnd),
+      )
+      .subscribe((e: NavigationEnd) => {
+        this.menuSrv.openedByUrl(e.urlAfterRedirects, this.recursivePath);
+        this.underPad();
+        this.cdr.detectChanges();
+      });
+    this.underPad();
+  }
+
   ngOnDestroy(): void {
-    this.change$.unsubscribe();
-    if (this.route$) this.route$.unsubscribe();
+    const { unsubscribe$ } = this;
+    unsubscribe$.next();
+    unsubscribe$.complete();
     this.clearFloatingContainer();
   }
 
@@ -218,18 +233,8 @@ export class SidebarNavComponent implements OnInit, OnDestroy {
     return window.innerWidth < 768;
   }
 
-  private route$: Subscription;
-  private installUnderPad() {
-    if (!this.autoCloseUnderPad) return;
-    this.route$ = this.router.events
-      .pipe(filter(e => e instanceof NavigationEnd))
-      .subscribe(s => this.underPad());
-
-    this.underPad();
-  }
-
   private underPad() {
-    if (this.isPad && !this.collapsed) {
+    if (this.autoCloseUnderPad && this.isPad && !this.collapsed) {
       setTimeout(() => this.openAside(true));
     }
   }

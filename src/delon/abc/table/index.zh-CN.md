@@ -22,6 +22,7 @@ config: STConfig
 - 通过 `res.reName` 重置数据 `key` 而无须担心后端数据格式是否满足 `st` 需求
 - 通过 `res.process` 可以对表格渲染前对数据进一步优化
 - 通过 `page.zeroIndexed` 可以调整 http 请求时 `pi` 参数是否遵循 0 基索引，默认情况下为 1 基索引
+- 若返回体的值是数组类型，则强制不分页
 - 使用 `_HttpClient` 发起请求，因此满足 [AlainThemeConfig](/theme/http#AlainThemeConfig) 的配置也适用
 
 ### 静态数据
@@ -35,7 +36,7 @@ config: STConfig
 
 ## API
 
-### STComponent
+### st
 
 参数 | 说明 | 类型 | 默认值
 ----|------|-----|------
@@ -45,10 +46,11 @@ config: STConfig
 `[res]` | 返回体配置 | `STRes` | -
 `[pi]` | 当前页码 | `number` | `1`
 `[ps]` | 每页数量，当设置为 `0` 表示不分页，默认：`10` | `number` | `10`
+`[total]` | 当前总数据，在服务器渲染时需要传入，默认：`0` | `number` | `0`
 `[page]` | 分页器配置 | `STPage` | -
 `[noResult]` | 无数据时显示内容 | `string,TemplateRef<void>` | -
 `[bordered]` | 是否显示边框 | `boolean` | `false`
-`[size]` | table大小 | `small,middle,default` | `default`
+`[size]` | table大小 | `'small','middle','default'` | `'default'`
 `[rowClassName]` | 表格行的类名 | `(record: STData, index: number) => string` | -
 `[loading]` | 页面是否加载中 | `boolean` | `false`
 `[loadingDelay]` | 延迟显示加载效果的时间（防止闪烁） | `number` | `0`
@@ -58,15 +60,19 @@ config: STConfig
 `[rowClickTime]` | 行单击多少时长之类为双击（单位：毫秒） | `number` | `200`
 `[header]` | 表格标题 | `string,TemplateRef<void>` | -
 `[footer]` | 表格底部 | `string,TemplateRef<void>` | -
-`[body]` | 表格额外内容，一般用于添加合计行 | `TemplateRef<void>` | -
+`[bodyHeader]` | 表格顶部额外内容，一般用于添加合计行 | `TemplateRef<STStatisticalResults>` | -
+`[body]` | 表格额外内容，一般用于添加合计行 | `TemplateRef<STStatisticalResults>` | -
+`[widthConfig]` | 表头分组时指定每列宽度，与 STColumn 的 width 不可混用 | `string[]` | -
+`[expandRowByClick]` | 通过点击行来展开子行 | `boolean` | `false`
 `[expand]` | 当前列是否包含展开按钮，当数据源中包括 `expand` 表示展开状态 | `TemplateRef<void>` | -
-`(change)` | 变化时回调，包括：`pi`、`ps`、`checkbox`、`radio`、`sort`、`filter`、`click`、`dblClick` 变动 | `EventEmitter<STChange>` | -
+`(change)` | 变化时回调，包括：`pi`、`ps`、`checkbox`、`radio`、`sort`、`filter`、`click`、`dblClick`、`expand` 变动 | `EventEmitter<STChange>` | -
 `(error)` | 异常时回调 | `EventEmitter<STError>` | -
 
 ### 组件方法
 
 名称 | 说明
 --- | -----
+`resetColumns()` | 重置列描述
 `load(pi = 1, extraParams?: any, options?: STLoadOptions)` | 加载指定页
 `reload(extraParams?: any, options?: STLoadOptions)` | 刷新当前页
 `reset(extraParams?: any, options?: STLoadOptions)` | 重置且重新设置 `pi` 为 `1`，包含单多选、排序、过滤状态（同默认状态一并清除）
@@ -102,12 +108,14 @@ class TestComponent {
 
 参数 | 说明 | 类型 | 默认值
 ----|------|-----|------
+`[type]` | 分页类型，`page` 使用 `pi`，`ps` 组合；`skip` 使用 `skip`，`limit` 组合 | `page,skip` | `page`
 `[params]` | 额外请求参数，默认自动附加 `pi`、`ps` 至URL | `any` | -
-`[method]` | 请求方法 | `string` | `GET`
+`[method]` | 请求方法 | `'POST','GET','HEAD','PUT','PATCH','DELETE'` | `'GET'`
 `[body]` | 请求体 `body`，当 `method: POST` 时有效 | `any` | -
 `[headers]` | 请求体 `headers` | `any` | -
-`[reName]` | 重命名请求参数 `pi`、`ps` | `STReqReNameType` | `{ pi: 'pi', ps: 'ps' }`
+`[reName]` | 重命名请求参数 `pi`、`ps` | `STReqReNameType` | `{ pi: 'pi', ps: 'ps', skip: 'skip', limit: 'limit' }`
 `[allInBody]` | 是否将请求所有参数数据都放入 `body` 当中（`url` 地址本身参数除外），仅当 `method: 'POST'` 时有效 | `boolean` | `false`
+`[process]` | 请求前数据处理 | `(requestOptions: STRequestOptions) => STRequestOptions` | -
 
 ### STRes
 
@@ -122,7 +130,7 @@ class TestComponent {
 ----|------|-----|------
 `[front]` | 前端分页，当 `data` 为 `any[]` 或 `Observable<any[]>` 有效 | `boolean` | `true`
 `[zeroIndexed]` | 后端分页是否采用`0`基索引，只在`data`类型为`string`时有效 | `boolean` | `false`
-`[placement]` | 分页方向 | `left,center,right` | `right`
+`[placement]` | 分页方向 | `'left','center','right'` | `'right'`
 `[show]` | 是否显示分页器 | `boolean` | -
 `[showSize]` | 是否显示分页器中改变页数 | `boolean` | `false`
 `[pageSizes]` | 分页器中每页显示条目数下拉框值 | `number[]` | `[10, 20, 30, 40, 50]`
@@ -142,7 +150,7 @@ class TestComponent {
 
 参数 | 说明 | 类型 | 默认值
 ----|------|-----|------
-`[type]` | 变更类型，包括：`pi`、`ps`、`checkbox`、`radio`、`sort`、`filter`、`click`、`dblClick` | `STChangeType` | -
+`[type]` | 变更类型，包括：`pi`、`ps`、`checkbox`、`radio`、`sort`、`filter`、`click`、`dblClick`、`expand` | `STChangeType` | -
 `[pi]` | 当前页码 | `number` | -
 `[ps]` | 每页数量 | `number` | -
 `[total]` | 数据总量 | `number` | -
@@ -151,6 +159,7 @@ class TestComponent {
 `[sort]` | 排序参数 | `STChangeSort` | -
 `[filter]` | 过滤参数 | `STColumn` | -
 `[click]` | 行点击或双击参数 | `STChangeRowClick` | -
+`[expand]` | `expand` 参数 | `STData` | -
 
 ### STChangeSort
 
@@ -205,7 +214,7 @@ class TestComponent {
 `[renderTitle]` | 标题自定义渲染ID | `string` | -
 `[default]` | 当不存在数据时以默认值替代 | `string` | -
 `[buttons]` | 按钮组 | `STColumnButton[]` | -
-`[width]` | 列宽，例如：`10%`、`100px` | `string` | -
+`[width]` | 列宽（数字型表示 `px` 值，**注意：** 若固定列必须是数字），例如：`100`、`10%`、`100px` | `string,number` | -
 `[fixed]` | 固定前后列，当指定时务必指定 `width` 否则视为无效 | `left,right` | -
 `[format]` | 格式化列值 | `function(cell: any, row: any)` | -
 `[className]` | 列 `class` 属性值，例如：；`text-center` 居中； `text-right` 居右； `text-danger` 异常色，更多参考[样式工具类](/theme/tools) | `string` | -
@@ -221,7 +230,9 @@ class TestComponent {
 `[click]` | 链接回调 | `(record: STData, instance?: STComponent) => void` | -
 `[badge]` | 徽标配置项 | `STColumnBadge` | -
 `[tag]` | 徽标配置项 | `STColumnTag` | -
-`[noIndex]` | 行号索引开始值 | `STColumnTag` | `1`
+`[noIndex]` | 行号索引开始值 | `number` | `1`
+`[iif]` | 条件表达式<br>1、仅赋值 `columns` 时执行一次<br>2、可调用 `resetColumns()` 再一次触发 | `(item: STColumn) => boolean` | -
+`[statistical]` | 统计信息 | `STStatisticalType,STStatistical` | -
 
 ### STColumnSort
 
@@ -290,7 +301,7 @@ class TestComponent {
 `[component]` | 目标组件对象，务必在 `entryComponents` 注册 | `any` | -
 `[params]` | 目标组件的接收参数对象 | `(record: STData) => Object` | -
 `[paramsName]` | 目标组件的接收参数名，若目标组件接收值为空时，检查 [delon.module.ts](https://github.com/ng-alain/ng-alain/blob/master/src/app/delon.module.ts#L69) 全局设置 | `string` | record
-`[size]` | 对话框大小 | `sm, md, lg, xl, '', number` | `lg`
+`[size]` | 对话框大小，支持数字类型 | `'sm','md','lg','xl'` | `'lg'`
 `[exact]` | 是否精准（默认：`true`），若返回值非空值（`null`或`undefined`）视为成功，否则视为错误 | `boolean` | `true`
 `[includeTabs]` | 是否包裹标签页，修复模态包含标签间距问题 | `boolean` | -
 `[modalOptions]` | 对话框 [ModalOptionsForService](https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/components/modal/nz-modal.type.ts) 参数 | `any` | -
@@ -303,7 +314,7 @@ class TestComponent {
 `[component]` | 目标组件对象，务必在 `entryComponents` 注册 | `any` | -
 `[params]` | 目标组件的接收参数对象 | `(record: STData) => Object` | -
 `[paramsName]` | 目标组件的接收参数名，若目标组件接收值为空时，检查 [delon.module.ts](https://github.com/ng-alain/ng-alain/blob/master/src/app/delon.module.ts#L69) 全局设置 | `string` | record
-`[size]` | 抽屉大小 | `sm, md, lg, xl, number` | `md`
+`[size]` | 抽屉大小，支持数字类型 | `'sm','md','lg','xl'` | `'md'`
 `[drawerOptions]` | 抽屉 [NzDrawerOptions](https://ng.ant.design/components/drawer/zh#nzdraweroptions) 参数 | `any` | -
 
 ### STColumnSelection
@@ -336,3 +347,10 @@ class TestComponent {
 `[text]` | 文本 | `string` | -
 `[color]` | Tag颜色值 | `string` | -
 
+### STStatistical
+
+参数 | 说明 | 类型 | 默认值
+----|------|-----|------
+`[type]` | 统计类型 | `STStatisticalType | STStatisticalFn` | -
+`[digits]` | 保留小数位数 | `number` | `2`
+`[currenty]` | 是否需要货币格式化，默认当 `type` 为 `STStatisticalFn`、 `sum`、`average`、`max`、`min` 时为 `true` | `boolean` | -

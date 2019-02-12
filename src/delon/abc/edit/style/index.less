@@ -17,6 +17,10 @@
       margin-bottom: 0;
       padding-bottom: 0;
     }
+    // fix angular & ng-zorro-antd
+    .@{ant-prefix}-form-explain {
+      display: block;
+    }
   }
   &__label {
     text-align: right;
@@ -81,13 +85,6 @@
       }
     }
   }
-  // fix angular & ng-zorro-antd
-  .@{ant-prefix}-form-explain {
-    display: block;
-  }
-}
-
-@media (min-width: @mobile-min) {
 }
 
 @media (max-width: @mobile-max) {

@@ -29,25 +29,29 @@ export class DashboardAnalysisComponent implements OnInit {
       };
     });
   titleMap = {
-    y1: 'y1',
+   y1: 'y1',
     y2: 'y2',
+
   };
   searchColumn: STColumn[] = [
     { title: '排名', i18n: 'app.analysis.table.rank', index: 'index' },
     {
       title: '搜索关键词',
+      i18n: 'app.analysis.table.search-keyword',
       index: 'keyword',
       click: (item: any) => this.msg.success(item.keyword),
     },
     {
       type: 'number',
       title: '用户数',
+      i18n: 'app.analysis.table.users',
       index: 'count',
       sorter: (a, b) => a.count - b.count,
     },
     {
       type: 'number',
       title: '周涨幅',
+      i18n: 'app.analysis.table.weekly-range',
       index: 'range',
       render: 'range',
       sorter: (a, b) => a.range - b.range,
@@ -97,6 +101,22 @@ export class DashboardAnalysisComponent implements OnInit {
     return yuan(value);
   }
 
-  _activeTab = 0;
-  _tabChange(value: any) {}
+  saleTabs: any[] = [
+    { key: 'sales', show: true },
+    { key: 'visits' },
+  ];
+  salesChange(idx: number) {
+    if (this.saleTabs[idx].show !== true) {
+      this.saleTabs[idx].show = true;
+      this.cdr.detectChanges();
+    }
+  }
+
+  offlineIdx = 0;
+  offlineChange(idx: number) {
+    if (this.data.offlineData[idx].show !== true) {
+      this.data.offlineData[idx].show = true;
+      this.cdr.detectChanges();
+    }
+  }
 }

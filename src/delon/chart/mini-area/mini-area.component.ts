@@ -5,6 +5,7 @@ import {
   ElementRef,
   HostBinding,
   Input,
+  NgZone,
   OnChanges,
   OnDestroy,
   OnInit,
@@ -33,7 +34,7 @@ export class G2MiniAreaComponent implements OnInit, OnChanges, OnDestroy {
   @Input() color = 'rgba(24, 144, 255, 0.2)';
   @Input() borderColor = '#1890FF';
   @Input() @InputNumber() borderWidth = 2;
-  @HostBinding('style.height.px') @Input() @InputNumber() height;
+  @HostBinding('style.height.px') @Input() @InputNumber() height = 56;
   @Input() @InputBoolean() fit = true;
   @Input() @InputBoolean() line = false;
   @Input() @InputBoolean() animate = true;
@@ -46,16 +47,16 @@ export class G2MiniAreaComponent implements OnInit, OnChanges, OnDestroy {
 
   // #endregion
 
-  constructor(private el: ElementRef) { }
+  constructor(private el: ElementRef, private ngZone: NgZone) {}
 
   private install() {
     const { el, fit, height, padding, xAxis, yAxis, yTooltipSuffix, tooltipType, line } = this;
-    const chart = this.chart = new G2.Chart({
+    const chart = (this.chart = new G2.Chart({
       container: el.nativeElement,
       forceFit: fit,
       height,
       padding,
-    });
+    }));
 
     if (!xAxis && !yAxis) {
       chart.axis(false);
@@ -75,9 +76,9 @@ export class G2MiniAreaComponent implements OnInit, OnChanges, OnDestroy {
 
     chart.legend(false);
     chart.tooltip({
-      'type': tooltipType === 'mini' ? 'mini' : null,
-      'showTitle': false,
-      'hideMarkders': false,
+      type: tooltipType === 'mini' ? 'mini' : null,
+      showTitle: false,
+      hideMarkders: false,
       'g2-tooltip': { padding: 4 },
       'g2-tooltip-list-item': { margin: `0px 4px` },
     });
@@ -90,7 +91,12 @@ export class G2MiniAreaComponent implements OnInit, OnChanges, OnDestroy {
       .opacity(1);
 
     if (line) {
-      chart.line().position('x*y').shape('smooth').opacity(1).tooltip(false);
+      chart
+        .line()
+        .position('x*y')
+        .shape('smooth')
+        .opacity(1)
+        .tooltip(false);
     }
 
     chart.render();
@@ -99,8 +105,21 @@ export class G2MiniAreaComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   private attachChart() {
-    const { chart, line, fit, height, animate, padding, data, color, borderColor, borderWidth } = this;
-    if (!chart || !data || data.length <= 0) return ;
+    const {
+      chart,
+      line,
+      fit,
+      height,
+      animate,
+      padding,
+      data,
+      color,
+      borderColor,
+      borderWidth,
+    } = this;
+    if (!chart || !data || data.length <= 0) {
+      return;
+    }
 
     const geoms = chart.get('geoms');
     geoms.forEach(g => g.color(color));
@@ -117,14 +136,16 @@ export class G2MiniAreaComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit() {
-    setTimeout(() => this.install(), this.delay);
+    this.ngZone.runOutsideAngular(() => setTimeout(() => this.install(), this.delay));
   }
 
   ngOnChanges(): void {
-    this.attachChart();
+    this.ngZone.runOutsideAngular(() => this.attachChart());
   }
 
   ngOnDestroy(): void {
-    if (this.chart) this.chart.destroy();
+    if (this.chart) {
+      this.ngZone.runOutsideAngular(() => this.chart.destroy());
+    }
   }
 }

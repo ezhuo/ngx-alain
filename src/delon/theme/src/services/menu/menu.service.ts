@@ -20,16 +20,14 @@ export class MenuService implements OnDestroy {
     private i18nSrv: AlainI18NService,
     @Optional() private aclService: ACLService,
   ) {
-    if (this.i18nSrv) {
-      this.i18n$ = this.i18nSrv.change.subscribe(() => this.resume());
-    }
+    this.i18n$ = this.i18nSrv.change.subscribe(() => this.resume());
   }
 
   get change(): Observable<Menu[]> {
     return this._change$.pipe(share());
   }
 
-  visit(callback: (item: Menu, parentMenum: Menu, depth?: number) => void) {
+  visit(data: Menu[], callback: (item: Menu, parentMenum: Menu, depth?: number) => void) {
     const inFn = (list: Menu[], parentMenu: Menu, depth: number) => {
       for (const item of list) {
         callback(item, parentMenu, depth);
@@ -41,7 +39,7 @@ export class MenuService implements OnDestroy {
       }
     };
 
-    inFn(this.data, null, 0);
+    inFn(data, null, 0);
   }
 
   add(items: Menu[]) {
@@ -55,13 +53,12 @@ export class MenuService implements OnDestroy {
   resume(callback?: (item: Menu, parentMenum: Menu, depth?: number) => void) {
     let i = 1;
     const shortcuts: Menu[] = [];
-    this.visit((item, parent, depth) => {
+    this.visit(this.data, (item, parent, depth) => {
       item.__id = i++;
       item.__parent = parent;
       item._depth = depth;
 
       if (!item.link) item.link = '';
-      if (typeof item.linkExact === 'undefined') item.linkExact = false;
       if (!item.externalLink) item.externalLink = '';
 
       // badge
@@ -100,8 +97,7 @@ export class MenuService implements OnDestroy {
         item.icon = { theme: 'outline', spin: false, ...(item.icon as MenuIcon) };
       }
 
-      item.text =
-        item.i18n && this.i18nSrv ? this.i18nSrv.fanyi(item.i18n) : item.text;
+      item.text = item.i18n && this.i18nSrv ? this.i18nSrv.fanyi(item.i18n) : item.text;
 
       // group
       item.group = item.group !== false;
@@ -109,10 +105,11 @@ export class MenuService implements OnDestroy {
       // hidden
       item._hidden = typeof item.hide === 'undefined' ? false : item.hide;
 
+      // disabled
+      item.disabled = typeof item.disabled === 'undefined' ? false : item.disabled;
+
       // acl
-      if (item.acl && this.aclService) {
-        item._hidden = !this.aclService.can(item.acl);
-      }
+      item._aclResult = item.acl && this.aclService ? this.aclService.can(item.acl) : true;
 
       // shortcut
       if (parent && item.shortcut === true && parent.shortcutRoot !== true) {
@@ -156,10 +153,10 @@ export class MenuService implements OnDestroy {
     // tslint:disable-next-line:prefer-object-spread
     _data = Object.assign(_data, {
       shortcutRoot: true,
-      _type: 3,
       __id: -1,
-      _depth: 1,
       __parent: null,
+      _type: 3,
+      _depth: 1,
     });
     _data.children = shortcuts.map(i => {
       i._depth = 2;
@@ -180,11 +177,11 @@ export class MenuService implements OnDestroy {
     this._change$.next(this.data);
   }
 
-  private getHit(url: string, recursive = false, cb: (i: Menu) => void = null) {
+  getHit(data: Menu[], url: string, recursive = false, cb: (i: Menu) => void = null) {
     let item: Menu = null;
 
     while (!item && url) {
-      this.visit(i => {
+      this.visit(data, i => {
         if (cb) {
           cb(i);
         }
@@ -212,10 +209,14 @@ export class MenuService implements OnDestroy {
   openedByUrl(url: string, recursive = false) {
     if (!url) return;
 
-    let findItem = this.getHit(url, recursive, i => (i._open = false));
+    let findItem = this.getHit(this.data, url, recursive, i => {
+      i._selected = false;
+      i._open = false;
+    });
     if (!findItem) return;
 
     do {
+      findItem._selected = true;
       findItem._open = true;
       findItem = findItem.__parent;
     } while (findItem);
@@ -228,7 +229,7 @@ export class MenuService implements OnDestroy {
    */
   getPathByUrl(url: string, recursive = false): Menu[] {
     const ret: Menu[] = [];
-    let item = this.getHit(url, recursive);
+    let item = this.getHit(this.data, url, recursive);
 
     if (!item) return ret;
 
@@ -242,6 +243,6 @@ export class MenuService implements OnDestroy {
 
   ngOnDestroy(): void {
     this._change$.unsubscribe();
-    if (this.i18n$) this.i18n$.unsubscribe();
+    this.i18n$.unsubscribe();
   }
 }

@@ -37,7 +37,7 @@ export class ArrayService {
       /** 是否移除 `children` 节点，默认：`true` */
       clearChildren?: boolean;
       /** 转换成数组结构时回调 */
-      cb?(item: any, parent: any, deep: number): void;
+      cb?: (item: any, parent: any, deep: number) => void;
     },
   ): any[] {
     options = {
@@ -53,17 +53,17 @@ export class ArrayService {
       for (const i of list) {
         i[options.deepMapName] = deep;
         i[options.parentMapName] = parent;
-        if (options.cb) { options.cb(i, parent, deep); }
+        if (options.cb) {
+          options.cb(i, parent, deep);
+        }
         result.push(i);
         const children = i[options.childrenMapName];
-        if (
-          children != null &&
-          Array.isArray(children) &&
-          children.length > 0
-        ) {
+        if (children != null && Array.isArray(children) && children.length > 0) {
           inFn(children, i, deep + 1);
         }
-        if (options.clearChildren) { delete i[options.childrenMapName]; }
+        if (options.clearChildren) {
+          delete i[options.childrenMapName];
+        }
       }
     };
     inFn(tree, 1, null);
@@ -83,7 +83,7 @@ export class ArrayService {
       /** 子项名，默认：`'children'` */
       childrenMapName?: string;
       /** 转换成树数据时回调 */
-      cb?(item: any): void;
+      cb?: (item: any) => void;
     },
   ): any[] {
     options = {
@@ -100,7 +100,9 @@ export class ArrayService {
       const pid = item[options.parentIdMapName];
       childrenOf[id] = childrenOf[id] || [];
       item[options.childrenMapName] = childrenOf[id];
-      if (options.cb) { options.cb(item); }
+      if (options.cb) {
+        options.cb(item);
+      }
       if (pid) {
         childrenOf[pid] = childrenOf[pid] || [];
         childrenOf[pid].push(item);
@@ -134,7 +136,7 @@ export class ArrayService {
       /** 设置是否禁用节点(不可进行任何操作)项名，默认：`'disabled'` */
       disabledMapname?: string;
       /** 转换成树数据后，执行的递归回调 */
-      cb?(item: any, parent: any, deep: number): void;
+      cb?: (item: any, parent: any, deep: number) => void;
     },
   ): NzTreeNode[] {
     options = {
@@ -166,7 +168,9 @@ export class ArrayService {
       } else {
         item.isLeaf = item[options.isLeafMapName];
       }
-      if (options.cb) { options.cb(item, parent, deep); }
+      if (options.cb) {
+        options.cb(item, parent, deep);
+      }
     });
     return tree.map(node => new NzTreeNode(node));
   }
@@ -209,7 +213,7 @@ export class ArrayService {
       /** 是否重新指定 `key` 键名，若不指定表示使用 `NzTreeNode.key` 值 */
       keyMapName?: string;
       /** 回调，返回一个值 `key` 值，优先级高于其他 */
-      cb?(item: NzTreeNode, parent: NzTreeNode, deep: number): any;
+      cb?: (item: NzTreeNode, parent: NzTreeNode, deep: number) => any;
     },
   ): any[] {
     options = {
@@ -217,18 +221,17 @@ export class ArrayService {
       ...options,
     };
     const keys: any[] = [];
-    this.visitTree(
-      tree,
-      (item: NzTreeNode, parent: NzTreeNode, deep: number) => {
-        if (item.isChecked || (options.includeHalfChecked && item.isHalfChecked)) {
-          keys.push(
-            options.cb ?
-              options.cb(item, parent, deep) :
-              options.keyMapName ? item.origin[options.keyMapName] : item.key,
-          );
-        }
-      },
-    );
+    this.visitTree(tree, (item: NzTreeNode, parent: NzTreeNode, deep: number) => {
+      if (item.isChecked || (options.includeHalfChecked && item.isHalfChecked)) {
+        keys.push(
+          options.cb
+            ? options.cb(item, parent, deep)
+            : options.keyMapName
+            ? item.origin[options.keyMapName]
+            : item.key,
+        );
+      }
+    });
     return keys;
   }
 }

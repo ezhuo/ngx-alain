@@ -17,20 +17,12 @@ import { ACLCanType } from './acl.type';
 
 @Injectable({ providedIn: 'root' })
 export class ACLGuard implements CanActivate, CanActivateChild, CanLoad {
-  constructor(
-    private srv: ACLService,
-    private router: Router,
-    private options: DelonACLConfig,
-  ) { }
+  constructor(private srv: ACLService, private router: Router, private options: DelonACLConfig) {}
 
   private process(guard: ACLCanType | Observable<ACLCanType>): Observable<boolean> {
     return (guard && guard instanceof Observable
       ? guard
-      : of(
-        typeof guard !== 'undefined' && guard !== null
-          ? (guard as ACLCanType)
-          : null,
-      )
+      : of(typeof guard !== 'undefined' && guard !== null ? (guard as ACLCanType) : null)
     ).pipe(
       map(v => this.srv.can(v)),
       tap(v => {
@@ -52,10 +44,7 @@ export class ACLGuard implements CanActivate, CanActivateChild, CanLoad {
     return this.canActivate(childRoute, state);
   }
   // route
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ): Observable<boolean> {
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return this.process((route.data && route.data.guard) || null);
   }
 }

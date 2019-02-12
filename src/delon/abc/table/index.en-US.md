@@ -22,6 +22,7 @@ The value is URL.
 - Resolve backend data format through `res.reName` mapping data
 - Use `res.process` to optimize data before rendering table
 - Use `page.zeroIndexed` to adjust the http request when `pi` parameter follows the `0` base index, default is `1` base index
+- Automatically cancel paging when the response body value is an array type
 - Use `_HttpClient` send request, so applies to [AlainThemeConfig](/theme/http#AlainThemeConfig) configuration
 
 ### Static
@@ -35,7 +36,7 @@ The value is `STData[]` or `Observable<STData[]>`, both follow the following rul
 
 ## API
 
-### STComponent
+### st
 
 Property | Description | Type | Default
 -------- | ----------- | ---- | -------
@@ -45,10 +46,11 @@ Property | Description | Type | Default
 `[res]` | Http response configuration | `STRes` | -
 `[pi]` | Page index | `number` | `1`
 `[ps]` | Page size, `0` is no page, default is `10` | `number` | `10`
+`[total]` | Total data count, should set when nzServerRender is true, default is `0` | `number` | `0`
 `[page]` | Pager configuration | `STPage` | -
 `[noResult]` | Custom no result content | `string,TemplateRef<void>` | -
 `[bordered]` | Whether to show all table borders | `boolean` | `false`
-`[size]` | Size of table | `small,middle,default` | `default`
+`[size]` | Size of table | `'small','middle','default'` | `'default'`
 `[rowClassName]` | Row class name of table | `(record: STData, index: number) => string` | -
 `[loading]` | Loading status of table | `boolean` | `false`
 `[loadingDelay]` | Specifies a delay in milliseconds for loading state (prevent flush) | `number` | `0`
@@ -58,7 +60,10 @@ Property | Description | Type | Default
 `[rowClickTime]` | Click twice in the time range for double click, unit is millisecond | `number` | `200`
 `[header]` | Table header renderer | `string,TemplateRef<void>` | -
 `[footer]` | Table footer renderer | `string,TemplateRef<void>` | -
-`[body]` | Table extra body renderer, generally used to add total rows | `TemplateRef<void>` | -
+`[bodyHeader]` | Table extra body renderer in header, generally used to add total rows | `TemplateRef<STStatisticalResults>` | -
+`[body]` | Table extra body renderer, generally used to add total rows | `TemplateRef<STStatisticalResults>` | -
+`[widthConfig]` | Set col width can not used with width of STColumn | `string[]` | -
+`[expandRowByClick]` | Whether to expand row by clicking anywhere in the whole row | `boolean` | `false`
 `[expand]` | Whether current column include expand icon | `TemplateRef<void>` | -
 `(change)` | Events | `EventEmitter<STChange>` | -
 `(error)` | Error event | `EventEmitter<STError>` | -
@@ -67,6 +72,7 @@ Property | Description | Type | Default
 
 Name | Description
 ---- | -----------
+`resetColumns()` | Reset columns
 `load(pi = 1, extraParams?: any, options?: STLoadOptions)` | Load specified page
 `reload(extraParams?: any, options?: STLoadOptions)` | Refresh current page
 `reset(extraParams?: any, options?: STLoadOptions)` | Reset data and `pi` to `1`, including single multi-select, sort, filter status (Covered default state)
@@ -102,12 +108,14 @@ class TestComponent {
 
 Property | Description | Type | Default
 -------- | ----------- | ---- | -------
+`[type]` | Pagination type, `page` used `pi`, `ps`; `skip` used `skip`, `limit` | `page,skip` | `page`
 `[params]` | Request parameters, default to auto append `pi`, `ps` to URL | `any` | -
-`[method]` | Request method | `string` | `GET`
+`[method]` | Request method | `'POST','GET','HEAD','PUT','PATCH','DELETE'` | `'GET'`
 `[body]` | Request body (only method is POST)  | `any` | -
 `[headers]` | Request header | `any` | -
-`[reName]` | Map name `pi`、`ps` | `STReqReNameType` | `{ pi: 'pi', ps: 'ps' }`
+`[reName]` | Map name `pi`、`ps` | `STReqReNameType` | `{ pi: 'pi', ps: 'ps', skip: 'skip', limit: 'limit' }`
 `[allInBody]` | Whether to request all parameter data into `body` (except `url` itself parameter) | `boolean` | `false`
+`[process]` | Pre-request data processing | `(requestOptions: STRequestOptions) => STRequestOptions` | -
 
 ### STRes
 
@@ -122,7 +130,7 @@ Property | Description | Type | Default
 -------- | ----------- | ---- | -------
 `[front]` | Front paging when `data` is `any[]` or `Observable<any[]>` | `boolean` | `true`
 `[zeroIndexed]` | Whether the backend paging uses the `0` base index (only data is url) | `boolean` | `false`
-`[placement]` | Pager direction | `left,center,right` | `right`
+`[placement]` | Pager direction | `'left','center','right'` | `'right'`
 `[show]` | Whether to show pager | `boolean` | -
 `[showSize]` | Determine whether `ps` can be changed | `boolean` | `false`
 `[pageSizes]` | Specify the sizeChanger options | `number[]` | `[10, 20, 30, 40, 50]`
@@ -151,6 +159,7 @@ Property | Description | Type | Default
 `[sort]` | Parameters of type `sort` | `STChangeSort` | -
 `[filter]` | Parameters of type `filter` | `STColumn` | -
 `[click]` | Parameters of type `click` or `dblClick` | `STChangeRowClick` | -
+`[expand]` | Parameters of type `expand` | `STData` | -
 
 ### STChangeSort
 
@@ -212,7 +221,7 @@ Property | Description | Type | Default
 `[renderTitle]` | Title custom render template ID | `string` | -
 `[default]` | Replace with default value when no data exists | `string` | -
 `[buttons]` | Buttons of this column | `STColumnButton[]` | -
-`[width]` | Width of this column, e.g: `10%`、`100px` | `string` | -
+`[width]` | Width of this column (**NOTICE:** If the fixed column must be a number), e.g: `100`, `10%`, `100px` | `string,number` | -
 `[fixed]` | Set column to be fixed, must specify `width` | `left,right` | -
 `[format]` | Format value of this column | `function(cell: any, row: any)` | -
 `[className]` | Class name of this column, e.g: `text-center`, `text-right`, `text-danger`, pls refer to [Style Tools](/theme/tools) | `string` | -
@@ -228,6 +237,9 @@ Property | Description | Type | Default
 `[click]` | Callback of type is link | `(record: STData, instance?: STComponent) => void` | -
 `[badge]` | Config of type is badge | `STColumnBadge` | -
 `[tag]` | Config of type is tag | `STColumnTag` | -
+`[noIndex]` | Line number index start value | `number` | `1`
+`[iif]` | Custom conditional expression<br>1. Execute only once when `columns` is assigned<br>2. Call `resetColumns()` to trigger again | `(item: STColumn) => boolean` | -
+`[statistical]` | Statistics | `STStatisticalType,STStatistical` | -
 
 ### STColumnSort
 
@@ -296,7 +308,7 @@ Property | Description | Type | Default
 `[component]` | Modal component class, be sure to register in `entryComponents` | `any` | -
 `[params]` | Dialog parameter | `(record: STData) => Object` | -
 `[paramsName]` | Receive parameter name of the target component, If target component receive value is null, pls check [delon.module.ts](https://github.com/ng-alain/ng-alain/blob/master/src/app/delon.module.ts#L69) Global settings | `string` | record
-`[size]` | Size of modal | `sm, md, lg, xl, '', number` | `lg`
+`[size]` | Size of modal, support number type | `'sm','md','lg','xl'` | `'lg'`
 `[exact]` | Exact match return value, default is `true`, If the return value is not null (`null` or `undefined`) is considered successful, otherwise it is considered error. | `boolean` | `true`
 `[includeTabs]` | Whether to wrap the nz-tabset, fix content spacing problem | `boolean` | -
 `[modalOptions]` | nz-modal raw parameters [ModalOptionsForService](https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/components/modal/nz-modal.type.ts) | `any` | -
@@ -309,7 +321,7 @@ Property | Description | Type | Default
 `[component]` | Drawer component class, be sure to register in `entryComponents` | `any` | -
 `[params]` | Dialog parameter | `(record: STData) => Object` | -
 `[paramsName]` | Receive parameter name of the target component, If target component receive value is null, pls check [delon.module.ts](https://github.com/ng-alain/ng-alain/blob/master/src/app/delon.module.ts#L69) Global settings | `string` | record
-`[size]` | Size of drawer | `sm, md, lg, xl, number` | `md`
+`[size]` | Size of drawer, support number type | `'sm','md','lg','xl'` | `'md'`
 `[drawerOptions]` | nz-drawer raw parameters [NzDrawerOptions](https://ng.ant.design/components/drawer/zh#nzdraweroptions) | `any` | -
 
 ### STColumnSelection
@@ -342,3 +354,10 @@ Property | Description | Type | Default
 `[text]` | Tag text | `string` | -
 `[color]` | Tag color value | `string` | -
 
+### STStatistical
+
+Property | Description | Type | Default
+-------- | ----------- | ---- | -------
+`[type]` | Statistic type of current column | `STStatisticalType | STStatisticalFn` | -
+`[digits]` | The number of digits to appear after the decimal point | `number` | `2`
+`[currenty]` | Whether formatting currenty, default to `true` when `type` is `STStatisticalFn`,`sum`,`average`,`max`,`min` | `boolean` | -

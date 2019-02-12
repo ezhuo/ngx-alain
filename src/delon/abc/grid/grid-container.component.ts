@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  HostBinding,
-  Input,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
 import { REP_TYPE } from '@delon/theme';
 import { InputNumber } from '@delon/util';
 import { SGConfig } from './grid.config';
@@ -18,6 +13,7 @@ import { SGConfig } from './grid.config';
     '[class.sg__wrap]': 'true',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
+  exportAs: 'sgContainer',
 })
 export class SGContainerComponent {
   //#region fields
@@ -39,6 +35,6 @@ export class SGContainerComponent {
   }
 
   constructor(cog: SGConfig) {
-    Object.assign(this, cog);
+    Object.assign(this, { ...new SGConfig(), ...cog });
   }
 }

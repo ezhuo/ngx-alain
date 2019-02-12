@@ -1,8 +1,6 @@
 import { DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DelonFormModule } from '@delon/form';
-import { configureTestSuite, createTestContext } from '@delon/testing';
-import { AlainThemeModule } from '@delon/theme';
+import { ComponentFixture } from '@angular/core/testing';
+import { createTestContext } from '@delon/testing';
 import { deepCopy } from '@delon/util';
 import { configureSFTestSuite, SFPage, TestFormComponent } from '../../../spec/base.spec';
 import { SFSchema } from '../../../src/schema/index';
@@ -103,13 +101,13 @@ describe('form: widget: array', () => {
       const data = [{ a: 'a1' }, { a: 'a2' }];
       const s = deepCopy(schema) as SFSchema;
       s.properties.arr.default = data;
-      page.newSchema(s)
-          .checkCount('.sf-array-item', data.length)
-          .add()
-          .checkCount('.sf-array-item', data.length + 1)
-          .reset()
-          .checkCount('.sf-array-item', data.length)
-          ;
+      page
+        .newSchema(s)
+        .checkCount('.sf-array-item', data.length)
+        .add()
+        .checkCount('.sf-array-item', data.length + 1)
+        .reset()
+        .checkCount('.sf-array-item', data.length);
     });
   });
 });

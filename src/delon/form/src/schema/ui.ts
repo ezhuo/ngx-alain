@@ -132,8 +132,9 @@ export interface SFDataSchema {
    * - `input` 可能根据不同部件的情况存在值，例如：`autocomplete` 表示当前键入的值
    * - 参数、返回值：可能根据不同部件需求而定，具体参阅相应小部件独立说明
    */
-  asyncData?(input?: any): Observable<SFSchemaEnumType[]>;
+  asyncData?: (input?: any) => Observable<SFSchemaEnumType[]>;
 }
+
 
 export interface SFEnumSchema {
   /**
@@ -164,14 +165,14 @@ export interface SFoptionsSchema {
 /** 指定如何渲染 `Schema` */
 export interface SFUISchemaItem
   extends SFRenderSchema,
-  SFArraySchema,
-  SFHorizontalLayoutSchema,
-  SFDataSchema,
-  SFInputSchema,
+    SFArraySchema,
+    SFHorizontalLayoutSchema,
+    SFDataSchema,
+    SFInputSchema,
   SFEnumSchema,
   SFstyleSchema,
   SFoptionsSchema,
-  ErrorSchema {
+    ErrorSchema {
   [key: string]: any;
 
   /** 是否开启调试模式，在数据变更、校验会打印出相信信息，不建议在生产环境中使用 */

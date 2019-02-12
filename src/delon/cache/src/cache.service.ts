@@ -6,27 +6,27 @@ import { of, BehaviorSubject, Observable } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 
 import { DelonCacheConfig } from './cache.config';
-import {
-  CacheNotifyResult,
-  CacheNotifyType,
-  ICache,
-  ICacheStore,
-} from './interface';
+import { CacheNotifyResult, CacheNotifyType, ICache, ICacheStore } from './interface';
 import { DC_STORE_STORAGE_TOKEN } from './local-storage-cache.service';
 
 @Injectable({ providedIn: 'root' })
 export class CacheService implements OnDestroy {
   private readonly memory: Map<string, ICache> = new Map<string, ICache>();
-  private readonly notifyBuffer: Map<string, BehaviorSubject<CacheNotifyResult>> = new Map<string, BehaviorSubject<CacheNotifyResult>>();
+  private readonly notifyBuffer: Map<string, BehaviorSubject<CacheNotifyResult>> = new Map<
+    string,
+    BehaviorSubject<CacheNotifyResult>
+  >();
   private meta: Set<string> = new Set<string>();
   private freqTick = 3000;
   private freqTime;
+  private cog: DelonCacheConfig = {};
 
   constructor(
-    private options: DelonCacheConfig,
+    _: DelonCacheConfig,
     @Inject(DC_STORE_STORAGE_TOKEN) private store: ICacheStore,
     private http: HttpClient,
   ) {
+    Object.assign(this.cog, { ...new DelonCacheConfig(), ..._ });
     this.loadMeta();
     this.startExpireNotify();
   }
@@ -55,7 +55,7 @@ export class CacheService implements OnDestroy {
   }
 
   private loadMeta() {
-    const ret = this.store.get(this.options.meta_key);
+    const ret = this.store.get(this.cog.meta_key);
     if (ret && ret.v) {
       (ret.v as string[]).forEach(key => this.meta.add(key));
     }
@@ -64,7 +64,7 @@ export class CacheService implements OnDestroy {
   private saveMeta() {
     const metaData: string[] = [];
     this.meta.forEach(key => metaData.push(key));
-    this.store.set(this.options.meta_key, { v: metaData, e: 0 });
+    this.store.set(this.cog.meta_key, { v: metaData, e: 0 });
   }
 
   getMeta() {
@@ -100,21 +100,13 @@ export class CacheService implements OnDestroy {
    * - `set('data/1', 1)`
    * - `set('data/1', 1, { expire: 10 })`
    */
-  set(
-    key: string,
-    data: {},
-    options?: { type?: 's'; expire?: number },
-  ): void;
+  set(key: string, data: {}, options?: { type?: 's'; expire?: number }): void;
   /**
    * 指定缓存类型进行缓存对象，例如内存缓存：
    * - `set('data/1', 1, { type: 'm' })`
    * - `set('data/1', 1, { type: 'm', expire: 10 })`
    */
-  set(
-    key: string,
-    data: {},
-    options: { type: 'm' | 's'; expire?: number },
-  ): void;
+  set(key: string, data: {}, options: { type: 'm' | 's'; expire?: number }): void;
   /**
    * 缓存对象
    */
@@ -150,7 +142,7 @@ export class CacheService implements OnDestroy {
     if (type === 'm') {
       this.memory.set(key, value);
     } else {
-      this.store.set(this.options.prefix + key, value);
+      this.store.set(this.cog.prefix + key, value);
       this.pushMeta(key);
     }
     this.runNotify(key, 'set');
@@ -195,20 +187,17 @@ export class CacheService implements OnDestroy {
       expire?: number;
     } = {},
   ): Observable<any> | any {
-    const isPromise =
-      options.mode !== 'none' && this.options.mode === 'promise';
+    const isPromise = options.mode !== 'none' && this.cog.mode === 'promise';
     const value: ICache = this.memory.has(key)
       ? this.memory.get(key)
-      : this.store.get(this.options.prefix + key);
+      : this.store.get(this.cog.prefix + key);
     if (!value || (value.e && value.e > 0 && value.e < new Date().valueOf())) {
       if (isPromise) {
-        return this.http
-          .get(key)
-          .pipe(
-            // tslint:disable-next-line:no-any
-            map((ret: any) => this._deepGet(ret, this.options.reName as string[], null)),
-            tap(v => this.set(key, v)),
-          );
+        return this.http.get(key).pipe(
+          // tslint:disable-next-line:no-any
+          map((ret: any) => this._deepGet(ret, this.cog.reName as string[], null)),
+          tap(v => this.set(key, v, { type: options.type, expire: options.expire })),
+        );
       }
       return null;
     }
@@ -242,19 +231,11 @@ export class CacheService implements OnDestroy {
   /**
    * 获取缓存，若不存在则设置持久化缓存基础对象
    */
-  tryGet(
-    key: string,
-    data: {},
-    options?: { type?: 's'; expire?: number },
-  ): any;
+  tryGet(key: string, data: {}, options?: { type?: 's'; expire?: number }): any;
   /**
    * 获取缓存，若不存在则设置指定缓存类型进行缓存对象
    */
-  tryGet(
-    key: string,
-    data: {},
-    options: { type: 'm' | 's'; expire?: number },
-  ): any;
+  tryGet(key: string, data: {}, options: { type: 'm' | 's'; expire?: number }): any;
 
   /**
    * 获取缓存，若不存在则设置缓存对象
@@ -302,7 +283,7 @@ export class CacheService implements OnDestroy {
       this.memory.delete(key);
       return;
     }
-    this.store.remove(this.options.prefix + key);
+    this.store.remove(this.cog.prefix + key);
     this.removeMeta(key);
   }
 
@@ -315,7 +296,7 @@ export class CacheService implements OnDestroy {
   clear() {
     this.notifyBuffer.forEach((v, k) => this.runNotify(k, 'remove'));
     this.memory.clear();
-    this.meta.forEach(key => this.store.remove(this.options.prefix + key));
+    this.meta.forEach(key => this.store.remove(this.cog.prefix + key));
   }
 
   // #endregion

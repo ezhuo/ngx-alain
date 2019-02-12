@@ -79,8 +79,12 @@ export class UploadxWidget extends ControlWidget implements OnInit {
     btnType = '';
     avatar: any = null;
 
-    constructor(cd: ChangeDetectorRef, private modalSrv: NzModalService) {
-        super(cd);
+    // constructor(cd: ChangeDetectorRef, private modalSrv: NzModalService) {
+    //     super(cd);
+    // }
+
+    get modalSrv() {
+        return this.injector.get(NzModalService);
     }
 
     ngOnInit(): void {

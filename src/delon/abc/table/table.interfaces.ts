@@ -1,9 +1,16 @@
 // tslint:disable:no-any
+import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { DrawerHelperOptions, ModalHelperOptions } from '@delon/theme';
 import { ModalOptionsForService, NzDrawerOptions } from 'ng-zorro-antd';
 import { STComponent } from './table.component';
 
 export interface STReq {
+  /**
+   * 分页类型，默认：`page`
+   * - `page` 使用 `pi`，`ps` 组合
+   * - `skip` 使用 `skip`，`limit` 组合
+   */
+  type?: 'page' | 'skip';
   /**
    * 额外请求参数，默认自动附加 `pi`、`ps` 至URL
    * - `{ status: 'new' }` => `url?pi=1&ps=10&status=new`
@@ -24,6 +31,28 @@ export interface STReq {
    * 是否将请求所有参数数据都放入 `body` 当中（`url` 地址本身参数除外），仅当 `method: 'POST'` 时有效，默认：`false`
    */
   allInBody?: boolean;
+  /**
+   * 请求前数据处理
+   */
+  process?: (requestOptions: STRequestOptions) => STRequestOptions;
+}
+
+export interface STRequestOptions {
+  body?: any;
+  headers?:
+    | HttpHeaders
+    | {
+        [header: string]: string | string[];
+      };
+  params?:
+    | HttpParams
+    | {
+        [param: string]: string | string[];
+      };
+  observe?: 'body' | 'events' | 'response';
+  reportProgress?: boolean;
+  responseType?: 'arraybuffer' | 'blob' | 'json' | 'text';
+  withCredentials?: boolean;
 }
 
 export interface STLoadOptions {
@@ -40,7 +69,7 @@ export interface STRes {
   /**
    * 数据预处理
    */
-  process?(data: STData[]): STData[];
+  process?: (data: STData[]) => STData[];
 }
 
 export interface STPage {
@@ -123,6 +152,10 @@ export interface STData {
  */
 export interface STColumn {
   /**
+   * 用于定义数据源主键，例如：`STStatistical`
+   */
+  key?: string;
+  /**
    * 列标题
    */
   title: string;
@@ -152,21 +185,21 @@ export interface STColumn {
    * - `yn` 将`boolean`类型徽章化 [document](https://ng-alain.com/docs/data-render#yn)
    */
   type?:
-  | 'checkbox'
-  | 'link'
-  | 'badge'
-  | 'tag'
-  | 'radio'
-  | 'img'
-  | 'currency'
-  | 'number'
-  | 'date'
-  | 'yn'
-  | 'no';
+    | 'checkbox'
+    | 'link'
+    | 'badge'
+    | 'tag'
+    | 'radio'
+    | 'img'
+    | 'currency'
+    | 'number'
+    | 'date'
+    | 'yn'
+    | 'no';
   /**
    * 链接回调，若返回一个字符串表示导航URL会自动触发 `router.navigateByUrl`
    */
-  click?(record: STData, instance?: STComponent): any;
+  click?: (record: STData, instance?: STComponent) => any;
   /**
    * 按钮组
    */
@@ -190,7 +223,7 @@ export interface STColumn {
   /**
    * 列宽（数字型表示 `px` 值），例如：`100`、`10%`、`100px`
    *
-   * **注意：** 固定列不支持百分比
+   * **注意：** 若固定列必须是数字
    */
   width?: string | number;
   /**
@@ -206,7 +239,7 @@ export interface STColumn {
   /**
    * 格式化列值
    */
-  format?(item: STData, col: STColumn): string;
+  format?: (item: STData, col: STColumn) => string;
   /**
    * 自定义全/反选选择项
    */
@@ -263,8 +296,50 @@ export interface STColumn {
    * - 计算规则为：`index + noIndex`
    */
   noIndex?: number;
+  /**
+   * 条件表达式
+   * - 仅赋值 `columns` 时执行一次
+   * - 可调用 `resetColumns()` 再一次触发
+   */
+  iif?: (item: STColumn) => boolean;
+
+  /**
+   * 统计
+   */
+  statistical?: STStatisticalType | STStatistical;
 
   [key: string]: any;
+}
+
+export type STStatisticalType = 'count' | 'distinctCount' | 'sum' | 'average' | 'max' | 'min';
+
+export type STStatisticalFn = (
+  values: number[],
+  col: STColumn,
+  list: STData[],
+) => STStatisticalResult;
+
+export interface STStatistical {
+  type: STStatisticalType | STStatisticalFn;
+  /**
+   * 保留小数位数，默认：`2`
+   */
+  digits?: number;
+  /**
+   * 是否需要货币格式化，默认以下情况为 `true`
+   * - `type` 为 `STStatisticalFn`、 `sum`、`average`、`max`、`min`
+   */
+  currenty?: boolean;
+}
+
+export interface STStatisticalResults {
+  [key: string]: STStatisticalResult;
+  [index: number]: STStatisticalResult;
+}
+
+export interface STStatisticalResult {
+  value: number;
+  text?: string;
 }
 
 export interface STColumnSort {
@@ -275,7 +350,7 @@ export interface STColumnSort {
   /**
    * 本地数据的排序函数，使用一个函数(参考 [Array.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) 的 compareFunction)
    */
-  compare?(a: STData, b: STData): number;
+  compare?: (a: STData, b: STData) => number;
   /**
    * 远程数据的排序时后端相对应的KEY，默认使用 `index` 属性
    * - 若 `multiSort: false` 时：`key: 'name' => ?name=1&pi=1`
@@ -298,7 +373,7 @@ export interface STColumnFilter {
   /**
    * 本地数据的筛选函数
    */
-  fn?(filter: STColumnFilterMenu, record: STData): boolean;
+  fn?: (filter: STColumnFilterMenu, record: STData) => boolean;
   /**
    * 标识数据是否已过滤，筛选图标会高亮
    */
@@ -329,7 +404,7 @@ export interface STColumnFilter {
    * - 默认当 `multiple: true` 时以英文逗号拼接的字符串
    * @return 返回为 Object 对象
    */
-  reName?(list: STColumnFilterMenu[], col: STColumn): {};
+  reName?: (list: STColumnFilterMenu[], col: STColumn) => {};
 }
 
 export interface STColumnFilterMenu {
@@ -359,7 +434,7 @@ export interface STColumnSelection {
   /**
    * 选择项点击回调，允许对参数 `data.checked` 进行操作
    */
-  select(data: STData[]): void;
+  select: (data: STData[]) => void;
   /** 权限，等同 `can()` 参数值 */
   acl?: any;
 }
@@ -412,7 +487,7 @@ export interface STColumnButton {
   /**
    * 格式化文本，较高调用频率，请勿过多复杂计算免得产生性能问题
    */
-  format?(record: STData, btn: STColumnButton): string;
+  format?: (record: STData, btn: STColumnButton) => string;
   /**
    * 按钮类型
    * - `none` 无任何互动
@@ -430,10 +505,7 @@ export interface STColumnButton {
    * - reload：重新刷新当前页
    * - load：重新加载数据，并重置页码为：`1`
    */
-  click?:
-  | 'reload'
-  | 'load'
-  | ((record: STData, modal?: any, instance?: STComponent) => any);
+  click?: 'reload' | 'load' | ((record: STData, modal?: any, instance?: STComponent) => any);
   /**
    * 是否需要气泡确认框
    */
@@ -462,7 +534,7 @@ export interface STColumnButton {
   /**
    * 条件表达式，较高调用频率，请勿过多复杂计算免得产生性能问题
    */
-  iif?(item: STData, btn: STColumnButton, column: STColumn): boolean;
+  iif?: (item: STData, btn: STColumnButton, column: STColumn) => boolean;
 
   [key: string]: any;
 }
@@ -475,7 +547,7 @@ export interface STColumnButtonModal extends ModalHelperOptions {
   /**
    * 对话框参数
    */
-  params?(record: STData): {};
+  params?: (record: STData) => {};
   /**
    * 对话框目标组件的接收参数名，默认：`record`
    */
@@ -507,7 +579,7 @@ export interface STColumnButtonDrawer extends DrawerHelperOptions {
   /**
    * 抽屉参数
    */
-  params?(record: STData): {};
+  params?: (record: STData) => {};
   /**
    * 抽屉目标组件的接收参数名，默认：`record`
    */
@@ -547,6 +619,8 @@ export interface STColumnButtonDrawerConfig {
 export interface STReqReNameType {
   pi?: string;
   ps?: string;
+  skip?: string;
+  limit?: string;
 }
 
 export interface STResReNameType {
@@ -562,7 +636,7 @@ export interface STExportOptions {
   /** 文件名 */
   filename?: string;
   /** triggers when saveas */
-  callback?(wb: any): void;
+  callback?: (wb: any) => void;
 }
 
 /**
@@ -633,18 +707,18 @@ export interface STColumnTagValue {
    * - 色值：#f50,#ff0
    */
   color?:
-  | 'geekblue'
-  | 'blue'
-  | 'purple'
-  | 'success'
-  | 'red'
-  | 'volcano'
-  | 'orange'
-  | 'gold'
-  | 'lime'
-  | 'green'
-  | 'cyan'
-  | string;
+    | 'geekblue'
+    | 'blue'
+    | 'purple'
+    | 'success'
+    | 'red'
+    | 'volcano'
+    | 'orange'
+    | 'gold'
+    | 'lime'
+    | 'green'
+    | 'cyan'
+    | string;
 }
 
 export type STChangeType =
@@ -655,7 +729,8 @@ export type STChangeType =
   | 'sort'
   | 'filter'
   | 'click'
-  | 'dblClick';
+  | 'dblClick'
+  | 'expand';
 
 /**
  * 回调数据
@@ -697,6 +772,10 @@ export interface STChange {
    * 行点击或双击参数
    */
   click?: STChangeRowClick;
+  /**
+   * `expand` 参数
+   */
+  expand?: STData;
 }
 
 /** 行单击参数 */

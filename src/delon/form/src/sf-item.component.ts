@@ -8,6 +8,7 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { Subject } from 'rxjs';
 import { FormProperty } from './model/form.property';
 import { SFUISchemaItem } from './schema/ui';
 import { TerminatorService } from './terminator.service';
@@ -18,10 +19,13 @@ let nextUniqueId = 0;
 
 @Component({
   selector: 'sf-item',
-  template: `<ng-template #target></ng-template>`,
+  template: `
+    <ng-template #target></ng-template>
+  `,
 })
 export class SFItemComponent implements OnInit, OnChanges, OnDestroy {
   private ref: ComponentRef<Widget<FormProperty>>;
+  readonly unsubscribe$ = new Subject<void>();
   widget: Widget<FormProperty> = null;
 
   @Input() formProperty: FormProperty;
@@ -29,10 +33,7 @@ export class SFItemComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild('target', { read: ViewContainerRef })
   container: ViewContainerRef;
 
-  constructor(
-    private widgetFactory: WidgetFactory,
-    private terminator: TerminatorService,
-  ) { }
+  constructor(private widgetFactory: WidgetFactory, private terminator: TerminatorService) {}
 
   onWidgetInstanciated(widget: Widget<FormProperty>) {
     this.widget = widget;
@@ -48,21 +49,19 @@ export class SFItemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.terminator.onDestroy.subscribe(() => {
-      this.ngOnDestroy();
-    });
+    this.terminator.onDestroy.subscribe(() => this.ngOnDestroy());
   }
 
   ngOnChanges(): void {
-    this.ref = this.widgetFactory.createWidget(
-      this.container,
-      (this.formProperty.ui.widget || this.formProperty.schema.type) as string,
-    );
+    this.ref = this.widgetFactory.createWidget(this.container, (this.formProperty.ui.widget ||
+      this.formProperty.schema.type) as string);
     this.onWidgetInstanciated(this.ref.instance);
   }
 
   ngOnDestroy(): void {
-    this.formProperty.ui.__destroy = true;
+    const { unsubscribe$ } = this;
+    unsubscribe$.next();
+    unsubscribe$.complete();
     this.ref.destroy();
   }
 }

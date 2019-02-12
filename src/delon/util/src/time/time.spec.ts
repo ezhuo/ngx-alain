@@ -1,5 +1,5 @@
-import * as addDays from 'date-fns/add_days';
-import * as format from 'date-fns/format';
+import addDays from 'date-fns/add_days';
+import format from 'date-fns/format';
 import { getTimeDistance } from './time';
 
 describe('util: time', () => {

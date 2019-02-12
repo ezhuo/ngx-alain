@@ -5,6 +5,7 @@ import {
   ElementRef,
   HostBinding,
   Input,
+  NgZone,
   OnChanges,
   OnDestroy,
   OnInit,
@@ -47,6 +48,8 @@ export class G2BarComponent implements OnInit, OnChanges, OnDestroy {
 
   // #endregion
 
+  constructor(private ngZone: NgZone) {}
+
   private getHeight() {
     return this.title ? this.height - TITLE_HEIGHT : this.height;
   }
@@ -55,13 +58,13 @@ export class G2BarComponent implements OnInit, OnChanges, OnDestroy {
     const { node, padding } = this;
 
     const container = node.nativeElement as HTMLElement;
-    const chart = this.chart = new G2.Chart({
+    const chart = (this.chart = new G2.Chart({
       container,
       forceFit: true,
       legend: null,
       height: this.getHeight(),
       padding,
-    });
+    }));
     this.updatelabel();
     chart.axis('y', {
       title: false,
@@ -91,7 +94,7 @@ export class G2BarComponent implements OnInit, OnChanges, OnDestroy {
 
   private attachChart() {
     const { chart, padding, data, color } = this;
-    if (!chart || !data || data.length <= 0) return ;
+    if (!chart || !data || data.length <= 0) return;
     this.installResizeEvent();
     const height = this.getHeight();
     if (chart.get('height') !== height) {
@@ -119,15 +122,15 @@ export class G2BarComponent implements OnInit, OnChanges, OnDestroy {
         filter(() => this.chart),
         debounceTime(200),
       )
-      .subscribe(() => this.updatelabel());
+      .subscribe(() => this.ngZone.runOutsideAngular(() => this.updatelabel()));
   }
 
   ngOnInit() {
-    setTimeout(() => this.install(), this.delay);
+    this.ngZone.runOutsideAngular(() => setTimeout(() => this.install(), this.delay));
   }
 
   ngOnChanges(): void {
-    this.attachChart();
+    this.ngZone.runOutsideAngular(() => this.attachChart());
   }
 
   ngOnDestroy(): void {
@@ -135,7 +138,7 @@ export class G2BarComponent implements OnInit, OnChanges, OnDestroy {
       this.resize$.unsubscribe();
     }
     if (this.chart) {
-      this.chart.destroy();
+      this.ngZone.runOutsideAngular(() => this.chart.destroy());
     }
   }
 }

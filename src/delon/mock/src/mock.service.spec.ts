@@ -45,7 +45,8 @@ describe('mock: service', () => {
     beforeEach(() =>
       genModule({
         data: DATA,
-      }));
+      }),
+    );
 
     afterEach(() => srv.ngOnDestroy());
 
@@ -67,6 +68,10 @@ describe('mock: service', () => {
       expect(rule).not.toBeNull();
       expect(rule.method).toBe('GET');
       expect(rule.url).toBe('/users/2');
+    });
+
+    it('should be starts with URL in route param', () => {
+      expect(srv.getRule('GET', '/org/users/2')).toBeNull();
     });
 
     it('should be support regex', () => {

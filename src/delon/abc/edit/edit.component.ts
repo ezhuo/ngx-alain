@@ -101,7 +101,10 @@ export class SEComponent implements OnChanges, AfterViewInit, OnDestroy {
     this.labelWidth = parent.labelWidth;
     clsMap.forEach(cls => ren.removeClass(el, cls));
     clsMap.length = 0;
-    const repCls = parent.nzLayout === 'horizontal' ? this.rep.genCls(col != null ? col : parent.colInCon || parent.col) : [];
+    const repCls =
+      parent.nzLayout === 'horizontal'
+        ? this.rep.genCls(col != null ? col : parent.colInCon || parent.col)
+        : [];
     clsMap.push(`ant-form-item`, ...repCls, `${prefixCls}__item`);
     if (this.line || parent.line) {
       clsMap.push(`${prefixCls}__line`);
@@ -115,19 +118,23 @@ export class SEComponent implements OnChanges, AfterViewInit, OnDestroy {
     if (!this.ngControl || this.status$) return;
 
     this.status$ = this.ngControl.statusChanges.subscribe(res => {
-      if (this.ngControl.isDisabled) {
-        return ;
+      if (this.ngControl.disabled || this.ngControl.isDisabled) {
+        return;
       }
-      const status = res !== 'VALID';
-      if (!this.onceFlag || this.invalid === status) {
+      const invalid = res === 'INVALID';
+      if (!this.onceFlag) {
         this.onceFlag = true;
         return;
       }
-      this.invalid = status;
+      this.invalid = this.ngControl.dirty && invalid;
       this.cdr.detectChanges();
     });
+
     if (this._autoId) {
-      const control = deepGet(this.ngControl.valueAccessor, '_elementRef.nativeElement') as HTMLElement;
+      const control = deepGet(
+        this.ngControl.valueAccessor,
+        '_elementRef.nativeElement',
+      ) as HTMLElement;
       if (control) {
         control.id = this._id;
       }

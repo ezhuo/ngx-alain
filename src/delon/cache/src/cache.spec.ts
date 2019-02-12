@@ -1,8 +1,4 @@
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
-import { Injector } from '@angular/core';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed, TestBedStatic } from '@angular/core/testing';
 import { of, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -43,11 +39,7 @@ describe('cache: service', () => {
 
   function genModule() {
     injector = TestBed.configureTestingModule({
-      imports: [
-        HttpClientTestingModule,
-        AlainThemeModule.forRoot(),
-        DelonCacheModule,
-      ],
+      imports: [HttpClientTestingModule, AlainThemeModule.forRoot(), DelonCacheModule],
       providers: [],
     });
 
@@ -138,6 +130,19 @@ describe('cache: service', () => {
         srv.get(k).subscribe(res => {
           expect(res).toBe('ok!');
           expect(srv.getNone(k)).toBe('ok!');
+          done();
+        });
+        injector
+          .get(HttpTestingController)
+          .expectOne(k)
+          .flush('ok!');
+      });
+      it('should be specify sotre type via promise mode', (done: () => void) => {
+        const k = '/data/1';
+        const setSpy = spyOn(srv, 'set');
+        srv.get(k, { mode: 'promise', type: 'm' }).subscribe(res => {
+          const data = setSpy.calls.mostRecent().args[2];
+          expect(data.type).toBe('m');
           done();
         });
         injector
@@ -252,9 +257,7 @@ describe('cache: service', () => {
         expect(srv._deepGet(tree, ['status'])).toBe(tree.status);
       });
       it('should be get [responsne.totle]', () => {
-        expect(srv._deepGet(tree, ['responsne', 'total'])).toBe(
-          tree.responsne.total,
-        );
+        expect(srv._deepGet(tree, ['responsne', 'total'])).toBe(tree.responsne.total);
       });
       it('should be return default value when not exist deep key', () => {
         const def = 'aa';
