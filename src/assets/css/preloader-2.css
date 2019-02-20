@@ -1,8 +1,12 @@
+@charset "UTF-8";
+.preloader {
+    background: #000 !important;
+}
+
 @-webkit-keyframes spin {
     0% {
         transform: rotate(0)
     }
-
     100% {
         transform: rotate(360deg)
     }
@@ -12,7 +16,6 @@
     0% {
         -moz-transform: rotate(0)
     }
-
     100% {
         -moz-transform: rotate(360deg)
     }
@@ -22,7 +25,6 @@
     0% {
         transform: rotate(0)
     }
-
     100% {
         transform: rotate(360deg)
     }
@@ -51,8 +53,7 @@
     animation: spin 2s linear infinite
 }
 
-.spinner div:first-child:after,
-.spinner div:first-child:before {
+.spinner div:first-child:after, .spinner div:first-child:before {
     content: '';
     position: absolute;
     border-radius: 50%

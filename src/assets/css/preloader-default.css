@@ -1,21 +1,21 @@
 @charset "UTF-8";
+.preloader {
+    background: #49a9ee !important;
+}
 
 @keyframes lol {
     0% {
         opacity: 0;
         transform: translateX(-300px)
     }
-
     33% {
         opacity: 1;
         transform: translateX(0)
     }
-
     66% {
         opacity: 1;
         transform: translateX(0)
     }
-
     100% {
         opacity: 0;
         transform: translateX(300px)
