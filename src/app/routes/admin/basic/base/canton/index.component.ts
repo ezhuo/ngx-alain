@@ -1,19 +1,25 @@
 import { Component, Injector, ChangeDetectionStrategy } from '@angular/core';
 import { IndexControl } from '@core';
 
+const changeDetection = ChangeDetectionStrategy.OnPush;
+
 @Component({
   selector: 'app-base-canton',
   templateUrl: `./index.component.html`,
   styleUrls: [`./index.component.less`],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection,
 })
 export class CantonComponent extends IndexControl {
   constructor(protected injector: Injector) {
     super(injector);
-    super.__init__(this, {
-      url: '/canton',
-      key: 'canton_id',
-    });
+    super.__init__(
+      this,
+      {
+        url: '/canton',
+        key: 'canton_id',
+      },
+      { changeDetection },
+    );
   }
 
   jstree = {

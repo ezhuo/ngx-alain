@@ -1,4 +1,3 @@
-// tslint:disable:no-any
 import { deepCopy, toBoolean } from '@delon/util';
 import { of, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -28,7 +27,8 @@ export function isBlank(o: any) {
 }
 
 export function toBool(value: any, defaultValue: boolean) {
-  return toBoolean(value, defaultValue);
+  value = toBoolean(value, true);
+  return value == null ? defaultValue : value;
 }
 
 export function di(ui: SFUISchema, ...args) {

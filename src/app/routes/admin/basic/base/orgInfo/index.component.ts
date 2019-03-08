@@ -14,11 +14,13 @@ import { OrgInfoEditComponent } from './modal/edit.component';
 import { OrgInfoShowComponent } from './modal/show.component';
 import { NzFormatEmitEvent, NzTreeNode, NzTreeComponent } from 'ng-zorro-antd';
 
+const changeDetection = ChangeDetectionStrategy.OnPush;
+
 @Component({
   selector: 'app-base-orgInfo',
   templateUrl: `./index.component.html`,
   styleUrls: [`./index.component.less`],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection,
 })
 export class OrgInfoComponent extends IndexControl implements OnInit {
   @ViewChild('st')
@@ -30,10 +32,14 @@ export class OrgInfoComponent extends IndexControl implements OnInit {
 
   constructor(protected injector: Injector) {
     super(injector);
-    super.__init__(this, {
-      url: '/orginfo',
-      key: 'org_id',
-    });
+    super.__init__(
+      this,
+      {
+        url: '/orginfo',
+        key: 'org_id',
+      },
+      { changeDetection },
+    );
   }
 
   ngOnInit() {

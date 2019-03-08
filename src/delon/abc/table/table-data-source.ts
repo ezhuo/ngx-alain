@@ -56,6 +56,8 @@ export interface STDataSourceResult {
 
 @Injectable()
 export class STDataSource {
+  private sortTick = 0;
+
   constructor(
     private http: HttpService,
     @Host() private currentyPipe: CNCurrencyPipe,
@@ -202,7 +204,7 @@ export class STDataSource {
     let ret = value;
     switch (col.type) {
       case 'no':
-        ret = col.noIndex + idx;
+        ret = this.getNoIndex(item, col, idx);
         break;
       case 'img':
         ret = value ? `<img src="${value}" class="img">` : '';
@@ -262,7 +264,11 @@ export class STDataSource {
     return this.http.request(method, url, reqOptions);
   }
 
-  //#region sort
+  getNoIndex(item: STData, col: STColumn, idx: number): number {
+    return typeof col.noIndex === 'function' ? col.noIndex(item, col, idx) : col.noIndex + idx;
+  }
+
+  // #region sort
 
   private getValidSort(columns: STColumn[]): STSortMap[] {
     return columns
@@ -289,6 +295,10 @@ export class STDataSource {
     };
   }
 
+  get nextSortTick(): number {
+    return ++this.sortTick;
+  }
+
   getReqSortMap(
     singleSort: STSingleSort,
     multiSort: STMultiSort,
@@ -305,13 +315,10 @@ export class STDataSource {
         nameSeparator: '.',
         ...multiSort,
       };
-      sortList.forEach(item => {
-        ret[item.key] = (item.reName || {})[item.default] || item.default;
-      });
-      // 合并处理
+
       ret = {
-        [ms.key]: Object.keys(ret)
-          .map(key => key + ms.nameSeparator + ret[key])
+        [ms.key]: sortList.sort((a, b) => a.tick - b.tick)
+          .map(item => item.key + ms.nameSeparator + ((item.reName || {})[item.default] || item.default))
           .join(ms.separator),
       };
     } else {
@@ -327,9 +334,9 @@ export class STDataSource {
     return ret;
   }
 
-  //#endregion
+  // #endregion
 
-  //#region filter
+  // #region filter
 
   private getReqFilterMap(columns: STColumn[]): { [key: string]: string } {
     let ret = {};
@@ -348,7 +355,7 @@ export class STDataSource {
     return ret;
   }
 
-  //#endregion
+  // #endregion
 
   // #region statistical
 

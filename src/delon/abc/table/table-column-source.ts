@@ -8,6 +8,8 @@ import { STConfig } from './table.config';
 import { STColumn, STColumnButton, STColumnFilter, STColumnSort } from './table.interfaces';
 
 export interface STSortMap extends STColumnSort {
+  [key: string]: any;
+
   /** 是否启用排序 */
   enabled?: boolean;
 }
@@ -120,7 +122,6 @@ export class STColumnSource {
     if (item.sorter && typeof item.sorter === 'function') {
       return {
         enabled: true,
-        // tslint:disable-next-line:no-any
         default: item.sort as any,
         compare: item.sorter,
         key: item.sortKey || item.indexKey,
@@ -157,7 +158,6 @@ export class STColumnSource {
         confirmText: item.filterConfirmText,
         clearText: item.filterClearText,
         default: item.filtered,
-        // tslint:disable-next-line:no-any
         fn: item.filter as any,
         icon: item.filterIcon,
         key: item.filterKey || item.indexKey,
@@ -276,7 +276,6 @@ export class STColumnSource {
         (item.type === 'badge' && item.badge == null) ||
         (item.type === 'tag' && item.tag == null)
       ) {
-        // tslint:disable-next-line:no-any
         (item as any).type = '';
       }
       // className

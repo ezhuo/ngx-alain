@@ -7,16 +7,18 @@ import {
 import { ModalControl } from '@core';
 import { tplModalShowHTML } from '@layout';
 
+const changeDetection = ChangeDetectionStrategy.OnPush;
+
 @Component({
   selector: 'app-system-logs-show',
   template: tplModalShowHTML,
   styles: [``],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection,
 })
 export class LogsShowComponent extends ModalControl implements OnInit {
   constructor(protected injector: Injector) {
     super(injector);
-    super.__init__(this);
+    super.__init__(this, null, { changeDetection });
   }
 
   ngOnInit() {

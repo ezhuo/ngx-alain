@@ -1,32 +1,56 @@
-<div class="alain-default__content-title">
-  <h1>
-    <span [innerHTML]="pageTitle"></span>
-    <small></small>
-  </h1>
-  <div>
-    <button nz-button (click)="add()" [nzType]="'primary'" [nzSize]="'large'">新建</button>
-  </div>
-</div>
+<page-header [title]="pageTitle" [autoBreadcrumb]="false" [action]="action">
+  <ng-template #action> </ng-template>
+</page-header>
 
-<sf #sf mode="search" [schema]="schemaData.search" [formData]="tableParams" (formSubmit)="searchSubmit(st,$event)" (formReset)="st.reset(tableParams)" class="search-form" [button]="'none'">
-  <nz-form-item class="sf-btns">
-    <nz-form-control class="ant-form-item-control-wrapper">
-      <div class="ant-form-item-control">
-        <button type="submit" nz-button [nzType]="'primary'" [nzLoading]="httpSrv.loading">查询</button>
-      </div>
-    </nz-form-control>
-  </nz-form-item>
-  <nz-form-item class="sf-btns">
-    <nz-form-control class="ant-form-item-control-wrapper">
-      <div class="ant-form-item-control">
-        <button nz-button (click)="appCase.exportXlsFromSt(st)">导出</button>
-      </div>
-    </nz-form-control>
-  </nz-form-item>
-</sf>
+<div class="ngx-alain__page-content-nz-card">
+  <nz-card [nzBordered]="false">
+    <sf
+      #sf
+      mode="search"
+      [schema]="schemaData.search"
+      [formData]="tableParams"
+      (formSubmit)="searchSubmit(st, $event)"
+      (formReset)="st.reset(tableParams)"
+      class="search-form"
+      [button]="'none'"
+    >
+      <nz-form-item class="sf-btns">
+        <nz-form-control class="ant-form-item-control-wrapper">
+          <div class="ant-form-item-control">
+            <button
+              type="submit"
+              nz-button
+              [nzType]="'primary'"
+              [nzLoading]="httpSrv.loading"
+            >
+              查询
+            </button>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item class="sf-btns">
+        <nz-form-control class="ant-form-item-control-wrapper">
+          <div class="ant-form-item-control">
+            <button nz-button (click)="appCase.exportXlsFromSt(st)">
+              导出
+            </button>
+          </div>
+        </nz-form-control>
+      </nz-form-item>
+    </sf>
+  </nz-card>
 
-<div nz-row nzGutter="16">
-  <div nz-col nzSpan="24">
-    <st #st class="simple-table" [data]="dataSource.url" [columns]="tableData.col" [req]="tableReq"></st>
-  </div>
+  <nz-card [nzBordered]="false">
+    <div nz-row nzGutter="16">
+      <div nz-col nzSpan="24">
+        <st
+          #st
+          class="simple-table"
+          [data]="dataSource.url"
+          [columns]="tableData.col"
+          [req]="tableReq"
+        ></st>
+      </div>
+    </div>
+  </nz-card>
 </div>

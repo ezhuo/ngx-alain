@@ -70,6 +70,6 @@ src
 
 ```
 1. form\src\sf.component.ts：添加了 submit() 方法
-2. form\src\sf-item-wrap.component.ts：添加了[ngStyle]="ui.styleLabel" 和 [ngStyle]="ui.styleControl"
+2. form\src\sf-item-wrap.component.html：添加了[ngStyle]="ui.styleLabel" 和 [ngStyle]="ui.styleControl"
 3. form\src\schema\ui.ts：添加了 SFEnumSchema , SFstyleSchema，SFoptionsSchema 接口
 ```

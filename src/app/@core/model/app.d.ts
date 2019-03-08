@@ -1,6 +1,8 @@
+import { ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { SFSchema, SFUISchema } from '@delon/form';
-import { STColumn, STReq } from '@delon/abc';
+import { STColumn, STReq, STData } from '@delon/abc';
+import { of, Observable } from 'rxjs';
 
 /**
  * 动态表单结构
@@ -86,6 +88,11 @@ export interface DataSource {
   url?: string;
 
   /**
+   * 表格的URL
+   */
+  stUrl?: string | STData[] | Observable<STData[]>;
+
+  /**
    * 主键KEY
    */
   key?: string;
@@ -122,6 +129,10 @@ export interface PageData {
   title?: any;
 }
 
+export interface PageParams {
+  changeDetection?: ChangeDetectionStrategy;
+}
+
 /**
  * 页面传值
  */
@@ -130,4 +141,14 @@ export interface ComponentData {
   name?: string;
   //元数据
   meta?: any;
+}
+
+/**
+ * 与对话框之间传值
+ */
+export interface ModalParamsFormat {
+  dataSource?: DataSource;
+  form?: FormData;
+  schemaData?: SchemaData;
+  modalData?: ModalData;
 }

@@ -9,7 +9,10 @@ import { helpers } from '@core';
   <sf-item-wrap [id]="id" [schema]="schema" [ui]="ui" [showError]="showError" [error]="error" [showTitle]="schema.title">
     
     <ng-container *ngIf="!isFiles">
-        <div [safeHTML]="getTextValue"></div>
+        <div [safeHTML]="getTextValue" *ngIf="!isAvatar"></div>
+        <a [attr.href]="value" target="_blank" class="avatar-show" *ngIf="isAvatar">
+          <img [src]="value" class="avatar " />
+        </a>
     </ng-container>
 
     <ng-container *ngIf="isFiles">
@@ -30,14 +33,18 @@ export class TextsWidget extends ControlWidget implements OnInit {
 
   ngOnInit(): void {
     this.ui._required = false;
+    console.log(this.value);
   }
 
   get isPicture() {
-    this.ui.options = this.ui.options || {};
     return this.isFiles && (
-      this.ui.options['avatar'] ||
-      (['picture', 'picture-card'].indexOf(this.ui.listType) > -1)
+      this.isAvatar || (['picture', 'picture-card'].indexOf(this.ui.listType) > -1)
     );
+  }
+
+  get isAvatar() {
+    this.ui.options = this.ui.options || {};
+    return this.ui.options['avatar'];
   }
 
   get isFiles() {

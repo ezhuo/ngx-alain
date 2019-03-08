@@ -9,11 +9,13 @@ import {
 import { ModalControl } from '@core';
 import { NzTreeNode, NzTreeComponent } from 'ng-zorro-antd';
 
+const changeDetection = ChangeDetectionStrategy.Default;
+
 @Component({
   selector: 'app-system-role-edit',
   templateUrl: `./edit.component.html`,
   styles: [``],
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection,
 })
 export class RoleEditComponent extends ModalControl
   implements OnInit, OnDestroy {
@@ -21,7 +23,7 @@ export class RoleEditComponent extends ModalControl
 
   constructor(protected injector: Injector) {
     super(injector);
-    super.__init__(this);
+    super.__init__(this, null, { changeDetection });
   }
 
   ngOnInit() {

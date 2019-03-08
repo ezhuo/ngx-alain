@@ -10,7 +10,7 @@ import {
   Output,
   TemplateRef,
 } from '@angular/core';
-import { DelonLocaleService } from '@delon/theme';
+import { DelonLocaleService, LocaleData } from '@delon/theme';
 import { deepCopy, InputBoolean } from '@delon/util';
 import { Subscription } from 'rxjs';
 
@@ -47,22 +47,21 @@ export function useFactory(
   ],
   host: {
     '[class.sf]': 'true',
-    '[class.sf-search]': `mode === 'search'`,
-    '[class.sf-edit]': `mode === 'edit'`,
+    '[class.sf__search]': `mode === 'search'`,
+    '[class.sf__edit]': `mode === 'edit'`,
     '[class.sf__no-error]': `onlyVisual`,
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SFComponent implements OnInit, OnChanges, OnDestroy {
   private i18n$: Subscription;
-  // tslint:disable-next-line:no-any
-  locale: any = {};
   private _renders = new Map<string, TemplateRef<void>>();
   private _item: {};
   private _valid = true;
   private _defUi: SFUISchemaItem;
   private _inited = false;
 
+  locale: LocaleData = {};
   rootProperty: FormProperty = null;
   _formData: {};
   _btn: SFButton;
@@ -142,7 +141,6 @@ export class SFComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   /** 表单值 */
-  // tslint:disable-next-line:no-any
   get value(): { [key: string]: any } {
     return this._item;
   }
@@ -159,7 +157,6 @@ export class SFComponent implements OnInit, OnChanges, OnDestroy {
    * 根据路径获取表单元素当前值
    * @param path [路径](https://ng-alain.com/form/qa#path)
    */
-  // tslint:disable-next-line:no-any
   getValue(path: string): any {
     return this.getProperty(path)!.value;
   }
@@ -169,7 +166,6 @@ export class SFComponent implements OnInit, OnChanges, OnDestroy {
    * @param path [路径](https://ng-alain.com/form/qa#path)
    * @param value 新值
    */
-  // tslint:disable-next-line:no-any
   setValue(path: string, value: any): this {
     const item = this.getProperty(path);
     if (!item) {
@@ -230,7 +226,7 @@ export class SFComponent implements OnInit, OnChanges, OnDestroy {
           widget: property.type,
           ...(property.format && FORMATMAPS[property.format]),
           ...(typeof property.ui === 'string' ? { widget: property.ui } : null),
-          ...(!property.ui && Array.isArray(property.enum) && property.enum.length > 0
+          ...(!property.format && !property.ui && Array.isArray(property.enum) && property.enum.length > 0
             ? { widget: 'select' }
             : null),
           ...this._defUi,

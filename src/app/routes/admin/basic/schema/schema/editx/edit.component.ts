@@ -6,10 +6,12 @@ import {
 } from '@angular/core';
 import { ModalControl } from '@core';
 
+const changeDetection = ChangeDetectionStrategy.Default;
+
 @Component({
   selector: 'app-schema-edit',
   templateUrl: './edit.component.html',
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection,
 })
 export class SchemaFormEditxComponent extends ModalControl implements OnInit {
   i: any;

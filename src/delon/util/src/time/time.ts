@@ -1,8 +1,11 @@
 import * as addDays from 'date-fns/add_days';
+import * as endOfDay from 'date-fns/end_of_day';
 import * as endOfMonth from 'date-fns/end_of_month';
 import * as endOfWeek from 'date-fns/end_of_week';
 import * as endOfYear from 'date-fns/end_of_year';
+import * as format from 'date-fns/format';
 import * as parse from 'date-fns/parse';
+import * as startOfDay from 'date-fns/start_of_day';
 import * as startOfMonth from 'date-fns/start_of_month';
 import * as startOfWeek from 'date-fns/start_of_week';
 import * as startOfYear from 'date-fns/start_of_year';
@@ -16,29 +19,61 @@ import * as subYears from 'date-fns/sub_years';
  * @param time 开始时间
  */
 export function getTimeDistance(
-  type: 'today' | '-today' | 'week' | '-week' | 'month' | '-month' | 'year' | '-year' | number,
+  type:
+    | 'today'
+    | '-today'
+    | 'yesterday'
+    | 'week'
+    | '-week'
+    | 'month'
+    | '-month'
+    | 'year'
+    | '-year'
+    | number,
   time?: Date | string | number,
 ): [Date, Date] {
   time = parse(time || new Date());
+  const options = { weekStartsOn: 1 };
 
+  let res: [Date, Date];
   switch (type) {
     case 'today':
-      return [time, time];
+      res = [time, time];
+      break;
     case '-today':
-      return [addDays(time, -1), time];
+      res = [addDays(time, -1), time];
+      break;
+    case 'yesterday':
+      res = [addDays(time, -1), addDays(time, -1)];
+      break;
     case 'week':
-      return [startOfWeek(time), endOfWeek(time)];
+      res = [startOfWeek(time, options), endOfWeek(time, options)];
+      break;
     case '-week':
-      return [startOfWeek(subWeeks(time, 1)), endOfWeek(subWeeks(time, 1))];
+      res = [startOfWeek(subWeeks(time, 1), options), endOfWeek(subWeeks(time, 1), options)];
+      break;
     case 'month':
-      return [startOfMonth(time), endOfMonth(time)];
+      res = [startOfMonth(time), endOfMonth(time)];
+      break;
     case '-month':
-      return [startOfMonth(subMonths(time, 1)), endOfMonth(subMonths(time, 1))];
+      res = [startOfMonth(subMonths(time, 1)), endOfMonth(subMonths(time, 1))];
+      break;
     case 'year':
-      return [startOfYear(time), endOfYear(time)];
+      res = [startOfYear(time), endOfYear(time)];
+      break;
     case '-year':
-      return [startOfYear(subYears(time, 1)), endOfYear(subYears(time, 1))];
+      res = [startOfYear(subYears(time, 1)), endOfYear(subYears(time, 1))];
+      break;
     default:
-      return type > 0 ? [time, addDays(time, type)] : [addDays(time, type), time];
+      res = type > 0 ? [time, addDays(time, type)] : [addDays(time, type), time];
+      break;
   }
+  return fixEndTimeOfRange(res);
+}
+
+/**
+ * fix time is the most, big value
+ */
+export function fixEndTimeOfRange(dates: [Date, Date]): [Date, Date] {
+  return [ startOfDay(dates[0]), endOfDay(dates[1]) ];
 }

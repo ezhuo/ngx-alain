@@ -7,16 +7,18 @@ import {
 import { ModalControl } from '@core';
 import { tplModalEditHTML } from '@layout';
 
+const changeDetection = ChangeDetectionStrategy.Default;
+
 @Component({
   selector: 'app-account-edit',
   template: tplModalEditHTML,
   styles: [``],
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection,
 })
 export class AccountEditComponent extends ModalControl implements OnInit {
   constructor(protected injector: Injector) {
     super(injector);
-    super.__init__(this);
+    super.__init__(this, null, { changeDetection });
   }
 
   ngOnInit() {
@@ -40,7 +42,7 @@ export class AccountEditComponent extends ModalControl implements OnInit {
   }
 
   onSubmit($event: any) {
-    this.cdr.detectChanges();
+    this.detectChanges();
     const formData = this.appBase.__formatSubmitData(
       $event.value,
       this.schemaData.edit,

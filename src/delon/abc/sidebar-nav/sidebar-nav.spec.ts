@@ -10,6 +10,7 @@ import { configureTestSuite } from '@delon/testing';
 import { AlainThemeModule, MenuIcon, MenuService, SettingsService, WINDOW } from '@delon/theme';
 import { deepCopy } from '@delon/util';
 
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { SidebarNavComponent } from './sidebar-nav.component';
 import { SidebarNavModule } from './sidebar-nav.module';
 import { Nav } from './sidebar-nav.types';
@@ -75,7 +76,7 @@ describe('abc: sidebar-nav', () => {
 
   function createModule() {
     injector = TestBed.configureTestingModule({
-      imports: [RouterModule.forRoot([]), AlainThemeModule, SidebarNavModule],
+      imports: [RouterModule.forRoot([]), AlainThemeModule, HttpClientTestingModule, SidebarNavModule],
       declarations: [TestComponent],
       providers: [
         { provide: ACLService, useClass: MockACLService },
@@ -289,7 +290,8 @@ describe('abc: sidebar-nav', () => {
         setSrv.layout.collapsed = true;
         fixture.detectChanges();
         page.showSubMenu();
-        spyOn(context.comp.floatingEl, 'remove');
+        // tslint:disable-next-line: no-string-literal
+        spyOn(context.comp['floatingEl'], 'remove');
         page.hideSubMenu();
         expect(page.getEl<HTMLElement>(floatingShowCls, true)).toBeNull();
       });
@@ -316,6 +318,50 @@ describe('abc: sidebar-nav', () => {
         menuSrv.add(newMenus);
         const itemEl = page.getEl<HTMLElement>('.sidebar-nav__item [data-id="3"]');
         expect(itemEl == null).toBe(true);
+      });
+    });
+
+    describe('#openStrictly', () => {
+      beforeEach(() => {
+        createComp();
+        context.openStrictly = true;
+        fixture.detectChanges();
+        menuSrv.add([
+          {
+            text: '',
+            group: true,
+            children: [
+              {
+                text: '',
+                open: true,
+                children: [
+                  { text: '' },
+                ],
+              },
+              {
+                text: '',
+                open: true,
+                children: [
+                  { text: '' },
+                ],
+              },
+            ],
+          },
+        ] as Nav[]);
+        fixture.detectChanges();
+      });
+      it('should working', () => {
+        page.checkCount('.sidebar-nav__open', 2);
+      });
+      it(`should be won't close other item`, () => {
+        const list = dl.queryAll(By.css('.sidebar-nav__item-link'));
+        expect(list.length).toBe(4);
+        (list[0].nativeElement as HTMLElement).click();
+        fixture.detectChanges();
+        page.checkCount('.sidebar-nav__open', 1);
+        (list[2].nativeElement as HTMLElement).click();
+        fixture.detectChanges();
+        page.checkCount('.sidebar-nav__open', 0);
       });
     });
   });
@@ -354,7 +400,7 @@ describe('abc: sidebar-nav', () => {
       });
       router.navigateByUrl('/');
       fixture.detectChanges();
-      tick(20);
+      tick(1000);
       expect(setSrv.layout.collapsed).toBe(defaultCollapsed);
     }));
     it('should be auto expaned when less than pad trigger click', fakeAsync(() => {
@@ -483,6 +529,7 @@ describe('abc: sidebar-nav', () => {
       [disabledAcl]="disabledAcl"
       [autoCloseUnderPad]="autoCloseUnderPad"
       [recursivePath]="recursivePath"
+      [openStrictly]="openStrictly"
       (select)="select()"
     ></sidebar-nav>
   `,
@@ -493,6 +540,7 @@ class TestComponent {
   disabledAcl = false;
   autoCloseUnderPad = false;
   recursivePath = false;
+  openStrictly = false;
   select() {}
 }
 

@@ -11,7 +11,6 @@ import { ControlWidget } from '../../widget';
   templateUrl: './upload.widget.html',
 })
 export class UploadWidget extends ControlWidget implements OnInit {
-  // tslint:disable-next-line:no-any
   i: any;
   fileList: UploadFile[] = [];
   btnType = '';
@@ -32,6 +31,7 @@ export class UploadWidget extends ControlWidget implements OnInit {
       showUploadList,
       withCredentials,
       resReName,
+      urlReName,
       beforeUpload,
       customRequest,
       directory,
@@ -54,6 +54,7 @@ export class UploadWidget extends ControlWidget implements OnInit {
       showUploadList: toBool(showUploadList, true),
       withCredentials: toBool(withCredentials, false),
       resReName: (resReName || '').split('.'),
+      urlReName: (urlReName || '').split('.'),
       beforeUpload: typeof beforeUpload === 'function' ? beforeUpload : null,
       customRequest: typeof customRequest === 'function' ? customRequest : null,
     };
@@ -85,8 +86,15 @@ export class UploadWidget extends ControlWidget implements OnInit {
     );
   }
 
+  private _getValue(file: UploadFile) {
+    return deepGet(file.response, this.i.resReName, file.response);
+  }
+
   private _setValue(fileList: UploadFile[]) {
-    const res = fileList.map(item => deepGet(item.response, this.i.resReName, item.response));
+    fileList.filter(file => !file.url).forEach(file => {
+      file.url = deepGet(file.response, this.i.urlReName);
+    });
+    const res = fileList.map(file => this._getValue(file));
     this.setValue(this.i.multiple === true ? res : res.pop());
   }
 
@@ -95,12 +103,15 @@ export class UploadWidget extends ControlWidget implements OnInit {
       this.ui.preview(file);
       return;
     }
+    const _url = file.thumbUrl || file.url;
+    if (!_url) {
+      return ;
+    }
     this.injector
       .get(NzModalService)
       .create({
-        nzContent: `<img src="${file.url || file.thumbUrl}" class="img-fluid" />`,
+        nzContent: `<img src="${_url}" class="img-fluid" />`,
         nzFooter: null,
-      })
-      .afterClose.subscribe(() => this.detectChanges());
+      });
   }
 }

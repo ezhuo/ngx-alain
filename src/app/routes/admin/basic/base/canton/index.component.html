@@ -1,10 +1,29 @@
-<div class="alain-default__content-title">
-  <h1>
-    <span [innerHTML]="pageTitle"></span>
-    <small></small>
-  </h1>
-</div>
+<page-header [title]="pageTitle" [autoBreadcrumb]="false" [action]="action">
+  <ng-template #action>
+    <nz-button-group>
+      <button nz-button>操作</button>
+      <button nz-button>操作</button>
+    </nz-button-group>
+    <nz-dropdown class="mx-sm">
+      <button nz-button nz-dropdown><i nz-icon type="ellipsis"></i></button>
+      <ul nz-menu>
+        <li nz-menu-item>选项一</li>
+        <li nz-menu-item>选项二</li>
+        <li nz-menu-item>选项三</li>
+      </ul>
+    </nz-dropdown>
+    <button nz-button [nzType]="'primary'" [nzSize]="'large'">主操作</button>
+  </ng-template>
+</page-header>
 
-<div class="search-form" style="background-color: #ffffff">
-  <div [jstree]="jstree" (jstreeChange)="jstreeChange($event)" class="jstree"></div>
+<div class="ngx-alain__page-content-nz-card">
+  <nz-card [nzBordered]="false">
+    <div class="search-form">
+      <div
+        [jstree]="jstree"
+        (jstreeChange)="jstreeChange($event)"
+        class="jstree"
+      ></div>
+    </div>
+  </nz-card>
 </div>

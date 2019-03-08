@@ -10,11 +10,13 @@ import { STComponent } from '@delon/abc';
 import { IndexControl } from '@core';
 import { DictEditComponent } from './modal/edit.component';
 
+const changeDetection = ChangeDetectionStrategy.OnPush;
+
 @Component({
   selector: 'app-base-dict',
   templateUrl: `./index.component.html`,
   styleUrls: [`./index.component.less`],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection,
 })
 export class DictComponent extends IndexControl implements OnInit {
   @ViewChild('st')
@@ -24,10 +26,14 @@ export class DictComponent extends IndexControl implements OnInit {
 
   constructor(protected injector: Injector) {
     super(injector);
-    super.__init__(this, {
-      url: '/' + this.activeRoute.routeConfig.data.url || '/dictdic',
-      key: 'dic_id',
-    });
+    super.__init__(
+      this,
+      {
+        url: '/' + this.activeRoute.routeConfig.data.url || '/dictdic',
+        key: 'dic_id',
+      },
+      { changeDetection },
+    );
     this.tableParams.ps = 100;
   }
 

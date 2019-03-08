@@ -13,7 +13,6 @@ export interface MenuIcon {
 }
 
 export interface Menu {
-  // tslint:disable-next-line:no-any
   [key: string]: any;
   /** 文本 */
   text: string;
@@ -49,7 +48,6 @@ export interface Menu {
   /** 隐藏面包屑，指 `page-header` 组件的自动生成面包屑时有效 */
   hideInBreadcrumb?: boolean;
   /** ACL配置，若导入 `@delon/acl` 时自动有效，等同于 `ACLService.can(roleOrAbility: ACLCanType)` 参数值 */
-  // tslint:disable-next-line:no-any
   acl?: any;
   /** 是否快捷菜单项 */
   shortcut?: boolean;
@@ -57,6 +55,8 @@ export interface Menu {
   shortcutRoot?: boolean;
   /** 是否允许复用，需配合 `reuse-tab` 组件 */
   reuse?: boolean;
+  /** 是否展开，当设置 `checkStrictly` 时有效 */
+  open?: boolean;
   /** 二级菜单 */
   children?: Menu[];
 }

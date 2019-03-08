@@ -1,5 +1,5 @@
 import { Component, DebugElement, EventEmitter, ViewChild } from '@angular/core';
-import { inject, ComponentFixture, TestBed } from '@angular/core/testing';
+import { fakeAsync, inject, tick, ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   FormsModule,
   FormBuilder,
@@ -61,31 +61,6 @@ describe('abc: edit', () => {
             fixture.detectChanges();
             expect(page.getEl(prefixCls + 'title').textContent).toContain(`parent_title`);
           });
-          describe('#firstVisual', () => {
-            let ngModel: NgModel;
-            let changes: EventEmitter<any>;
-            beforeEach(() => {
-              ngModel = dl.query(By.directive(NgModel)).injector.get(NgModel);
-              changes = ngModel.statusChanges as EventEmitter<any>;
-              spyOnProperty(ngModel, 'dirty').and.returnValue(true);
-            });
-            it('with true', () => {
-              context.label = 'a';
-              context.parent_firstVisual = true;
-              fixture.detectChanges();
-              // mock statusChanges
-              changes.emit('INVALID');
-              page.expect('.has-error', 1);
-            });
-            it('with false', () => {
-              context.label = 'a';
-              context.parent_firstVisual = false;
-              fixture.detectChanges();
-              // mock statusChanges
-              changes.emit('INVALID');
-              page.expect('.has-error', 0);
-            });
-          });
           it('#gutter', () => {
             const gutter = 24;
             const halfGutter = gutter / 2;
@@ -97,13 +72,21 @@ describe('abc: edit', () => {
             expect(page.getEl(itemCls).style.paddingLeft).toBe(`${halfGutter}px`);
             expect(page.getEl(itemCls).style.paddingRight).toBe(`${halfGutter}px`);
           });
-          it('#labelWidth', () => {
-            context.parent_labelWidth = 20;
-            context.label = 'aa';
-            fixture.detectChanges();
-            expect(page.getEl(prefixCls + 'label').style.width).toBe(
-              `${context.parent_labelWidth}px`,
-            );
+          describe('#labelWidth', () => {
+            it('should working', () => {
+              context.labelWidth = 20;
+              context.label = 'aa';
+              fixture.detectChanges();
+              expect(page.getEl(prefixCls + 'label').style.width).toBe(`${context.labelWidth}px`);
+            });
+            it('should be inherit parent labelWidth value', () => {
+              context.parent_labelWidth = 20;
+              context.label = 'aa';
+              fixture.detectChanges();
+              expect(page.getEl(prefixCls + 'label').style.width).toBe(
+                `${context.parent_labelWidth}px`,
+              );
+            });
           });
           it('#layout', () => {
             context.parent_layout = 'horizontal';
@@ -189,7 +172,7 @@ describe('abc: edit', () => {
         it('should be show error', () => {
           ngModel = dl.query(By.directive(NgModel)).injector.get(NgModel);
           spyOnProperty(ngModel, 'dirty').and.returnValue(true);
-          const changes = ngModel.statusChanges as EventEmitter<any>;
+          const changes = ngModel.statusChanges as EventEmitter<string>;
           // mock statusChanges
           changes.emit('VALID');
           page.expect('se-error', 0);
@@ -198,6 +181,28 @@ describe('abc: edit', () => {
           page.expect('se-error');
         });
       });
+    });
+
+    describe('#firstVisual', () => {
+      beforeEach(() => {
+        ({ fixture, dl, context } = createTestContext(TestComponent));
+        context.required = true;
+        context.label = 'a';
+      });
+      it('with true', fakeAsync(() => {
+        context.parent_firstVisual = true;
+        fixture.detectChanges();
+        tick();
+        page = new PageObject();
+        page.expect('.has-error', 1);
+      }));
+      it('with false', fakeAsync(() => {
+        context.parent_firstVisual = false;
+        fixture.detectChanges();
+        tick();
+        page = new PageObject();
+        page.expect('.has-error', 0);
+      }));
     });
   });
 
@@ -240,7 +245,7 @@ describe('abc: edit', () => {
       fixture2.detectChanges();
       page = new PageObject();
       const formControlName = dl.query(By.directive(FormControlName)).injector.get(FormControlName);
-      const changes = formControlName.statusChanges as EventEmitter<any>;
+      const changes = formControlName.statusChanges as EventEmitter<string>;
       spyOnProperty(formControlName, 'dirty').and.returnValue(true);
       // mock statusChanges
       changes.emit('VALID');
@@ -255,7 +260,7 @@ describe('abc: edit', () => {
         context.disabled = true;
         fixture.detectChanges();
         ngModel = dl.query(By.directive(NgModel)).injector.get(NgModel);
-        const changes = ngModel.statusChanges as EventEmitter<any>;
+        const changes = ngModel.statusChanges as EventEmitter<string>;
         changes.emit('INVALID');
         page.expect('se-error', 0);
       });
@@ -270,7 +275,7 @@ describe('abc: edit', () => {
         page = new PageObject();
         const allControls = dl.queryAll(By.directive(FormControlName));
         const formControlName = allControls[1].injector.get(FormControlName);
-        const changes = formControlName.statusChanges as EventEmitter<any>;
+        const changes = formControlName.statusChanges as EventEmitter<string>;
         // mock statusChanges
         changes.emit('VALID');
         page.expect('se-error', 0);
@@ -380,6 +385,7 @@ describe('abc: edit', () => {
         [col]="col"
         [required]="required"
         [line]="line"
+        [labelWidth]="labelWidth"
       >
         <input type="text" [(ngModel)]="val" name="val" required [disabled]="disabled" />
       </se>
@@ -411,6 +417,7 @@ class TestComponent {
   line: boolean;
   col: number;
   controlClass = '';
+  labelWidth = null;
 
   val = '';
   showModel = true;

@@ -3,6 +3,7 @@ import { FormGroup } from '@angular/forms';
 import { SFSchema } from '@delon/form';
 import { STData } from '@delon/abc';
 import * as helpers from '../helpers';
+import { ModalParamsFormat } from '../model';
 
 export class AppFunc {
   private ___appCtl: AppControl = null;
@@ -145,7 +146,7 @@ export class AppFunc {
    * 向模态对话框传递数据过程中的数据格式化
    * @param record
    */
-  public __formatModalParams = (record?: STData, params?: any): Object => {
+  public __formatModalParams = (record?: STData, params?: any): ModalParamsFormat => {
     const self = this.appCtl;
     // 保留最原始的数据
     const srcData = record || self.form.data || {};
@@ -169,7 +170,7 @@ export class AppFunc {
         } else {
           oldwidget = prop[idx]['ui']['widget'];
         }
-        if (frmData && frmData[idx] && !helpers.isEmpty(frmData[idx])) {
+        if (frmData && oldwidget && frmData[idx] && !helpers.isEmpty(frmData[idx])) {
           if (oldwidget.indexOf('upload') > -1) {
             frmData[idx] = helpers.formatUploadFilesToObject(frmData[idx]);
           }

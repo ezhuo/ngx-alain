@@ -21,6 +21,8 @@ import {
   ScrollService,
 } from '@delon/theme';
 
+import { CacheService } from '@delon/cache';
+
 import {
   AuthService,
   TokenService,
@@ -29,7 +31,7 @@ import {
   UserService,
 } from '../data';
 
-import { ComponentData } from '../model';
+import { ComponentData, PageParams } from '../model';
 import { ModalService, NoticeService } from '../utils';
 import { HttpService } from '../net';
 import * as helpers from '../helpers';
@@ -117,6 +119,10 @@ export class InjectorControl implements OnInit, OnDestroy {
     return this.injector.get(SettingsService);
   }
 
+  get cacheSrv() {
+    return this.injector.get(CacheService);
+  }
+
   get scrollSrv() {
     return this.injector.get(ScrollService);
   }
@@ -185,7 +191,11 @@ export class InjectorControl implements OnInit, OnDestroy {
     return helpers;
   }
 
-  protected __init__(child: Object | Function, dataSource?: any, params?: any) {
+  protected __init__(
+    child: Object | Function,
+    dataSource?: any,
+    params?: PageParams,
+  ) {
     if (!helpers.isEmpty(child)) {
       const obj = helpers.isObject(child) ? <any>child.constructor : child;
       if (obj && !helpers.isEmpty(obj.__annotations__)) {
@@ -198,6 +208,10 @@ export class InjectorControl implements OnInit, OnDestroy {
           this.componentData.meta,
         );
     }
+    if (!helpers.isEmpty(params) && params.changeDetection != undefined) {
+      this.componentData.meta = this.componentData.meta || {};
+      this.componentData.meta.changeDetection = params.changeDetection;
+    }
     return null;
   }
 
@@ -207,7 +221,10 @@ export class InjectorControl implements OnInit, OnDestroy {
         this.componentData.meta.changeDetection ==
         ChangeDetectionStrategy.OnPush
       ) {
-        this.cdr.detectChanges();
+        const sto = setTimeout(() => {
+          this.cdr.detectChanges();
+          clearTimeout(sto);
+        }, 0);
       }
     }
   };

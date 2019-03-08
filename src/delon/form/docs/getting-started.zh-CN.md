@@ -67,7 +67,7 @@ angular.json
 全局配置性可以通过在根模块或 `DelonModule` 里覆盖，例如：
 
 ```ts
-import { DelonFormConfig } from '@delon/abc';
+import { DelonFormConfig } from '@delon/form';
 export function fnDelonFormConfig(): DelonFormConfig {
   return Object.assign(new DelonFormConfig(), <DelonFormConfig>{
     // values
@@ -103,6 +103,7 @@ export class DelonModule {
 `[uiDateNumberFormat]` | date小部件：`type="number"` 且不指定 `schema.format` 和 `ui.format` 时日期格式，默认：`x` 13位Unix Timestamp | `string` | `x`
 `[uiTimeStringFormat]` | time小部件：`type="string"` 且不指定 `schema.format` 和 `ui.format` 时日期格式 | `string` | `HH:mm:ss`
 `[uiTimeNumberFormat]` | time小部件：`type="number"` 且不指定 `schema.format` 和 `ui.format` 时日期格式，默认：`x` 13位Unix Timestamp，日期统一使用 `1970-01-01` | `string` | `x`
+`[uiEmailSuffixes]` | 指定 `format: 'email'` 的默认Email后缀 | `string[]` | `['qq.com', '163.com', 'gmail.com', '126.com', 'aliyun.com']`
 
 构建一个邮箱、姓名表单：
 

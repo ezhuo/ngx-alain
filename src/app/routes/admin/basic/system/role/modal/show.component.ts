@@ -7,11 +7,13 @@ import {
 import { ModalControl } from '@core';
 import { tplModalShowHTML } from '@layout';
 
+const changeDetection = ChangeDetectionStrategy.OnPush;
+
 @Component({
   selector: 'app-system-role-show',
   template: tplModalShowHTML,
   styles: [``],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection,
 })
 export class RoleShowComponent extends ModalControl implements OnInit {
   constructor(protected injector: Injector) {

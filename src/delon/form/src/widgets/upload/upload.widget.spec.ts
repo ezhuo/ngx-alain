@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { NzModalService, NzUploadComponent } from 'ng-zorro-antd';
 
 import { createTestContext } from '@delon/testing';
-import { of, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { configureSFTestSuite, SFPage, TestFormComponent } from '../../../spec/base.spec';
 import { UploadWidget } from './upload.widget';
 
@@ -27,6 +27,10 @@ describe('form: widget: upload', () => {
     return page.getWidget<UploadWidget>('sf-upload');
   }
 
+  function getUpload() {
+    return dl.query(By.directive(NzUploadComponent)).injector.get(NzUploadComponent);
+  }
+
   it('should be ingore update value when status is not success', () => {
     page.newSchema({
       properties: { a: { type: 'string', ui: { widget } } },
@@ -42,8 +46,7 @@ describe('form: widget: upload', () => {
       page.newSchema({
         properties: { a: { type: 'string', ui: { widget, fileList: [{}], limit: 1 } } },
       });
-      const upload = dl.query(By.directive(NzUploadComponent)).injector.get(NzUploadComponent);
-      expect(upload.nzFileList.length).toBe(1);
+      expect(getUpload().nzFileList.length).toBe(1);
     });
 
     it('#size', () => {
@@ -52,8 +55,7 @@ describe('form: widget: upload', () => {
           a: { type: 'string', ui: { widget, fileSize: 100, filter: [] } },
         },
       });
-      const upload = dl.query(By.directive(NzUploadComponent)).injector.get(NzUploadComponent);
-      expect(upload.nzSize).toBe(100);
+      expect(getUpload().nzSize).toBe(100);
     });
 
     it('#multiple', () => {
@@ -92,6 +94,24 @@ describe('form: widget: upload', () => {
         .checkElText('.ant-upload-hint', '支持单个或批量，严禁上传公司数据或其他安全文件');
     });
 
+    it('#beforeUpload', () => {
+      page
+        .newSchema({
+          properties: { a: { type: 'string', ui: { widget, type: 'drag', beforeUpload: () => {} } } },
+        });
+
+      expect(getUpload().nzBeforeUpload != null).toBe(true);
+    });
+
+    it('#customRequest', () => {
+      page
+        .newSchema({
+          properties: { a: { type: 'string', ui: { widget, type: 'drag', customRequest: () => {} } } },
+        });
+
+      expect(getUpload().nzCustomRequest != null).toBe(true);
+    });
+
     describe('preview', () => {
       it('should be trigger preview', () => {
         page.newSchema({
@@ -116,13 +136,23 @@ describe('form: widget: upload', () => {
           },
         });
         const comp = page.getWidget<UploadWidget>('sf-upload');
-        const afterClose = new Subject();
-        spyOn(msg, 'create').and.returnValue({ afterClose });
-        spyOn(comp, 'detectChanges');
-        comp.handlePreview({ thumbUrl: '' } as any);
-        afterClose.next();
-        afterClose.complete();
-        expect(comp.detectChanges).toHaveBeenCalled();
+        spyOn(msg, 'create');
+        comp.handlePreview({ url: 'a' } as any);
+        expect(msg.create).toHaveBeenCalled();
+      }));
+      it(`should be won't preview image when not found url property`, inject([NzModalService], (msg: NzModalService) => {
+        page.newSchema({
+          properties: {
+            a: {
+              type: 'string',
+              ui: { widget },
+            },
+          },
+        });
+        const comp = page.getWidget<UploadWidget>('sf-upload');
+        spyOn(msg, 'create');
+        comp.handlePreview({ } as any);
+        expect(msg.create).not.toHaveBeenCalled();
       }));
     });
   });

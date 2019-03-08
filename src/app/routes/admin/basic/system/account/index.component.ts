@@ -14,23 +14,26 @@ import { AccountShowComponent } from './modal/show.component';
 import { AccountPwdComponent } from './modal/pwd.component';
 import { NzFormatEmitEvent, NzTreeNode, NzTreeComponent } from 'ng-zorro-antd';
 
+const changeDetection = ChangeDetectionStrategy.Default;
+
 @Component({
   selector: 'app-system-account',
   templateUrl: `./index.component.html`,
   styleUrls: [`./index.component.less`],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection,
 })
 export class AccountComponent extends IndexControl implements OnInit {
-  @ViewChild('st')
-  st: STComponent;
-  @ViewChild('sf')
-  sf: SFComponent;
-  @ViewChild('tree')
-  tree: NzTreeComponent;
+  @ViewChild('st') st: STComponent;
+  @ViewChild('sf') sf: SFComponent;
+  @ViewChild('tree') tree: NzTreeComponent;
 
   constructor(protected injector: Injector) {
     super(injector);
-    super.__init__(this, { url: '/account', key: 'account_id' });
+    super.__init__(
+      this,
+      { url: '/account', key: 'account_id' },
+      { changeDetection },
+    );
   }
 
   ngOnInit() {
@@ -357,7 +360,7 @@ export class AccountComponent extends IndexControl implements OnInit {
           }
           this.treeData.push(new NzTreeNode(node));
         });
-        this.cdr.detectChanges();
+        this.detectChanges();
       });
   }
 
@@ -385,6 +388,6 @@ export class AccountComponent extends IndexControl implements OnInit {
     }
 
     this.searchSubmit(this.st, this.sf.value);
-    this.cdr.detectChanges();
+    this.detectChanges();
   }
 }

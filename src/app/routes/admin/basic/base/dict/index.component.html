@@ -1,22 +1,35 @@
-<div class="alain-default__content-title">
-  <h1>
-    <span [innerHTML]="pageTitle"></span>
-    <small></small>
-  </h1>
-  <div>
-    <button nz-button (click)="add()" [nzType]="'primary'" [nzSize]="'large'">新建</button>
-  </div>
-</div>
+<page-header [title]="pageTitle" [autoBreadcrumb]="false" [action]="action">
+  <ng-template #action>
+    <button nz-button (click)="add()" [nzType]="'primary'" [nzSize]="'large'">
+      新建
+    </button>
+  </ng-template>
+</page-header>
 
-<div class="main">
-  <div class="menu">
-    <ul nz-menu [nzMode]="'inline'">
-      <li *ngFor="let item of dictTypeName" nz-menu-item [nzSelected]="item.type==dictActive['type']" (click)="dictTypeClick(item)">
-        {{item.type_name}}
-      </li>
-    </ul>
-  </div>
-  <div class="content">
-    <st #st class="simple-table" [data]="url" [columns]="tableData.col" [req]="tableReq"></st>
-  </div>
+<div class="ngx-alain__page-content-nz-card">
+  <nz-card [nzBordered]="false">
+    <div class="main">
+      <div class="menu">
+        <ul nz-menu [nzMode]="'inline'">
+          <li
+            *ngFor="let item of dictTypeName"
+            nz-menu-item
+            [nzSelected]="item.type == dictActive['type']"
+            (click)="dictTypeClick(item)"
+          >
+            {{ item.type_name }}
+          </li>
+        </ul>
+      </div>
+      <div class="content">
+        <st
+          #st
+          class="simple-table"
+          [data]="url"
+          [columns]="tableData.col"
+          [req]="tableReq"
+        ></st>
+      </div>
+    </div>
+  </nz-card>
 </div>

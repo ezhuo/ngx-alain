@@ -504,6 +504,14 @@ describe('abc: table: data-souce', () => {
             done();
           });
         });
+        it(`should be in user order`, (done: () => void) => {
+          options.columns[1]._sort.tick = srv.nextSortTick;
+          options.columns[0]._sort.tick = srv.nextSortTick;
+          srv.process(options).then(res => {
+            expect(resParams.SORT).toBe('id2.ascend-id1.descend');
+            done();
+          });
+        });
       });
       describe('[singleSort]', () => {
         it(`should working`, (done: () => void) => {
@@ -607,6 +615,14 @@ describe('abc: table: data-souce', () => {
           options.columns[0].noIndex = 0;
           srv.process(options).then(res => {
             expect(res.list[0]._values[0].text).toBe(0);
+            done();
+          });
+        });
+        it('with function', (done: () => void) => {
+          options.columns[0].type = 'no';
+          options.columns[0].noIndex = () => 10;
+          srv.process(options).then(res => {
+            expect(res.list[0]._values[0].text).toBe(10);
             done();
           });
         });

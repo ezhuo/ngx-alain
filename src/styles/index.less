@@ -75,7 +75,37 @@ h5 {
     }
 }
 
+.page-index-card .ant-card-body {
+    padding: 12px !important;
+}
+
 // 安全HTML视图
 .safeHTML-View {
     font-size: 16px;
+}
+
+.ant-modal-close:focus {
+    outline: 0;
+}
+
+.ant-drawer-close:focus {
+    outline: 0;
+}
+
+.cke_editable {
+    font-size: 16px;
+    line-height: 1.6;
+    /* Fix for missing scrollbars with RTL texts. (#10488) */
+    word-wrap: break-word;
+    p {
+        margin: 0 auto;
+    }
+}
+
+.ngx-alain__page-content-nz-card {
+    nz-card {
+        .ant-card-body {
+            padding: 8px;
+        }
+    }
 }

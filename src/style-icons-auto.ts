@@ -57,6 +57,10 @@ import {
   EyeOutline,
   MinusSquareOutline,
   PlusSquareOutline,
+  AreaChartOutline,
+  HomeOutline,
+  DeleteOutline,
+  CheckOutline
 } from '@ant-design/icons-angular/icons';
 
 export const ICONS_AUTO = [
@@ -113,4 +117,8 @@ export const ICONS_AUTO = [
   EyeOutline,
   MinusSquareOutline,
   PlusSquareOutline,
+  AreaChartOutline,
+  HomeOutline,
+  DeleteOutline,
+  CheckOutline
 ];

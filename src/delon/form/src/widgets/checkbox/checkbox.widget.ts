@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { LocaleData } from '@delon/theme';
 import { SFValue } from '../../interface';
 import { SFSchemaEnum } from '../../schema';
 import { getData } from '../../utils';
@@ -16,7 +17,7 @@ export class CheckboxWidget extends ControlWidget {
   labelTitle = ``;
   inited = false;
 
-  get l() {
+  get l(): LocaleData {
     return this.formProperty.root.widget.sfComp.locale;
   }
 
@@ -59,7 +60,7 @@ export class CheckboxWidget extends ControlWidget {
   }
 
   updateAllChecked(): this {
-    if (this.data.every(item => item.checked === false)) {
+    if (this.data.every(item => item.checked !== true)) {
       this.allChecked = false;
       this.indeterminate = false;
     } else if (this.data.every(item => item.checked === true)) {
@@ -68,8 +69,7 @@ export class CheckboxWidget extends ControlWidget {
     } else {
       this.indeterminate = true;
     }
-    // issues: https://github.com/NG-ZORRO/ng-zorro-antd/issues/2025
-    setTimeout(() => this.detectChanges());
+    this.detectChanges();
     return this;
   }
 

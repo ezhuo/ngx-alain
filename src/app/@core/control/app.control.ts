@@ -9,6 +9,7 @@ import {
   DataSource,
   ModalData,
   PageData,
+  PageParams,
 } from '../model';
 import * as config from '../config.inc';
 
@@ -211,7 +212,7 @@ export class AppControl extends InjectorControl implements OnInit, OnDestroy {
   protected __init__(
     child: Object | Function,
     dataSource?: DataSource,
-    params?: any,
+    params?: PageParams,
   ): void {
     if (!this.helpers.isEmpty(dataSource)) {
       this.dataSource = Object.assign(this.dataSource, dataSource);

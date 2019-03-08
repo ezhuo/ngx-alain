@@ -162,12 +162,12 @@ export class SFPage {
   }
 
   add(): this {
-    this.getEl('.add button').click();
+    this.getEl('.sf__array-add button').click();
     return this;
   }
   /** 下标从 `1` 开始 */
   remove(index = 1): this {
-    this.getEl(`.sf-array-container [data-index="${index - 1}"] .remove`).click();
+    this.getEl(`.sf__array-container [data-index="${index - 1}"] .remove`).click();
     return this;
   }
 
@@ -301,6 +301,10 @@ export class SFPage {
 
   typeEvent(eventName: string, cls = 'input'): this {
     const node = document.querySelector(cls) as HTMLInputElement;
+    if (node == null) {
+      expect(true).toBe(false, `won't found '${cls}' class element`);
+      return this;
+    }
     dispatchFakeEvent(node, eventName);
     return this.time().dc();
   }

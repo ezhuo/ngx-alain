@@ -14,7 +14,6 @@ export class DateWidget extends ControlWidget implements OnInit {
   displayValue: Date | Date[] = null;
   displayFormat: string;
   format: string;
-  // tslint:disable-next-line:no-any
   i: any;
   flatRange = false;
 
@@ -37,11 +36,8 @@ export class DateWidget extends ControlWidget implements OnInit {
     } else {
       this.displayFormat = ui.displayFormat;
     }
-    this.format = ui.format
-      ? ui.format
-      : this.schema.type === 'number'
-      ? 'x'
-      : 'YYYY-MM-DD HH:mm:ss';
+    // 构建属性对象时会对默认值进行校验，因此可以直接使用 format 作为格式化属性
+    this.format = ui.format;
     // 公共API
     this.i = {
       allowClear: toBool(ui.allowClear, true),
@@ -88,7 +84,6 @@ export class DateWidget extends ControlWidget implements OnInit {
     if (this.ui.onOpenChange) this.ui.onOpenChange(status);
   }
 
-  // tslint:disable-next-line:no-any
   _ok(value: any) {
     if (this.ui.onOk) this.ui.onOk(value);
   }

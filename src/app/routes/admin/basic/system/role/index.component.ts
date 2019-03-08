@@ -11,11 +11,13 @@ import { SFComponent } from '@delon/form';
 import { IndexControl } from '@core';
 import { RoleEditComponent } from './modal/edit.component';
 
+const changeDetection = ChangeDetectionStrategy.Default;
+
 @Component({
   selector: 'app-system-role',
   templateUrl: `./index.component.html`,
   styleUrls: [`./index.component.less`],
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection,
 })
 export class RoleComponent extends IndexControl implements OnInit {
   @ViewChild('st')
@@ -25,7 +27,7 @@ export class RoleComponent extends IndexControl implements OnInit {
 
   constructor(protected injector: Injector) {
     super(injector);
-    super.__init__(this, { url: '/role', key: 'role_id' });
+    super.__init__(this, { url: '/role', key: 'role_id' }, { changeDetection });
   }
 
   ngOnInit() {

@@ -8,16 +8,18 @@ import {
 import { ModalControl } from '@core';
 import { tplModalEditHTML } from '@layout';
 
+const changeDetection = ChangeDetectionStrategy.Default;
+
 @Component({
   selector: 'app-orginfo-edit',
   template: tplModalEditHTML,
   styles: [``],
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection,
 })
 export class OrgInfoEditComponent extends ModalControl implements OnInit {
   constructor(protected injector: Injector) {
     super(injector);
-    super.__init__(this);
+    super.__init__(this, {}, changeDetection);
   }
 
   ngOnInit() {

@@ -7,16 +7,18 @@ import {
 
 import { ModalControl } from '@core';
 
+const changeDetection = ChangeDetectionStrategy.Default;
+
 @Component({
   selector: 'app-system-role-edit',
   templateUrl: `./edit.component.html`,
   styles: [``],
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection,
 })
 export class DictEditComponent extends ModalControl implements OnInit {
   constructor(protected injector: Injector) {
     super(injector);
-    super.__init__(this);
+    super.__init__(this, null, { changeDetection });
   }
 
   ngOnInit() {

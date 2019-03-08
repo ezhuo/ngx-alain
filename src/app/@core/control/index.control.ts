@@ -3,7 +3,7 @@ import { STComponent, STColumnButtonModal } from '@delon/abc';
 import { ModalOptionsForService } from 'ng-zorro-antd';
 import { Observable } from 'rxjs';
 import { AppControl } from './app.control';
-import { DataSource } from '../model';
+import { DataSource, PageParams } from '../model';
 
 export class IndexControl extends AppControl implements OnInit, OnDestroy {
   constructor(protected injector: Injector, protected child?: Function) {
@@ -25,7 +25,7 @@ export class IndexControl extends AppControl implements OnInit, OnDestroy {
   protected __init__(
     child: Object | Function,
     dataSource?: DataSource,
-    params?: any,
+    params?: PageParams,
   ) {
     return super.__init__(child, dataSource, params);
   }

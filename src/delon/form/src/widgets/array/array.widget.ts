@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { LocaleData } from '@delon/theme';
 import { FormProperty } from '../../model/form.property';
 import { ArrayLayoutWidget } from '../../widget';
 
@@ -19,13 +20,14 @@ export class ArrayWidget extends ArrayLayoutWidget implements OnInit {
     );
   }
 
-  // tslint:disable-next-line:no-any
-  get l(): any {
+  get l(): LocaleData {
     return this.formProperty.root.widget.sfComp.locale;
   }
 
   ngOnInit(): void {
-    if (this.ui.grid && this.ui.grid.arraySpan) this.arraySpan = this.ui.grid.arraySpan;
+    if (this.ui.grid && this.ui.grid.arraySpan) {
+      this.arraySpan = this.ui.grid.arraySpan;
+    }
 
     this.addTitle = this.ui.addTitle || this.l.addText;
     this.addType = this.ui.addType || 'dashed';

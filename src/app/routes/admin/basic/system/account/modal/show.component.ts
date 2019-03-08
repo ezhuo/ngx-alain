@@ -8,11 +8,13 @@ import {
 import { ModalControl } from '@core';
 import { tplModalShowHTML } from '@layout';
 
+const changeDetection = ChangeDetectionStrategy.OnPush;
+
 @Component({
   selector: 'app-account-edit',
   template: tplModalShowHTML,
   styles: [``],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection,
 })
 export class AccountShowComponent extends ModalControl implements OnInit {
   constructor(protected injector: Injector) {

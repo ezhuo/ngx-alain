@@ -1,4 +1,3 @@
-// tslint:disable:no-any
 import { TemplateRef } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -134,7 +133,6 @@ export interface SFDataSchema {
    */
   asyncData?: (input?: any) => Observable<SFSchemaEnumType[]>;
 }
-
 
 export interface SFEnumSchema {
   /**

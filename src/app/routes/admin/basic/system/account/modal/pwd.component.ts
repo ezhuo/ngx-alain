@@ -7,11 +7,13 @@ import {
 import { ModalControl } from '@core';
 import { tplModalPasswordHTML } from '@layout';
 
+const changeDetection = ChangeDetectionStrategy.Default;
+
 @Component({
   selector: 'app-account-pwd',
   template: tplModalPasswordHTML,
   styles: [``],
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection,
 })
 export class AccountPwdComponent extends ModalControl implements OnInit {
   constructor(protected injector: Injector) {

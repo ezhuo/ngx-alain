@@ -53,13 +53,24 @@ export class HttpService {
 
   /** 服务端URL地址 */
   SERVER_URL(url: string): string {
+    url = url || '';
     const findIdx = ['mock/', 'assets/'].findIndex(value => {
       return url.includes(value);
     });
     if (findIdx === -1) {
-      url = api.base + url;
+      let separator = '';
+      if (
+        api.base.substr(api.base.length - 1, 1) != '/' &&
+        url.substr(0, 1) != '/'
+      ) {
+        separator = '/';
+      }
+      url = api.base + separator + url;
     } else if (url.includes('/mock/')) {
       url = url.replace('/mock/', '/');
+    }
+    if (url.substr(0, 4) != 'http' && url.substr(0, 1) != '/') {
+      url = '/' + url;
     }
     return url;
   }
@@ -656,5 +667,9 @@ export class HttpService {
         body: body || null,
       }),
     );
+  }
+
+  cacheRemoveDict(url: string) {
+    this.cacheSrv.remove('dict' + this.userSrv.userInfo.id + '-' + url);
   }
 }

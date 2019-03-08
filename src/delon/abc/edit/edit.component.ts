@@ -6,7 +6,6 @@ import {
   ContentChild,
   ElementRef,
   Host,
-  HostBinding,
   Input,
   OnChanges,
   OnDestroy,
@@ -28,6 +27,11 @@ let nextUniqueId = 0;
 @Component({
   selector: 'se',
   templateUrl: './edit.component.html',
+  host: {
+    '[style.padding-left.px]': 'paddingValue',
+    '[style.padding-right.px]': 'paddingValue',
+    '[class.ant-form-item-with-help]': 'showErr',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SEComponent implements OnChanges, AfterViewInit, OnDestroy {
@@ -39,7 +43,7 @@ export class SEComponent implements OnChanges, AfterViewInit, OnDestroy {
   private inited = false;
   private onceFlag = false;
   invalid = false;
-  labelWidth = null;
+  _labelWidth = null;
 
   // #region fields
 
@@ -52,6 +56,7 @@ export class SEComponent implements OnChanges, AfterViewInit, OnDestroy {
   @Input() @InputBoolean() required = false;
   @Input() controlClass: string = '';
   @Input() @InputBoolean(null) line: boolean;
+  @Input() @InputNumber(null) labelWidth: number;
 
   @Input()
   set id(value: string) {
@@ -64,17 +69,10 @@ export class SEComponent implements OnChanges, AfterViewInit, OnDestroy {
 
   // #endregion
 
-  @HostBinding('style.padding-left.px')
-  get paddingLeft(): number {
+  get paddingValue(): number {
     return this.parent.gutter / 2;
   }
 
-  @HostBinding('style.padding-right.px')
-  get paddingRight(): number {
-    return this.parent.gutter / 2;
-  }
-
-  @HostBinding('class.ant-form-item-with-help')
   get showErr(): boolean {
     return this.invalid && this.parent.size !== 'compact' && !!this.error;
   }
@@ -97,16 +95,16 @@ export class SEComponent implements OnChanges, AfterViewInit, OnDestroy {
   }
 
   private setClass(): this {
-    const { el, ren, clsMap, col, parent, cdr } = this;
-    this.labelWidth = parent.labelWidth;
+    const { el, ren, clsMap, col, parent, cdr, line, labelWidth, rep } = this;
+    this._labelWidth = labelWidth != null ? labelWidth : parent.labelWidth;
     clsMap.forEach(cls => ren.removeClass(el, cls));
     clsMap.length = 0;
     const repCls =
       parent.nzLayout === 'horizontal'
-        ? this.rep.genCls(col != null ? col : parent.colInCon || parent.col)
+        ? rep.genCls(col != null ? col : parent.colInCon || parent.col)
         : [];
     clsMap.push(`ant-form-item`, ...repCls, `${prefixCls}__item`);
-    if (this.line || parent.line) {
+    if (line || parent.line) {
       clsMap.push(`${prefixCls}__line`);
     }
     clsMap.forEach(cls => ren.addClass(el, cls));
@@ -117,18 +115,9 @@ export class SEComponent implements OnChanges, AfterViewInit, OnDestroy {
   private bindModel() {
     if (!this.ngControl || this.status$) return;
 
-    this.status$ = this.ngControl.statusChanges.subscribe(res => {
-      if (this.ngControl.disabled || this.ngControl.isDisabled) {
-        return;
-      }
-      const invalid = res === 'INVALID';
-      if (!this.onceFlag) {
-        this.onceFlag = true;
-        return;
-      }
-      this.invalid = this.ngControl.dirty && invalid;
-      this.cdr.detectChanges();
-    });
+    this.status$ = this.ngControl.statusChanges.subscribe(res =>
+      this.updateStatus(res === 'INVALID'),
+    );
 
     if (this._autoId) {
       const control = deepGet(
@@ -141,6 +130,14 @@ export class SEComponent implements OnChanges, AfterViewInit, OnDestroy {
     }
   }
 
+  private updateStatus(invalid: boolean): void {
+    if (this.ngControl.disabled || this.ngControl.isDisabled) {
+      return;
+    }
+    this.invalid = (invalid && this.onceFlag) || (this.ngControl.dirty && invalid);
+    this.cdr.detectChanges();
+  }
+
   ngOnChanges() {
     this.onceFlag = this.parent.firstVisual;
     if (this.inited) this.setClass().bindModel();
@@ -149,6 +146,12 @@ export class SEComponent implements OnChanges, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.setClass().bindModel();
     this.inited = true;
+    if (this.onceFlag) {
+      Promise.resolve().then(() => {
+        this.updateStatus(this.ngControl.invalid);
+        this.onceFlag = false;
+      });
+    }
   }
 
   ngOnDestroy(): void {

@@ -10,11 +10,12 @@ import { SFComponent } from '@delon/form';
 import { IndexControl } from '@core';
 import { LogsShowComponent } from './modal/show.component';
 
+const changeDetection = ChangeDetectionStrategy.OnPush;
 @Component({
   selector: 'app-system-logs',
   templateUrl: `./index.component.html`,
   styleUrls: [`./index.component.less`],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection,
 })
 export class LogsComponent extends IndexControl implements OnInit {
   @ViewChild('st')
@@ -24,10 +25,14 @@ export class LogsComponent extends IndexControl implements OnInit {
 
   constructor(protected injector: Injector) {
     super(injector);
-    super.__init__(this, {
-      url: this.activeRoute.routeConfig.data.url || '/logs',
-      key: 'id',
-    });
+    super.__init__(
+      this,
+      {
+        url: this.activeRoute.routeConfig.data.url || '/logs',
+        key: 'id',
+      },
+      { changeDetection },
+    );
   }
 
   ngOnInit() {
