@@ -1,10 +1,9 @@
-import { Component, OnDestroy, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { _HttpClient } from '@delon/theme';
 
 @Component({
   selector: 'app-data-v-relation',
   templateUrl: './relation.component.html',
-  styleUrls: ['./relation.component.less'],
 })
 export class RelationComponent implements OnInit, OnDestroy {
   ecIntance: any;
@@ -46,8 +45,7 @@ export class RelationComponent implements OnInit, OnDestroy {
         tooltip: {
           triggerOn: 'click',
           formatter: item => {
-            if (item.dataType === 'node')
-              return `${item.data.name}：${item.data.arg}`;
+            if (item.dataType === 'node') return `${item.data.name}：${item.data.arg}`;
             return item.name;
           },
         },

@@ -82,27 +82,22 @@ export class LayoutDefaultComponent extends InjectorControl
       if (!(evt instanceof NavigationEnd)) {
         return;
       }
-      setTimeout(() => {
-        this.scrollSrv.scrollToTop();
-        this.isFetching = false;
-      }, 100);
+      if (this.isFetching) {
+        setTimeout(() => {
+          this.isFetching = false;
+        }, 100);
+      }
     });
   }
 
   private setClass() {
     const { el, renderer, settings } = this;
     const layout = settings.layout;
-    updateHostClass(
-      el.nativeElement,
-      renderer,
-      {
-        ['alain-default']: true,
-        [`alain-default__fixed`]: layout.fixed,
-        [`alain-default__boxed`]: layout.boxed,
-        [`alain-default__collapsed`]: layout.collapsed,
-      },
-      true,
-    );
+    updateHostClass(el.nativeElement, renderer, {
+      ['alain-default']: true,
+      [`alain-default__fixed`]: layout.fixed,
+      [`alain-default__collapsed`]: layout.collapsed,
+    });
 
     this.doc.body.classList[layout.colorWeak ? 'add' : 'remove']('color-weak');
   }

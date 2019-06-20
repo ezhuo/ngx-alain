@@ -1,6 +1,6 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { Component, DebugElement, Injector, ViewChild } from '@angular/core';
-import { fakeAsync, inject, tick, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, DebugElement, ViewChild } from '@angular/core';
+import { fakeAsync, inject, tick, ComponentFixture, TestBed, TestBedStatic } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -27,7 +27,7 @@ class MockI18NServiceFake extends AlainI18NServiceFake {
 }
 
 describe('abc: page-header', () => {
-  let injector: Injector;
+  let injector: TestBedStatic;
   let fixture: ComponentFixture<TestComponent>;
   let dl: DebugElement;
   let menuSrv: MenuService;
@@ -67,7 +67,7 @@ describe('abc: page-header', () => {
 
   function checkValue(cls: string, value: any) {
     const el = dl.query(By.css(cls)).nativeElement as HTMLElement;
-    expect(el.textContent.trim()).toBe(value);
+    expect(el.textContent!.trim()).toBe(value);
   }
 
   afterEach(() => context.comp.ngOnDestroy());
@@ -75,10 +75,7 @@ describe('abc: page-header', () => {
   describe('', () => {
     configureTestSuite(() => {
       injector = TestBed.configureTestingModule({
-        imports: [
-          RouterTestingModule.withRoutes([{ path: '1-1/:name', component: TestComponent }]),
-          PageHeaderModule,
-        ],
+        imports: [RouterTestingModule.withRoutes([{ path: '1-1/:name', component: TestComponent }]), PageHeaderModule],
         providers: [{ provide: APP_BASE_HREF, useValue: '/' }, SettingsService],
         declarations: [TestComponent, TestAutoBreadcrumbComponent, TestI18nComponent],
       });
@@ -127,7 +124,7 @@ describe('abc: page-header', () => {
           const srv = injector.get(SettingsService);
           const affixComp = dl
             .query(By.directive(NzAffixComponent))
-            .injector.get(NzAffixComponent, null);
+            .injector.get<NzAffixComponent>(NzAffixComponent, undefined);
           spyOn(affixComp, 'updatePosition');
           srv.setLayout('collapsed', true);
           expect(affixComp.updatePosition).toHaveBeenCalled();
@@ -161,10 +158,7 @@ describe('abc: page-header', () => {
               {
                 text: '1-1',
                 link: '/1-1',
-                children: [
-                  { text: '1-1-1', link: '/1-1/1-1-1' },
-                  { text: '1-1-2', link: '/1-1/1-1-2' },
-                ],
+                children: [{ text: '1-1-1', link: '/1-1/1-1-1' }, { text: '1-1-2', link: '/1-1/1-1-2' }],
               },
             ],
           },
@@ -195,10 +189,7 @@ describe('abc: page-header', () => {
               {
                 text: '1-1',
                 link: '/1-1',
-                children: [
-                  { text: '1-1-1', link: '/1-1/1-1-1' },
-                  { text: '1-1-2', link: '/1-1/1-1-2' },
-                ],
+                children: [{ text: '1-1-1', link: '/1-1/1-1-1' }, { text: '1-1-2', link: '/1-1/1-1-2' }],
               },
             ],
           },
@@ -225,15 +216,13 @@ describe('abc: page-header', () => {
         const urlSpy = spyOnProperty(router, 'url');
         urlSpy.and.returnValue('/1-1/1-1-2');
         fixture.detectChanges();
-        const firstPath: HTMLElement = dl.query(By.css('nz-breadcrumb-item:nth-child(3)'))
-          .nativeElement;
+        const firstPath: HTMLElement = dl.query(By.css('nz-breadcrumb-item:nth-child(3)')).nativeElement;
         urlSpy.and.returnValue('/1-1/1-1-1');
-        fixture.ngZone.run(() => {
+        fixture.ngZone!.run(() => {
           router.navigateByUrl('/1-1/1-1-1');
           fixture.whenStable().then(() => {
             fixture.detectChanges();
-            const secondPath: HTMLElement = dl.query(By.css('nz-breadcrumb-item:nth-child(3)'))
-              .nativeElement;
+            const secondPath: HTMLElement = dl.query(By.css('nz-breadcrumb-item:nth-child(3)')).nativeElement;
             expect(firstPath.innerText).not.toBe(secondPath.innerText);
           });
         });
@@ -267,10 +256,7 @@ describe('abc: page-header', () => {
               {
                 text: '1-1',
                 link: '/1-1',
-                children: [
-                  { text: '1-1-1', link: '/1-1/1-1-1' },
-                  { text: '1-1-2', link: '/1-1/1-1-2' },
-                ],
+                children: [{ text: '1-1-1', link: '/1-1/1-1-1' }, { text: '1-1-2', link: '/1-1/1-1-2' }],
               },
             ],
           },
@@ -286,7 +272,7 @@ describe('abc: page-header', () => {
         const text = 'asdf';
         // tslint:disable-next-line:no-shadowed-variable
         const i18n = 'i18n';
-        context.title = undefined;
+        context.title = null;
         context.autoTitle = true;
         context.autoBreadcrumb = true;
         spyOn(menuSrv, 'getPathByUrl').and.returnValue([{ text, i18n }]);
@@ -301,10 +287,7 @@ describe('abc: page-header', () => {
               {
                 text: '1-1',
                 link: '/1-1',
-                children: [
-                  { text: '1-1-1', link: '/1-1/1-1-1' },
-                  { text: '1-1-2', link: '/1-1/1-1-2' },
-                ],
+                children: [{ text: '1-1-1', link: '/1-1/1-1-1' }, { text: '1-1-2', link: '/1-1/1-1-2' }],
               },
             ],
           },
@@ -335,7 +318,7 @@ describe('abc: page-header', () => {
 
     it('should be refresh title when route changed of auto generate title', fakeAsync(() => {
       genModule({ created: false });
-      context.title = undefined;
+      context.title = null;
       context.autoTitle = true;
       menuSrv.add([{ text: '1', link: '/1-1/p1' }, { text: '2', link: '/1-1/p2' }]);
       const urlSpy = spyOnProperty(router, 'url');
@@ -366,7 +349,7 @@ describe('abc: page-header', () => {
           ],
         });
 
-        context.title = undefined;
+        context.title = null;
         context.autoTitle = true;
         context.syncTitle = true;
       });
@@ -384,7 +367,7 @@ describe('abc: page-header', () => {
         setTitle = jasmine.createSpy();
       }
       class MockReuse {
-        set title(val: string) {}
+        set title(_val: string) {}
         get title(): string {
           return '';
         }
@@ -423,7 +406,7 @@ describe('abc: page-header', () => {
 class TestBaseComponent {
   @ViewChild('comp')
   comp: PageHeaderComponent;
-  title = '所属类目';
+  title: string | null = '所属类目';
   autoBreadcrumb: boolean;
   autoTitle: boolean;
   syncTitle: boolean;

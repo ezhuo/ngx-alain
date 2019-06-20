@@ -2,6 +2,13 @@
 
 var assetsHelper = {};
 
+if (!window.MutationObserver) {
+    window.MutationObserver = function() {
+      this.observe = nop;
+      this.disconnect = nop;
+    };
+}
+
 __load();
 
 // ---------------------------
@@ -55,3 +62,5 @@ function __ie_notice(__ver) {
         $('.preloader').remove();
     }
 }
+
+function nop() {}

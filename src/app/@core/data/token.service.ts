@@ -7,6 +7,7 @@ import { HttpService } from '../net/http.service';
 import { http, appDebug } from '../config.inc';
 import { UserService } from './users.service';
 import * as helper from '../helpers';
+import { CacheService } from '@delon/cache';
 
 @Injectable({
   providedIn: 'root',
@@ -34,6 +35,10 @@ export class TokenService {
 
   get httpSrv() {
     return this.injector.get(HttpService);
+  }
+
+  get cacheSrv() {
+    return this.injector.get(CacheService);
   }
 
   constructor(private injector: Injector) {}
@@ -91,6 +96,7 @@ export class TokenService {
       this.__session.clear();
       this.__local.clear();
       this.menuSrv.clear();
+      this.cacheSrv.clear();
     };
     // 发出注销请求
     return this.httpSrv.post('/auth/logout').subscribe(tokendes, tokendes);

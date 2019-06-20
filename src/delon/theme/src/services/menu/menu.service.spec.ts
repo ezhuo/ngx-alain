@@ -1,5 +1,4 @@
-import { Injector } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, TestBedStatic } from '@angular/core/testing';
 import { filter } from 'rxjs/operators';
 
 import { ACLService } from '@delon/acl';
@@ -16,7 +15,7 @@ class MockACLService {
 }
 
 describe('Service: Menu', () => {
-  let injector: Injector;
+  let injector: TestBedStatic;
   let srv: MenuService;
   const DATA = [
     {
@@ -67,7 +66,7 @@ describe('Service: Menu', () => {
     it('#resume', () => {
       srv.add(deepCopy(DATA));
       let tick = 0;
-      srv.resume(item => ++tick);
+      srv.resume(() => ++tick);
       expect(tick).toBeGreaterThan(0);
     });
 
@@ -155,7 +154,7 @@ describe('Service: Menu', () => {
     describe('#shortcuts', () => {
       it('should be under the dashboard', () => {
         srv.add(deepCopy(DATA));
-        expect(srv.menus[0].children[1].children.length).toBe(1);
+        expect(srv.menus[0].children![1].children!.length).toBe(1);
       });
       it('should be use [shortcutRoot: true]', () => {
         const newMenus = [
@@ -173,7 +172,7 @@ describe('Service: Menu', () => {
           },
         ] as Menu[];
         srv.add(newMenus);
-        expect(srv.menus[0].children[2].children.length).toBe(1);
+        expect(srv.menus[0].children![2].children!.length).toBe(1);
       });
       it('should be under zero node', () => {
         const newMenus = [
@@ -187,7 +186,7 @@ describe('Service: Menu', () => {
           },
         ] as Menu[];
         srv.add(newMenus);
-        expect(srv.menus[0].children[0].children.length).toBe(1);
+        expect(srv.menus[0].children![0].children!.length).toBe(1);
       });
       it('should be clean children', () => {
         const newMenus = [
@@ -205,9 +204,9 @@ describe('Service: Menu', () => {
           },
         ] as Menu[];
         srv.add(newMenus);
-        const shortcutList = srv.menus[0].children[2].children;
-        expect(shortcutList.length).toBe(1);
-        expect(shortcutList[0].__parent).toBe(srv.menus[0].children[2]);
+        const shortcutList = srv.menus[0].children![2].children;
+        expect(shortcutList!.length).toBe(1);
+        expect(shortcutList![0].__parent).toBe(srv.menus[0].children![2]);
       });
     });
 
@@ -231,11 +230,11 @@ describe('Service: Menu', () => {
     describe('ISSUES', () => {
       it('ng-alain #107', () => {
         srv.add(deepCopy(DATA));
-        expect(srv.menus[0].children.filter(w => w.shortcutRoot === true).length).toBe(1);
-        expect(srv.menus[0].children[1].children.length).toBe(1);
+        expect(srv.menus[0].children!.filter(w => w.shortcutRoot === true).length).toBe(1);
+        expect(srv.menus[0].children![1].children!.length).toBe(1);
         srv.resume();
-        expect(srv.menus[0].children.filter(w => w.shortcutRoot === true).length).toBe(1);
-        expect(srv.menus[0].children[1].children.length).toBe(1);
+        expect(srv.menus[0].children!.filter(w => w.shortcutRoot === true).length).toBe(1);
+        expect(srv.menus[0].children![1].children!.length).toBe(1);
       });
     });
 

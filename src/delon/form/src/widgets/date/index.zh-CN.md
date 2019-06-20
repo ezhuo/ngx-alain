@@ -33,6 +33,7 @@ type: Widgets
 
 参数        | 说明                   | 类型     | 默认值
 ------------|------------------------|----------|--------
+`[mode]`        | 渲染模式 | `date,week,month,year` | `date`
 `[size]`        | 大小，等同 `nzSize`     | `string` | -
 `[placeholder]` | 在文字框中显示提示讯息 | `string` | -
 `[format]`      | 数据格式化             | `string` | -
@@ -47,6 +48,6 @@ type: Widgets
 `[disabledDate]` | 不可选择的日期 | `(current: Date) => boolean` | -
 `[disabledTime]` | 不可选择的时间 | `(current: Date) => { nzDisabledHours, nzDisabledMinutes, nzDisabledSeconds }` | -
 `[renderExtraFooter]` | 在面板中添加额外的页脚 | `string` | -
-`[showTime]` | 增加时间选择功能 | `boolean` | `true`
+`[showTime]` | 增加时间选择功能，`object` 类型为 [TimePickerOptions](https://ng.ant.design/components/time-picker/en#api) | `object,boolean` | `true`
 `[showToday]` | 是否展示“今天”按钮 | `boolean` | `true`
 `[onOk]` | 点击确定按钮的回调	 | `(data: Data | Data[]) => void` | -

@@ -1,13 +1,13 @@
 export function preloaderFinished() {
-  const body = document.querySelector('body');
-  const preloader = document.querySelector('.preloader');
+  const body = document.querySelector('body')!;
+  const preloader = document.querySelector('.preloader')!;
 
   body.style.overflow = 'hidden';
 
   function remove() {
     // preloader value null when running --hmr
     if (!preloader) return;
-    preloader.addEventListener('transitionend', function () {
+    preloader.addEventListener('transitionend', () => {
       preloader.className = 'preloader-hidden';
     });
 

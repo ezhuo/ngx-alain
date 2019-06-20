@@ -8,22 +8,17 @@ describe('Service: Scroll', () => {
   const topOfPageElem = {} as Element;
   let injector: Injector;
   let window: any;
-  let doc: MockDocument;
   let scrollService: ScrollService;
 
   class MockElement {
-    getBoundingClientRect = jasmine
-      .createSpy('Element getBoundingClientRect')
-      .and.returnValue({ top: 0 });
+    getBoundingClientRect = jasmine.createSpy('Element getBoundingClientRect').and.returnValue({ top: 0 });
     scrollIntoView = jasmine.createSpy('Element scrollIntoView');
     scrollTo = jasmine.createSpy('Element scrollTo');
   }
 
   class MockDocument {
     body = new MockElement();
-    getElementById = jasmine
-      .createSpy('Document getElementById')
-      .and.returnValue(topOfPageElem);
+    getElementById = jasmine.createSpy('Document getElementById').and.returnValue(topOfPageElem);
     querySelector = jasmine.createSpy('Document querySelector');
   }
 
@@ -40,7 +35,6 @@ describe('Service: Scroll', () => {
       ] as StaticProvider[];
       injector = Injector.create({ providers });
       window = injector.get(WINDOW);
-      doc = injector.get(DOCUMENT) as any;
       scrollService = injector.get(ScrollService);
 
       spyOn(window, 'scrollBy');
@@ -149,7 +143,6 @@ describe('Service: Scroll', () => {
       ] as StaticProvider[];
       injector = Injector.create({ providers });
       window = injector.get(WINDOW);
-      doc = injector.get(DOCUMENT) as any;
       scrollService = injector.get(ScrollService);
     });
     it('should only use scrollIntoView', () => {

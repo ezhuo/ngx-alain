@@ -498,3 +498,75 @@ export function getUUID() {
     return (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
   }
 }
+
+/**
+ * 获取IP, 仅限 firefox and chrome
+ * @param onNewIP
+ */
+export function getUserIP(onNewIP) {
+  // onNewIp - your listener function for new IPs
+  // compatibility for firefox and chrome
+  const myPeerConnection: any =
+    window['RTCPeerConnection'] ||
+    window['mozRTCPeerConnection'] ||
+    window['webkitRTCPeerConnection'];
+
+  if (!myPeerConnection) {
+    throw null;
+  }
+  const pc = new myPeerConnection({
+      iceServers: [],
+    }),
+    noop = function() {},
+    localIPs = {},
+    ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g;
+
+  const iterateIP = ip => {
+    if (!localIPs[ip]) onNewIP(ip);
+    localIPs[ip] = true;
+  };
+
+  // create a bogus data channel
+  pc.createDataChannel('');
+
+  // create offer and set local description
+  pc.createOffer()
+    .then(function(sdp) {
+      sdp.sdp.split('\n').forEach(function(line) {
+        if (line.indexOf('candidate') < 0) return;
+        line.match(ipRegex).forEach(iterateIP);
+      });
+
+      pc.setLocalDescription(sdp, noop, noop);
+    })
+    .catch(function(reason) {
+      // An error occurred, so handle the failure to connect
+    });
+
+  // sten for candidate events
+  pc.onicecandidate = function(ice) {
+    if (
+      !ice ||
+      !ice.candidate ||
+      !ice.candidate.candidate ||
+      !ice.candidate.candidate.match(ipRegex)
+    ) {
+      throw null;
+      // return;
+    }
+    ice.candidate.candidate.match(ipRegex).forEach(iterateIP);
+  };
+}
+
+/**
+ * a 单击
+ * @param url
+ */
+export function aClick(url) {
+  const link = document.createElement('a');
+  link.target = '_blank';
+  link.href = url;
+  document.body.appendChild(link);
+  link.click();
+  return document.body.removeChild(link);
+}

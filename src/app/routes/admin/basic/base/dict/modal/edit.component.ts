@@ -31,11 +31,12 @@ export class DictEditComponent extends ModalControl implements OnInit {
   }
 
   onSubmit($event: any) {
-    const formData = this.appBase.__formatSubmitData(
+    const formData: any = this.appBase.__formatSubmitData(
       $event.value,
       this.schemaData.edit,
     );
 
+    formData.code = formData.name;
     this.freeData.save = this.httpSrv
       .update(this.dataSource.url, formData, this.dataSource.val)
       .subscribe(result => {

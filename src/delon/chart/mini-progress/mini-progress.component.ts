@@ -4,15 +4,19 @@ import {
   Component,
   Input,
   OnChanges,
+  ViewEncapsulation,
 } from '@angular/core';
 import { DelonLocaleService } from '@delon/theme';
 import { toNumber, InputNumber } from '@delon/util';
 
 @Component({
   selector: 'g2-mini-progress',
+  exportAs: 'g2MiniProgress',
   templateUrl: './mini-progress.component.html',
   host: { '[class.g2-mini-progress]': 'true' },
+  preserveWhitespaces: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class G2MiniProgressComponent implements OnChanges {
   @Input() color = '#1890FF';

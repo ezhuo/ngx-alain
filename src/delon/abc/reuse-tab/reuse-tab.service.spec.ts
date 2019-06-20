@@ -1,5 +1,4 @@
-import { Injector } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { TestBed, TestBedStatic } from '@angular/core/testing';
 import { ActivatedRoute, Router, RouteReuseStrategy } from '@angular/router';
 import { filter } from 'rxjs/operators';
 
@@ -26,7 +25,7 @@ class MockRouter {
 }
 
 describe('abc: reuse-tab(service)', () => {
-  let injector: Injector;
+  let injector: TestBedStatic;
   let srv: ReuseTabService;
   let menuSrv: MenuService;
   let router: MockRouter;
@@ -47,7 +46,7 @@ describe('abc: reuse-tab(service)', () => {
       ].concat(providers),
     });
     srv = injector.get(ReuseTabService);
-    menuSrv = injector.get(MenuService, null);
+    menuSrv = injector.get(MenuService, undefined);
     router = injector.get(Router) as any;
   }
 
@@ -55,7 +54,7 @@ describe('abc: reuse-tab(service)', () => {
     srv.clear();
     Array(count)
       .fill({})
-      .forEach((item: any, index: number) => {
+      .forEach((_item: any, index: number) => {
         srv.store(getSnapshot(index + 1, urlTpl), { a: 1 });
       });
   }
@@ -170,7 +169,7 @@ describe('abc: reuse-tab(service)', () => {
     describe('#excludes', () => {
       beforeEach(() => (srv.mode = ReuseTabMatchMode.URL));
       it('can hit because not exclude', () => {
-        srv.excludes = null;
+        srv.excludes = [];
         const snapshot = getSnapshot(1);
         expect(srv.can(snapshot)).toBe(true);
       });
@@ -193,7 +192,7 @@ describe('abc: reuse-tab(service)', () => {
       // get
       expect(srv.get('/a/1')).not.toBeNull(`'get' muse be return cache data`);
       expect(srv.get('/a/b')).toBeNull(`'get' muse be return null`);
-      expect(srv.get(null)).toBeNull(`'get' muse be return null if null`);
+      expect(srv.get()).toBeNull(`'get' muse be return null if null`);
       // remove
       srv.close('/a/1');
       --count;
@@ -356,7 +355,7 @@ describe('abc: reuse-tab(service)', () => {
     it('#refresh', () => {
       const _$ = srv.change.pipe(filter(w => w !== null)).subscribe(
         res => {
-          expect(res.active).toBe('refresh');
+          expect(res!.active).toBe('refresh');
           _$.unsubscribe();
         },
         () => expect(false).toBe(true),

@@ -152,3 +152,12 @@ export interface ModalParamsFormat {
   schemaData?: SchemaData;
   modalData?: ModalData;
 }
+
+/**
+ * 导出接口
+ */
+export interface ExportConfig {
+  filename?: string;
+  sheetname?: string;
+  title?: string;
+}

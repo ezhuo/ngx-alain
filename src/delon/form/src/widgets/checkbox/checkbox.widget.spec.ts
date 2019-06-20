@@ -78,7 +78,7 @@ describe('form: widget: checkbox', () => {
         },
       });
       const comp = page.getWidget<CheckboxWidget>('sf-checkbox');
-      const checkAllBtn = page.getEl('.sf__checkbox-list .ant-checkbox-wrapper');
+      const checkAllBtn = page.getEl('.sf__checkbox-list .ant-checkbox');
       checkAllBtn.click();
       expect(comp.allChecked).toBe(true);
       checkAllBtn.click();
@@ -121,6 +121,6 @@ describe('form: widget: checkbox', () => {
       .click('.ant-col-8 label')
       .asyncEnd();
     expect(page.getValue('a').length).toBe(1);
-    expect((s.properties.a.ui as any).change).toHaveBeenCalled();
+    expect((s.properties!.a.ui as any).change).toHaveBeenCalled();
   }));
 });

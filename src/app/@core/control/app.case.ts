@@ -1,3 +1,4 @@
+import { ExportConfig } from './../model/app.d';
 import { AppControl } from './app.control';
 import { of } from 'rxjs';
 import { STComponent } from '@delon/abc';
@@ -45,68 +46,68 @@ export class AppCase {
   ) => {
     const self = this.appCtl;
     __url = __url || self.dataSource.url;
-    __body = __body || {};
     __tableParams = __tableParams || self.tableParams;
-    const pi = __tableParams.pi;
-    const ps = __tableParams.ps;
-    __options = __options || {
-      filename: (self.titleSrv.getTitle() || '数据导出') + '.xlsx',
-      sheetname: '数据导出',
-    };
-    if (!__st) {
-      return self.noticeSrv.noticeError('导出无效！');
-    }
-    __tableParams.pi = 1;
-    __tableParams.ps = 10000;
-    __body = Object.assign(__body, __tableParams);
+    __options = __options || {};
+    __options.filename =
+      __options.filename || (self.titleSrv.getTitle() || '数据导出') + '.xlsx';
+    __options.sheetname = __options.sheetname || '数据导出';
+    if (!__st) return self.noticeSrv.noticeError('导出无效！');
 
-    const finallyFn = (res?: any) => {
-      self.freeTimeOut.to = setTimeout(() => {
-        __tableParams.pi = pi;
-        __tableParams.ps = ps;
-      }, 0);
-    };
-    self.httpSrv.get(__url, __body).subscribe(
-      (res: any) => {
-        if (res && res.data && res.data.list)
-          __st.export(res.data.list, __options);
-        finallyFn(res);
-      },
-      finallyFn,
-      finallyFn,
-    );
+    __body = helpers.deepExtend({}, __body || {}, __tableParams, {
+      pi: 1,
+      ps: 10000,
+    });
+    Object.keys(__body).forEach(kk => {
+      if (__body[kk] == null || __body[kk] == undefined || __body[kk] == '') {
+        delete __body[kk];
+      }
+    });
+
+    self.httpSrv.get(__url, __body).subscribe(({ data }: any) => {
+      if (data && data.list) {
+        data.list.forEach(row => {
+          Object.keys(row).forEach(item => {
+            if (row[item] == null || row[item] == undefined) {
+              row[item] = '';
+            }
+          });
+        });
+        __st.export(helpers.stDataAddIndex(data.list), __options);
+      }
+    });
   };
 
   /**
    * 根据服务器端，数据导出到EXCEL
    */
-  exportXlsFromServer = (__url?: string, __body?: any, __options?: any) => {
+  exportXlsFromServer = (
+    __url?: string,
+    __body?: any,
+    __config?: ExportConfig,
+  ) => {
     const self = this.appCtl;
     __url = __url || self.dataSource.url;
     __body = __body || {};
-    __options = __options || {
-      filename: self.titleSrv.getTitle() || '数据导出',
-      sheetname: '数据导出',
-    };
-
+    __config = __config || {};
     __url += '/exports';
 
     // 配置导出数据
-    __body.export_file = encodeURI(__body.export_file || '数据导出');
-    __body.export_title = encodeURI(__body.export_title || '数据列表');
-    if (__body.export_file.indexOf('.') < 1) {
-      __body.export_file += '.xlsx';
+    __config.filename = encodeURI(__config.filename || '数据导出');
+    __config.title = encodeURI(__config.title || '数据列表');
+    if (__config.filename.indexOf('.') < 1) {
+      __config.filename += '.xls';
     }
-    let ext = __body.export_file.split('.');
-    if (ext.length > 0) {
-      ext = ext[ext.length - 1];
+    const arr = __config.filename.split('.');
+    let ext = '';
+    if (arr.length > 0) {
+      ext = ext[arr.length - 1];
     }
 
     // 配置API ----------------------------
-    const header = self.tokenSrv.getRequestHeaders({});
+    const header = self.tokenSrv.getRequestHeaders({ id: __body.id + '' });
     __url +=
       '/' +
-      0 +
+      __body.id +
       '/' +
       header.get('style') +
       '/' +
@@ -115,13 +116,12 @@ export class AppCase {
       header.get('validate');
     const link = document.createElement('a');
     if (['pdf'].indexOf(ext) == -1) {
-      link.download = __body.export_file + '.' + ext;
+      link.download = __config.filename + '.' + ext;
     }
     link.target = '_blank';
-    link.href =
-      self.configSrv.api.base + __url + helpers.jsonToURL(__body);
+    link.href = self.configSrv.api.base + __url + helpers.jsonToURL(__config);
     document.body.appendChild(link);
-    console.log(link.href, header.get('validate'));
+    // console.log(link.href, header.get('validate'));
     link.click();
     return document.body.removeChild(link);
   };
@@ -129,7 +129,11 @@ export class AppCase {
   /**
    * 数据上传
    */
-  nzUploadHandleChange = ($event: any, $isMult?: boolean): void => {
+  nzUploadHandleChange = (
+    $event: any,
+    $isMult?: boolean,
+    $thumbUrl: string = null,
+  ): void => {
     const self = this.appCtl;
     const file = $event.file;
     const fileList: any[] = $event.fileList;
@@ -146,14 +150,16 @@ export class AppCase {
       if (!$isMult && fileList.length > 1) {
         fileList.shift();
       }
-      fileList[fileList.length - 1].thumbUrl = file.response.url;
+      fileList[fileList.length - 1].thumbUrl = $thumbUrl || file.response.url;
       fileList[fileList.length - 1].url = file.response.url;
-      console.log(file, fileList);
+      // console.log(file, fileList);
       self.msgSrv.msgSuccess(`${file.name} 上传成功！`);
     } else if (status === 'error') {
       // 上传失败
       // console.log(file, fileList);
       self.msgSrv.msgError(`${file.name} 上传失败！`);
+    } else if (status == 'removed') {
+      $event.type = 'success';
     }
   };
 
@@ -239,4 +245,12 @@ export class AppCase {
       }
     });
   };
+
+  stReset(__st: STComponent, __stParams: any) {
+    if (__st) {
+      __stParams = __stParams || this.appCtl.tableParams;
+      __st.reset(__stParams);
+      this.appCtl.detectChanges();
+    }
+  }
 }

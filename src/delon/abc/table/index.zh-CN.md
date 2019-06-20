@@ -51,10 +51,16 @@ config: STConfig
 `[noResult]` | 无数据时显示内容 | `string,TemplateRef<void>` | -
 `[bordered]` | 是否显示边框 | `boolean` | `false`
 `[size]` | table大小 | `'small','middle','default'` | `'default'`
+`[widthMode]` | 设置表格宽度模式 | `STWidthMode` | -
 `[rowClassName]` | 表格行的类名 | `(record: STData, index: number) => string` | -
-`[loading]` | 页面是否加载中 | `boolean` | `false`
+`[loading]` | 页面是否加载中，当指定 `null` 由 st 受控 | `boolean | null` | `null`
+`[loadingIndicator]` | 加载指示符 | `TemplateRef<void>` | -
 `[loadingDelay]` | 延迟显示加载效果的时间（防止闪烁） | `number` | `0`
 `[scroll]` | 横向或纵向支持滚动，也可用于指定滚动区域的宽高度：`{ x: "300px", y: "300px" }` | `{ y?: string; x?: string }` | -
+`[virtualScroll]` | 是否启用虚拟滚动模式，与 `[nzScroll]` 配合使用 | `boolean` | `false`
+`[virtualItemSize]` | 虚拟滚动时每一列的高度，与 [cdk itemSize](https://material.angular.io/cdk/scrolling/api) 相同 | `number` | `54`
+`[virtualMaxBufferPx]` | 缓冲区最大像素高度，与 [cdk maxBufferPx](https://material.angular.io/cdk/scrolling/api) 相同 | `number` | `200`
+`[virtualMinBufferPx]` | 缓冲区最小像素高度，低于该值时将加载新结构，与 [cdk minBufferPx](https://material.angular.io/cdk/scrolling/api) 相同 | `number` | `100`
 `[singleSort]` | 单排序规则<br>若不指定，则返回：`columnName=ascend|descend`<br>若指定，则返回：`sort=columnName.(ascend|descend)` | `STSingleSort` | `null`
 `[multiSort]` | 是否多排序，当 `sort` 多个相同值时自动合并，建议后端支持时使用 | `boolean, STMultiSort` | `false`
 `[rowClickTime]` | 行单击多少时长之类为双击（单位：毫秒） | `number` | `200`
@@ -64,15 +70,19 @@ config: STConfig
 `[body]` | 表格额外内容，一般用于添加合计行 | `TemplateRef<STStatisticalResults>` | -
 `[widthConfig]` | 表头分组时指定每列宽度，与 STColumn 的 width 不可混用 | `string[]` | -
 `[expandRowByClick]` | 通过点击行来展开子行 | `boolean` | `false`
+`[expandAccordion]` | 手风琴模式 | `boolean` | `false`
 `[expand]` | 当前列是否包含展开按钮，当数据源中包括 `expand` 表示展开状态 | `TemplateRef<void>` | -
+`[responsive]` | 是否开启响应式 | `boolean` | `true`
+`[responsiveHideHeaderFooter]` | 是否在小屏幕下才显示顶部与底部 | `boolean` | `false`
 `(change)` | 变化时回调，包括：`pi`、`ps`、`checkbox`、`radio`、`sort`、`filter`、`click`、`dblClick`、`expand` 变动 | `EventEmitter<STChange>` | -
 `(error)` | 异常时回调 | `EventEmitter<STError>` | -
 
-### 组件方法
+### 组件属性与方法
 
 名称 | 说明
 --- | -----
-`resetColumns()` | 重置列描述
+`filteredData` | 获取过滤后所有数据<br>- 本地数据：包含排序、过滤后不分页数据<br>- 远程数据：不传递 `pi`、`ps` 两个参数
+`resetColumns(options?: STResetColumnsOption)` | 重置列描述
 `load(pi = 1, extraParams?: any, options?: STLoadOptions)` | 加载指定页
 `reload(extraParams?: any, options?: STLoadOptions)` | 刷新当前页
 `reset(extraParams?: any, options?: STLoadOptions)` | 重置且重新设置 `pi` 为 `1`，包含单多选、排序、过滤状态（同默认状态一并清除）
@@ -81,7 +91,7 @@ config: STConfig
 `clearStatus()` | 清空所有状态（包含单多选、排序、过滤状态）
 `clearCheck()` | 清除所有 `checkbox`
 `clearRadio()` | 清除所有 `radio`
-`export(newData?: any[], opt?: STExportOptions)` | 导出Excel，确保已经导入 `XlsxModule`
+`export(newData?: STData[] | true, opt?: STExportOptions)` | 导出Excel，确保已经导入 `XlsxModule`
 
 一些细节：
 
@@ -122,7 +132,7 @@ class TestComponent {
 参数 | 说明 | 类型 | 默认值
 ----|------|-----|------
 `[reName]` | 重命名返回参数 `total`、`list`，支持 `a.b.c` 的嵌套写法 | `{total:string;list:string}` | -
-`[process]` | 数据预处理 | `(data: STData[]) => STData[]` | -
+`[process]` | 数据预处理 | `(data: STData[], rawData?: any) => STData[]` | -
 
 ### STPage
 
@@ -130,8 +140,9 @@ class TestComponent {
 ----|------|-----|------
 `[front]` | 前端分页，当 `data` 为 `any[]` 或 `Observable<any[]>` 有效 | `boolean` | `true`
 `[zeroIndexed]` | 后端分页是否采用`0`基索引，只在`data`类型为`string`时有效 | `boolean` | `false`
-`[placement]` | 分页方向 | `'left','center','right'` | `'right'`
-`[show]` | 是否显示分页器 | `boolean` | -
+`[position]` | 指定分页显示的位置 | `top,bottom,both` | `bottom`
+`[placement]` | 指定分页分页方向 | `left,center,right` | `right`
+`[show]` | 是否显示分页器 | `boolean` | `true`
 `[showSize]` | 是否显示分页器中改变页数 | `boolean` | `false`
 `[pageSizes]` | 分页器中每页显示条目数下拉框值 | `number[]` | `[10, 20, 30, 40, 50]`
 `[showQuickJumper]` | 是否显示分页器中快速跳转 | `boolean` | `false`
@@ -201,6 +212,7 @@ class TestComponent {
 `[checked]` | 选择框或单选框状态值 | `boolean` | -
 `[disabled]` | 选择框或单选框 `disabled` 值 | `boolean` | -
 `[expand]` | 是否展开状态 | `boolean` | -
+`[showExpand]` | 是否显示展开按钮 | `boolean` | -
 
 ### STColumn
 
@@ -212,11 +224,11 @@ class TestComponent {
 `[index]` | 列数据在数据项中对应的 key，支持 `a.b.c` 的嵌套写法 | `string, string[]` | -
 `[render]` | 自定义渲染ID | `string` | -
 `[renderTitle]` | 标题自定义渲染ID | `string` | -
-`[default]` | 当不存在数据时以默认值替代 | `string` | -
+`[default]` | 当不存在数据（值类型为 `undefined`）时以默认值替代 | `string` | -
 `[buttons]` | 按钮组 | `STColumnButton[]` | -
 `[width]` | 列宽（数字型表示 `px` 值，**注意：** 若固定列必须是数字），例如：`100`、`10%`、`100px` | `string,number` | -
 `[fixed]` | 固定前后列，当指定时务必指定 `width` 否则视为无效 | `left,right` | -
-`[format]` | 格式化列值 | `function(cell: any, row: any)` | -
+`[format]` | 格式化列值 | `(item: STData, col: STColumn) => string` | -
 `[className]` | 列 `class` 属性值，例如：；`text-center` 居中； `text-right` 居右； `text-danger` 异常色，更多参考[样式工具类](/theme/tools) | `string` | -
 `[colSpan]` | 合并列 | `number` | -
 `[sort]` | 排序配置项，远程数据配置**优先**规则：<br>`true` 表示允许排序<br>`string` 表示远程数据排序相对应 `key` 值 | `true,string,STColumnSort` | -
@@ -239,7 +251,7 @@ class TestComponent {
 参数 | 说明 | 类型 | 默认值
 ----|------|-----|------
 `[default]` | 排序的受控属性 | `ascend,descend` | -
-`[compare]` | 本地数据的排序函数，使用一个函数(参考 [Array.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) 的 compareFunction) | `(a: any, b: any) => number` | -
+`[compare]` | 本地数据的排序函数，使用一个函数(参考 [Array.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort) 的 compareFunction)，`null` 忽略本地排序，但保持排序功能 | `(a: any, b: any) => number, null` | -
 `[key]` | 远程数据的排序时后端相对应的KEY，默认使用 `index` 属性<br>若 `multiSort: false` 时：`key: 'name' => ?name=1&pi=1`<br>若 `multiSort: true` 允许多个排序 key 存在，或使用 `STMultiSort` 指定多列排序key合并规则 | `string` | -
 `[reName]` | 远程数据的排序时后端相对应的VALUE<br>`{ ascend: '0', descend: '1' }` 结果 `?name=1&pi=1`<br>`{ ascend: 'asc', descend: 'desc' }` 结果 `?name=desc&pi=1` | `{ ascend?: string, descend?: string }` | -
 
@@ -247,10 +259,11 @@ class TestComponent {
 
 参数 | 说明 | 类型 | 默认值
 ----|------|-----|------
+`[type]` | 类型，`keyword` 文本框形式 | `default,keyword` | `default`
 `[menus]` | 表头的筛选菜单项，至少一项才会生效 | `STColumnFilterMenu[]` | -
 `[fn]` | 本地数据的筛选函数 | `(filter: STColumnFilterMenu, record: STData) => boolean` | -
 `[default]` | 标识数据是否经过过滤，筛选图标会高亮 | `boolean` | -
-`[icon]` | 自定义 fiter 图标 | `string` | `filter`
+`[icon]` | 自定义 fiter 图标<br>当 `type='default'` 默认 `filter`<br>当 `type='keyword'` 默认 `search` | `string | STIcon` | `filter`
 `[multiple]` | 是否多选 | `boolean` | `true`
 `[confirmText]` | filter 确认按钮文本 | `string` | `确认`
 `[clearText]` | filter 清除按钮文本 | `string` | `重置`
@@ -261,7 +274,7 @@ class TestComponent {
 
 参数 | 说明 | 类型 | 默认值
 ----|------|-----|------
-`[text]` | 文本 | `string` | -
+`[text]` | 文本<br>当 `type: 'keyword'` 时表示 `placeholder` | `string` | -
 `[value]` | 值 | `any` | -
 `[checked]` | 是否选中 | `boolean` | -
 `[acl]` | 权限，等同 `can()` 参数值 | `ACLCanType` | -
@@ -270,10 +283,10 @@ class TestComponent {
 
 参数 | 说明 | 类型 | 默认值
 ----|------|-----|------
-`[text]` | 文本与图标共存 | `string` | -
+`[text]` | 文本与图标共存 | `string | (record: STData, btn: STColumnButton) => string` | -
 `[icon]` | 图标与文本共存 | `string | STIcon` | -
 `[i18n]` | 文本i18n | `string` | -
-`[format]` | 格式化文本 | `(record: STData, btn: STColumnButton) => string` | -
+(deprecated) `[format]` | 格式化文本 | `(record: STData, btn: STColumnButton) => string` | -
 `[type]` | 按钮类型 | `none,del,modal,static,drawer,link` | -
 `[click]` | 点击回调；**函数：** `type=modal` 只会在 `确认` 时触发且 `modal` 参数有效<br>**reload：** 重新刷新当前页<br>**load：** 重新加载数据，并重置页码为：`1` | `(record: STData, modal?: any, instance?: STComponent) => void | reload` | -
 `[pop]` | 是否需要气泡确认框 | `string` | -
@@ -283,6 +296,7 @@ class TestComponent {
 `[children]` | 下拉菜单，当存在时以 `dropdown` 形式渲染；只支持一级 | `STColumnButton[]` | -
 `[acl]` | ACL权限，等同 `can()` 参数值 | `ACLCanType` | -
 `[iif]` | 自定义条件表达式 | `(item: STData, btn: STColumnButton, column: STColumn) => boolean` | `() => true`
+`[iifBehavior]` | 表达式 `false` 值时渲染方式 | `hide,disabled` | `hide`
 
 ### STIcon
 
@@ -332,6 +346,7 @@ class TestComponent {
 `[truth]` | 真值条件 | `any` | `true`
 `[yes]` | 徽章 `true` 时文本 | `string` | `是`
 `[no]` | 徽章 `false` 时文本 | `string` | `否`
+`[mode]` | 显示模式 | `full,icon,text` | `icon`
 
 ### STColumnBadge
 
@@ -347,10 +362,28 @@ class TestComponent {
 `[text]` | 文本 | `string` | -
 `[color]` | Tag颜色值 | `string` | -
 
+### STWidthMode
+
+参数 | 说明 | 类型 | 默认值
+----|------|-----|------
+`[type]` | 类型 | `strict,default` | `default`
+`[strictBehavior]` | `strict` 的行为类型 | `wrap,truncate` | `truncate`
+
 ### STStatistical
 
 参数 | 说明 | 类型 | 默认值
 ----|------|-----|------
 `[type]` | 统计类型 | `STStatisticalType | STStatisticalFn` | -
 `[digits]` | 保留小数位数 | `number` | `2`
-`[currenty]` | 是否需要货币格式化，默认当 `type` 为 `STStatisticalFn`、 `sum`、`average`、`max`、`min` 时为 `true` | `boolean` | -
+`[currency]` | 是否需要货币格式化，默认当 `type` 为 `STStatisticalFn`、 `sum`、`average`、`max`、`min` 时为 `true` | `boolean` | -
+
+**STStatisticalFn**
+
+```ts
+(
+  values: number[],
+  col: STColumn,
+  list: STData[],
+  rawData?: any,
+) => STStatisticalResult
+```

@@ -21,14 +21,10 @@ export class PrintComponent {
     `,
   };
   error = false;
-  lodop: Lodop = null;
+  lodop: Lodop | null = null;
   pinters: any[] = [];
   papers: string[] = [];
-  constructor(
-    public lodopSrv: LodopService,
-    private msg: NzMessageService,
-    private notify: NzNotificationService,
-  ) {
+  constructor(public lodopSrv: LodopService, private msg: NzMessageService, private notify: NzNotificationService) {
     this.lodopSrv.lodop.subscribe(({ lodop, ok }) => {
       if (!ok) {
         this.error = true;
@@ -36,7 +32,7 @@ export class PrintComponent {
       }
       this.error = false;
       this.msg.success(`打印机加载成功`);
-      this.lodop = lodop;
+      this.lodop = lodop as Lodop;
       this.pinters = this.lodopSrv.printer;
     });
   }
@@ -47,28 +43,22 @@ export class PrintComponent {
     this.cog.printer = '';
     this.cog.paper = '';
 
-    this.lodopSrv.cog = Object.assign({}, this.cog, options);
+    this.lodopSrv.cog = { ...this.cog, ...options };
     this.error = false;
     if (options === null) this.lodopSrv.reset();
   }
 
   changePinter(name: string) {
-    this.papers = this.lodop.GET_PAGESIZES_LIST(name, '\n').split('\n');
+    this.papers = this.lodop!.GET_PAGESIZES_LIST(name, '\n').split('\n');
   }
 
   printing = false;
   print(isPrivew = false) {
-    const LODOP = this.lodop;
+    const LODOP = this.lodop as Lodop;
     LODOP.PRINT_INITA(10, 20, 810, 610, '测试C-Lodop远程打印四步骤');
     LODOP.SET_PRINTER_INDEXA(this.cog.printer);
     LODOP.SET_PRINT_PAGESIZE(0, 0, 0, this.cog.paper);
-    LODOP.ADD_PRINT_TEXT(
-      1,
-      1,
-      300,
-      200,
-      '下面输出的是本页源代码及其展现效果：',
-    );
+    LODOP.ADD_PRINT_TEXT(1, 1, 300, 200, '下面输出的是本页源代码及其展现效果：');
     LODOP.ADD_PRINT_TEXT(20, 10, '90%', '95%', this.cog.html);
     LODOP.SET_PRINT_STYLEA(0, 'ItemType', 4);
     LODOP.NewPageA();

@@ -48,15 +48,20 @@ const REUSETAB_PROVIDES = [
 
 import { PageHeaderConfig } from '@delon/abc';
 export function fnPageHeaderConfig(): PageHeaderConfig {
-  return Object.assign(new PageHeaderConfig(), { homeI18n: 'home' });
+  return {
+    ...new PageHeaderConfig(),
+    homeI18n: 'home',
+  };
 }
 
 import { DelonAuthConfig } from '@delon/auth';
 export function fnDelonAuthConfig(): DelonAuthConfig {
-  return Object.assign(new DelonAuthConfig(), <DelonAuthConfig>{
+  return {
+    ...new DelonAuthConfig(),
     login_url: '/passport/login',
-  });
+  };
 }
+
 
 import { DelonFormConfig } from '@delon/form';
 export function fnDelonFormConfig(): DelonFormConfig {
@@ -72,11 +77,12 @@ export function fnDelonFormConfig(): DelonFormConfig {
 
 import { STConfig } from '@delon/abc';
 export function fnSTConfig(): STConfig {
-  return Object.assign(new STConfig(), <STConfig>{
+  return {
+    ...new STConfig(),
     modal: { size: 'lg' },
     res: { reName: { list: 'data.list', total: 'data.total' } },
     bordered: true,
-  });
+  };
 }
 
 const GLOBAL_CONFIG_PROVIDES = [

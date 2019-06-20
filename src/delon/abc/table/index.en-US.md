@@ -51,10 +51,16 @@ Property | Description | Type | Default
 `[noResult]` | Custom no result content | `string,TemplateRef<void>` | -
 `[bordered]` | Whether to show all table borders | `boolean` | `false`
 `[size]` | Size of table | `'small','middle','default'` | `'default'`
+`[widthMode]` | Set the table width mode | `STWidthMode` | -
 `[rowClassName]` | Row class name of table | `(record: STData, index: number) => string` | -
-`[loading]` | Loading status of table | `boolean` | `false`
+`[loading]` | Loading status of table, when specifying `null` is controlled by st | `boolean | null` | `null`
+`[loadingIndicator]` | The spinning indicator | `TemplateRef<void>` | -
 `[loadingDelay]` | Specifies a delay in milliseconds for loading state (prevent flush) | `number` | `0`
 `[scroll]` | Whether table can be scrolled in x/y direction, x or y can be a string that indicates the width and height of table body | `{ y?: string; x?: string }` | -
+`[virtualScroll]` | Enable virtual scroll mode，work with `[nzScroll]` | `boolean` | `false`
+`[virtualItemSize]` | The size of the items in the list, same as [cdk itemSize](https://material.angular.io/cdk/scrolling/api) | `number` | `54`
+`[virtualMaxBufferPx]` | The number of pixels worth of buffer to render for when rendering new items, same as [cdk maxBufferPx](https://material.angular.io/cdk/scrolling/api) | `number` | `200`
+`[virtualMinBufferPx]` | The minimum amount of buffer rendered beyond the viewport (in pixels),same as [cdk minBufferPx](https://material.angular.io/cdk/scrolling/api) | `number` | `100`
 `[singleSort]` | Single sort config<br>If not specified, return: `columnName=ascend|descend`<br>If specified, return: `sort=columnName.(ascend|descend)` | `STSingleSort` | `null`
 `[multiSort]` | Whether to mulit-sort, recommended use in URL data source | `boolean, STMultiSort` | `false`
 `[rowClickTime]` | Click twice in the time range for double click, unit is millisecond | `number` | `200`
@@ -64,15 +70,19 @@ Property | Description | Type | Default
 `[body]` | Table extra body renderer, generally used to add total rows | `TemplateRef<STStatisticalResults>` | -
 `[widthConfig]` | Set col width can not used with width of STColumn | `string[]` | -
 `[expandRowByClick]` | Whether to expand row by clicking anywhere in the whole row | `boolean` | `false`
+`[expandAccordion]` | Accordion mode | `boolean` | `false`
 `[expand]` | Whether current column include expand icon | `TemplateRef<void>` | -
+`[responsive]` | Whether to turn on responsive | `boolean` | `true`
+`[responsiveHideHeaderFooter]` | Whether to display the header and footer under the small screen | `boolean` | `false`
 `(change)` | Events | `EventEmitter<STChange>` | -
 `(error)` | Error event | `EventEmitter<STError>` | -
 
-### Methods
+### Properties & Methods
 
 Name | Description
 ---- | -----------
-`resetColumns()` | Reset columns
+`filteredData` | Get all data after filtering & sorting<br>- Local data: including sorting, filtering<br>- Remote data: Don't pass `pi`, `ps` parameters in http request
+`resetColumns(options?: STResetColumnsOption)` | Reset columns
 `load(pi = 1, extraParams?: any, options?: STLoadOptions)` | Load specified page
 `reload(extraParams?: any, options?: STLoadOptions)` | Refresh current page
 `reset(extraParams?: any, options?: STLoadOptions)` | Reset data and `pi` to `1`, including single multi-select, sort, filter status (Covered default state)
@@ -81,7 +91,7 @@ Name | Description
 `clearStatus()` | Clean all status (like this: single multi-select, sort, filter status)
 `clearCheck()` | Clear all `checkbox`
 `clearRadio()` | Clear all `radio`
-`export(newData?: any[], opt?: STExportOptions)` | Export Excel and make sure you have imported `XlsxModule`
+`export(newData?: STData[] | true, opt?: STExportOptions)` | Export Excel and make sure you have imported `XlsxModule`
 
 Some details:
 
@@ -122,7 +132,7 @@ Property | Description | Type | Default
 Property | Description | Type | Default
 -------- | ----------- | ---- | -------
 `[reName]` | Map name `total`、`list`, could be set like `a.b.c` | `{total:string;list:string}` | -
-`[process]` | Data preprocessing | `(data: STData[]) => STData[]` | -
+`[process]` | Data preprocessing | `(data: STData[], rawData?: any) => STData[]` | -
 
 ### STPage
 
@@ -130,8 +140,9 @@ Property | Description | Type | Default
 -------- | ----------- | ---- | -------
 `[front]` | Front paging when `data` is `any[]` or `Observable<any[]>` | `boolean` | `true`
 `[zeroIndexed]` | Whether the backend paging uses the `0` base index (only data is url) | `boolean` | `false`
-`[placement]` | Pager direction | `'left','center','right'` | `'right'`
-`[show]` | Whether to show pager | `boolean` | -
+`[position]` | Specify the position of Pagination | `top,bottom,both` | `bottom`
+`[placement]` | Specify the direction of Pagination | `left,center,right` | `right`
+`[show]` | Whether to show pager | `boolean` | `true`
 `[showSize]` | Determine whether `ps` can be changed | `boolean` | `false`
 `[pageSizes]` | Specify the sizeChanger options | `number[]` | `[10, 20, 30, 40, 50]`
 `[showQuickJumper]` | Determine whether you can jump to pages directly | `boolean` | `false`
@@ -208,6 +219,7 @@ Property | Description | Type | Default
 `[checked]` | Select or radio button `checked` status value | `boolean` | -
 `[disabled]` | Select or radio button `disabled` status value | `boolean` | -
 `[expand]` | Whether to expand the status value | `boolean` | -
+`[showExpand]` | Whether show expand icon | `boolean` | -
 
 ### STColumn
 
@@ -219,11 +231,11 @@ Property | Description | Type | Default
 `[index]` | Display field of the data record, could be set like `a.b.c` | `string, string[]` | -
 `[render]` | Custom render template ID | `string` | -
 `[renderTitle]` | Title custom render template ID | `string` | -
-`[default]` | Replace with default value when no data exists | `string` | -
+`[default]` | Replace with default value when no data exists (value typeof is `undefined`) | `string` | -
 `[buttons]` | Buttons of this column | `STColumnButton[]` | -
 `[width]` | Width of this column (**NOTICE:** If the fixed column must be a number), e.g: `100`, `10%`, `100px` | `string,number` | -
 `[fixed]` | Set column to be fixed, must specify `width` | `left,right` | -
-`[format]` | Format value of this column | `function(cell: any, row: any)` | -
+`[format]` | Format value of this column | `(item: STData, col: STColumn) => string` | -
 `[className]` | Class name of this column, e.g: `text-center`, `text-right`, `text-danger`, pls refer to [Style Tools](/theme/tools) | `string` | -
 `[colSpan]` | Span of this column's title | `number` | -
 `[sort]` | Sort config of this column, Remote Data Configuration**Priority** Rule: <br>`true` allow sorting<br>`string` corresponding `key` value| `true,string,STColumnSort` | -
@@ -246,7 +258,7 @@ Property | Description | Type | Default
 Property | Description | Type | Default
 -------- | ----------- | ---- | -------
 `[default]` | Default order of sorted values | `ascend,descend` | -
-`[compare]` | Sort function for local sort, see [Array.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort)'s compareFunction. | `(a: STData, b: STData) => number` | -
+`[compare]` | Sort function for local sort, see [Array.sort](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort)'s compareFunction, `null` ingore local sort but keeping sort function. | `(a: STData, b: STData) => number, null` | -
 `[key]` | Unique key of this column, default is `index` property value<br>`multiSort: false` => `key: 'name' => ?name=1&pi=1`<br>`multiSort: true` allow multiple sort keys, or use `STMultiSort` to specify multi-column sort key merge rule | `string` | -
 `[reName]` | Map name<br>`{ ascend: '0', descend: '1' }` => `?name=1&pi=1`<br>`{ ascend: 'asc', descend: 'desc' }` => `?name=desc&pi=1` | `{ ascend?: string, descend?: string }` | -
 
@@ -254,10 +266,11 @@ Property | Description | Type | Default
 
 Property | Description | Type | Default
 -------- | ----------- | ---- | -------
+`[type]` | Type of the filter, `keyword` render by input | `default,keyword` | `default`
 `[menus]` | Filter menu config | `STColumnFilterMenu[]` | -
 `[fn]` | Filter function for local data | `(filter: STColumnFilterMenu, record: STData) => boolean` | -
 `[default]` | Whether the `data` is filtered | `boolean` | -
-`[icon]` | Customized filter icon | `string` | `filter`
+`[icon]` | Customized filter icon<br>When `type='default'` default `filter`<br> when `type='keyword'` default `search` | `string | STIcon` | `filter`
 `[multiple]` | Whether multiple filters can be selected | `boolean` | `true`
 `[confirmText]` | Text of the confirm button | `string` | `确认`
 `[clearText]` | Text of the clear button | `string` | `重置`
@@ -268,7 +281,7 @@ Property | Description | Type | Default
 
 Property | Description | Type | Default
 -------- | ----------- | ---- | -------
-`[text]` | Filter text | `string` | -
+`[text]` | Filter text<br>When `type: 'keyword'` is `placeholder` value | `string` | -
 `[value]` | Filter value | `any` | -
 `[checked]` | Whether checked | `boolean` | -
 `[acl]` | ACL permission (Use `can()` verify) | `ACLCanType` | -
@@ -287,10 +300,10 @@ Property | Description | Type | Default
 
 Property | Description | Type | Default
 -------- | ----------- | ---- | -------
-`[text]` | Text of button, coexist with icon | `string` | -
+`[text]` | Text of button, coexist with icon | `string | (record: STData, btn: STColumnButton) => string` | -
 `[icon]` | Icon of button, coexist with text | `string | STIcon` | -
 `[i18n]` | I18n key of button | `string` | -
-`[format]` | Format value of button text | `(record: STData, btn: STColumnButton) => string` | -
+(deprecated) `[format]` | Format value of button text | `(record: STData, btn: STColumnButton) => string` | -
 `[type]` | Type of button | `none,del,modal,static,drawer,link` | -
 `[click]` | Click callback; <br>**function** when `type=modal` will only fire when `confirmed`<br>**reload** Refresh current page<br>**load** load `1` page | `(record: STData, modal?: any, instance?: STComponent) => void | reload` | -
 `[pop]` | Whether to pop confirm | `string` | -
@@ -300,6 +313,7 @@ Property | Description | Type | Default
 `[children]` | Drop-down menu, only supports level 1| `STColumnButton[]` | -
 `[acl]` | ACL permission (Use `can()` verify) | `ACLCanType` | -
 `[iif]` | Custom conditional expression | `(item: STData, btn: STColumnButton, column: STColumn) => boolean` | `() => true`
+`[iifBehavior]` | Render button mode when the conditional expression `false` value | `hide,disabled` | `hide`
 
 ### STColumnButtonModal
 
@@ -339,6 +353,7 @@ Property | Description | Type | Default
 `[truth]` | Truth condition value | `any` | `true`
 `[yes]` | Badge `true` text | `string` | `是`
 `[no]` | Badge `false` text | `string` | `否`
+`[mode]` | Display mode for yn | `full,icon,text` | `icon`
 
 ### STColumnBadge
 
@@ -354,10 +369,28 @@ Property | Description | Type | Default
 `[text]` | Tag text | `string` | -
 `[color]` | Tag color value | `string` | -
 
+### STWidthMode
+
+Property | Description | Type | Default
+-------- | ----------- | ---- | -------
+`[type]` | Type of width mode | `strict,default` | `default`
+`[strictBehavior]` | Behavior type of `strict` | `wrap,truncate` | `truncate`
+
 ### STStatistical
 
 Property | Description | Type | Default
 -------- | ----------- | ---- | -------
 `[type]` | Statistic type of current column | `STStatisticalType | STStatisticalFn` | -
 `[digits]` | The number of digits to appear after the decimal point | `number` | `2`
-`[currenty]` | Whether formatting currenty, default to `true` when `type` is `STStatisticalFn`,`sum`,`average`,`max`,`min` | `boolean` | -
+`[currency]` | Whether formatting currency, default to `true` when `type` is `STStatisticalFn`,`sum`,`average`,`max`,`min` | `boolean` | -
+
+**STStatisticalFn**
+
+```ts
+(
+  values: number[],
+  col: STColumn,
+  list: STData[],
+  rawData?: any,
+) => STStatisticalResult
+```

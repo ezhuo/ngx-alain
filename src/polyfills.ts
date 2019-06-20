@@ -18,6 +18,27 @@
  * BROWSER POLYFILLS
  */
 
+ // 兼容ie10
+(function() {
+  Object.setPrototypeOf =
+    Object.setPrototypeOf ||
+    ({ __proto__: [] } instanceof Array ? setProtoOf : mixinProperties);
+
+  function setProtoOf(obj, proto) {
+    obj.__proto__ = proto;
+    return obj;
+  }
+
+  function mixinProperties(obj, proto) {
+    for (const prop in proto) {
+      if (!obj.hasOwnProperty(prop)) {
+        obj[prop] = proto[prop];
+      }
+    }
+    return obj;
+  }
+})();
+
 /** IE9, IE10 and IE11 requires all of the following polyfills. **/
 import 'core-js/es6/symbol';
 import 'core-js/es6/object';
@@ -33,6 +54,7 @@ import 'core-js/es6/regexp';
 import 'core-js/es6/map';
 import 'core-js/es6/weak-map';
 import 'core-js/es6/set';
+// import 'core-js/es6/promise';
 
 /** IE10 and IE11 requires the following for NgClass support on SVG elements */
 // import 'classlist.js'; // Run `npm install --save classlist.js`.
@@ -54,6 +76,8 @@ import 'core-js/es7/object';
  * Zone JS is required by Angular itself.
  */
 import 'zone.js/dist/zone'; // Included with Angular CLI.
+
+import 'babel-polyfill';
 
 /***************************************************************************************************
  * APPLICATION IMPORTS

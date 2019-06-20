@@ -1,6 +1,6 @@
-import { AfterViewInit, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ViewChild, ViewEncapsulation } from '@angular/core';
 import { NgModel } from '@angular/forms';
-import { NzAutocompleteOptionComponent } from 'ng-zorro-antd';
+import { NzAutocompleteOptionComponent } from 'ng-zorro-antd/auto-complete';
 import { of, Observable } from 'rxjs';
 import { debounceTime, flatMap, map, startWith } from 'rxjs/operators';
 import { SFValue } from '../../interface';
@@ -11,6 +11,8 @@ import { ControlWidget } from '../../widget';
 @Component({
   selector: 'sf-autocomplete',
   templateUrl: './autocomplete.widget.html',
+  preserveWhitespaces: false,
+  encapsulation: ViewEncapsulation.None,
 })
 export class AutoCompleteWidget extends ControlWidget implements AfterViewInit {
   i: any = {};
@@ -43,27 +45,27 @@ export class AutoCompleteWidget extends ControlWidget implements AfterViewInit {
     const orgTime = +(this.ui.debounceTime || 0);
     const time = Math.max(0, this.isAsync ? Math.max(50, orgTime) : orgTime);
 
-    this.list = this.ngModel.valueChanges.pipe(
+    this.list = this.ngModel.valueChanges!.pipe(
       debounceTime(time),
       startWith(''),
-      flatMap(input => (this.isAsync ? this.ui.asyncData(input) : this.filterData(input))),
-      map(res => getEnum(res, null, this.schema.readOnly)),
+      flatMap(input => (this.isAsync ? this.ui.asyncData!(input) : this.filterData(input))),
+      map(res => getEnum(res, null, this.schema.readOnly!)),
     );
   }
 
-  reset(value: SFValue) {
+  reset(_value: SFValue) {
     this.typing = this.value;
     if (this.isAsync) return;
     switch (this.ui.type) {
       case 'email':
-        this.fixData = getCopyEnum(this.schema.enum || this.formProperty.options.uiEmailSuffixes, null, this.schema.readOnly);
+        this.fixData = getCopyEnum(
+          this.schema.enum! || this.formProperty.options.uiEmailSuffixes,
+          null,
+          this.schema.readOnly!,
+        );
         break;
       default:
-        this.fixData = getCopyEnum(
-          this.schema.enum,
-          this.formProperty.formData,
-          this.schema.readOnly,
-        );
+        this.fixData = getCopyEnum(this.schema.enum!, this.formProperty.formData, this.schema.readOnly!);
         break;
     }
   }
@@ -78,8 +80,6 @@ export class AutoCompleteWidget extends ControlWidget implements AfterViewInit {
   }
 
   private addEmailSuffix(value: string) {
-    return of(
-      !value || ~value.indexOf('@') ? [] : this.fixData.map(domain => `${value}@${domain.label}`),
-    );
+    return of(!value || ~value.indexOf('@') ? [] : this.fixData.map(domain => `${value}@${domain.label}`));
   }
 }

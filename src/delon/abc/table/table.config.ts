@@ -9,6 +9,8 @@ import {
   STRes,
   STRowClassName,
   STSingleSort,
+  STWidthMode,
+  IifBehaviorType,
 } from './table.interfaces';
 
 @Injectable({ providedIn: 'root' })
@@ -30,7 +32,11 @@ export class STConfig {
    */
   size?: 'small' | 'middle' | 'default' = 'default';
   /**
-   * 是否隐藏头和尾，当小屏幕下才显示，默认：`false`
+   * 是否开启响应式，默认：`true`
+   */
+  responsive?: boolean = true;
+  /**
+   * 是否在小屏幕下才显示顶部与底部，默认：`false`
    */
   responsiveHideHeaderFooter?: boolean = false;
   /** 请求体配置 */
@@ -48,6 +54,7 @@ export class STConfig {
   page?: STPage = {
     front: true,
     zeroIndexed: false,
+    position: 'bottom',
     placement: 'right',
     show: true,
     showSize: false,
@@ -67,11 +74,11 @@ export class STConfig {
    * - 若不指定，则返回：`columnName=ascend|descend`
    * - 若指定，则返回：`sort=columnName.(ascend|descend)`
    */
-  singleSort?: STSingleSort = null;
+  singleSort?: STSingleSort | null = null;
   /**
    * 是否多排序，当 `sort` 多个相同值时自动合并，建议后端支持时使用
    */
-  multiSort?: STMultiSort = null;
+  multiSort?: STMultiSort | null = null;
   /**
    * 按钮模态框配置
    */
@@ -126,4 +133,23 @@ export class STConfig {
    * 通过点击行来展开子行
    */
   expandRowByClick?: boolean = false;
+  /**
+   * 手风琴模式
+   */
+  expandAccordion?: boolean = false;
+  /**
+   * 指定 `width` 模式
+   */
+  widthMode?: STWidthMode = {
+    type: 'default',
+    strictBehavior: 'truncate',
+  };
+  virtualItemSize? = 54;
+  virtualMaxBufferPx? = 200;
+  virtualMinBufferPx? = 100;
+
+  /**
+   * Conditional expression rendering behavior, can be set to `hide` (default) or `disabled`
+   */
+  iifBehavior?: IifBehaviorType = 'hide';
 }

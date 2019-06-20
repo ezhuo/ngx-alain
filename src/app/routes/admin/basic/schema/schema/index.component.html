@@ -78,13 +78,13 @@
     <nz-form-item>
         <nz-form-control>
             <nz-tree 
-                    [(nzData)]="nodes2" 
+                    [nzData]="nodes2" 
                     [nzShowLine]="true" 
                     [nzCheckable]="false" 
-                    [nzDefaultExpandedKeys]="expandKeys" 
-                    [nzDefaultCheckedKeys]="checkedKeys"
-                    [nzDefaultSelectedKeys]="selectedKeys" 
-                    [nzDefaultExpandAll]="true" 
+                    [nzExpandedKeys]="expandKeys" 
+                    [nzCheckedKeys]="checkedKeys"
+                    [nzSelectedKeys]="selectedKeys" 
+                    [nzExpandAll]="true" 
                     (nzClick)="mouseAction('click',$event)" 
                     (nzDblClick)="mouseAction('dblclick', $event)" 
                     (nzContextMenu)="contextMenu2($event , contextTemplate)">

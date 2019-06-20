@@ -14,19 +14,16 @@ import { StringProperty } from './string.property';
 const SEQ = '/';
 
 export class FormPropertyFactory {
-  constructor(
-    private schemaValidatorFactory: SchemaValidatorFactory,
-    private options: DelonFormConfig,
-  ) {}
+  constructor(private schemaValidatorFactory: SchemaValidatorFactory, private options: DelonFormConfig) {}
 
   createProperty(
     schema: SFSchema,
     ui: SFUISchema | SFUISchemaItem,
     formData: {},
-    parent: PropertyGroup = null,
+    parent: PropertyGroup | null = null,
     propertyId?: string,
   ): FormProperty {
-    let newProperty = null;
+    let newProperty: FormProperty | null = null;
     let path = '';
     if (parent) {
       path += parent.path;
@@ -38,20 +35,18 @@ export class FormPropertyFactory {
       } else if (parent.type === 'array') {
         path += (parent as ArrayProperty).tick++;
       } else {
-        throw new Error(
-          'Instanciation of a FormProperty with an unknown parent type: ' + parent.type,
-        );
+        throw new Error('Instanciation of a FormProperty with an unknown parent type: ' + parent.type);
       }
     } else {
       path = SEQ;
     }
 
     if (schema.$ref) {
-      const refSchema = retrieveSchema(schema, parent.root.schema.definitions);
+      const refSchema = retrieveSchema(schema, parent!.root.schema.definitions);
       newProperty = this.createProperty(refSchema, ui, formData, parent, path);
     } else {
       // fix required
-      if (propertyId && ((parent!.schema.required || []) as string[]).indexOf(propertyId.split(SEQ).pop()) !== -1) {
+      if (propertyId && ((parent!.schema.required || []) as string[]).indexOf(propertyId.split(SEQ).pop()!) !== -1) {
         ui._required = true;
       }
       // fix title
@@ -59,21 +54,11 @@ export class FormPropertyFactory {
         schema.title = propertyId;
       }
       // fix date
-      if (
-        (schema.type === 'string' || schema.type === 'number') &&
-        !schema.format &&
-        !(ui as SFUISchemaItem).format
-      ) {
+      if ((schema.type === 'string' || schema.type === 'number') && !schema.format && !(ui as SFUISchemaItem).format) {
         if ((ui as SFUISchemaItem).widget === 'date')
-          ui.format =
-            schema.type === 'string'
-              ? this.options.uiDateStringFormat
-              : this.options.uiDateNumberFormat;
+          ui.format = schema.type === 'string' ? this.options.uiDateStringFormat : this.options.uiDateNumberFormat;
         else if ((ui as SFUISchemaItem).widget === 'time')
-          ui.format =
-            schema.type === 'string'
-              ? this.options.uiTimeStringFormat
-              : this.options.uiTimeNumberFormat;
+          ui.format = schema.type === 'string' ? this.options.uiTimeStringFormat : this.options.uiTimeNumberFormat;
       }
       switch (schema.type) {
         case 'integer':

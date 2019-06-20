@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { NzDrawerOptions, NzDrawerService } from 'ng-zorro-antd';
+import { deepMerge } from '@delon/util';
+import { NzDrawerOptions, NzDrawerService } from 'ng-zorro-antd/drawer';
 import { Observable, Observer } from 'rxjs';
 
 export interface DrawerHelperOptions {
@@ -24,6 +25,8 @@ export interface DrawerHelperOptions {
    * 底部工具条高度，默认：`55`
    */
   footerHeight?: number;
+  /** 是否精准（默认：`true`），若返回值非空值（`null`或`undefined`）视为成功，否则视为错误 */
+  exact?: boolean;
   /** 抽屉 [NzDrawerOptions](https://ng.ant.design/components/drawer/zh#nzdraweroptions) 参数 */
   drawerOptions?: NzDrawerOptions;
 }
@@ -33,65 +36,58 @@ export interface DrawerHelperOptions {
  *
  * **注意：** 构建结果都可被订阅，但永远都不会触发 `observer.error`
  *
- * 示例：
-```ts
-this.drawerHelper.create('Edit', FormEditComponent, { i }).subscribe(res => this.load());
-// 对于组件的成功&关闭的处理说明
-// 成功
-this.NzDrawerRef.close(data);
-this.NzDrawerRef.close(true);
-// 关闭
-this.NzDrawerRef.close();
-this.NzDrawerRef.close(false);
-```
+ * @example
+ * this.drawerHelper.create('Edit', FormEditComponent, { i }).subscribe(res => this.load());
+ * // 对于组件的成功&关闭的处理说明
+ * // 成功
+ * this.NzDrawerRef.close(data);
+ * this.NzDrawerRef.close(true);
+ * // 关闭
+ * this.NzDrawerRef.close();
+ * this.NzDrawerRef.close(false);
  */
 @Injectable({ providedIn: 'root' })
 export class DrawerHelper {
-  // 大部分情况下抽屉的层级比 Modal 会更低一些
-  private zIndex = 400;
-
   constructor(private srv: NzDrawerService) {}
 
   /**
    * 构建一个抽屉
    */
   create(title: string, comp: any, params?: any, options?: DrawerHelperOptions): Observable<any> {
-    options = {
-      size: 'md',
-      footer: true,
-      footerHeight: 55,
-      drawerOptions: {
-        nzPlacement: 'right',
-        nzWrapClassName: '',
+    options = deepMerge(
+      {
+        size: 'md',
+        footer: true,
+        footerHeight: 55,
+        exact: true,
+        drawerOptions: {
+          nzPlacement: 'right',
+          nzWrapClassName: '',
+        },
       },
-      ...options,
-    };
+      options,
+    );
     return new Observable((observer: Observer<any>) => {
-      const { size, footer, footerHeight, drawerOptions } = options;
+      const { size, footer, footerHeight, drawerOptions } = options as DrawerHelperOptions;
       const defaultOptions: NzDrawerOptions = {
         nzContent: comp,
         nzContentParams: params,
-        nzZIndex: ++this.zIndex,
         nzTitle: title,
       };
 
       if (typeof size === 'number') {
         defaultOptions[
-          drawerOptions.nzPlacement === 'top' || drawerOptions.nzPlacement === 'bottom'
-            ? 'nzHeight'
-            : 'nzWidth'
-        ] = options.size;
+          drawerOptions!.nzPlacement === 'top' || drawerOptions!.nzPlacement === 'bottom' ? 'nzHeight' : 'nzWidth'
+        ] = options!.size;
       } else {
-        defaultOptions.nzWrapClassName = (
-          drawerOptions.nzWrapClassName + ` drawer-${options.size}`
-        ).trim();
-        delete drawerOptions.nzWrapClassName;
+        defaultOptions.nzWrapClassName = (drawerOptions!.nzWrapClassName + ` drawer-${options!.size}`).trim();
+        delete drawerOptions!.nzWrapClassName;
       }
 
       if (footer) {
-        const { nzPlacement, nzHeight } = drawerOptions;
+        const { nzPlacement, nzHeight } = drawerOptions as NzDrawerOptions;
         // Should be header * footer, because of includes header
-        const reduceHeight = (footerHeight * 2) - 2;
+        const reduceHeight = footerHeight! * 2 - 2;
         if (nzPlacement === 'left' || nzPlacement === 'right') {
           defaultOptions.nzBodyStyle = {
             height: `calc(100% - ${reduceHeight}px)`,
@@ -107,7 +103,11 @@ export class DrawerHelper {
 
       const subject = this.srv.create({ ...defaultOptions, ...drawerOptions });
       const afterClose$ = subject.afterClose.subscribe((res: any) => {
-        if (res != null && res !== false) {
+        if (options!.exact === true) {
+          if (res != null) {
+            observer.next(res);
+          }
+        } else {
           observer.next(res);
         }
         observer.complete();

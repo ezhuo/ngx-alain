@@ -96,7 +96,9 @@ describe('abc: date-picker: range', () => {
       context.shortcut = true;
       fixture.detectChanges();
       openPicker();
-      getPickerFooterExtra().querySelectorAll('a')[0].click();
+      getPickerFooterExtra()
+        .querySelectorAll('a')[0]
+        .click();
       timeEnd();
       expect(differenceInDays(context.i.end, context.i.start)).toBe(0);
     }));
@@ -117,10 +119,12 @@ describe('abc: date-picker: range', () => {
       fixture.detectChanges();
       openPicker();
       expect(dl.query(By.css('.ant-calendar-footer-extra')) == null).toBe(false);
-      getPickerFooterExtra().querySelectorAll('a')[0].click();
+      getPickerFooterExtra()
+        .querySelectorAll('a')[0]
+        .click();
       const list = getPickerFooterExtra().querySelectorAll('a');
       const shortcut = context.comp.shortcut as DateRangePickerShortcut;
-      expect(list.length).toBe(shortcut.list.length);
+      expect(list.length).toBe(shortcut.list!.length);
       list.forEach(el => {
         el.click();
         timeEnd();
@@ -165,8 +169,8 @@ class TestComponent {
   @ViewChild('comp')
   comp: RangePickerComponent;
   i: any = {};
-  _nzOnOpenChange() {}
-  _nzOnPanelChange() {}
-  _nzOnOk() {}
-  shortcut: boolean | DateRangePickerShortcut = false;
+  shortcut: boolean | DateRangePickerShortcut | null = false;
+  _nzOnOpenChange() { }
+  _nzOnPanelChange() { }
+  _nzOnOk() { }
 }

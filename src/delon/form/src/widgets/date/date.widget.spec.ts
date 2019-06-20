@@ -90,6 +90,14 @@ describe('form: widget: date', () => {
     });
 
     describe('when not specify displayFormat', () => {
+      it('should display yyyy with year mode ', () => {
+        const s: SFSchema = {
+          properties: { a: { type: 'string', ui: { widget, mode: 'year' } } },
+        };
+        page.newSchema(s);
+        const comp = getComp();
+        expect(comp.displayFormat).toBe('yyyy');
+      });
       it('should display yyyy-MM with month mode ', () => {
         const s: SFSchema = {
           properties: { a: { type: 'string', ui: { widget, mode: 'month' } } },
@@ -155,25 +163,23 @@ describe('form: widget: date', () => {
       expect(comp.mode).toBe('range');
       const time = new Date();
       comp._change([time, time]);
-      page
-        .checkValue('/start', format(time, comp.format))
-        .checkValue('/end', format(time, comp.format));
+      page.checkValue('/start', format(time, comp.format)).checkValue('/end', format(time, comp.format));
       comp._change(null);
       page.checkValue('/start', '').checkValue('/end', '');
     });
     it('should be default', () => {
       const copyS = { ...s };
       const time = new Date();
-      copyS.properties.start.default = time;
-      copyS.properties.end.default = time;
+      copyS.properties!.start.default = time;
+      copyS.properties!.end.default = time;
       page.newSchema(copyS);
       const res = getComp().displayValue;
       expect(Array.isArray(res)).toBe(true);
-      expect(res[0]).toBe(time);
+      expect(res![0]).toBe(time);
     });
     it('should be removed ui.end when not found end path', () => {
       const copyS = { ...s };
-      (copyS.properties.start.ui as SFUISchemaItem).end = 'invalid-end';
+      (copyS.properties!.start.ui as SFUISchemaItem).end = 'invalid-end';
       page.newSchema(copyS).checkUI('/start', 'end', null);
     });
   });
@@ -195,7 +201,7 @@ describe('form: widget: date', () => {
       };
       page.newSchema(s);
       const comp = getComp();
-      const ui = s.properties.a.ui as any;
+      const ui = s.properties!.a.ui as any;
       expect(ui.onOpenChange).not.toHaveBeenCalled();
       comp._openChange(true);
       expect(ui.onOpenChange).toHaveBeenCalled();
@@ -206,7 +212,7 @@ describe('form: widget: date', () => {
       };
       page.newSchema(s);
       const comp = getComp();
-      const ui = s.properties.a.ui as any;
+      const ui = s.properties!.a.ui as any;
       expect(ui.onOk).not.toHaveBeenCalled();
       comp._ok(true);
       expect(ui.onOk).toHaveBeenCalled();

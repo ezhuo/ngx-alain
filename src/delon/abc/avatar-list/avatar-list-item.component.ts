@@ -1,8 +1,14 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 
 @Component({
   selector: 'avatar-list-item, [avatar-list-item]',
-  template: `<ng-content></ng-content>`,
+  exportAs: 'avatarListItem',
+  template: `
+    <ng-content></ng-content>
+  `,
+  preserveWhitespaces: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class AvatarListItemComponent {
   @Input() src: string;

@@ -16,6 +16,8 @@ import {
   SimpleChange,
   SimpleChanges,
   TemplateRef,
+  ViewEncapsulation,
+  ViewChild,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import {
@@ -29,19 +31,12 @@ import {
   ModalHelper,
   YNPipe,
 } from '@delon/theme';
-import {
-  deepMerge,
-  deepMergeKey,
-  toBoolean,
-  updateHostClass,
-  InputBoolean,
-  InputNumber,
-} from '@delon/util';
-import { of, Observable, Subject } from 'rxjs';
+import { deepMerge, deepMergeKey, toBoolean, updateHostClass, InputBoolean, InputNumber } from '@delon/util';
+import { of, Observable, Subject, from } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 
 import { STColumnSource } from './table-column-source';
-import { STDataSource } from './table-data-source';
+import { STDataSource, STDataSourceResult, STDataSourceOptions } from './table-data-source';
 import { STExport } from './table-export';
 import { STRowSource } from './table-row.directive';
 import { STConfig } from './table.config';
@@ -63,39 +58,22 @@ import {
   STRowClassName,
   STSingleSort,
   STStatisticalResults,
+  STWidthMode,
+  STResetColumnsOption,
 } from './table.interfaces';
+import { NzTableComponent } from 'ng-zorro-antd';
 
 @Component({
   selector: 'st',
+  exportAs: 'st',
   templateUrl: './table.component.html',
-  providers: [
-    STDataSource,
-    STRowSource,
-    STColumnSource,
-    STExport,
-    CNCurrencyPipe,
-    DatePipe,
-    YNPipe,
-    DecimalPipe,
-  ],
+  providers: [STDataSource, STRowSource, STColumnSource, STExport, CNCurrencyPipe, DatePipe, YNPipe, DecimalPipe],
+  preserveWhitespaces: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
-  private unsubscribe$ = new Subject<void>();
-  private totalTpl = ``;
-  private locale: LocaleData = {};
-  private clonePage: STPage;
-  _data: STData[] = [];
-  _statistical: STStatisticalResults = {};
-  _isPagination = true;
-  _allChecked = false;
-  _allCheckedDisabled = false;
-  _indeterminate = false;
-  _columns: STColumn[] = [];
-
-  // #region fields
-
-  @Input() data: string | STData[] | Observable<STData[]>;
+  @ViewChild('table') orgTable: NzTableComponent;
   /** 请求体配置 */
   @Input()
   get req() {
@@ -104,7 +82,6 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   set req(value: STReq) {
     this._req = deepMerge({}, this._req, this.cog.req, value);
   }
-  private _req: STReq;
   /** 返回体配置 */
   @Input()
   get res() {
@@ -117,11 +94,6 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
     if (!Array.isArray(reName.total)) reName.total = reName.total.split('.');
     this._res = item;
   }
-  private _res: STRes;
-  @Input() columns: STColumn[] = [];
-  @Input() @InputNumber() ps = 10;
-  @Input() @InputNumber() pi = 1;
-  @Input() @InputNumber() total = 0;
   /** 分页器配置 */
   @Input()
   get page() {
@@ -140,24 +112,6 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
     }
     this._page = item;
   }
-  private _page: STPage;
-  /** 是否显示Loading */
-  @Input() @InputBoolean() loading = false;
-  /** 延迟显示加载效果的时间（防止闪烁） */
-  @Input() @InputNumber() loadingDelay = 0;
-  /** 是否显示边框 */
-  @Input() @InputBoolean() bordered = false;
-  /** table大小 */
-  @Input() size: 'small' | 'middle' | 'default';
-  /** 纵向支持滚动，也可用于指定滚动区域的高度：`{ y: '300px', x: '300px' }` */
-  @Input() scroll: { y?: string; x?: string };
-  /**
-   * 单排序规则
-   * - 若不指定，则返回：`columnName=ascend|descend`
-   * - 若指定，则返回：`sort=columnName.(ascend|descend)`
-   */
-  @Input() singleSort: STSingleSort = null;
-  private _multiSort: STMultiSort;
   /** 是否多排序，当 `sort` 多个相同值时自动合并，建议后端支持时使用 */
   @Input()
   get multiSort() {
@@ -172,29 +126,13 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
       ...(typeof value === 'object' ? value : {}),
     };
   }
-  @Input() rowClassName: STRowClassName;
-  /** `header` 标题 */
-  @Input() header: string | TemplateRef<void>;
-  /** `footer` 底部 */
-  @Input() footer: string | TemplateRef<void>;
-  /** 额外 `body` 顶部内容 */
-  @Input() bodyHeader: TemplateRef<STStatisticalResults>;
-  /** 额外 `body` 内容 */
-  @Input() body: TemplateRef<STStatisticalResults>;
-  @Input() @InputBoolean() expandRowByClick = false;
-  /** `expand` 可展开，当数据源中包括 `expand` 表示展开状态 */
-  @Input() expand: TemplateRef<{ $implicit: {}; column: STColumn }>;
-  @Input() noResult: string | TemplateRef<void>;
-  @Input() widthConfig: string[];
-  /** 行单击多少时长之类为双击（单位：毫秒），默认：`200` */
-  @Input() @InputNumber() rowClickTime = 200;
-  @Input() @InputBoolean() responsiveHideHeaderFooter: boolean;
-  /** 请求异常时回调 */
-  @Output() readonly error = new EventEmitter<STError>();
-  /**
-   * 变化时回调，包括：`pi`、`ps`、`checkbox`、`radio`、`sort`、`filter`、`click`、`dblClick` 变动
-   */
-  @Output() readonly change = new EventEmitter<STChange>();
+  @Input()
+  set widthMode(value: STWidthMode) {
+    this._widthMode = { type: 'default', strictBehavior: 'truncate', ...value };
+  }
+  get widthMode() {
+    return this._widthMode;
+  }
 
   // #endregion
 
@@ -221,9 +159,9 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
       }
     });
 
-    const copyCog = deepMergeKey(new STConfig(), true, cog);
-    delete copyCog.multiSort;
-    Object.assign(this, copyCog);
+    this.copyCog = deepMergeKey(new STConfig(), true, cog);
+    delete this.copyCog.multiSort;
+    Object.assign(this, this.copyCog);
     if (cog.multiSort && cog.multiSort.global !== false) {
       this.multiSort = { ...cog.multiSort };
     }
@@ -235,6 +173,85 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
       )
       .subscribe(() => this.refreshColumns());
   }
+
+  private get routerState() {
+    const { pi, ps, total } = this;
+    return { pi, ps, total };
+  }
+  private unsubscribe$ = new Subject<void>();
+  private totalTpl = ``;
+  private locale: LocaleData = {};
+  private clonePage: STPage;
+  private copyCog: STConfig;
+  _data: STData[] = [];
+  _statistical: STStatisticalResults = {};
+  _isPagination = true;
+  _allChecked = false;
+  _allCheckedDisabled = false;
+  _indeterminate = false;
+  _columns: STColumn[] = [];
+
+  // #region fields
+
+  @Input() data: string | STData[] | Observable<STData[]>;
+  private _req: STReq;
+  private _res: STRes;
+  @Input() columns: STColumn[] = [];
+  @Input() @InputNumber() ps = 10;
+  @Input() @InputNumber() pi = 1;
+  @Input() @InputNumber() total = 0;
+  private _page: STPage;
+  _loading = false;
+  /** 是否显示Loading */
+  @Input() loading: boolean | null = null;
+  /** 延迟显示加载效果的时间（防止闪烁） */
+  @Input() @InputNumber() loadingDelay = 0;
+  @Input() loadingIndicator: TemplateRef<void>;
+  /** 是否显示边框 */
+  @Input() @InputBoolean() bordered = false;
+  /** table大小 */
+  @Input() size: 'small' | 'middle' | 'default';
+  /** 纵向支持滚动，也可用于指定滚动区域的高度：`{ y: '300px', x: '300px' }` */
+  @Input() scroll: { y?: string; x?: string };
+  @Input() @InputBoolean() virtualScroll = false;
+  @Input() @InputNumber() virtualItemSize = 54;
+  @Input() @InputNumber() virtualMaxBufferPx = 200;
+  @Input() @InputNumber() virtualMinBufferPx = 100;
+  /**
+   * 单排序规则
+   * - 若不指定，则返回：`columnName=ascend|descend`
+   * - 若指定，则返回：`sort=columnName.(ascend|descend)`
+   */
+  @Input() singleSort: STSingleSort | null = null;
+  private _multiSort: STMultiSort | null;
+  @Input() rowClassName: STRowClassName;
+  private _widthMode: STWidthMode;
+  /** `header` 标题 */
+  @Input() header: string | TemplateRef<void>;
+  /** `footer` 底部 */
+  @Input() footer: string | TemplateRef<void>;
+  /** 额外 `body` 顶部内容 */
+  @Input() bodyHeader: TemplateRef<STStatisticalResults>;
+  /** 额外 `body` 内容 */
+  @Input() body: TemplateRef<STStatisticalResults>;
+  @Input() @InputBoolean() expandRowByClick = false;
+  @Input() @InputBoolean() expandAccordion = false;
+  /** `expand` 可展开，当数据源中包括 `expand` 表示展开状态 */
+  @Input() expand: TemplateRef<{ $implicit: {}; column: STColumn }>;
+  @Input() noResult: string | TemplateRef<void>;
+  @Input() widthConfig: string[];
+  /** 行单击多少时长之类为双击（单位：毫秒），默认：`200` */
+  @Input() @InputNumber() rowClickTime = 200;
+  @Input() @InputBoolean() responsive: boolean = true;
+  @Input() @InputBoolean() responsiveHideHeaderFooter: boolean;
+  /** 请求异常时回调 */
+  @Output() readonly error = new EventEmitter<STError>();
+  /**
+   * 变化时回调，包括：`pi`、`ps`、`checkbox`、`radio`、`sort`、`filter`、`click`、`dblClick` 变动
+   */
+  @Output() readonly change = new EventEmitter<STChange>();
+
+  private rowClickCount = 0;
 
   cd() {
     this.cdr.detectChanges();
@@ -250,6 +267,14 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
       : '';
   }
 
+  isTruncate(column: STColumn): boolean {
+    return !!column.width && this.widthMode.strictBehavior === 'truncate';
+  }
+
+  columnClass(column: STColumn): string | null {
+    return column.className || (this.isTruncate(column) ? 'text-truncate' : null);
+  }
+
   private changeEmit(type: STChangeType, data?: any) {
     const res: STChange = {
       type,
@@ -263,32 +288,47 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
     this.change.emit(res);
   }
 
-  private get routerState() {
-    const { pi, ps, total } = this;
-    return { pi, ps, total };
-  }
-
   // #region data
 
-  private _load() {
+  /**
+   * 获取过滤后所有数据
+   * - 本地数据：包含排序、过滤后不分页数据
+   * - 远程数据：不传递 `pi`、`ps` 两个参数
+   */
+  get filteredData(): Promise<STData[]> {
+    return this.loadData({ paginator: false } as any).then(res => res.list);
+  }
+
+  private setLoading(val: boolean): void {
+    if (this.loading == null) {
+      this._loading = val;
+    }
+  }
+
+  private loadData(options?: STDataSourceOptions): Promise<STDataSourceResult> {
     const { pi, ps, data, req, res, page, total, singleSort, multiSort, rowClassName } = this;
-    this.loading = true;
-    return this.dataSource
-      .process({
-        pi,
-        ps,
-        total,
-        data,
-        req,
-        res,
-        page,
-        columns: this._columns,
-        singleSort,
-        multiSort,
-        rowClassName,
-      })
+    return this.dataSource.process({
+      pi,
+      ps,
+      total,
+      data,
+      req,
+      res,
+      page,
+      columns: this._columns,
+      singleSort,
+      multiSort,
+      rowClassName,
+      paginator: true,
+      ...options,
+    });
+  }
+
+  private loadPageData(): Promise<this> {
+    this.setLoading(true);
+    return this.loadData()
       .then(result => {
-        this.loading = false;
+        this.setLoading(false);
         if (typeof result.pi !== 'undefined') {
           this.pi = result.pi;
         }
@@ -301,19 +341,21 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
         if (typeof result.pageShow !== 'undefined') {
           this._isPagination = result.pageShow;
         }
-        this._data = result.list;
-        this._statistical = result.statistical;
+        this._data = result.list as STData[];
+        this._statistical = result.statistical as STStatisticalResults;
         return this._data;
       })
       .then(() => this._refCheck())
       .catch(error => {
-        this.loading = false;
+        this.setLoading(false);
+        this.cdr.detectChanges();
         this.error.emit({ type: 'req', error });
+        return this;
       });
   }
 
   /** 清空所有数据 */
-  clear(cleanStatus = true) {
+  clear(cleanStatus = true): this {
     if (cleanStatus) {
       this.clearStatus();
     }
@@ -322,7 +364,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   /** 清空所有状态 */
-  clearStatus() {
+  clearStatus(): this {
     return this.clearCheck()
       .clearRadio()
       .clearFilter()
@@ -339,8 +381,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   load(pi = 1, extraParams?: {}, options?: STLoadOptions) {
     if (pi !== -1) this.pi = pi;
     if (typeof extraParams !== 'undefined') {
-      this._req.params =
-        options && options.merge ? { ...this._req.params, ...extraParams } : extraParams;
+      this._req.params = options && options.merge ? { ...this._req.params, ...extraParams } : extraParams;
     }
     this._change('pi');
     return this;
@@ -372,37 +413,41 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
     if (!this.page.toTop) return;
     const el = this.el.nativeElement as HTMLElement;
     if (this.scroll) {
-      el.querySelector('.ant-table-body').scrollTo(0, 0);
+      el.querySelector('.ant-table-body')!.scrollTo(0, 0);
       return;
     }
     el.scrollIntoView();
     // fix header height
-    this.doc.documentElement.scrollTop -= this.page.toTopOffset;
+    this.doc.documentElement.scrollTop -= this.page.toTopOffset!;
   }
 
   _change(type: 'pi' | 'ps') {
-    this._load().then(() => {
-      this._toTop();
-    });
+    if (type === 'pi' || (type === 'ps' && this.pi <= Math.ceil(this.total / this.ps))) {
+      this.loadPageData().then(() => this._toTop());
+    }
+
     this.changeEmit(type);
   }
 
   _click(e: Event, item: STData, col: STColumn) {
     e.preventDefault();
     e.stopPropagation();
-    const res = col.click(item, this);
+    const res = col.click!(item, this);
     if (typeof res === 'string') {
       this.router.navigateByUrl(res, { state: this.routerState });
     }
     return false;
   }
-
-  private rowClickCount = 0;
+  private closeOtherExpand(item: STData) {
+    if (this.expandAccordion === false) return;
+    this._data.filter(i => i !== item).forEach(i => (i.expand = false));
+  }
   _rowClick(e: Event, item: STData, index: number) {
     if ((e.target as HTMLElement).nodeName === 'INPUT') return;
     const { expand, expandRowByClick, rowClickTime } = this;
-    if (!!expand && expandRowByClick) {
+    if (!!expand && item.showExpand !== false && expandRowByClick) {
       item.expand = !item.expand;
+      this.closeOtherExpand(item);
       this.changeEmit('expand', item);
       return;
     }
@@ -417,6 +462,11 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
       }
       this.rowClickCount = 0;
     }, rowClickTime);
+  }
+
+  _expandChange(item: STData): void {
+    this.closeOtherExpand(item);
+    this.changeEmit('expand', item);
   }
 
   /** 移除某行数据 */
@@ -449,7 +499,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
     } else {
       this._columns.forEach((item, index) => (item._sort.default = index === idx ? value : null));
     }
-    this._load();
+    this.loadPageData();
     const res = {
       value,
       map: this.dataSource.getReqSortMap(this.singleSort, this.multiSort, this._columns),
@@ -468,8 +518,8 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   // #region filter
 
   private handleFilter(col: STColumn) {
-    col.filter.default = col.filter.menus.findIndex(w => w.checked) !== -1;
-    this._load();
+    this.columnSource.updateDefault(col.filter!);
+    this.loadPageData();
     this.changeEmit('filter', col);
   }
 
@@ -477,23 +527,18 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
     this.handleFilter(col);
   }
 
-  _filterClear(col: STColumn) {
-    col.filter.menus.forEach(i => (i.checked = false));
-    this.handleFilter(col);
-  }
-
   _filterRadio(col: STColumn, item: STColumnFilterMenu, checked: boolean) {
-    col.filter.menus.forEach(i => (i.checked = false));
+    col.filter!.menus!.forEach(i => (i.checked = false));
     item.checked = checked;
   }
 
+  _filterClear(col: STColumn) {
+    this.columnSource.cleanFilter(col);
+    this.handleFilter(col);
+  }
+
   clearFilter() {
-    this._columns
-      .filter(w => w.filter && w.filter.default === true)
-      .forEach(col => {
-        col.filter.default = false;
-        col.filter.menus.forEach(f => (f.checked = false));
-      });
+    this._columns.filter(w => w.filter && w.filter.default === true).forEach(col => this.columnSource.cleanFilter(col));
     return this;
   }
 
@@ -513,8 +558,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
     const allUnChecked = validData.every(value => !value.checked);
     this._indeterminate = !this._allChecked && !allUnChecked;
     this._allCheckedDisabled = this._data.length === this._data.filter(w => w.disabled).length;
-    this.cd();
-    return this;
+    return this.cd();
   }
 
   _checkAll(checked?: boolean): this {
@@ -562,31 +606,27 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   // #region buttons
 
-  _btnClick(e: Event, record: STData, btn: STColumnButton) {
-    if (e) {
-      e.stopPropagation();
-      e.preventDefault();
-    }
+  _btnClick(record: STData, btn: STColumnButton) {
     if (btn.type === 'modal' || btn.type === 'static') {
       const { modal } = btn;
-      const obj = { [modal.paramsName]: record };
+      const obj = { [modal!.paramsName!]: record };
       (this.modalHelper[btn.type === 'modal' ? 'create' : 'createStatic'] as any)(
-        modal.component,
-        { ...obj, ...(modal.params && modal.params(record)) },
-        { ...modal },
+        modal!.component,
+        { ...obj, ...(modal!.params && modal!.params!(record)) },
+        deepMergeKey({}, true, this.copyCog.modal, modal),
       )
         .pipe(filter(w => typeof w !== 'undefined'))
         .subscribe(res => this.btnCallback(record, btn, res));
       return;
     } else if (btn.type === 'drawer') {
       const { drawer } = btn;
-      const obj = { [drawer.paramsName]: record };
+      const obj = { [drawer!.paramsName!]: record };
       this.drawerHelper
         .create(
-          drawer.title,
-          drawer.component,
-          { ...obj, ...(drawer.params && drawer.params(record)) },
-          { ...drawer },
+          drawer!.title!,
+          drawer!.component,
+          { ...obj, ...(drawer!.params && drawer!.params!(record)) },
+          deepMergeKey({}, true, this.copyCog.drawer, drawer),
         )
         .pipe(filter(w => typeof w !== 'undefined'))
         .subscribe(res => this.btnCallback(record, btn, res));
@@ -618,12 +658,22 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   _btnText(record: STData, btn: STColumnButton) {
-    if (btn.format) return btn.format(record, btn);
-    return btn.text || '';
+    // tslint:disable-next-line: deprecation
+    if (btn.format) {
+      // tslint:disable-next-line: deprecation
+      return btn.format(record, btn);
+    }
+    return typeof btn.text === 'function' ? btn.text(record, btn) : btn.text || '';
   }
 
-  _validBtns(item: STData, col: STColumn): STColumnButton[] {
-    return col.buttons.filter(btn => btn.iif(item, btn, col));
+  _validBtns(btns: STColumnButton[], item: STData, col: STColumn): STColumnButton[] {
+    return btns.filter(btn => {
+      const result = btn.iif!(item, btn, col);
+      const isRenderDisabled = btn.iifBehavior === 'disabled';
+      btn._result = result;
+      btn._disabled = !result && isRenderDisabled;
+      return result || isRenderDisabled;
+    });
   }
 
   // #endregion
@@ -632,25 +682,38 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   /**
    * 导出当前页，确保已经注册 `XlsxModule`
-   * @param newData 重新指定数据，例如希望导出所有数据非常有用
+   * @param newData 重新指定数据；若为 `true` 表示使用 `filteredData` 数据
    * @param opt 额外参数
    */
-  export(newData?: STData[], opt?: STExportOptions) {
-    (newData ? of(newData) : of(this._data)).subscribe((res: STData[]) =>
+  export(newData?: STData[] | true, opt?: STExportOptions) {
+    (newData === true ? from(this.filteredData) : of(newData || this._data)).subscribe((res: STData[]) =>
       this.exportSrv.export({
         ...opt,
-        ...{
-          _d: res,
-          _c: this._columns,
-        },
+        _d: res,
+        _c: this._columns,
       }),
     );
   }
 
   // #endregion
 
-  resetColumns() {
-    return this.refreshColumns()._load();
+  get cdkVirtualScrollViewport() {
+    return this.orgTable.cdkVirtualScrollViewport;
+  }
+
+  resetColumns(options?: STResetColumnsOption) {
+    if (options) {
+      if (typeof options.columns !== 'undefined') {
+        this.columns = options.columns;
+      }
+      if (typeof options.pi !== 'undefined') {
+        this.pi = options.pi;
+      }
+      if (typeof options.ps !== 'undefined') {
+        this.ps = options.ps;
+      }
+    }
+    return this.refreshColumns().loadPageData();
   }
 
   private refreshColumns(): this {
@@ -659,9 +722,13 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private setClass() {
+    const { type, strictBehavior } = this.widthMode;
     updateHostClass(this.el.nativeElement, this.renderer, {
       [`st`]: true,
       [`st__p-${this.page.placement}`]: this.page.placement,
+      [`st__width-${type}`]: true,
+      [`st__width-strict-${strictBehavior}`]: type === 'strict',
+      [`ant-table-rep`]: this.responsive,
       [`ant-table-rep__hide-header-footer`]: this.responsiveHideHeaderFooter,
     });
   }
@@ -675,7 +742,10 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
       this.refreshColumns();
     }
     if (changes.data && changes.data.currentValue) {
-      this._load();
+      this.loadPageData();
+    }
+    if (changes.loading) {
+      this._loading = changes.loading.currentValue;
     }
     this.setClass();
   }
@@ -685,4 +755,9 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
     unsubscribe$.next();
     unsubscribe$.complete();
   }
+
+    /** 是否正在加载中 */
+    get stLoading(): boolean {
+      return this._loading;
+    }
 }

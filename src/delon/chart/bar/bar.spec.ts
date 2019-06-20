@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { fakeAsync, tick } from '@angular/core/testing';
+import { fakeAsync } from '@angular/core/testing';
 import { checkDelay, PageG2, PageG2DataCount, PageG2Height } from '@delon/testing';
 import { G2BarComponent } from './bar.component';
 import { G2BarModule } from './bar.module';
@@ -86,6 +86,13 @@ describe('chart: bar', () => {
 class TestComponent implements OnInit {
   @ViewChild('comp') comp: G2BarComponent;
   data: any[] = [];
+  delay = 0;
+  @ViewChild('titleTpl') titleTpl: TemplateRef<void>;
+  title: string | TemplateRef<void> | null = 'title';
+  height = PageG2Height;
+  padding: number[];
+  autoLabel = false;
+  color = 'rgba(24, 144, 255, 0.85)';
   ngOnInit(): void {
     for (let i = 0; i < PageG2DataCount; i += 1) {
       this.data.push({
@@ -94,11 +101,4 @@ class TestComponent implements OnInit {
       });
     }
   }
-  delay = 0;
-  @ViewChild('titleTpl') titleTpl: TemplateRef<void>;
-  title: string | TemplateRef<void> = 'title';
-  height = PageG2Height;
-  padding: number[];
-  autoLabel = false;
-  color = 'rgba(24, 144, 255, 0.85)';
 }

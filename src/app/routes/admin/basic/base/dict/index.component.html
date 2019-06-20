@@ -1,6 +1,6 @@
 <page-header [title]="pageTitle" [autoBreadcrumb]="false" [action]="action">
   <ng-template #action>
-    <button nz-button (click)="add()" [nzType]="'primary'" [nzSize]="'large'">
+    <button nz-button (click)="add($event)" [nzType]="'primary'" [nzSize]="'large'">
       新建
     </button>
   </ng-template>

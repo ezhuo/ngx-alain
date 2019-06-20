@@ -15,14 +15,14 @@ describe('theme: preloader', () => {
         style: {
           overflow: '',
         },
-        addEventListener: (key: string, fn: any) => {
+        addEventListener: (_key: string, fn: any) => {
           fn();
         },
       };
       return cached[type];
     });
-    const body = document.querySelector('body');
-    const preloader = document.querySelector('.preloader');
+    const body = document.querySelector('body')!;
+    const preloader = document.querySelector('.preloader')!;
     preloaderFinished();
     expect(body.style.overflow).toBe('hidden');
 
@@ -43,7 +43,7 @@ describe('theme: preloader', () => {
         style: {
           overflow: '',
         },
-        addEventListener: (key: string, fn: any) => {
+        addEventListener: (_key: string, fn: any) => {
           fn();
         },
       };

@@ -9,7 +9,6 @@ describe('form: widget: object', () => {
   let dl: DebugElement;
   let context: TestFormComponent;
   let page: SFPage;
-  const widget = 'object';
 
   configureSFTestSuite();
 
@@ -20,17 +19,16 @@ describe('form: widget: object', () => {
   });
 
   it('should working', fakeAsync(() => {
-    page
-      .newSchema({
-        properties: {
-          a: {
-            type: 'object',
-            properties: {
-              b: { type: 'string' },
-            },
+    page.newSchema({
+      properties: {
+        a: {
+          type: 'object',
+          properties: {
+            b: { type: 'string' },
           },
         },
-      });
+      },
+    });
     const property = page.getProperty('/a');
     property.setValue({ b: 1, c: 0 }, false);
     page.time();
@@ -47,8 +45,7 @@ describe('form: widget: object', () => {
             a: {
               type: 'object',
               title: 'a',
-              properties: {
-              },
+              properties: {},
             },
           },
         })
@@ -63,8 +60,7 @@ describe('form: widget: object', () => {
             a: {
               type: 'object',
               title: 'a',
-              properties: {
-              },
+              properties: {},
             },
           },
         })
@@ -80,8 +76,7 @@ describe('form: widget: object', () => {
               type: 'object',
               title: 'a',
               ui: { showTitle: false },
-              properties: {
-              },
+              properties: {},
             },
           },
         })
@@ -92,8 +87,7 @@ describe('form: widget: object', () => {
         .newSchema({
           title: null,
           ui: { showTitle: true },
-          properties: {
-          },
+          properties: {},
         })
         .checkCount('.sf__title', 0);
     });

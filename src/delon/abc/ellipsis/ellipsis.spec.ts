@@ -1,5 +1,5 @@
 import { Component, DebugElement, ViewChild } from '@angular/core';
-import { fakeAsync, tick, ComponentFixture, TestBed, TestBedStatic } from '@angular/core/testing';
+import { fakeAsync, tick, ComponentFixture, TestBed } from '@angular/core/testing';
 import { configureTestSuite } from '@delon/testing';
 
 import { By } from '@angular/platform-browser';
@@ -9,13 +9,12 @@ import { EllipsisModule } from './ellipsis.module';
 
 describe('abc: ellipsis', () => {
   let fixture: ComponentFixture<TestBaseComponent>;
-  let injector: TestBedStatic;
   let dl: DebugElement;
   let context: TestBaseComponent;
   let page: PageObject;
 
   function genModule() {
-    injector = TestBed.configureTestingModule({
+    TestBed.configureTestingModule({
       imports: [EllipsisModule],
       declarations: [TestLengthComponent, TestLineComponent],
     });
@@ -90,7 +89,7 @@ describe('abc: ellipsis', () => {
         }));
         it('should working', () => {
           // tslint:disable-next-line:no-string-literal
-          expect(+page.getEl('.ellipsis').style['webkitLineClamp']).toBe(context.lines);
+          expect(+page.getEl('.ellipsis')!.style!['webkitLineClamp']).toBe(context!.lines as number);
         });
       });
       describe('in firefox', () => {
@@ -108,14 +107,14 @@ describe('abc: ellipsis', () => {
         }));
         it('should be not innerText', () => {
           const el = page.getEl('.ellipsis__shadow');
-          spyOnProperty(el, 'innerText').and.returnValue(null);
+          spyOnProperty(el!, 'innerText').and.returnValue(null);
           // tslint:disable-next-line:no-string-literal
           page.comp['gen']();
           expect(page.getText()).toBe('There');
         });
         it('should be raw response when html offsetHeight is smallest', () => {
           const el = page.getEl('.ellipsis__shadow');
-          spyOnProperty(el, 'offsetHeight').and.returnValue(1);
+          spyOnProperty(el!, 'offsetHeight').and.returnValue(1);
           // tslint:disable-next-line:no-string-literal
           page.comp['gen']();
           expect(page.getText()).not.toBe('There');
@@ -128,10 +127,7 @@ describe('abc: ellipsis', () => {
     it('should be throw error when include html element', fakeAsync(() => {
       expect(() => {
         genModule();
-        TestBed.overrideTemplate(
-          TestLengthComponent,
-          `<ellipsis length="1"><p>asdf</p></ellipsis>`,
-        );
+        TestBed.overrideTemplate(TestLengthComponent, `<ellipsis length="1"><p>asdf</p></ellipsis>`);
         fixture = TestBed.createComponent(TestLengthComponent);
         dl = fixture.debugElement;
         context = fixture.componentInstance;
@@ -153,7 +149,7 @@ describe('abc: ellipsis', () => {
       return dl.nativeElement;
     }
 
-    getEl(cls: string): HTMLElement {
+    getEl(cls: string): HTMLElement | null {
       return this.root.querySelector(cls);
     }
 
@@ -202,8 +198,8 @@ describe('abc: ellipsis', () => {
 class TestBaseComponent {
   @ViewChild('comp') comp: EllipsisComponent;
   tooltip = false;
-  length = 10;
-  lines = 3;
+  length: number | null = 10;
+  lines: number | null = 3;
   fullWidthRecognition = false;
   tail = '...';
   text = `There were injuries alleged in three cases in 2015, and a fourth incident in September, according to the safety recall report. After meeting with US regulators in October, the firm decided to issue a voluntary recall.`;
@@ -212,14 +208,9 @@ class TestBaseComponent {
 
 @Component({
   template: `
-    <ellipsis
-      #comp
-      [tooltip]="tooltip"
-      [length]="length"
-      [fullWidthRecognition]="fullWidthRecognition"
-      [tail]="tail"
-      >{{ text }}</ellipsis
-    >
+    <ellipsis #comp [tooltip]="tooltip" [length]="length" [fullWidthRecognition]="fullWidthRecognition" [tail]="tail">{{
+      text
+    }}</ellipsis>
   `,
 })
 class TestLengthComponent extends TestBaseComponent {}

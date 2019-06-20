@@ -1,11 +1,23 @@
 import { Injectable, Injector } from '@angular/core';
-import { HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
+import {
+  HttpHeaders,
+  HttpParams,
+  HttpResponse,
+  HttpClient,
+} from '@angular/common/http';
 import { Observable, throwError, of } from 'rxjs';
 import { tap, catchError, switchMap } from 'rxjs/operators';
 import { api } from '../config.inc';
 import { UserService } from './../data/users.service';
 import { CacheService } from '@delon/cache';
 import { _HttpClient } from '@delon/theme';
+import { SFSchemaEnum } from '@delon/form';
+
+export interface DictParams {
+  headerItem?: SFSchemaEnum;
+  deleteItem?: SFSchemaEnum;
+  isCache?: Boolean;
+}
 
 /**
  * 封装HttpClient，主要解决：
@@ -22,6 +34,9 @@ export class HttpService {
 
   get http() {
     return this.injector.get(_HttpClient);
+  }
+  get http2() {
+    return this.injector.get(HttpClient);
   }
   get cacheSrv() {
     return this.injector.get(CacheService);
@@ -629,24 +644,58 @@ export class HttpService {
     params?: any,
     options?: any,
     headerItem?: any,
+    isCache: any = true,
   ): Observable<any> {
-    const cacheKey = 'dict' + this.userSrv.userInfo.id + '-' + url;
+    return this.getDict(url, params, options, { headerItem, isCache });
+  }
+
+  /**
+   * 获取数据字典,并且缓存
+   * @param url
+   * @param params
+   * @param options 60 * 60 * 6 6个小时
+   */
+  getDict(
+    url: string,
+    params?: any,
+    options?: any,
+    params2?: DictParams,
+  ): Observable<any> {
+    params2 = params2 || {};
+    if (!params2.isCache) {
+      this.cacheRemoveDict(url);
+    }
+
+    const cacheKey =
+      'dict' +
+      this.userSrv.userInfo.id +
+      '-' +
+      url +
+      JSON.stringify(params || {});
+      
+    if (!params2.isCache) {
+      this.cacheSrv.remove(cacheKey);
+    }
     return this.cacheSrv
       .tryGet(cacheKey, this.get(url, params, options), {
         type: 'm',
         expire: 60 * 60 * 6,
       })
       .pipe(
-        switchMap((data: any) => {
+        switchMap(({ data }: any) => {
           this.end();
           let result = [];
-          if (data && data.data && data.data.list) {
-            result = data.data.list.slice(0); // 复制数组
-            if (headerItem) {
-              result.unshift(headerItem);
-            }
-            return of(result);
-          } else return of(result);
+          if (!(data && data.list)) return of(result);
+
+          result = data.list;
+          if (params2.headerItem) result = [params2.headerItem, ...data.list];
+          if (params2.deleteItem) {
+            result.forEach((ele: SFSchemaEnum, idx) => {
+              if (ele.value.toString() == params2.deleteItem.value.toString())
+                result.splice(idx, 1);
+            });
+          }
+          return of(result);
         }),
       );
   }
@@ -671,5 +720,29 @@ export class HttpService {
 
   cacheRemoveDict(url: string) {
     this.cacheSrv.remove('dict' + this.userSrv.userInfo.id + '-' + url);
+  }
+
+  requestPrototype(
+    method: string,
+    url: string,
+    options?: {
+      body?: any;
+      headers?:
+        | HttpHeaders
+        | {
+            [header: string]: string | string[];
+          };
+      observe?: 'body' | 'events' | 'response';
+      params?:
+        | HttpParams
+        | {
+            [param: string]: string | string[];
+          };
+      responseType?: 'arraybuffer' | 'blob' | 'json' | 'text';
+      reportProgress?: boolean;
+      withCredentials?: boolean;
+    },
+  ): Observable<any> {
+    return this.http2.request(method, this.SERVER_URL(url), options);
   }
 }

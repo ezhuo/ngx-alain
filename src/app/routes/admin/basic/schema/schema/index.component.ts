@@ -93,6 +93,7 @@ export class SchemaDemoComponent extends IndexControl implements OnInit {
 
     this.tableParams.s = '';
     this.tableData.col = [
+      this.configSrv.define.tableIndexColumn,
       { title: '编号', index: 'id', width: '100px' },
       { title: '门店名称', index: 'name' },
       { title: '分店名', index: 'branch_name' },

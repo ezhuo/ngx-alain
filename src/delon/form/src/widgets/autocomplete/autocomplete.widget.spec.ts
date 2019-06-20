@@ -1,4 +1,4 @@
-import { DebugElement, Inject } from '@angular/core';
+import { DebugElement } from '@angular/core';
 import { fakeAsync, ComponentFixture } from '@angular/core/testing';
 import { createTestContext } from '@delon/testing';
 import { of } from 'rxjs';
@@ -70,13 +70,13 @@ describe('form: widget: autocomplete', () => {
         })
         .time(100)
         .typeChar(typeValue)
-        .checkCount('nz-auto-option', config.uiEmailSuffixes.length)
+        .checkCount('nz-auto-option', config.uiEmailSuffixes!.length)
         .click('nz-auto-option')
-        .checkValue('a', `${typeValue}@${config.uiEmailSuffixes[0]}`)
+        .checkValue('a', `${typeValue}@${config.uiEmailSuffixes![0]}`)
         .asyncEnd();
     }));
     it('with email and custom suffix of format', fakeAsync(() => {
-      const suffixes = [ 'a.com', 'b.com' ];
+      const suffixes = ['a.com', 'b.com'];
       const typeValue = 'a';
       page
         .newSchema({
@@ -138,7 +138,7 @@ describe('form: widget: autocomplete', () => {
               type: 'string',
               ui: {
                 widget,
-                filterOption: (input: string, option: SFSchemaEnum) => option.label === 'a11',
+                filterOption: (_input: string, option: SFSchemaEnum) => option.label === 'a11',
               },
               enum: data,
             },

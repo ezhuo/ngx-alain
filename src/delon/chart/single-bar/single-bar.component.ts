@@ -7,6 +7,7 @@ import {
   OnChanges,
   OnDestroy,
   OnInit,
+  ViewEncapsulation,
 } from '@angular/core';
 import { InputBoolean, InputNumber } from '@delon/util';
 
@@ -14,11 +15,14 @@ declare var G2: any;
 
 @Component({
   selector: 'g2-single-bar',
+  exportAs: 'g2SingleBar',
   template: ``,
   host: {
     '[style.height.px]': 'height',
   },
+  preserveWhitespaces: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class G2SingleBarComponent implements OnInit, OnChanges, OnDestroy {
   private chart: any;

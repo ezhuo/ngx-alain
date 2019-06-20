@@ -1,15 +1,16 @@
 import { Component, DebugElement } from '@angular/core';
 import { fakeAsync, tick, ComponentFixture, TestBed, TestBedStatic } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ACLService } from '@delon/acl';
 import { configureTestSuite, createTestContext } from '@delon/testing';
 import { en_US, AlainThemeModule, DelonLocaleService } from '@delon/theme';
 import { deepCopy } from '@delon/util';
 import { of } from 'rxjs';
-import { FormProperty } from '../src/model/form.property';
 import { FormPropertyFactory } from '../src/model/form.property.factory';
 import { DelonFormModule } from '../src/module';
 import { SFSchema } from '../src/schema/index';
 import { SCHEMA, SFPage, TestFormComponent } from './base.spec';
+import { WidgetRegistry } from '../src/widget.factory';
 
 describe('form: component', () => {
   let injector: TestBedStatic;
@@ -40,7 +41,7 @@ describe('form: component', () => {
     describe('[default]', () => {
       it('should throw error when parent is not object or array', () => {
         expect(() => {
-          const factory = dl.injector.get(FormPropertyFactory);
+          const factory = dl.injector.get<FormPropertyFactory>(FormPropertyFactory);
           factory.createProperty({}, {}, {}, { type: 'invalid', path: 'a' } as any, 'a');
         }).toThrowError();
       });
@@ -126,6 +127,32 @@ describe('form: component', () => {
         fixture.detectChanges();
         expect(console.warn).toHaveBeenCalled();
       });
+
+      it('should be ingore required when element is hidden', () => {
+        const s: SFSchema = {
+          properties: {
+            name: {
+              type: 'string',
+              ui: { hidden: true },
+            },
+          },
+          required: ['name'],
+        };
+        page.newSchema(s);
+        expect(context.comp._schema.required!.indexOf('name') === -1).toBe(true);
+      });
+
+      it('should be ingore trigger formChange event when call refreshSchema method', () => {
+        expect(context.formChange).not.toHaveBeenCalled();
+        page.newSchema({ properties: { name: { type: 'string' } } });
+        expect(context.formChange).not.toHaveBeenCalled();
+      });
+
+      it('should be hava values when call refreshSchema method after', () => {
+        page.newSchema({ properties: { name: { type: 'string', default: 'a' } } });
+        expect(context.formChange).not.toHaveBeenCalled();
+        expect(context.comp.value.name).toBe('a');
+      });
     });
 
     describe('[button]', () => {
@@ -146,6 +173,19 @@ describe('form: component', () => {
         context.button = 'none';
         fixture.detectChanges();
         page.checkCount('.sf-btns', 0);
+      });
+      it('should be icon', () => {
+        context.button = {
+          submit_icon: {
+            type: 'search',
+          },
+          reset_icon: {
+            type: 'file',
+          },
+        };
+        fixture.detectChanges();
+        page.checkCount('[type="submit"] .anticon', 1);
+        page.checkCount('[type="button"] .anticon', 1);
       });
       describe('when layout is horizontal', () => {
         it('should be has a fix 100px width', () => {
@@ -180,11 +220,7 @@ describe('form: component', () => {
             },
           };
           fixture.detectChanges();
-          page.checkStyle(
-            '.sf-btns .ant-form-item-control-wrapper',
-            'margin-left',
-            `${spanLabelFixed}px`,
-          );
+          page.checkStyle('.sf-btns .ant-form-item-control-wrapper', 'margin-left', `${spanLabelFixed}px`);
         });
       });
       describe('#size', () => {
@@ -238,7 +274,7 @@ describe('form: component', () => {
       describe('#reset', () => {
         it('should be set default value', () => {
           const schema = deepCopy(SCHEMA.user) as SFSchema;
-          schema.properties.name.default = 'cipchk';
+          schema.properties!.name.default = 'cipchk';
           page
             .newSchema(schema)
             .reset()
@@ -325,6 +361,56 @@ describe('form: component', () => {
         });
       });
 
+      it('#disabled', () => {
+        const CLS = {
+          input: '.ant-input[disabled]',
+          number: '.ant-input-number-disabled',
+          switch: '.ant-switch-disabled',
+          select: [['.ant-select-enabled', 1], ['.ant-select-disabled', 1]],
+        };
+        page.newSchema({
+          properties: {
+            ipt: { type: 'string' },
+            number: { type: 'number' },
+            switch: { type: 'boolean' },
+            select: { type: 'string', enum: ['A'] },
+          },
+        });
+        context.disabled = false;
+        fixture.detectChanges();
+        Object.keys(CLS).forEach(key => {
+          if (Array.isArray(CLS[key])) {
+            page.checkCount(CLS[key][0][0], CLS[key][0][1]);
+          } else {
+            page.checkCount(CLS[key], 0);
+          }
+        });
+        context.disabled = true;
+        fixture.detectChanges();
+        Object.keys(CLS).forEach(key => {
+          if (Array.isArray(CLS[key])) {
+            page.checkCount(CLS[key][1][0], CLS[key][1][1]);
+          } else {
+            page.checkCount(CLS[key], 1);
+          }
+        });
+      });
+
+      it('#loading', () => {
+        context.loading = false;
+        fixture.detectChanges();
+        const CLS = {
+          loading: '.ant-btn-primary.ant-btn-loading',
+          disabled: '.ant-btn-default[disabled]',
+        };
+        page.checkCount(CLS.loading, 0);
+        page.checkCount(CLS.disabled, 0);
+        context.loading = true;
+        fixture.detectChanges();
+        page.checkCount(CLS.loading, 1);
+        page.checkCount(CLS.disabled, 1);
+      });
+
       it('#formChange', () => {
         page.setValue('/name', 'cipchk');
         expect(context.formChange).toHaveBeenCalled();
@@ -361,9 +447,7 @@ describe('form: component', () => {
           .checkCls('input', 'ant-input-lg');
       });
       it('#disabled', fakeAsync(() => {
-        const el = page
-          .newSchema({ properties: { name: { type: 'string', readOnly: true } } })
-          .getEl('input') as HTMLInputElement;
+        const el = page.newSchema({ properties: { name: { type: 'string', readOnly: true } } }).getEl('input') as HTMLInputElement;
         tick();
         expect(el.disabled).toBe(true);
         expect(el.classList).toContain('ant-input-disabled');
@@ -375,6 +459,10 @@ describe('form: component', () => {
           })
           .checkCls('sf-string', 'test-cls');
       });
+      it('should get all registered widgets', () => {
+        const wr = injector.get(WidgetRegistry) as WidgetRegistry;
+        expect(Object.keys(wr.widgets).length).toBeGreaterThan(0);
+      });
     });
 
     describe('public methods', () => {
@@ -383,7 +471,7 @@ describe('form: component', () => {
       });
       it('#getValue', () => {
         const name = 'asdf';
-        page.newSchema({ properties: { name: { type: 'string' } } }, null, { name });
+        page.newSchema({ properties: { name: { type: 'string' } } }, null!, { name });
         expect(context.comp.getValue('/name')).toBe(name);
       });
       it('#setValue', () => {
@@ -405,9 +493,7 @@ describe('form: component', () => {
             a: {
               type: 'string',
               ui: {
-                validator: jasmine
-                  .createSpy()
-                  .and.returnValue([{ keyword: 'required', message: 'a' }]),
+                validator: jasmine.createSpy().and.returnValue([{ keyword: 'required', message: 'a' }]),
               },
             },
           },
@@ -421,9 +507,7 @@ describe('form: component', () => {
             a: {
               type: 'string',
               ui: {
-                validator: jasmine
-                  .createSpy()
-                  .and.returnValue([]),
+                validator: jasmine.createSpy().and.returnValue([]),
               },
             },
           },
@@ -437,9 +521,7 @@ describe('form: component', () => {
             a: {
               type: 'string',
               ui: {
-                validator: jasmine
-                  .createSpy()
-                  .and.returnValue(of([{ keyword: 'required', message: 'a' }])),
+                validator: jasmine.createSpy().and.returnValue(of([{ keyword: 'required', message: 'a' }])),
               },
             },
           },
@@ -454,9 +536,7 @@ describe('form: component', () => {
               a: {
                 type: 'string',
                 ui: {
-                  validator: jasmine
-                    .createSpy()
-                    .and.returnValue([{ keyword: 'required' }]),
+                  validator: jasmine.createSpy().and.returnValue([{ keyword: 'required' }]),
                 },
               },
             },
@@ -470,19 +550,21 @@ describe('form: component', () => {
             a: {
               type: 'string',
               ui: {
-                validator: () => [{
-                  keyword: 'a',
-                  message: 'a-{id}-{invalid}',
-                  params: {
-                    id: 10,
+                validator: () => [
+                  {
+                    keyword: 'a',
+                    message: 'a-{id}-{invalid}',
+                    params: {
+                      id: 10,
+                    },
                   },
-                }],
+                ],
               },
             },
           },
         };
         page.newSchema(s);
-        expect(page.getProperty('/a').errors[0].message).toBe(`a-10-`);
+        expect(page.getProperty('/a').errors![0].message).toBe(`a-10-`);
       });
     });
 
@@ -502,7 +584,7 @@ describe('form: component', () => {
           required: ['a'],
         };
         page.newSchema(s);
-        expect(page.getProperty('/a').errors[0].message).toBe('REQUEST');
+        expect(page.getProperty('/a').errors![0].message).toBe('REQUEST');
       });
 
       it('shoule be re-error message via error property and type is function', () => {
@@ -520,9 +602,35 @@ describe('form: component', () => {
           required: ['a'],
         };
         page.newSchema(s);
-        expect(page.getProperty('/a').errors[0].message).toBe('A');
-        expect((s.properties.a.ui as any).errors.required).toHaveBeenCalled();
+        expect(page.getProperty('/a').errors![0].message).toBe('A');
+        expect((s.properties!.a.ui as any).errors.required).toHaveBeenCalled();
       });
+    });
+
+    describe('ACL', () => {
+      let acl: ACLService;
+      beforeEach(() => (acl = injector.get(ACLService)));
+      it('shoule be working', fakeAsync(() => {
+        acl.setFull(false);
+        acl.setRole(['admin']);
+        const s: SFSchema = {
+          properties: {
+            a: {
+              type: 'string',
+              ui: {
+                acl: 'admin',
+              },
+            },
+          },
+          required: ['a'],
+        };
+        page.newSchema(s);
+        page.checkUI('/a', 'hidden', false);
+        acl.setRole(['user']);
+        tick();
+        fixture.detectChanges();
+        page.checkUI('/a', 'hidden', true);
+      }));
     });
   });
 
@@ -531,12 +639,12 @@ describe('form: component', () => {
     it('should be auto 搜索 in submit', () => {
       context.mode = 'search';
       createComp();
-      expect(page.getEl('.ant-btn-primary').textContent).toBe('搜索');
+      expect(page.getEl('.ant-btn-primary').textContent).toContain('搜索');
     });
     it('should be auto 保存 in submit', () => {
       context.mode = 'edit';
       createComp();
-      expect(page.getEl('.ant-btn-primary').textContent).toBe('保存');
+      expect(page.getEl('.ant-btn-primary').textContent).toContain('保存');
     });
     it('should be custom text of search', () => {
       context.mode = 'search';
@@ -544,7 +652,7 @@ describe('form: component', () => {
         search: 'SEARCH',
       };
       createComp();
-      expect(page.getEl('.ant-btn-primary').textContent).toBe('SEARCH');
+      expect(page.getEl('.ant-btn-primary').textContent).toContain('SEARCH');
     });
     it('should be custom text of edit', () => {
       context.mode = 'edit';
@@ -552,14 +660,14 @@ describe('form: component', () => {
         edit: 'SAVE',
       };
       createComp();
-      expect(page.getEl('.ant-btn-primary').textContent).toBe('SAVE');
+      expect(page.getEl('.ant-btn-primary').textContent).toContain('SAVE');
     });
   });
 });
 
 @Component({
   template: `
-    <sf [layout]="layout" #comp [schema]="schema" [ui]="ui" [button]="button" [mode]="mode"></sf>
+    <sf [layout]="layout" #comp [schema]="schema" [ui]="ui" [button]="button" [mode]="mode" [loading]="loading"></sf>
   `,
 })
 class TestModeComponent extends TestFormComponent {}

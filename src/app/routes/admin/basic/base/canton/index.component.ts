@@ -1,7 +1,8 @@
 import { Component, Injector, ChangeDetectionStrategy } from '@angular/core';
 import { IndexControl } from '@core';
+import { JsTreeOptions } from '@shared';
 
-const changeDetection = ChangeDetectionStrategy.OnPush;
+const changeDetection = ChangeDetectionStrategy.Default;
 
 @Component({
   selector: 'app-base-canton',
@@ -22,11 +23,10 @@ export class CantonComponent extends IndexControl {
     );
   }
 
-  jstree = {
-    type: 'edit', // view查看 edit:编辑
-    api: '/canton',
-    data: [],
-    open_all: false,
+  jstree: JsTreeOptions = {
+    type: 'edit',
+    data: '/canton',
+    isOpenAll: false,
   };
 
   jstreeChange($event) {

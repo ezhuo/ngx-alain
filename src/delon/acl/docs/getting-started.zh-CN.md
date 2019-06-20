@@ -35,6 +35,13 @@ export class AppModule { }
 
 ## API
 
+### DelonACLConfig
+
+| 属性 | 类型 | 说明 | 默认 |
+| --- | --- | --- | --- |
+| `[guard_url]` | `string` | 路由守卫失败后跳转 | `/403` |
+| `[preCan]` | `(roleOrAbility: ACLCanType) => ACLType` | `can` 执行前回调 | - |
+
 ### ACLService
 
 | 方法 | 说明 |
@@ -66,3 +73,4 @@ type ACLCanType = number | number[] | string | string[] | ACLType
 | `[role]` | `string[]` | 角色 | - |
 | `[ability]` | `number[], string[]` | 权限点 | - |
 | `[mode]` | `allOf, oneOf` | `allOf` 表示必须满足所有角色或权限点数组算有效<br>`oneOf` 表示只须满足角色或权限点数组中的一项算有效 | `oneOf` |
+| `[except]` | `boolean` | 是否取反，即结果为 `true` 时表示未授权 | `false` |

@@ -1,25 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, Injector, NgModule } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, NgModule } from '@angular/core';
+import { ComponentFixture, TestBed, TestBedStatic } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { NgZorroAntdModule, NzModalRef, NzModalService } from 'ng-zorro-antd';
+import { NzModalModule, NzModalRef } from 'ng-zorro-antd/modal';
 import { AlainThemeModule } from '../../theme.module';
 import { ModalHelper } from './modal.helper';
 
 describe('theme: ModalHelper', () => {
-  let injector: Injector;
+  let injector: TestBedStatic;
   let modal: ModalHelper;
-  let srv: NzModalService;
   let fixture: ComponentFixture<TestComponent>;
 
   beforeEach(() => {
     @NgModule({
-      imports: [
-        CommonModule,
-        NgZorroAntdModule,
-        NoopAnimationsModule,
-        AlainThemeModule.forChild(),
-      ],
+      imports: [CommonModule, NoopAnimationsModule, AlainThemeModule.forChild(), NzModalModule],
       declarations: [TestModalComponent, TestComponent],
       entryComponents: [TestModalComponent],
     })
@@ -28,7 +22,6 @@ describe('theme: ModalHelper', () => {
     injector = TestBed.configureTestingModule({ imports: [TestModule] });
     fixture = TestBed.createComponent(TestComponent);
     modal = injector.get(ModalHelper);
-    srv = injector.get(NzModalService);
   });
 
   afterEach(() => {
@@ -37,12 +30,31 @@ describe('theme: ModalHelper', () => {
   });
 
   describe('[default]', () => {
-    it('#open', (done: () => void) => {
+    it('#open', done => {
       modal
         .open(TestModalComponent, {
           ret: 'true',
         })
-        .subscribe(res => {
+        .subscribe(() => {
+          expect(true).toBeTruthy();
+          done();
+        });
+      fixture.detectChanges();
+    });
+
+    it('shoudl be size & nzWrapClassName toggle', done => {
+      modal
+        .open(
+          TestModalComponent,
+          {
+            ret: 'true',
+          },
+          'sm',
+          {
+            nzWrapClassName: 'aaa',
+          },
+        )
+        .subscribe(() => {
           expect(true).toBeTruthy();
           done();
         });
@@ -58,7 +70,7 @@ describe('theme: ModalHelper', () => {
           },
           100,
         )
-        .subscribe(res => {
+        .subscribe(() => {
           expect(true).toBeTruthy();
           done();
         });
@@ -72,7 +84,7 @@ describe('theme: ModalHelper', () => {
         .create(TestModalComponent, {
           ret: 'true',
         })
-        .subscribe(res => {
+        .subscribe(() => {
           expect(true).toBeTruthy();
           done();
         });
@@ -89,7 +101,7 @@ describe('theme: ModalHelper', () => {
             includeTabs: true,
           },
         )
-        .subscribe(res => {
+        .subscribe(() => {
           expect(true).toBeTruthy();
           done();
         });
@@ -110,11 +122,11 @@ describe('theme: ModalHelper', () => {
             },
           )
           .subscribe(
-            res => {
+            () => {
               expect(false).toBeTruthy();
               done();
             },
-            err => {
+            () => {
               expect(false).toBeTruthy();
               done();
             },
@@ -239,15 +251,22 @@ describe('theme: ModalHelper', () => {
   });
 });
 
-@Component({ template: `<div id="modal{{id}}">modal{{id}}</div>` })
+@Component({
+  template: `
+    <div id="modal{{ id }}">modal{{ id }}</div>
+  `,
+})
 class TestModalComponent {
-  id: string = '';
+  id = '';
   ret: any = 'true';
 
   constructor(private modal: NzModalRef) {
     setTimeout(() => {
-      if (this.ret === 'destroy') this.modal.destroy();
-      else this.modal.close(this.ret);
+      if (this.ret === 'destroy') {
+        this.modal.destroy();
+      } else {
+        this.modal.close(this.ret);
+      }
     }, 100);
   }
 }

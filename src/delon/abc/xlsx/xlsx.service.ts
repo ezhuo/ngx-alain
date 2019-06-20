@@ -13,7 +13,7 @@ export class XlsxService {
   constructor(private cog: XlsxConfig, private http: HttpClient, private lazy: LazyService) {}
 
   private init(): Promise<LazyResult[]> {
-    return this.lazy.load([this.cog.url].concat(this.cog.modules));
+    return this.lazy.load([this.cog.url!].concat(this.cog.modules!));
   }
 
   private read(wb: any): { [key: string]: any[][] } {
@@ -81,10 +81,7 @@ export class XlsxService {
         type: 'array',
         ...options.opts,
       });
-      saveAs(
-        new Blob([wbout], { type: 'application/octet-stream' }),
-        options.filename || 'export.xlsx',
-      );
+      saveAs(new Blob([wbout], { type: 'application/octet-stream' }), options.filename || 'export.xlsx');
     });
   }
 }

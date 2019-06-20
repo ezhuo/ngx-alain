@@ -1,15 +1,7 @@
-import { Component, DebugElement, Injector, ViewChild } from '@angular/core';
-import { fakeAsync, tick, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, DebugElement, ViewChild } from '@angular/core';
+import { fakeAsync, tick, ComponentFixture, TestBed, TestBedStatic } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  ExtraOptions,
-  Router,
-  RouterStateSnapshot,
-  RouteReuseStrategy,
-  ROUTER_CONFIGURATION,
-} from '@angular/router';
+import { ExtraOptions, Router, RouteReuseStrategy, ROUTER_CONFIGURATION } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { Observable } from 'rxjs';
 
@@ -34,13 +26,13 @@ import { ReuseTabStrategy } from './reuse-tab.strategy';
 
 let i18nResult = 'zh';
 class MockI18NServiceFake extends AlainI18NServiceFake {
-  fanyi(key: string) {
+  fanyi(_key: string) {
     return i18nResult;
   }
 }
 
 describe('abc: reuse-tab', () => {
-  let injector: Injector;
+  let injector: TestBedStatic;
   let fixture: ComponentFixture<AppComponent>;
   let dl: DebugElement;
   let layoutComp: LayoutComponent;
@@ -50,15 +42,7 @@ describe('abc: reuse-tab', () => {
 
   function genModule(needI18n = false) {
     injector = TestBed.configureTestingModule({
-      declarations: [
-        AppComponent,
-        LayoutComponent,
-        AComponent,
-        BComponent,
-        CComponent,
-        DComponent,
-        EComponent,
-      ],
+      declarations: [AppComponent, LayoutComponent, AComponent, BComponent, CComponent, DComponent, EComponent],
       imports: [
         DelonLocaleModule,
         ReuseTabModule,
@@ -95,7 +79,7 @@ describe('abc: reuse-tab', () => {
         },
         {
           provide: 'CanDeactivate',
-          useValue: (c: DComponent, a: ActivatedRouteSnapshot, b: RouterStateSnapshot) => {
+          useValue: () => {
             return Observable.create((observer: any) => observer.next(false));
           },
         },
@@ -123,8 +107,8 @@ describe('abc: reuse-tab', () => {
     router.routeReuseStrategy = new ReuseTabStrategy(srv);
 
     page = new PageObject();
-    layoutComp = dl.query(By.directive(LayoutComponent)).injector.get(LayoutComponent);
-    rtComp = dl.query(By.directive(ReuseTabComponent)).injector.get(ReuseTabComponent);
+    layoutComp = dl.query(By.directive(LayoutComponent)).injector.get<LayoutComponent>(LayoutComponent);
+    rtComp = dl.query(By.directive(ReuseTabComponent)).injector.get<ReuseTabComponent>(ReuseTabComponent);
     spyOn(layoutComp, 'change');
     spyOn(layoutComp, 'close');
   }
@@ -244,15 +228,13 @@ describe('abc: reuse-tab', () => {
         }));
       });
       describe('#mode', () => {
-        [ReuseTabMatchMode.Menu, ReuseTabMatchMode.MenuForce, ReuseTabMatchMode.URL].forEach(
-          type => {
-            it(`with ${type}`, () => {
-              layoutComp.mode = type;
-              fixture.detectChanges();
-              expect(srv.mode).toBe(type);
-            });
-          },
-        );
+        [ReuseTabMatchMode.Menu, ReuseTabMatchMode.MenuForce, ReuseTabMatchMode.URL].forEach(type => {
+          it(`with ${type}`, () => {
+            layoutComp.mode = type;
+            fixture.detectChanges();
+            expect(srv.mode).toBe(type);
+          });
+        });
       });
       describe('#debug', () => {
         [true, false].forEach(type => {
@@ -312,7 +294,7 @@ describe('abc: reuse-tab', () => {
         expect(layoutComp.close).toHaveBeenCalled();
       }));
       it('should keeping tab if closed include multi prev tab', fakeAsync(() => {
-        let cTime: string;
+        let cTime = '';
         page
           .to('#b') // 1
           .to('#c') // 2
@@ -328,7 +310,7 @@ describe('abc: reuse-tab', () => {
           .expectTime(cTime);
       }));
       it('should show the previous tab if the right not tab', fakeAsync(() => {
-        let aTime: string;
+        let aTime = '';
         page
           .tap(() => (aTime = page.time))
           .to('#b') // 1
@@ -341,7 +323,7 @@ describe('abc: reuse-tab', () => {
           .expectTime(aTime);
       }));
       it('should show next tab if closed include multi right tab', fakeAsync(() => {
-        let cTime: string;
+        let cTime = '';
         page
           .to('#b') // 1
           .to('#c') // 2
@@ -376,7 +358,7 @@ describe('abc: reuse-tab', () => {
           .expectActive(0, true);
       }));
       it('should keeping tab of closed right tab', fakeAsync(() => {
-        let bTime: string;
+        let bTime = '';
         page
           .to('#b') // 1
           .tap(() => (bTime = page.time))
@@ -391,8 +373,22 @@ describe('abc: reuse-tab', () => {
           .expectUrl(1, '/b/1')
           .expectTime(bTime);
       }));
+      it('should acitved select tab of closed right tab', fakeAsync(() => {
+        let bTime = '';
+        page
+          .to('#b') // 1
+          .tap(() => (bTime = page.time))
+          .to('#c') // 2
+          .to('#d') // 3
+          .openContextMenu(1)
+          .clickContentMenu('closeRight')
+          .expectCount(2)
+          .expectActive(1, true)
+          .expectUrl(1, '/b/1')
+          .expectTime(bTime);
+      }));
       it('should keeping tab of close other tab', fakeAsync(() => {
-        let bTime: string;
+        let bTime = '';
         page
           .to('#b') // 1
           .tap(() => (bTime = page.time))
@@ -408,7 +404,7 @@ describe('abc: reuse-tab', () => {
           .expectTime(bTime);
       }));
       it('should keeping tab of clear tab', fakeAsync(() => {
-        let bTime: string;
+        let bTime = '';
         page
           .to('#b') // 1
           .tap(() => (bTime = page.time))
@@ -465,15 +461,15 @@ describe('abc: reuse-tab', () => {
           .to('#e')
           .openContextMenu(1)
           .tap(() =>
-            expect(
-              document.querySelector(`.reuse-tab__cm li[data-type="close"]`).classList,
-            ).toContain('ant-menu-item-disabled'),
+            expect(document.querySelector(`.reuse-tab__cm li[data-type="close"]`)!.classList).toContain(
+              'ant-menu-item-disabled',
+            ),
           )
           .openContextMenu(1, { ctrlKey: true })
           .tap(() =>
-            expect(
-              document.querySelector(`.reuse-tab__cm li[data-type="close"]`).classList,
-            ).not.toContain('ant-menu-item-disabled'),
+            expect(document.querySelector(`.reuse-tab__cm li[data-type="close"]`)!.classList).not.toContain(
+              'ant-menu-item-disabled',
+            ),
           )
           .expectCount(2);
       }));
@@ -515,7 +511,7 @@ describe('abc: reuse-tab', () => {
 
     describe('[routing]', () => {
       it('[ng-alain #326] should be restricted by canDeactivate when changing tab', fakeAsync(() => {
-        let lTime: string;
+        let lTime = '';
         page
           .to('#leave')
           .tap(() => (lTime = page.time))
@@ -546,14 +542,14 @@ describe('abc: reuse-tab', () => {
           .advance(KSTIME)
           .tap(() => {
             expect(srv.items[0].position != null).toBe(true);
-            expect(srv.items[0].position[1]).toBe(666);
+            expect(srv.items[0].position![1]).toBe(666);
             expect(ss.scrollToPosition).not.toHaveBeenCalled();
           })
           .to('#a')
           .advance(KSTIME)
           .tap(() => {
             expect(srv.items[1].position != null).toBe(true);
-            expect(srv.items[1].position[1]).toBe(666);
+            expect(srv.items[1].position![1]).toBe(666);
             expect(ss.scrollToPosition).toHaveBeenCalled();
           });
       }));
@@ -627,7 +623,7 @@ describe('abc: reuse-tab', () => {
             .advance(KSTIME)
             .tap(() => {
               expect(srv.items[0].position != null).toBe(true);
-              expect(srv.items[0].position[1]).toBe(666);
+              expect(srv.items[0].position![1]).toBe(666);
               expect(getScrollPositionSpy.calls.mostRecent().args[0]).toBe(window);
             });
         }));
@@ -641,7 +637,7 @@ describe('abc: reuse-tab', () => {
             .advance(KSTIME)
             .tap(() => {
               expect(srv.items[0].position != null).toBe(true);
-              expect(srv.items[0].position[1]).toBe(666);
+              expect(srv.items[0].position![1]).toBe(666);
               expect(getScrollPositionSpy.calls.mostRecent().args[0]).toBe(el);
             });
         }));
@@ -654,10 +650,8 @@ describe('abc: reuse-tab', () => {
             .advance(KSTIME)
             .tap(() => {
               expect(srv.items[0].position != null).toBe(true);
-              expect(srv.items[0].position[1]).toBe(666);
-              expect(getScrollPositionSpy.calls.mostRecent().args[0]).toBe(
-                document.querySelector('#children'),
-              );
+              expect(srv.items[0].position![1]).toBe(666);
+              expect(getScrollPositionSpy.calls.mostRecent().args[0]).toBe(document.querySelector('#children'));
             });
         }));
       });
@@ -679,11 +673,11 @@ describe('abc: reuse-tab', () => {
       genModule();
       createComp();
       page.to('#b').openContextMenu(1);
-      expect(document.querySelector('[data-type="close"]').textContent).toBe(zh_CN.reuseTab.close);
+      expect(document.querySelector('[data-type="close"]')!.textContent).toBe(zh_CN.reuseTab.close);
       injector.get(DelonLocaleService).setLocale(en_US);
       fixture.detectChanges();
       page.to('#a').openContextMenu(1);
-      expect(document.querySelector('[data-type="close"]').textContent).toBe(en_US.reuseTab.close);
+      expect(document.querySelector('[data-type="close"]')!.textContent).toBe(en_US.reuseTab.close);
     }));
   });
 
@@ -867,7 +861,7 @@ class LayoutComponent {
   allowClose = true;
   showCurrent = true;
   keepingScroll = false;
-  keepingScrollContainer = null;
+  keepingScrollContainer: Window | Element | string | null = null;
   customContextMenu: ReuseCustomContextMenu[] = [];
   change() {}
   close() {}
@@ -895,7 +889,6 @@ class AComponent {
 })
 class BComponent {
   time = +new Date();
-  constructor(private router: ActivatedRoute) {}
 }
 
 @Component({
@@ -934,7 +927,7 @@ class DComponent {
 })
 class EComponent {
   time = +new Date();
-  constructor(private reuse: ReuseTabService) {
+  constructor(reuse: ReuseTabService) {
     reuse.closable = false;
   }
 }

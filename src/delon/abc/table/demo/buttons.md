@@ -29,7 +29,7 @@ import { DemoDrawerComponent } from '@shared/components/dialog/drawer.component'
 @Component({
   selector: 'app-demo',
   template: `
-  <st [data]="users" [columns]="columns"></st>
+    <st [data]="users" [columns]="columns"></st>
   `,
 })
 export class DemoComponent {
@@ -37,7 +37,7 @@ export class DemoComponent {
 
   users: any[] = Array(10)
     .fill({})
-    .map((item: any, idx: number) => {
+    .map((_item: any, idx: number) => {
       return {
         id: idx + 1,
         name: `name ${idx + 1}`,
@@ -59,10 +59,7 @@ export class DemoComponent {
           modal: {
             component: DemoModalComponent,
           },
-          click: (record: any, modal: any) =>
-            this.message.success(
-              `重新加载页面，回传值：${JSON.stringify(modal)}`,
-            ),
+          click: (_record, modal) => this.message.success(`重新加载页面，回传值：${JSON.stringify(modal)}`),
         },
         {
           text: 'Drawer',
@@ -71,34 +68,40 @@ export class DemoComponent {
             title: '编辑',
             component: DemoDrawerComponent,
           },
-          click: (record: any, modal: any) =>
-            this.message.success(
-              `重新加载页面，回传值：${JSON.stringify(modal)}`,
-            ),
+          click: (_record, modal) => this.message.success(`重新加载页面，回传值：${JSON.stringify(modal)}`),
+        },
+        {
+          icon: 'check-circle',
+          click: record => this.message.info(`check-${record.name}`),
+          iif: record => record.id % 2 === 0,
+          iifBehavior: 'disabled',
         },
         {
           icon: 'delete',
           type: 'del',
-          click: (record, modal, comp) => {
+          click: (record, _modal, comp) => {
             this.message.success(`成功删除【${record.name}】`);
-            comp.removeRow(record);
+            comp!.removeRow(record);
           },
-          iif: (item: any) => item.id % 2 === 0,
+          iif: record => record.id % 2 === 0,
         },
         {
           text: '更多',
           children: [
             {
-              text: `过期`,
-              click: (record: any) =>
-                this.message.error(`过期【${record.name}】`),
-              format: (record: any) => `过期`,
+              text: record => (record.id === 1 ? `过期` : `正常`),
+              click: record => this.message.error(`${record.id === 1 ? `过期` : `正常`}【${record.name}】`),
             },
             {
               text: `重新开始`,
               icon: 'edit',
-              click: (record: any) =>
-                this.message.success(`重新开始【${record.name}】`),
+              click: record => this.message.success(`重新开始【${record.name}】`),
+            },
+            {
+              text: `审核`,
+              click: record => this.message.info(`check-${record.name}`),
+              iif: record => record.id % 2 === 0,
+              iifBehavior: 'disabled',
             },
           ],
         },

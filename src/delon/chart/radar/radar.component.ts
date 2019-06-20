@@ -10,6 +10,7 @@ import {
   OnInit,
   TemplateRef,
   ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { InputBoolean, InputNumber } from '@delon/util';
 
@@ -24,12 +25,15 @@ export interface G2RadarData {
 
 @Component({
   selector: 'g2-radar',
+  exportAs: 'g2Radar',
   templateUrl: './radar.component.html',
   host: {
     '[style.height.px]': 'height',
     '[class.g2-radar]': 'true',
   },
+  preserveWhitespaces: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class G2RadarComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('container') private node: ElementRef;
@@ -45,16 +49,7 @@ export class G2RadarComponent implements OnInit, OnDestroy, OnChanges {
   @Input() @InputBoolean() hasLegend = true;
   @Input() @InputNumber() tickCount = 4;
   @Input() data: G2RadarData[] = [];
-  @Input() colors = [
-    '#1890FF',
-    '#FACC14',
-    '#2FC25B',
-    '#8543E0',
-    '#F04864',
-    '#13C2C2',
-    '#fa8c16',
-    '#a0d911',
-  ];
+  @Input() colors = ['#1890FF', '#FACC14', '#2FC25B', '#8543E0', '#F04864', '#13C2C2', '#fa8c16', '#a0d911'];
 
   // #endregion
 

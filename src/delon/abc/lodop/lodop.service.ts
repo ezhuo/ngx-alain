@@ -8,11 +8,6 @@ import { Lodop, LodopPrintResult, LodopResult } from './lodop.types';
 
 @Injectable({ providedIn: 'root' })
 export class LodopService implements OnDestroy {
-  private _cog: LodopConfig;
-  private pending = false;
-  private _lodop: Lodop = null;
-  private _init: Subject<LodopResult> = new Subject<LodopResult>();
-  private _events: Subject<LodopPrintResult> = new Subject<LodopPrintResult>();
 
   constructor(private defCog: LodopConfig, private scriptSrv: LazyService) {
     this.cog = defCog;
@@ -42,6 +37,34 @@ export class LodopService implements OnDestroy {
     return this._events.asObservable();
   }
 
+  /** 获取 lodop 对象 */
+  get lodop(): Observable<LodopResult> {
+    if (this._lodop) return of({ ok: true, lodop: this._lodop } as LodopResult);
+    if (this.pending) return this._init.asObservable();
+
+    this.request();
+
+    return this._init.asObservable();
+  }
+
+  /** 获取打印机列表 */
+  get printer(): string[] {
+    this.check();
+    const ret: string[] = [];
+    const count = this._lodop!.GET_PRINTER_COUNT();
+    for (let index = 0; index < count; index++) {
+      ret.push(this._lodop!.GET_PRINTER_NAME(index));
+    }
+    return ret;
+  }
+
+  private _cog: LodopConfig;
+  private pending = false;
+  private _lodop: Lodop | null = null;
+  private _init = new Subject<LodopResult>();
+  private _events = new Subject<LodopPrintResult>();
+  private printBuffer: any[] = [];
+
   private check() {
     if (!this._lodop) throw new Error(`请务必先调用 lodop 获取对象`);
   }
@@ -50,18 +73,18 @@ export class LodopService implements OnDestroy {
     this.pending = true;
 
     const url = `${this.cog.url}?name=${this.cog.name}`;
-    let checkMaxCount = this.cog.checkMaxCount;
+    let checkMaxCount = this.cog.checkMaxCount as number;
     const onResolve = (status, error?: {}) => {
       this._init.next({
         ok: status === 'ok',
         status,
         error,
-        lodop: this._lodop,
+        lodop: this._lodop!,
       });
     };
     const checkStatus = () => {
       --checkMaxCount;
-      if (this._lodop.webskt && this._lodop.webskt.readyState === 1) {
+      if (this._lodop!.webskt && this._lodop!.webskt.readyState === 1) {
         onResolve('ok');
       } else {
         if (checkMaxCount < 0) {
@@ -78,17 +101,14 @@ export class LodopService implements OnDestroy {
         onResolve('script-load-error', res[0]);
         return;
       }
-      this._lodop = window.hasOwnProperty(this.cog.name) && (window[this.cog.name] as Lodop);
+      if (window.hasOwnProperty(this.cog.name!)) {
+        this._lodop = window[this.cog.name!] as Lodop;
+      }
       if (this._lodop === null) {
         onResolve('load-variable-name-error', { name: this.cog.name });
         return;
       }
-      this._lodop.SET_LICENSES(
-        this.cog.companyName,
-        this.cog.license,
-        this.cog.licenseA,
-        this.cog.licenseB,
-      );
+      this._lodop.SET_LICENSES(this.cog.companyName!, this.cog.license, this.cog.licenseA, this.cog.licenseB);
       checkStatus();
     });
   }
@@ -98,27 +118,6 @@ export class LodopService implements OnDestroy {
     this._lodop = null;
     this.pending = false;
     this.request();
-  }
-
-  /** 获取 lodop 对象 */
-  get lodop(): Observable<LodopResult> {
-    if (this._lodop) return of({ ok: true, lodop: this._lodop } as LodopResult);
-    if (this.pending) return this._init.asObservable();
-
-    this.request();
-
-    return this._init.asObservable();
-  }
-
-  /** 获取打印机列表 */
-  get printer(): string[] {
-    this.check();
-    const ret: string[] = [];
-    const count = this._lodop.GET_PRINTER_COUNT();
-    for (let index = 0; index < count; index++) {
-      ret.push(this._lodop.GET_PRINTER_NAME(index));
-    }
-    return ret;
   }
 
   /**
@@ -134,24 +133,24 @@ export class LodopService implements OnDestroy {
     this.check();
     if (!parser) parser = /LODOP\.([^(]+)\(([^\n]+)\);/i;
     code.split('\n').forEach(line => {
-      const res = parser.exec(line.trim());
+      const res = parser!.exec(line.trim());
       if (!res) return;
-      const fn = this._lodop[res[1]];
+      const fn = this._lodop![res[1]];
       if (fn) {
-        let arr: any[];
+        let arr: any[] | null = null;
         try {
           const fakeFn = new Function(`return [${res[2]}]`);
           arr = fakeFn();
-        } catch {}
+        } catch { }
 
-        if (Array.isArray(arr) && contextObj) {
+        if (arr != null && Array.isArray(arr) && contextObj) {
           for (let i = 0; i < arr.length; i++) {
             if (typeof arr[i] === 'string') {
-              arr[i] = arr[i].replace(/{{(.*?)}}/g, (match, key) => contextObj[key.trim()] || '');
+              arr[i] = (arr[i] as string).replace(/{{(.*?)}}/g, (_match, key) => contextObj[key.trim()] || '');
             }
           }
         }
-        fn.apply(this._lodop, arr);
+        fn.apply(this._lodop, arr!);
       }
     });
   }
@@ -163,25 +162,23 @@ export class LodopService implements OnDestroy {
    */
   design(): Promise<string> {
     this.check();
-    const tid = this._lodop.PRINT_DESIGN();
+    const tid = this._lodop!.PRINT_DESIGN();
     return new Promise(resolve => {
-      this._lodop.On_Return = (taskID: string, value: boolean | string) => {
+      this._lodop!.On_Return = (taskID: string, value: boolean | string) => {
         if (tid !== taskID) return;
-        this._lodop.On_Return = null;
+        this._lodop!.On_Return = null;
         resolve('' + value);
       };
     });
   }
-
-  private printBuffer: any[] = [];
   private printDo() {
     const data = this.printBuffer.shift();
     if (!data) return;
     this.attachCode(data.code, data.item, data.parser);
-    const tid = this._lodop.PRINT();
-    this._lodop.On_Return = (taskID: string, value: boolean | string) => {
+    const tid = this._lodop!.PRINT();
+    this._lodop!.On_Return = (taskID: string, value: boolean | string) => {
       if (tid !== taskID) return;
-      this._lodop.On_Return = null;
+      this._lodop!.On_Return = null;
       this._events.next({
         ok: value === true,
         error: value === true ? null : value,

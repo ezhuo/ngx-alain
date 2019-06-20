@@ -1,10 +1,4 @@
 export interface CLodop {
-  /** 建立打印机名单 */
-  Create_Printer_List(el: Element): void;
-
-  /** 建立纸张类型名单 */
-  Create_PageSize_List(el: Element, iPrintIndex: number): void;
-
   /**
    * 判断是否支持https协议的属性
    *
@@ -14,11 +8,17 @@ export interface CLodop {
    */
   readonly HTTPS_STATUS: number;
 
-  /** 结果回调函数 */
-  On_Return(taskID: string, value: boolean | string): void;
-
   /** 结果回调函数保留 */
   readonly On_Return_Remain: boolean;
+
+  /** 结果回调函数 */
+  On_Return: ((taskID: string, value: boolean | string) => void) | null;
+
+  /** 建立打印机名单 */
+  Create_Printer_List(el: Element): void;
+
+  /** 建立纸张类型名单 */
+  Create_PageSize_List(el: Element, iPrintIndex: number): void;
 }
 
 export interface Lodop extends CLodop {
@@ -55,7 +55,9 @@ export interface Lodop extends CLodop {
     strHtmlContent: string,
   ): void;
 
-  /** 增加表格打印项（超文本模式）*/
+  /**
+   * 增加表格打印项（超文本模式）
+   */
   ADD_PRINT_TABLE(
     Top: number | string,
     Left: number | string,
@@ -64,7 +66,9 @@ export interface Lodop extends CLodop {
     strHtml: string,
   ): void;
 
-  /** 增加表格打印项（超文本模式）*/
+  /**
+   * 增加表格打印项（超文本模式）
+   */
   ADD_PRINT_TABLE(
     Top: number | string,
     Left: number | string,
@@ -73,7 +77,9 @@ export interface Lodop extends CLodop {
     strHtml: string,
   ): void;
 
-  /** 增加超文本打印项（URL模式）*/
+  /**
+   * 增加超文本打印项（URL模式）
+   */
   ADD_PRINT_URL(
     Top: number | string,
     Left: number | string,
@@ -287,11 +293,7 @@ export interface Lodop extends CLodop {
   ): void;
 
   /** (增强型)设置打印项风格A, 继承 `SET_PRINT_STYLE` 的所有属性 */
-  SET_PRINT_STYLEA(
-    varItemNameID: number | string,
-    strStyleName: string,
-    varStyleValue: number | string,
-  ): void;
+  SET_PRINT_STYLEA(varItemNameID: number | string, strStyleName: string, varStyleValue: number | string): void;
 
   /** (增强型)导出数据到文件 */
   SAVE_TO_FILE(strFileName: string): boolean;
@@ -343,13 +345,9 @@ export interface Lodop extends CLodop {
    * @param  strLicenseA 附加注册号A，用途与控件参数LicenseA一样。
    * @param  strLicenseB 附加注册号B，用途与控件参数LicenseB一样。
    */
-  SET_LICENSES(
-    strCompanyName: string,
-    strLicense: string,
-    strLicenseA?: string,
-    strLicenseB?: string,
-  ): void;
+  SET_LICENSES(strCompanyName: string, strLicense: string, strLicenseA?: string, strLicenseB?: string): void;
 
+  // tslint:disable-next-line: member-ordering
   webskt: WebSocket;
 }
 

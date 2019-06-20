@@ -5,40 +5,21 @@ import { helpers } from '@core';
 
 @Component({
   selector: 'sf-texts',
-  template: `
-  <sf-item-wrap [id]="id" [schema]="schema" [ui]="ui" [showError]="showError" [error]="error" [showTitle]="schema.title">
-    
-    <ng-container *ngIf="!isFiles">
-        <div [safeHTML]="getTextValue" *ngIf="!isAvatar"></div>
-        <a [attr.href]="value" target="_blank" class="avatar-show" *ngIf="isAvatar">
-          <img [src]="value" class="avatar " />
-        </a>
-    </ng-container>
-
-    <ng-container *ngIf="isFiles">
-      <ng-container *ngFor="let f of value">
-        <a [attr.href]="f?.url" target="_blank" class="avatar-show">
-            <img [src]="f?.url" class="avatar " [attr.title]="f.name" *ngIf="isPicture" />
-            <span [innerHTML]="f.name" *ngIf="!isPicture"></span>
-        </a>
-      </ng-container>
-    </ng-container>
-
-  </sf-item-wrap>
-  `,
-  preserveWhitespaces: false,
+  templateUrl: `./texts.widget.html`,
 })
 export class TextsWidget extends ControlWidget implements OnInit {
   static readonly KEY = 'texts';
 
   ngOnInit(): void {
     this.ui._required = false;
-    console.log(this.value);
+    // console.log(this.value);
   }
 
   get isPicture() {
-    return this.isFiles && (
-      this.isAvatar || (['picture', 'picture-card'].indexOf(this.ui.listType) > -1)
+    return (
+      this.isFiles &&
+      (this.isAvatar ||
+        ['picture', 'picture-card'].indexOf(this.ui.listType) > -1)
     );
   }
 
@@ -67,6 +48,17 @@ export class TextsWidget extends ControlWidget implements OnInit {
     }
   }
 
+  get getFilesValue() {
+    return helpers.formatUploadFilesToObject(this.value || this.ui.defaultText);
+  }
+
+  isFilePicture(file) {
+    return (
+      ['image/png', 'image/jpeg', 'image/gif', 'image/bmp'].indexOf(file.type) >
+      -1
+    );
+  }
+
   reset(value: any) {
     if (this.ui.asyncData) {
       this.ui.enum = this.ui.enum || [];
@@ -78,5 +70,4 @@ export class TextsWidget extends ControlWidget implements OnInit {
       );
     }
   }
-
 }

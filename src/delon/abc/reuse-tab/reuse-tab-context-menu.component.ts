@@ -5,6 +5,7 @@ import {
   Input,
   OnInit,
   Output,
+  ViewEncapsulation,
 } from '@angular/core';
 import { DelonLocaleService } from '@delon/theme';
 
@@ -23,7 +24,9 @@ import {
     '(document:click)': 'closeMenu($event)',
     '(document:contextmenu)': 'closeMenu($event)',
   },
+  preserveWhitespaces: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class ReuseTabContextMenuComponent implements OnInit {
   private _i18n: ReuseContextI18n;

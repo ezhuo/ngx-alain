@@ -176,6 +176,13 @@ export class StateService {
     helpers.storageLocal.set('dict_dic', value);
   }
 
+  get dictDicDic(): any[] {
+    const arr = this.dictDic;
+    if (!helpers.isEmpty(arr)) {
+      return arr['dict_dic'];
+    }
+    return [];
+  }
   /**
    * 释放
    */

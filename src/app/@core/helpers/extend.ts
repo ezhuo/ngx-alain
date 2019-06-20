@@ -4,7 +4,11 @@ export function deepExtend(...objects: any[]): any {
   return deepExtendNode(true, ...objects);
 }
 
-export const deepExtends = function (...objects: any[]): any {
+export function deepExtendNewObject(...objects: any[]): any {
+  return deepExtend({}, ...objects);
+}
+
+export const deepExtends = function(...objects: any[]): any {
   if (arguments.length < 1 || typeof arguments[0] !== 'object') {
     return false;
   }
@@ -20,13 +24,13 @@ export const deepExtends = function (...objects: any[]): any {
 
   let val, src;
 
-  args.forEach(function (obj: any) {
+  args.forEach(function(obj: any) {
     // skip argument if it is array or isn't object
     if (typeof obj !== 'object' || Array.isArray(obj)) {
       return;
     }
 
-    Object.keys(obj).forEach(function (key) {
+    Object.keys(obj).forEach(function(key) {
       src = target[key]; // source value
       val = obj[key]; // new value
 
@@ -56,7 +60,11 @@ export const deepExtends = function (...objects: any[]): any {
         return;
 
         // overwrite by new value if source isn't object or array
-      } else if (typeof src !== 'object' || src === null || Array.isArray(src)) {
+      } else if (
+        typeof src !== 'object' ||
+        src === null ||
+        Array.isArray(src)
+      ) {
         target[key] = deepExtends({}, val);
 
         return;
@@ -74,10 +82,7 @@ export const deepExtends = function (...objects: any[]): any {
 };
 
 function isSpecificValue(val: any) {
-  return (
-    val instanceof Date
-    || val instanceof RegExp
-  ) ? true : false;
+  return val instanceof Date || val instanceof RegExp ? true : false;
 }
 
 function cloneSpecificValue(val: any): any {
@@ -95,7 +100,7 @@ function cloneSpecificValue(val: any): any {
  */
 function deepCloneArray(arr: any[]): any {
   const clone: any[] = [];
-  arr.forEach(function (item: any, index: any) {
+  arr.forEach(function(item: any, index: any) {
     if (typeof item === 'object' && item !== null) {
       if (Array.isArray(item)) {
         clone[index] = deepCloneArray(item);
@@ -112,14 +117,16 @@ function deepCloneArray(arr: any[]): any {
   return clone;
 }
 
-
-
 // getDeepFromObject({result: {data: 1}}, 'result.data', 2); // returns 1
-export const getDeepFromObject = (object = {}, name: string, defaultValue?: any) => {
+export const getDeepFromObject = (
+  object = {},
+  name: string,
+  defaultValue?: any,
+) => {
   const keys = name.split('.');
   // clone the object
   let level = deepExtends({}, object || {});
-  keys.forEach((k) => {
+  keys.forEach(k => {
     if (level && typeof level[k] !== 'undefined') {
       level = level[k];
     } else {

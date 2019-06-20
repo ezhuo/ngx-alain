@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { DelonACLConfig } from './acl.config';
 import { ACLCanType, ACLType } from './acl.type';
 
 /**
@@ -10,12 +11,10 @@ export class ACLService {
   private roles: string[] = [];
   private abilities: Array<number | string> = [];
   private full = false;
-  private aclChange: BehaviorSubject<ACLType | boolean> = new BehaviorSubject<ACLType | boolean>(
-    null,
-  );
+  private aclChange = new BehaviorSubject<ACLType | boolean | null>(null);
 
   /** ACL变更通知 */
-  get change(): Observable<ACLType | boolean> {
+  get change(): Observable<ACLType | boolean | null> {
     return this.aclChange.asObservable();
   }
 
@@ -28,16 +27,23 @@ export class ACLService {
     };
   }
 
-  private parseACLType(val: string | string[] | ACLType): ACLType {
-    if (typeof val !== 'string' && !Array.isArray(val)) {
-      return val as ACLType;
+  constructor(private options: DelonACLConfig) {}
+
+  private parseACLType(val: string | string[] | number | number[] | ACLType | null): ACLType {
+    let t: ACLType;
+    if (typeof val === 'number') {
+      t = { ability: [val] };
+    } else if (Array.isArray(val) && val.length > 0 && typeof val[0] === 'number') {
+      t = { ability: val };
+    } else if (typeof val === 'object' && !Array.isArray(val)) {
+      t = { ...val };
+    } else if (Array.isArray(val)) {
+      t = { role: val as string[] };
+    } else {
+      t = { role: val == null ? [] : [val] };
     }
-    if (Array.isArray(val)) {
-      return { role: val as string[] } as ACLType;
-    }
-    return {
-      role: [val],
-    } as ACLType;
+
+    return { except: false, ...t };
   }
 
   /**
@@ -140,36 +146,34 @@ export class ACLService {
    * - 当 `full: true` 或参数 `null` 时返回 `true`
    * - 若使用 `ACLType` 参数，可以指定 `mode` 校验模式
    */
-  can(roleOrAbility: ACLCanType): boolean {
+  can(roleOrAbility: ACLCanType | null): boolean {
+    const { preCan } = this.options;
+    if (preCan) {
+      roleOrAbility = preCan(roleOrAbility!);
+    }
+
+    const t = this.parseACLType(roleOrAbility);
+    let result = false;
     if (this.full === true || !roleOrAbility) {
-      return true;
-    }
-
-    let t: ACLType = {};
-    if (typeof roleOrAbility === 'number') {
-      t = { ability: [roleOrAbility] };
-    } else if (
-      Array.isArray(roleOrAbility) &&
-      roleOrAbility.length > 0 &&
-      typeof roleOrAbility[0] === 'number'
-    ) {
-      t = { ability: roleOrAbility };
+      result = true;
     } else {
-      t = this.parseACLType(roleOrAbility);
-    }
-
-    if (t.role) {
-      if (t.mode === 'allOf') return t.role.every(v => this.roles.includes(v));
-      else return t.role.some(v => this.roles.includes(v));
-    }
-    if (t.ability) {
-      if (t.mode === 'allOf') {
-        return (t.ability as any[]).every(v => this.abilities.includes(v));
-      } else {
-        return (t.ability as any[]).some(v => this.abilities.includes(v));
+      if (t.role && t.role.length > 0) {
+        if (t.mode === 'allOf') {
+          result = t.role.every(v => this.roles.includes(v));
+        } else {
+          result = t.role.some(v => this.roles.includes(v));
+        }
+      }
+      if (t.ability && t.ability.length > 0) {
+        if (t.mode === 'allOf') {
+          result = (t.ability as any[]).every(v => this.abilities.includes(v));
+        } else {
+          result = (t.ability as any[]).some(v => this.abilities.includes(v));
+        }
       }
     }
-    return false;
+
+    return t.except === true ? !result : result;
   }
 
   /** @inner */

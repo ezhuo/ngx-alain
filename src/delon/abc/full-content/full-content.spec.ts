@@ -1,12 +1,6 @@
 import { APP_BASE_HREF, DOCUMENT } from '@angular/common';
-import {
-  Component,
-  CUSTOM_ELEMENTS_SCHEMA,
-  DebugElement,
-  Injector,
-  ViewChild,
-} from '@angular/core';
-import { fakeAsync, tick, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, DebugElement, ViewChild } from '@angular/core';
+import { fakeAsync, tick, ComponentFixture, TestBed, TestBedStatic } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActivationEnd, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -17,13 +11,13 @@ import { FullContentModule } from './full-content.module';
 import { FullContentService } from './full-content.service';
 
 describe('abc: full-content', () => {
-  let injector: Injector;
+  let injector: TestBedStatic;
   let fixture: ComponentFixture<TestComponent>;
   let dl: DebugElement;
   let context: TestComponent;
   let doc: Document;
   let el: HTMLElement;
-  let bodyEl: HTMLElement;
+  let bodyEl: HTMLBodyElement;
 
   beforeEach(() => {
     injector = TestBed.configureTestingModule({
@@ -40,7 +34,7 @@ describe('abc: full-content', () => {
     context = fixture.componentInstance;
     fixture.detectChanges();
     doc = injector.get(DOCUMENT);
-    bodyEl = document.querySelector('body');
+    bodyEl = document.querySelector('body') as HTMLBodyElement;
     el = dl.query(By.css('full-content')).nativeElement as HTMLElement;
   }
 
@@ -123,9 +117,7 @@ describe('abc: full-content', () => {
       fixture.detectChanges();
       tick(210);
       expect(bodyEl.getBoundingClientRect).toHaveBeenCalled();
-      expect(context.comp._height).toBe(
-        bodyHeight - el.getBoundingClientRect().top - context.padding,
-      );
+      expect(context.comp._height).toBe(bodyHeight - el.getBoundingClientRect().top - context.padding);
     }));
     it('should be clear class when go to other route', () => {
       const eventsSub = new BehaviorSubject<any>(null);
@@ -142,7 +134,7 @@ describe('abc: full-content', () => {
       // mock component destroy
       (dl.nativeElement as HTMLElement).innerHTML = ``;
 
-      eventsSub.next(new ActivationEnd(null));
+      eventsSub.next(new ActivationEnd(null!));
       eventsSub.complete();
       expect(bodyEl.classList.contains('full-content')).toBe(false);
     });
@@ -161,7 +153,7 @@ describe('abc: full-content', () => {
 
       bodyEl.classList.remove('full-content__body');
 
-      eventsSub.next(new ActivationEnd(null));
+      eventsSub.next(new ActivationEnd(null!));
       eventsSub.complete();
 
       expect(bodyEl.classList.contains('full-content__body')).toBe(true);

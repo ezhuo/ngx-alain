@@ -44,7 +44,7 @@ import { STColumn } from '@delon/abc';
 export class DemoComponent  {
   data: any[] = Array(100)
     .fill({})
-    .map((item: any, idx: number) => {
+    .map((_item: any, idx: number) => {
       return {
         id: idx + 1,
         price: ~~(Math.random() * 100),
@@ -59,7 +59,7 @@ export class DemoComponent  {
     { title: 'Average', index: 'price', type: 'currency', statistical: 'average', key: 'avg' },
     { title: 'Min', index: 'price', type: 'currency', statistical: 'min', key: 'min' },
     { title: 'Max', index: 'price', type: 'currency', statistical: 'max', key: 'max' },
-    { title: 'Custom', index: 'price', type: 'currency', statistical: { type: values => ({ value: values[0], text: `**${values[0]}` }), currenty: false }, key: 'custom' },
+    { title: 'Custom', index: 'price', type: 'currency', statistical: { type: values => ({ value: values[0], text: `**${values[0]}` }), currency: false }, key: 'custom' },
   ];
 }
 ```

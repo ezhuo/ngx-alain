@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, DebugElement, Injector, ViewChild } from '@angular/core';
-import { fakeAsync, tick, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, DebugElement, ViewChild } from '@angular/core';
+import { fakeAsync, tick, ComponentFixture, TestBed, TestBedStatic } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Router, RouterModule } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -50,8 +50,8 @@ class MockACLService {
 }
 
 class MockWindow {
-  open() {}
   location = new MockLocation();
+  open() { }
 }
 class MockLocation {
   private url: string;
@@ -64,7 +64,7 @@ class MockLocation {
 }
 
 describe('abc: sidebar-nav', () => {
-  let injector: Injector;
+  let injector: TestBedStatic;
   let fixture: ComponentFixture<TestComponent>;
   let dl: DebugElement;
   let context: TestComponent;
@@ -114,7 +114,7 @@ describe('abc: sidebar-nav', () => {
         expect(context.select).not.toHaveBeenCalled();
         expect(router.navigateByUrl).not.toHaveBeenCalled();
         const itemEl = page.getEl<HTMLElement>('.sidebar-nav__depth1 a');
-        itemEl.click();
+        itemEl!.click();
         fixture.detectChanges();
         expect(context.select).toHaveBeenCalled();
         expect(router.navigateByUrl).toHaveBeenCalled();
@@ -126,14 +126,14 @@ describe('abc: sidebar-nav', () => {
           const win = injector.get(WINDOW) as MockWindow;
           spyOn(win, 'open');
           const itemEl = page.getEl<HTMLElement>('.sidebar-nav__item [data-id="6"]');
-          itemEl.click();
+          itemEl!.click();
           expect(win.open).toHaveBeenCalled();
         });
         it('with target is _top', () => {
           createComp();
           const win = injector.get(WINDOW) as MockWindow;
           const itemEl = page.getEl<HTMLElement>('.sidebar-nav__item [data-id="7"]');
-          itemEl.click();
+          itemEl!.click();
           expect(win.location.href).toBe(`//ng-alain.com/top`);
         });
       });
@@ -154,7 +154,7 @@ describe('abc: sidebar-nav', () => {
         menuSrv.add(data);
         expect(data[0].children[0]._open).toBeUndefined();
         const subTitleEl = page.getEl<HTMLElement>('.sidebar-nav__item-link');
-        subTitleEl.click();
+        subTitleEl!.click();
         fixture.detectChanges();
         expect(data[0].children[0]._open).toBe(true);
       });
@@ -181,7 +181,7 @@ describe('abc: sidebar-nav', () => {
         menuSrv.add(newMenus);
         expect(context.select).not.toHaveBeenCalled();
         const itemEl = page.getEl<HTMLElement>('.sidebar-nav__item-disabled');
-        itemEl.click();
+        itemEl!.click();
         fixture.detectChanges();
         expect(context.select).toHaveBeenCalled();
       });
@@ -247,10 +247,8 @@ describe('abc: sidebar-nav', () => {
           page.showSubMenu();
         });
         it('should be displayed full submenu', () => {
-          const clientHeight = spyOnProperty(doc.documentElement, 'clientHeight').and.returnValue(
-            0,
-          );
-          spyOnProperty(doc.querySelector('body'), 'clientHeight').and.returnValue(0);
+          const clientHeight = spyOnProperty(doc.documentElement, 'clientHeight').and.returnValue(0);
+          spyOnProperty(doc.querySelector('body')!, 'clientHeight').and.returnValue(0);
           expect(clientHeight).not.toHaveBeenCalled();
           page.showSubMenu();
           expect(clientHeight).toHaveBeenCalled();
@@ -270,7 +268,7 @@ describe('abc: sidebar-nav', () => {
           setSrv.layout.collapsed = true;
           fixture.detectChanges();
           page.showSubMenu();
-          page.getEl<HTMLElement>(floatingShowCls, true).dispatchEvent(new Event('mouseleave'));
+          page.getEl<HTMLElement>(floatingShowCls, true)!.dispatchEvent(new Event('mouseleave'));
           fixture.detectChanges();
           expect(page.getEl<HTMLElement>(floatingShowCls, true)).toBeNull();
         });
@@ -280,7 +278,7 @@ describe('abc: sidebar-nav', () => {
           fixture.detectChanges();
           page.showSubMenu();
           const containerEl = page.getEl<HTMLElement>(floatingShowCls, true);
-          containerEl.querySelectorAll('li')[1].click();
+          containerEl!.querySelectorAll('li')[1].click();
           fixture.detectChanges();
           expect(router.navigateByUrl).not.toHaveBeenCalled();
         });
@@ -310,7 +308,7 @@ describe('abc: sidebar-nav', () => {
         fixture.detectChanges();
         menuSrv.add(newMenus);
         const itemEl = page.getEl<HTMLElement>('.sidebar-nav__item [data-id="3"]');
-        expect(itemEl.classList).toContain('sidebar-nav__item-disabled');
+        expect(itemEl!.classList).toContain('sidebar-nav__item-disabled');
       });
       it('should be hidden item when with false', () => {
         context.disabledAcl = false;
@@ -334,16 +332,12 @@ describe('abc: sidebar-nav', () => {
               {
                 text: '',
                 open: true,
-                children: [
-                  { text: '' },
-                ],
+                children: [{ text: '' }],
               },
               {
                 text: '',
                 open: true,
-                children: [
-                  { text: '' },
-                ],
+                children: [{ text: '' }],
               },
             ],
           },
@@ -371,10 +365,7 @@ describe('abc: sidebar-nav', () => {
 
     it('should be auto collapsed when less than pad', fakeAsync(() => {
       // create test component
-      TestBed.overrideTemplate(
-        TestComponent,
-        `<sidebar-nav #comp [autoCloseUnderPad]="true"></sidebar-nav>`,
-      );
+      TestBed.overrideTemplate(TestComponent, `<sidebar-nav #comp [autoCloseUnderPad]="true"></sidebar-nav>`);
       const defaultCollapsed = false;
       createComp(false, () => {
         spyOnProperty(window, 'innerWidth').and.returnValue(767);
@@ -388,10 +379,7 @@ describe('abc: sidebar-nav', () => {
     }));
     it(`should be won't collapsed when more than pad`, fakeAsync(() => {
       // create test component
-      TestBed.overrideTemplate(
-        TestComponent,
-        `<sidebar-nav #comp [autoCloseUnderPad]="true"></sidebar-nav>`,
-      );
+      TestBed.overrideTemplate(TestComponent, `<sidebar-nav #comp [autoCloseUnderPad]="true"></sidebar-nav>`);
       const defaultCollapsed = false;
       createComp(false, () => {
         spyOnProperty(window, 'innerWidth').and.returnValue(769);
@@ -405,16 +393,13 @@ describe('abc: sidebar-nav', () => {
     }));
     it('should be auto expaned when less than pad trigger click', fakeAsync(() => {
       // create test component
-      TestBed.overrideTemplate(
-        TestComponent,
-        `<sidebar-nav #comp [autoCloseUnderPad]="true"></sidebar-nav>`,
-      );
+      TestBed.overrideTemplate(TestComponent, `<sidebar-nav #comp [autoCloseUnderPad]="true"></sidebar-nav>`);
       createComp();
       setSrv.layout.collapsed = true;
       fixture.detectChanges();
       spyOnProperty(window, 'innerWidth').and.returnValue(767);
       expect(setSrv.layout.collapsed).toBe(true);
-      page.getEl<HTMLElement>('.sidebar-nav').click();
+      page.getEl<HTMLElement>('.sidebar-nav')!.click();
       fixture.detectChanges();
       tick(20);
       expect(setSrv.layout.collapsed).toBe(false);
@@ -483,8 +468,8 @@ describe('abc: sidebar-nav', () => {
       const el = body
         ? document.querySelector(cls)
         : dl.query(By.css(cls))
-        ? dl.query(By.css(cls)).nativeElement
-        : null;
+          ? dl.query(By.css(cls)).nativeElement
+          : null;
       return el ? (el as T) : null;
     }
     checkText(cls: string, value: any) {
@@ -500,7 +485,7 @@ describe('abc: sidebar-nav', () => {
       let conEl = this.getEl<HTMLElement>(floatingShowCls, true);
       expect(conEl).toBeNull();
       const subTitleEl = this.getEl<HTMLElement>('.sidebar-nav__item-link');
-      subTitleEl.dispatchEvent(new Event('mouseenter'));
+      subTitleEl!.dispatchEvent(new Event('mouseenter'));
       fixture.detectChanges();
       conEl = this.getEl<HTMLElement>(floatingShowCls, true);
       if (resultExpectShow) {
@@ -513,7 +498,7 @@ describe('abc: sidebar-nav', () => {
     hideSubMenu(resultExpectHide = true) {
       const containerEl = this.getEl<HTMLElement>(floatingShowCls, true);
       expect(containerEl).not.toBeNull();
-      containerEl.querySelector(resultExpectHide ? 'a' : 'li').click();
+      containerEl!.querySelector(resultExpectHide ? 'a' : 'li')!.click();
       fixture.detectChanges();
       const conEl = this.getEl<HTMLElement>(floatingShowCls, true);
       if (resultExpectHide) expect(conEl).toBeNull();
@@ -541,8 +526,8 @@ class TestComponent {
   autoCloseUnderPad = false;
   recursivePath = false;
   openStrictly = false;
-  select() {}
+  select() { }
 }
 
 @Component({ template: `` })
-class TestRouteComponent {}
+class TestRouteComponent { }

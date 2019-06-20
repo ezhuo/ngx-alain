@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import * as format from 'date-fns/format';
 import { SFValue } from '../../interface';
 import { FormProperty } from '../../model/form.property';
@@ -8,10 +8,12 @@ import { ControlWidget } from '../../widget';
 @Component({
   selector: 'sf-date',
   templateUrl: './date.widget.html',
+  preserveWhitespaces: false,
+  encapsulation: ViewEncapsulation.None,
 })
 export class DateWidget extends ControlWidget implements OnInit {
   mode: string;
-  displayValue: Date | Date[] = null;
+  displayValue: Date | Date[] | null = null;
   displayFormat: string;
   format: string;
   i: any;
@@ -26,6 +28,9 @@ export class DateWidget extends ControlWidget implements OnInit {
     }
     if (!ui.displayFormat) {
       switch (this.mode) {
+        case 'year':
+          this.displayFormat = `yyyy`;
+          break;
         case 'month':
           this.displayFormat = `yyyy-MM`;
           break;
@@ -61,16 +66,14 @@ export class DateWidget extends ControlWidget implements OnInit {
     this.compCd();
   }
 
-  _change(value: Date | Date[]) {
+  _change(value: Date | Date[] | null) {
     if (value == null) {
       this.setValue(null);
       this.setEnd(null);
       return;
     }
 
-    const res = Array.isArray(value)
-      ? value.map(d => format(d, this.format))
-      : format(value, this.format);
+    const res = Array.isArray(value) ? value.map(d => format(d, this.format)) : format(value, this.format);
 
     if (this.flatRange) {
       this.setEnd(res[1]);
@@ -89,11 +92,13 @@ export class DateWidget extends ControlWidget implements OnInit {
   }
 
   private get endProperty(): FormProperty {
-    return this.formProperty.parent.properties[this.ui.end];
+    return this.formProperty.parent!.properties![this.ui.end];
   }
 
-  private setEnd(value: string) {
-    this.endProperty.setValue(value, true);
+  private setEnd(value: string | null) {
+    if (this.flatRange) {
+      this.endProperty.setValue(value, true);
+    }
   }
 
   private toDate(value: SFValue) {

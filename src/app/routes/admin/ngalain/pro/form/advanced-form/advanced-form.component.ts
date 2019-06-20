@@ -4,17 +4,14 @@ import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 @Component({
   selector: 'app-advanced-form',
   templateUrl: './advanced-form.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdvancedFormComponent implements OnInit {
   editIndex = -1;
   editObj = {};
 
   form: FormGroup;
-  users: any[] = [
-    { value: 'xiao', label: '付晓晓' },
-    { value: 'mao', label: '周毛毛' },
-  ];
+  users: any[] = [{ value: 'xiao', label: '付晓晓' }, { value: 'mao', label: '周毛毛' }];
 
   constructor(private fb: FormBuilder) {}
 
@@ -148,10 +145,10 @@ export class AdvancedFormComponent implements OnInit {
   }
 
   _submitForm() {
-    for (const i in this.form.controls) {
-      this.form.controls[i].markAsDirty();
-      this.form.controls[i].updateValueAndValidity();
-    }
+    Object.keys(this.form.controls).forEach(key => {
+      this.form.controls[key].markAsDirty();
+      this.form.controls[key].updateValueAndValidity();
+    });
     if (this.form.invalid) return;
   }
 }

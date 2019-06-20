@@ -72,6 +72,7 @@ export class DictComponent extends IndexControl implements OnInit {
         order: {
           type: 'number',
           title: '排序',
+          default: 100,
           ui: {
             widget: 'string',
           },
@@ -95,6 +96,7 @@ export class DictComponent extends IndexControl implements OnInit {
     };
 
     this.tableData.col = [
+      Object.assign({}, this.configSrv.define.tableIndexColumn, { width: 80 }),
       { title: '名称', index: 'name' },
       { title: '值', index: 'code' },
       { title: '排序', index: 'order' },
@@ -110,7 +112,7 @@ export class DictComponent extends IndexControl implements OnInit {
             modal: this.modalTable(DictEditComponent, { size: 'md' }),
             click: (record, btnRes) => {
               console.log(btnRes);
-              if (btnRes) this.st.load();
+              if (btnRes) this.st.reload();
             },
           },
           {
@@ -135,7 +137,11 @@ export class DictComponent extends IndexControl implements OnInit {
     this.dictTypeList();
   }
 
-  add() {
+  add($event) {
+if ($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+    }
     this.modalData.data = this.dictActive;
     this.freeData.add = this.modalEditStatic(
       DictEditComponent,

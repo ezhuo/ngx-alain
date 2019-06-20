@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ModalOptionsForService, NzModalService } from 'ng-zorro-antd';
+import { deepMerge } from '@delon/util';
+import { ModalOptionsForService, NzModalService } from 'ng-zorro-antd/modal';
 import { Observable, Observer } from 'rxjs';
 
 export interface ModalHelperOptions {
@@ -18,9 +19,7 @@ export interface ModalHelperOptions {
  */
 @Injectable({ providedIn: 'root' })
 export class ModalHelper {
-  private zIndex = 500;
-
-  constructor(private srv: NzModalService) { }
+  constructor(private srv: NzModalService) {}
 
   /**
    * 构建一个对话框
@@ -29,35 +28,41 @@ export class ModalHelper {
    * @param params 组件参数
    * @param options 额外参数
    *
-   * 示例：
-  ```ts
-this.modalHelper.create(FormEditComponent, { i }).subscribe(res => this.load());
-// 对于组件的成功&关闭的处理说明
-// 成功
-this.NzModalRef.close(data);
-this.NzModalRef.close();
-// 关闭
-this.NzModalRef.destroy();
-```
+   * @example
+   * this.modalHelper.create(FormEditComponent, { i }).subscribe(res => this.load());
+   * // 对于组件的成功&关闭的处理说明
+   * // 成功
+   * this.NzModalRef.close(data);
+   * this.NzModalRef.close();
+   * // 关闭
+   * this.NzModalRef.destroy();
    */
   create(comp: any, params?: any, options?: ModalHelperOptions): Observable<any> {
-    options = {
-      size: 'lg',
-      exact: true,
-      includeTabs: false, ...options,
-    };
+    options = deepMerge(
+      {
+        size: 'lg',
+        exact: true,
+        includeTabs: false,
+      },
+      options,
+    );
     return new Observable((observer: Observer<any>) => {
+      const { size, includeTabs, modalOptions } = options as ModalHelperOptions;
       let cls = '';
       let width = '';
-      if (options.size) {
-        if (typeof options.size === 'number') {
-          width = `${options.size}px`;
+      if (size) {
+        if (typeof size === 'number') {
+          width = `${size}px`;
         } else {
-          cls = `modal-${options.size}`;
+          cls = `modal-${size}`;
         }
       }
-      if (options.includeTabs) {
+      if (includeTabs) {
         cls += ' modal-include-tabs';
+      }
+      if (modalOptions && modalOptions.nzWrapClassName) {
+        cls += ` ${modalOptions.nzWrapClassName}`;
+        delete modalOptions.nzWrapClassName;
       }
       const defaultOptions: ModalOptionsForService = {
         nzWrapClassName: cls,
@@ -65,13 +70,10 @@ this.NzModalRef.destroy();
         nzWidth: width ? width : undefined,
         nzFooter: null,
         nzComponentParams: params,
-        nzZIndex: ++this.zIndex,
       };
-      const subject = this.srv.create(
-        { ...defaultOptions, ...options.modalOptions },
-      );
+      const subject = this.srv.create({ ...defaultOptions, ...modalOptions });
       const afterClose$ = subject.afterClose.subscribe((res: any) => {
-        if (options.exact === true) {
+        if (options!.exact === true) {
           if (res != null) {
             observer.next(res);
           }
@@ -91,16 +93,14 @@ this.NzModalRef.destroy();
    * @param params 组件参数
    * @param options 额外参数
    *
-   * 示例：
-  ```ts
-this.modalHelper.open(FormEditComponent, { i }).subscribe(res => this.load());
-// 对于组件的成功&关闭的处理说明
-// 成功
-this.NzModalRef.close(data);
-this.NzModalRef.close();
-// 关闭
-this.NzModalRef.destroy();
-```
+   * @example
+   * this.modalHelper.open(FormEditComponent, { i }).subscribe(res => this.load());
+   * // 对于组件的成功&关闭的处理说明
+   * // 成功
+   * this.NzModalRef.close(data);
+   * this.NzModalRef.close();
+   * // 关闭
+   * this.NzModalRef.destroy();
    */
   createStatic(comp: any, params?: any, options?: ModalHelperOptions): Observable<any> {
     const modalOptions = {
@@ -117,23 +117,16 @@ this.NzModalRef.destroy();
    * @param size 大小；例如：lg、600，默认：lg
    * @param options 对话框 `ModalOptionsForService` 参数
    *
-   * 示例：
-  ```ts
-this.modalHelper.open(FormEditComponent, { i }).subscribe(res => this.load());
-// 对于组件的成功&关闭的处理说明
-// 成功
-this.NzModalRef.close(data);
-this.NzModalRef.close();
-// 关闭
-this.NzModalRef.destroy();
-```
+   * @example
+   * this.modalHelper.open(FormEditComponent, { i }).subscribe(res => this.load());
+   * // 对于组件的成功&关闭的处理说明
+   * // 成功
+   * this.NzModalRef.close(data);
+   * this.NzModalRef.close();
+   * // 关闭
+   * this.NzModalRef.destroy();
    */
-  open(
-    comp: any,
-    params?: any,
-    size: 'sm' | 'md' | 'lg' | 'xl' | '' | number = 'lg',
-    options?: ModalOptionsForService,
-  ): Observable<any> {
+  open(comp: any, params?: any, size: 'sm' | 'md' | 'lg' | 'xl' | '' | number = 'lg', options?: ModalOptionsForService): Observable<any> {
     return this.create(comp, params, {
       size,
       modalOptions: options,
@@ -148,31 +141,19 @@ this.NzModalRef.destroy();
    * @param size 大小；例如：lg、600，默认：lg
    * @param options 对话框 `ModalOptionsForService` 参数
    *
-   * 示例：
-  ```ts
-this.modalHelper.open(FormEditComponent, { i }).subscribe(res => this.load());
-// 对于组件的成功&关闭的处理说明
-// 成功
-this.NzModalRef.close(data);
-this.NzModalRef.close();
-// 关闭
-this.NzModalRef.destroy();
-```
+   * @example
+   * this.modalHelper.open(FormEditComponent, { i }).subscribe(res => this.load());
+   * // 对于组件的成功&关闭的处理说明
+   * // 成功
+   * this.NzModalRef.close(data);
+   * this.NzModalRef.close();
+   * // 关闭
+   * this.NzModalRef.destroy();
    */
-  static(
-    comp: any,
-    params?: any,
-    size: 'sm' | 'md' | 'lg' | 'xl' | '' | number = 'lg',
-    options?: any,
-  ): Observable<any> {
-    return this.open(
-      comp,
-      params,
-      size,
-      {
-        nzMaskClosable: false,
-        ...options,
-      },
-    );
+  static(comp: any, params?: any, size: 'sm' | 'md' | 'lg' | 'xl' | '' | number = 'lg', options?: any): Observable<any> {
+    return this.open(comp, params, size, {
+      nzMaskClosable: false,
+      ...options,
+    });
   }
 }

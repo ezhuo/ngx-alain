@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { deepGet } from '@delon/util';
-import { NzModalService, UploadChangeParam, UploadFile } from 'ng-zorro-antd';
+import { NzModalService } from 'ng-zorro-antd/modal';
+import { UploadChangeParam, UploadFile } from 'ng-zorro-antd/upload';
 import { of } from 'rxjs';
 import { SFValue } from '../../interface';
 import { getData, toBool } from '../../utils';
@@ -9,6 +10,8 @@ import { ControlWidget } from '../../widget';
 @Component({
   selector: 'sf-upload',
   templateUrl: './upload.widget.html',
+  preserveWhitespaces: false,
+  encapsulation: ViewEncapsulation.None,
 })
 export class UploadWidget extends ControlWidget implements OnInit {
   i: any;
@@ -75,15 +78,13 @@ export class UploadWidget extends ControlWidget implements OnInit {
     this._setValue(args.fileList);
   }
 
-  reset(value: SFValue) {
+  reset(_value: SFValue) {
     const { fileList } = this.ui;
-    (fileList ? of(fileList) : getData(this.schema, this.ui, this.formProperty.formData)).subscribe(
-      list => {
-        this.fileList = list as UploadFile[];
-        this._setValue(this.fileList);
-        this.detectChanges();
-      },
-    );
+    (fileList ? of(fileList) : getData(this.schema, this.ui, this.formProperty.formData)).subscribe(list => {
+      this.fileList = list as UploadFile[];
+      this._setValue(this.fileList);
+      this.detectChanges();
+    });
   }
 
   private _getValue(file: UploadFile) {
@@ -91,12 +92,19 @@ export class UploadWidget extends ControlWidget implements OnInit {
   }
 
   private _setValue(fileList: UploadFile[]) {
-    fileList.filter(file => !file.url).forEach(file => {
-      file.url = deepGet(file.response, this.i.urlReName);
-    });
-    const res = fileList.map(file => this._getValue(file));
+    fileList
+      .filter(file => !file.url)
+      .forEach(file => {
+        file.url = deepGet(file.response, this.i.urlReName);
+      });
+    const res = fileList.filter(w => w.status === 'done').map(file => this._getValue(file));
     this.setValue(this.i.multiple === true ? res : res.pop());
   }
+
+  handleRemove = () => {
+    this._setValue(this.fileList);
+    return true;
+  };
 
   handlePreview = (file: UploadFile) => {
     if (this.ui.preview) {
@@ -105,13 +113,11 @@ export class UploadWidget extends ControlWidget implements OnInit {
     }
     const _url = file.thumbUrl || file.url;
     if (!_url) {
-      return ;
+      return;
     }
-    this.injector
-      .get(NzModalService)
-      .create({
-        nzContent: `<img src="${_url}" class="img-fluid" />`,
-        nzFooter: null,
-      });
-  }
+    this.injector.get<NzModalService>(NzModalService).create({
+      nzContent: `<img src="${_url}" class="img-fluid" />`,
+      nzFooter: null,
+    });
+  };
 }

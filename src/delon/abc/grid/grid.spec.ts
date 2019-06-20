@@ -133,12 +133,7 @@ describe('abc: grid', () => {
 
 @Component({
   template: `
-    <div
-      [sg-container]="parent_colInCon"
-      #sgComp="sgContainer"
-      [col]="parent_col"
-      [gutter]="parent_gutter"
-    >
+    <div [sg-container]="parent_colInCon" #sgComp="sgContainer" [col]="parent_col" [gutter]="parent_gutter">
       <sg #viewComp [col]="col"></sg>
     </div>
   `,
@@ -149,9 +144,9 @@ class TestComponent {
   @ViewChild('viewComp')
   viewComp: SGComponent;
 
-  parent_gutter: number = 32;
-  parent_colInCon: number;
-  parent_col: number = 3;
+  parent_gutter: number | null = 32;
+  parent_colInCon: number | null;
+  parent_col: number | null = 3;
 
-  col: number;
+  col: number | null;
 }

@@ -10,11 +10,21 @@ import {
   EventEmitter,
 } from '@angular/core';
 import { HttpService, helpers, NoticeService } from '@core';
-import { window } from 'rxjs/operators';
+
+export interface JsTreeOptions {
+  type?: 'view' | 'edit';
+  data?: string | any[];
+  event_loaded?: any;
+  clickNode?: any;
+  isDestroy?: boolean;
+  isOpenAll?: boolean;
+  isFirstNodeSelect?: boolean;
+  eventLoaded?: any;
+}
 
 @Directive({ selector: '[jstree]' })
 export class JsTreeDirective implements OnInit, OnDestroy, OnChanges {
-  op: any = {};
+  op: JsTreeOptions = {};
   data$: any = {};
   $container: any;
   private sweet: any;
@@ -38,7 +48,8 @@ export class JsTreeDirective implements OnInit, OnDestroy, OnChanges {
   ngOnInit() {}
 
   ngOnChanges(changes: SimpleChanges) {
-    this.tree_init(changes.treeData.currentValue);
+    if (changes.treeData.currentValue)
+      this.tree_init(changes.treeData.currentValue);
   }
 
   ngOnDestroy() {
@@ -52,35 +63,46 @@ export class JsTreeDirective implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  tree_init(op: any) {
+  tree_init(op: JsTreeOptions) {
     op.type = op.type || 'view'; // 默认是查看
     op.data = op.data || [];
-    op.is_destroy = op.is_destroy === undefined ? true : false;
-    op.open_all = op.open_all === undefined ? true : op.open_all;
-    op.first_node_select = op.first_node_select === undefined ? true : false;
+    op.isDestroy = op.isDestroy === undefined ? true : false;
+    op.isOpenAll = op.isOpenAll === undefined ? true : op.isOpenAll;
+    op.isFirstNodeSelect = op.isFirstNodeSelect === undefined ? true : false;
     this.op = op;
 
-    if (op.is_destroy && $.jstree) $.jstree.destroy();
+    if (op.isDestroy && $.jstree) $.jstree.destroy();
     this.$container.empty();
 
     if (helpers.isArray(op.data) && op.data.length > 0) {
       this.jstreeObj = this.tree_initUI();
-    } else {
+    } else if (helpers.isString(op.data)) {
       // 异步加载
-      this.data$.get$ = this.http.get(op.api).subscribe((result: any) => {
-        this.op.data = result.data.list;
-        this.jstreeObj = this.tree_initUI();
-      });
+      this.data$.get$ = this.http
+        .get(<string>op.data)
+        .subscribe((result: any) => {
+          this.op.data = result.data.list;
+          this.jstreeObj = this.tree_initUI();
+        });
     }
     this.tree_event();
   }
 
   tree_initUI() {
     const self = this;
-    if (this.op.data.length > 0) {
+    let len = this.op.data.length;
+    if (!len) {
+      if (helpers.isObject(this.op.data)) {
+        len = 1;
+      }
+    }
+    if (len > 0) {
+      if (helpers.isObject(this.op.data)) {
+        this.op.data = [this.op.data];
+      }
       this.op.data[0].state = this.op.data[0].state || {};
       this.op.data[0].state['opened'] = true;
-      this.op.data[0].type = 'root';
+      this.op.data[0].type = len > 1 ? 'opened' : 'root';
     }
     const jstree_op = {
       core: {
@@ -143,11 +165,11 @@ export class JsTreeDirective implements OnInit, OnDestroy, OnChanges {
 
     this.$container.on('loaded.jstree', (e, data) => {
       // 全部展开
-      if (self.op.open_all) {
+      if (self.op.isOpenAll) {
         self.$container.jstree('open_all');
       }
       // 第一个节点展开
-      if (self.op.first_node_select) {
+      if (self.op.isFirstNodeSelect) {
         self.first_node_select(e, data);
       }
       if (self.op.event_loaded) {
@@ -197,7 +219,7 @@ export class JsTreeDirective implements OnInit, OnDestroy, OnChanges {
         parent_id: node.id,
       };
       if (res.value) {
-        this.data$.post$ = self.http.post(self.op.api, data).subscribe(
+        this.data$.post$ = self.http.post(<string>self.op.data, data).subscribe(
           (result: any) => {
             result = result.data;
             if (typeof result !== 'object') {
@@ -239,7 +261,7 @@ export class JsTreeDirective implements OnInit, OnDestroy, OnChanges {
       };
       if (res.value) {
         self.data$.put$ = self.http
-          .put(self.op.api + '/' + node.id, data)
+          .put(<string>self.op.data + '/' + node.id, data)
           .subscribe(
             result => {
               return self.$container.jstree(true).set_text(node, res.value);
@@ -261,7 +283,7 @@ export class JsTreeDirective implements OnInit, OnDestroy, OnChanges {
       .then(res => {
         if (res.value)
           self.data$.del$ = self.http
-            .delete(self.op.api + '/' + node.id, { id: node.id })
+            .delete(<string>self.op.data + '/' + node.id, { id: node.id })
             .subscribe(
               (result: any) => {
                 result = result.data;

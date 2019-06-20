@@ -1,0 +1,73 @@
+<sf-item-wrap
+  [id]="id"
+  [schema]="schema"
+  [ui]="ui"
+  [showError]="showError"
+  [error]="error"
+  [showTitle]="schema.title"
+>
+  <nz-upload
+    [nzType]="i.type"
+    [nzFileList]="fileList"
+    [nzDisabled]="disabled"
+    [nzAction]="i.action"
+    [nzDirectory]="i.directory"
+    [nzOpenFileDialogOnClick]="i.openFileDialogOnClick"
+    [nzAccept]="i.accept"
+    [nzLimit]="i.limit"
+    [nzFilter]="i.filter"
+    [nzSize]="i.size"
+    [nzFileType]="i.fileType"
+    [nzHeaders]="ui.headers"
+    [nzData]="ui.data"
+    [nzListType]="i.listType"
+    [nzMultiple]="i.multiple"
+    [nzName]="i.name"
+    [nzShowUploadList]="i.showUploadList"
+    [nzWithCredentials]="i.withCredentials"
+    [nzBeforeUpload]="i.beforeUpload"
+    [nzCustomRequest]="i.customRequest"
+    [nzRemove]="ui.remove"
+    [nzPreview]="handlePreview"
+    (nzChange)="change($event)"
+  >
+    <ng-container *ngIf="!avatar?.url; else cross">
+      <ng-container [ngSwitch]="btnType">
+        <ng-container *ngSwitchCase="'plus'">
+          <i nz-icon type="plus"></i>
+          <div class="ant-upload-text" [innerHTML]="i.text"></div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'drag'">
+          <p class="ant-upload-drag-icon"><i nz-icon type="inbox"></i></p>
+          <p class="ant-upload-text" [innerHTML]="i.text"></p>
+          <p class="ant-upload-hint" [innerHTML]="i.hint"></p>
+        </ng-container>
+        <ng-container *ngSwitchDefault>
+          <button type="button" nz-button>
+            <i nz-icon type="upload"></i><span [innerHTML]="i.text"></span>
+          </button>
+        </ng-container>
+      </ng-container>
+    </ng-container>
+    <ng-template #cross>
+      <div class="avatarbutton">
+        <img [src]="avatar?.url" class="avatar" />
+        <span class="ant-upload-list-item-actions avatar-action">
+          <i
+            (click)="handlePreview(avatar, $event)"
+            nz-icon
+            type="eye"
+            title="查看"
+          ></i>
+          &nbsp;&nbsp;
+          <i
+            (click)="handleRemove(avatar, $event)"
+            nz-icon
+            type="delete"
+            title="删除"
+          ></i>
+        </span>
+      </div>
+    </ng-template>
+  </nz-upload>
+</sf-item-wrap>

@@ -29,9 +29,8 @@ export class DashboardAnalysisComponent implements OnInit {
       };
     });
   titleMap = {
-   y1: 'y1',
+    y1: 'y1',
     y2: 'y2',
-
   };
   searchColumn: STColumn[] = [
     { title: '排名', i18n: 'app.analysis.table.rank', index: 'index' },
@@ -68,7 +67,7 @@ export class DashboardAnalysisComponent implements OnInit {
     this.http.get('/chart').subscribe((res: any) => {
       res.offlineData.forEach((item: any, idx: number) => {
         item.show = idx === 0;
-        item.chart = Object.assign([], res.offlineChartData);
+        item.chart = { ...[], ...res.offlineChartData };
       });
       this.data = res;
       this.loading = false;
@@ -101,10 +100,7 @@ export class DashboardAnalysisComponent implements OnInit {
     return yuan(value);
   }
 
-  saleTabs: any[] = [
-    { key: 'sales', show: true },
-    { key: 'visits' },
-  ];
+  saleTabs: any[] = [{ key: 'sales', show: true }, { key: 'visits' }];
   salesChange(idx: number) {
     if (this.saleTabs[idx].show !== true) {
       this.saleTabs[idx].show = true;

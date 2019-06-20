@@ -7,6 +7,7 @@ import {
   OnChanges,
   OnDestroy,
   OnInit,
+  ViewEncapsulation,
 } from '@angular/core';
 import { InputNumber } from '@delon/util';
 import { fromEvent, Subscription } from 'rxjs';
@@ -24,11 +25,14 @@ export interface G2TagCloudData {
 
 @Component({
   selector: 'g2-tag-cloud',
+  exportAs: 'g2TagCloud',
   template: ``,
   host: {
     '[style.height.px]': 'height',
   },
+  preserveWhitespaces: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class G2TagCloudComponent implements OnDestroy, OnChanges, OnInit {
   private resize$: Subscription;

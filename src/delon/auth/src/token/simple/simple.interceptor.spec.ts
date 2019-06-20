@@ -1,9 +1,5 @@
 import { HttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-  TestRequest,
-} from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { TestBed, TestBedStatic } from '@angular/core/testing';
 import { DefaultUrlSerializer, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -77,7 +73,7 @@ describe('auth: simple.interceptor', () => {
     it(`in headers`, (done: () => void) => {
       const basicModel = genModel();
       genModule({}, basicModel);
-      http.get('/test', { responseType: 'text' }).subscribe(value => {
+      http.get('/test', { responseType: 'text' }).subscribe(() => {
         done();
       });
       const req = httpBed.expectOne('/test') as TestRequest;
@@ -91,7 +87,7 @@ describe('auth: simple.interceptor', () => {
         },
         genModel('123'),
       );
-      http.get('/test', { responseType: 'text' }).subscribe(value => {
+      http.get('/test', { responseType: 'text' }).subscribe(() => {
         done();
       });
       const req = httpBed.expectOne('/test') as TestRequest;
@@ -105,7 +101,7 @@ describe('auth: simple.interceptor', () => {
         },
         genModel('123'),
       );
-      http.get('/test', { responseType: 'text' }).subscribe(value => {
+      http.get('/test', { responseType: 'text' }).subscribe(() => {
         done();
       });
       const req = httpBed.expectOne(() => true) as TestRequest;
@@ -120,7 +116,7 @@ describe('auth: simple.interceptor', () => {
         },
         genModel('123'),
       );
-      http.get('https://ng-alain.com/test', { responseType: 'text' }).subscribe(value => {
+      http.get('https://ng-alain.com/test', { responseType: 'text' }).subscribe(() => {
         done();
       });
       const req = httpBed.expectOne(() => true) as TestRequest;
@@ -145,12 +141,10 @@ describe('auth: simple.interceptor', () => {
         basicModel,
       );
 
-      http.get('/test', { responseType: 'text' }).subscribe(value => {
+      http.get('/test', { responseType: 'text' }).subscribe(() => {
         done();
       });
-      const ret = httpBed.expectOne(
-        r => r.method === 'GET' && (r.url as string).startsWith('/test'),
-      ) as TestRequest;
+      const ret = httpBed.expectOne(r => r.method === 'GET' && (r.url as string).startsWith('/test')) as TestRequest;
       expect(ret.request.headers.get('Authorization')).toBe(`Bearer ${basicModel.token}`);
       ret.flush('ok!');
     });
@@ -167,15 +161,11 @@ describe('auth: simple.interceptor', () => {
         basicModel,
       );
 
-      http.get('/test', { responseType: 'text' }).subscribe(value => {
+      http.get('/test', { responseType: 'text' }).subscribe(() => {
         done();
       });
-      const ret = httpBed.expectOne(
-        r => r.method === 'GET' && (r.url as string).startsWith('/test'),
-      ) as TestRequest;
-      expect(ret.request.headers.get('Authorization')).toBe(
-        `Bearer ${basicModel.uid}-${basicModel.token}`,
-      );
+      const ret = httpBed.expectOne(r => r.method === 'GET' && (r.url as string).startsWith('/test')) as TestRequest;
+      expect(ret.request.headers.get('Authorization')).toBe(`Bearer ${basicModel.uid}-${basicModel.token}`);
       ret.flush('ok!');
     });
   });

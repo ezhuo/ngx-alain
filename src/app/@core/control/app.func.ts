@@ -142,11 +142,44 @@ export class AppFunc {
     return newSchema;
   };
 
+  // 格式化数据
+  public __formatDataBySchema = (mSchema: SFSchema, frmData: any) => {
+    const prop = mSchema.properties;
+    let oldwidget: any = '';
+    for (const idx of Object.keys(prop)) {
+      if (!(prop[idx] && prop[idx].ui)) {
+        continue;
+      }
+      if (helpers.isString(prop[idx].ui)) {
+        oldwidget = prop[idx].ui;
+      } else {
+        oldwidget = prop[idx]['ui']['widget'];
+      }
+      if (
+        frmData &&
+        oldwidget &&
+        frmData[idx] &&
+        !helpers.isEmpty(frmData[idx])
+      ) {
+        if (oldwidget.indexOf('upload') > -1) {
+          frmData[idx] = helpers.formatUploadFilesToObject(frmData[idx]);
+        }
+        if (oldwidget.indexOf('cascader') > -1) {
+          frmData[idx] = helpers.formatCascaderToObject(frmData[idx]);
+        }
+      }
+    }
+    return frmData;
+  };
+
   /**
    * 向模态对话框传递数据过程中的数据格式化
    * @param record
    */
-  public __formatModalParams = (record?: STData, params?: any): ModalParamsFormat => {
+  public __formatModalParams = (
+    record?: STData,
+    params?: any,
+  ): ModalParamsFormat => {
     const self = this.appCtl;
     // 保留最原始的数据
     const srcData = record || self.form.data || {};
@@ -157,35 +190,10 @@ export class AppFunc {
     // 克隆一份结构
     const newSchemaData = helpers.deepExtend({}, self.schemaData);
 
-    // 格式化数据
-    const __formatData = (mSchema: SFSchema, frmData: any) => {
-      const prop = mSchema.properties;
-      let oldwidget: any = '';
-      for (const idx of Object.keys(prop)) {
-        if (!(prop[idx] && prop[idx].ui)) {
-          continue;
-        }
-        if (helpers.isString(prop[idx].ui)) {
-          oldwidget = prop[idx].ui;
-        } else {
-          oldwidget = prop[idx]['ui']['widget'];
-        }
-        if (frmData && oldwidget && frmData[idx] && !helpers.isEmpty(frmData[idx])) {
-          if (oldwidget.indexOf('upload') > -1) {
-            frmData[idx] = helpers.formatUploadFilesToObject(frmData[idx]);
-          }
-          if (oldwidget.indexOf('cascader') > -1) {
-            frmData[idx] = helpers.formatCascaderToObject(frmData[idx]);
-          }
-        }
-      }
-      return frmData;
-    };
-
     // 逐条数据格式化
     Object.keys(newSchemaData).forEach((value, index) => {
       if (newSchemaData[value] && newSchemaData[value]['properties'])
-        __formatData(newSchemaData[value], newFrmData);
+        this.__formatDataBySchema(newSchemaData[value], newFrmData);
     });
 
     return {
@@ -231,5 +239,20 @@ export class AppFunc {
       }
     }
     return formValue;
+  };
+
+  public __formatSubmitDataBySchema = (
+    formValue: any,
+    schema?: any,
+  ): object => {
+    const self = this.appCtl;
+    formValue = this.__formatSubmitData(formValue, schema) || {};
+    schema = schema || self.schemaData.edit;
+    const prop = schema.properties;
+    const newValue = {};
+    for (const idx of Object.keys(prop)) {
+      if (formValue[idx]) newValue[idx] = formValue[idx];
+    }
+    return newValue;
   };
 }

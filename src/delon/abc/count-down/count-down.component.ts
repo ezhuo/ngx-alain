@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import * as addSeconds from 'date-fns/add_seconds';
 import * as format from 'date-fns/format';
 
 @Component({
   selector: 'count-down',
+  exportAs: 'countDown',
   template: `
     <countdown
       *ngIf="config"
@@ -13,6 +14,9 @@ import * as format from 'date-fns/format';
       (notify)="_notify($event)"
     ></countdown>
   `,
+  preserveWhitespaces: false,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class CountDownComponent {
   @Input() config: {};
@@ -24,8 +28,7 @@ export class CountDownComponent {
   set target(value: number | Date) {
     this.config = {
       template: `$!h!:$!m!:$!s!`,
-      stopTime:
-        typeof value === 'number' ? addSeconds(new Date(), value).valueOf() : format(value, 'x'),
+      stopTime: typeof value === 'number' ? addSeconds(new Date(), value).valueOf() : format(value, 'x'),
     };
   }
 

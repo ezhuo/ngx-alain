@@ -1,0 +1,31 @@
+<sf-item-wrap
+  [id]="id"
+  [schema]="schema"
+  [ui]="ui"
+  [showError]="showError"
+  [error]="error"
+  [showTitle]="schema.title"
+>
+  <ng-container *ngIf="!isFiles">
+    <div [safeHTML]="getTextValue" *ngIf="!isAvatar"></div>
+    <a [attr.href]="value" target="_blank" class="avatar-show" *ngIf="isAvatar">
+      <img [src]="value" class="avatar " />
+    </a>
+  </ng-container>
+
+  <ng-container *ngIf="isFiles">
+    <ng-container *ngFor="let f of getFilesValue">
+      <div style="line-height:30px;">
+        <a [attr.href]="f?.url" target="_blank" class="avatar-show">
+          <img
+            [src]="f?.url"
+            class="avatar "
+            [attr.title]="f.name"
+            *ngIf="isFilePicture(f)"
+          />
+          <span [innerHTML]="f.name" *ngIf="!isFilePicture(f)"></span>
+        </a>
+      </div>
+    </ng-container>
+  </ng-container>
+</sf-item-wrap>

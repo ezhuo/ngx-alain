@@ -11,10 +11,10 @@ import { JWTTokenModel } from './jwt.model';
 export class JWTInterceptor extends BaseInterceptor {
   isAuth(options: DelonAuthConfig): boolean {
     this.model = this.injector.get(DA_SERVICE_TOKEN).get<JWTTokenModel>(JWTTokenModel);
-    return CheckJwt(this.model as JWTTokenModel, options.token_exp_offset);
+    return CheckJwt(this.model as JWTTokenModel, options.token_exp_offset!);
   }
 
-  setReq(req: HttpRequest<any>, options: DelonAuthConfig): HttpRequest<any> {
+  setReq(req: HttpRequest<any>, _options: DelonAuthConfig): HttpRequest<any> {
     return req.clone({
       setHeaders: {
         Authorization: `Bearer ${this.model.token}`,

@@ -1,7 +1,7 @@
 export interface MenuIcon {
-  type: 'class' | 'icon' | 'img';
+  type: 'class' | 'icon' | 'iconfont' | 'img';
   /** 值，包含：类名、图标 `type`、图像 */
-  value: string;
+  value?: string;
   /** 图标主题风格，默认：`outline` */
   theme?: 'outline' | 'twotone' | 'fill';
   /** 是否有旋转动画，默认：`false` */
@@ -34,7 +34,7 @@ export interface Menu {
   /** 链接 target */
   target?: '_blank' | '_self' | '_parent' | '_top';
   /** 图标 */
-  icon?: string | MenuIcon;
+  icon?: string | MenuIcon | null;
   /** 徽标数，展示的数字。（注：`group:true` 无效） */
   badge?: number;
   /** 徽标数，显示小红点 */

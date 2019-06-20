@@ -6,6 +6,11 @@ export interface AlainI18NService {
   [key: string]: any;
 
   /**
+   * 调用 `use` 触发变更通知
+   */
+  readonly change: Observable<string>;
+
+  /**
    * 变更语言
    * @param lang 语言代码
    * @param emit 是否触发 `change`，默认：true
@@ -23,20 +28,12 @@ export interface AlainI18NService {
    * - `isSafe` 是否返回安全字符，自动调用 `bypassSecurityTrustHtml`
    */
   fanyi(key: string, params?: {}, isSafe?: boolean): string;
-
-  /**
-   * 调用 `use` 触发变更通知
-   */
-  readonly change: Observable<string>;
 }
 
-export const ALAIN_I18N_TOKEN = new InjectionToken<AlainI18NService>(
-  'alainTranslatorToken',
-  {
-    providedIn: 'root',
-    factory: ALAIN_I18N_TOKEN_FACTORY,
-  },
-);
+export const ALAIN_I18N_TOKEN = new InjectionToken<AlainI18NService>('alainTranslatorToken', {
+  providedIn: 'root',
+  factory: ALAIN_I18N_TOKEN_FACTORY,
+});
 
 export function ALAIN_I18N_TOKEN_FACTORY() {
   return new AlainI18NServiceFake();
@@ -44,10 +41,10 @@ export function ALAIN_I18N_TOKEN_FACTORY() {
 
 @Injectable({ providedIn: 'root' })
 export class AlainI18NServiceFake implements AlainI18NService {
-  private change$ = new BehaviorSubject<string>(null);
+  private change$ = new BehaviorSubject<string | null>(null);
 
   get change(): Observable<string> {
-    return this.change$.asObservable().pipe(filter(w => w != null));
+    return this.change$.asObservable().pipe(filter(w => w != null)) as Observable<string>;
   }
 
   use(lang: string): void {

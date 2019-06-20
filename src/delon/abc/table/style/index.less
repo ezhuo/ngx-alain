@@ -1,36 +1,68 @@
 @import '../../../theme/styles/default.less';
-
-@st-prefix: ~'.st';
+@import './variable.less';
 
 @{st-prefix} {
   display: block;
   &__selection {
-    cursor: pointer;
     padding-left: 2px;
+    cursor: pointer;
   }
   &__p-left {
     .@{ant-prefix}-table-pagination {
-      float: none;
       display: block;
+      float: none;
       text-align: left;
     }
   }
   &__p-center {
     .@{ant-prefix}-table-pagination {
-      float: none;
       display: block;
+      float: none;
       text-align: center;
     }
   }
+  // 修复按钮block
+  &__btn {
+    &-disabled {
+      &,
+      > a {
+        color: @st-btn-disabled-color;
+        pointer-events: none;
+      }
+    }
+    &-sub {
+      .@{ant-prefix}-dropdown-menu-item {
+        > span {
+          display: block;
+        }
+      }
+    }
+  }
   // 清除页码底部间距，在大部分列表中会包裹 `nz-card` 导致底部间距过大，若有需求可自行使用 `mb-md` 来调整
-  .@{ant-prefix}-table-pagination.@{ant-prefix}-pagination {
+  .@{ant-prefix}-table ~ nz-pagination > .@{ant-prefix}-pagination {
     margin-bottom: 0;
   }
-    .col-idx {
-        width: 30px;
+
+  &__filter {
+    &-keyword {
+      padding: @layout-gutter;
     }
-    .td-idx {
-        padding: 12px 0px;
-        text-align: center;
+  }
+  // 修复自动定义图标无法高亮问题
+  .@{ant-prefix}-table-thead > tr > th .@{ant-prefix}-table-filter-selected.@{ant-prefix}-table-filter-icon {
+    color: @primary-color;
+  }
+
+  @media screen and (min-width: @nz-table-rep-min-width) {
+    &__width {
+      &-strict {
+        .ant-table-body {
+          > table {
+            word-wrap: break-word;
+            table-layout: fixed;
+          }
+        }
+      }
     }
+  }
 }

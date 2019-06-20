@@ -38,9 +38,9 @@ export const tplMainIndexTreeHTML =
     <nz-card>
       <p>
         <nz-tree 
-          [(nzData)]="treeCompany" 
+          [nzData]="treeCompany" 
           [nzShowLine]="true" 
-          [nzDefaultExpandedKeys]="treeCompanyExpandKeys" 
+          [nzExpandedKeys]="treeCompanyExpandKeys" 
           (nzClick)="mouseTreeAction('click',$event)" 
           (nzContextMenu)="mouseTreeAction('click',$event)">
         </nz-tree>

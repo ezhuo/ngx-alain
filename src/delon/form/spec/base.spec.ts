@@ -7,7 +7,6 @@ import { deepCopy, deepGet } from '@delon/util';
 
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { configureTestSuite, dispatchFakeEvent, typeInElement } from '@delon/testing';
-import { ErrorData } from '../src/errors';
 import { SFButton } from '../src/interface';
 import { FormProperty } from '../src/model/form.property';
 import { DelonFormModule } from '../src/module';
@@ -32,17 +31,10 @@ export const SCHEMA = {
 let fixture: ComponentFixture<TestFormComponent>;
 let dl: DebugElement;
 let context: TestFormComponent;
-export function builder(options?: {
-  detectChanges?: boolean;
-  template?: string;
-  ingoreAntd?: boolean;
-  imports?: any[];
-}) {
+export function builder(options?: { detectChanges?: boolean; template?: string; ingoreAntd?: boolean; imports?: any[] }) {
   options = { detectChanges: true, ...options };
   TestBed.configureTestingModule({
-    imports: [NoopAnimationsModule, AlainThemeModule.forRoot(), DelonFormModule.forRoot()].concat(
-      options.imports || [],
-    ),
+    imports: [NoopAnimationsModule, AlainThemeModule.forRoot(), DelonFormModule.forRoot()].concat(options.imports || []),
     declarations: [TestFormComponent],
   });
   if (options.template) {
@@ -70,12 +62,7 @@ export function builder(options?: {
 export function configureSFTestSuite() {
   configureTestSuite(() => {
     TestBed.configureTestingModule({
-      imports: [
-        NoopAnimationsModule,
-        AlainThemeModule.forRoot(),
-        DelonFormModule.forRoot(),
-        HttpClientTestingModule,
-      ],
+      imports: [NoopAnimationsModule, AlainThemeModule.forRoot(), DelonFormModule.forRoot(), HttpClientTestingModule],
       declarations: [TestFormComponent],
     });
   });
@@ -84,11 +71,7 @@ export function configureSFTestSuite() {
 export class SFPage {
   constructor(private comp: SFComponent) {}
 
-  prop(
-    _dl: DebugElement,
-    _context: TestFormComponent,
-    _fixture: ComponentFixture<TestFormComponent>,
-  ) {
+  prop(_dl: DebugElement, _context: TestFormComponent, _fixture: ComponentFixture<TestFormComponent>) {
     dl = _dl;
     context = _context;
     fixture = _fixture;
@@ -138,7 +121,7 @@ export class SFPage {
 
   getProperty(path: string): FormProperty {
     path = this.fixPath(path);
-    return this.comp.getProperty(path);
+    return this.comp.getProperty(path)!;
   }
 
   submit(result = true): this {
@@ -189,9 +172,9 @@ export class SFPage {
 
   checkSchema(path: string, propertyName: string, value: any): this {
     path = this.fixPath(path);
-    const property = this.comp.rootProperty.searchProperty(path);
+    const property = this.comp.rootProperty!.searchProperty(path);
     expect(property != null).toBe(true);
-    const item = property.schema;
+    const item = property!.schema;
     const res = deepGet(item, propertyName.split('.'), undefined);
     expect(res).toBe(value);
     return this;
@@ -199,9 +182,9 @@ export class SFPage {
 
   checkUI(path: string, propertyName: string, value: any): this {
     path = this.fixPath(path);
-    const property = this.comp.rootProperty.searchProperty(path);
+    const property = this.comp.rootProperty!.searchProperty(path);
     expect(property != null).toBe(true);
-    const item = property.ui;
+    const item = property!.ui;
     const res = deepGet(item, propertyName.split('.'), undefined);
     expect(res).toBe(value);
     return this;
@@ -209,22 +192,22 @@ export class SFPage {
 
   checkValue(path: string, value: any, propertyName?: string): this {
     path = this.fixPath(path);
-    const property = this.comp.rootProperty.searchProperty(path);
+    const property = this.comp.rootProperty!.searchProperty(path);
     expect(property != null).toBe(true);
     if (typeof propertyName !== 'undefined') {
       const res = deepGet(property, propertyName.split('.'), undefined);
       expect(res).toBe(value);
     } else {
-      expect(property.value).toBe(value);
+      expect(property!.value).toBe(value);
     }
     return this;
   }
 
   checkCalled(path: string, propertyName: string, result = true): this {
     path = this.fixPath(path);
-    const property = this.comp.rootProperty.searchProperty(path);
+    const property = this.comp.rootProperty!.searchProperty(path);
     expect(property != null).toBe(true);
-    const item = property.ui;
+    const item = property!.ui;
     const res = deepGet(item, propertyName.split('.'), undefined);
     if (result) {
       expect(res).toHaveBeenCalled();
@@ -239,38 +222,33 @@ export class SFPage {
     if (value == null) {
       expect(node).toBeNull();
     } else {
-      expect(node.textContent.trim()).toBe(value);
+      expect(node!.textContent!.trim()).toBe(value);
     }
     return this;
   }
 
   checkCls(cls: string, value: string): this {
     const el = this.getEl(cls);
-    expect(el).not.toBe(null);
     expect(el.classList).toContain(value);
     return this;
   }
 
   checkStyle(cls: string, key: string, value: string): this {
     const el = this.getEl(cls);
-    expect(el).not.toBe(null);
     expect(el.style[key]).toBe(value);
     return this;
   }
 
   checkAttr(cls: string, key: string, value: any, required = true): this {
     const el = this.getEl(cls);
-    expect(el).not.toBe(null);
     const attr = el.attributes.getNamedItem(key);
-    if (required) expect(attr.textContent).toBe(value);
+    if (required) expect(attr!.textContent).toBe(value);
     else expect(attr).toBe(value);
     return this;
   }
 
   checkCount(cls: string, count: number, viaDocument = false): this {
-    const len = viaDocument
-      ? document.querySelectorAll(cls).length
-      : dl.queryAll(By.css(cls)).length;
+    const len = viaDocument ? document.querySelectorAll(cls).length : dl.queryAll(By.css(cls)).length;
     expect(len).toBe(count);
     return this;
   }
@@ -281,7 +259,7 @@ export class SFPage {
       expect(el == null).toBe(true);
       return this;
     }
-    expect(el.textContent.trim().includes(text)).toBe(true);
+    expect(el.textContent!.trim().includes(text)).toBe(true);
     return this;
   }
 
@@ -339,6 +317,8 @@ export class SFPage {
       [autocomplete]="autocomplete"
       [firstVisual]="firstVisual"
       [onlyVisual]="onlyVisual"
+      [disabled]="disabled"
+      [loading]="loading"
       (formChange)="formChange($event)"
       (formSubmit)="formSubmit($event)"
       (formReset)="formReset($event)"
@@ -350,17 +330,19 @@ export class TestFormComponent {
   @ViewChild('comp') comp: SFComponent;
   mode: 'default' | 'search' | 'edit' = 'default';
   layout = 'horizontal';
-  schema: SFSchema = SCHEMA.user;
-  ui: SFUISchema = {};
+  schema: SFSchema | null = SCHEMA.user;
+  ui: SFUISchema | null = {};
   formData: any;
-  button: SFButton | 'none' = {};
+  button: SFButton | 'none' | null | undefined = {};
   liveValidate = true;
   autocomplete: 'on' | 'off';
   firstVisual = true;
   onlyVisual = false;
+  disabled = false;
+  loading = false;
 
-  formChange(value: {}) {}
-  formSubmit(value: {}) {}
-  formReset(value: {}) {}
-  formError(value: ErrorData[]) {}
+  formChange() {}
+  formSubmit() {}
+  formReset() {}
+  formError() {}
 }

@@ -9,6 +9,7 @@ import {
   OnInit,
   TemplateRef,
   ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { InputBoolean, InputNumber } from '@delon/util';
 
@@ -28,8 +29,11 @@ export class G2TimelineData {
 
 @Component({
   selector: 'g2-timeline',
+  exportAs: 'g2Timeline',
   templateUrl: './timeline.component.html',
+  preserveWhitespaces: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class G2TimelineComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('container') private node: ElementRef;
@@ -107,19 +111,7 @@ export class G2TimelineComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private attachChart() {
-    const {
-      chart,
-      _slider,
-      slider,
-      height,
-      padding,
-      data,
-      mask,
-      titleMap,
-      position,
-      colorMap,
-      borderWidth,
-    } = this;
+    const { chart, _slider, slider, height, padding, data, mask, titleMap, position, colorMap, borderWidth } = this;
     if (!chart || !data || data.length <= 0) return;
 
     chart.legend({
@@ -142,10 +134,7 @@ export class G2TimelineComponent implements OnInit, OnDestroy, OnChanges {
         v.x = +new Date(v.x);
       });
     data.sort((a, b) => +a.x - +b.x);
-    const max = Math.max(
-      [...data].sort((a, b) => b.y1 - a.y1)[0].y1,
-      [...data].sort((a, b) => b.y2 - a.y2)[0].y2,
-    );
+    const max = Math.max([...data].sort((a, b) => b.y1 - a.y1)[0].y1, [...data].sort((a, b) => b.y2 - a.y2)[0].y2);
     const ds = new DataSet({
       state: {
         start: data[0].x,

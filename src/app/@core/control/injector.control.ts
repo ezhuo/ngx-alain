@@ -32,7 +32,7 @@ import {
 } from '../data';
 
 import { ComponentData, PageParams } from '../model';
-import { ModalService, NoticeService } from '../utils';
+import { ModalService, NoticeService, LodopPrintService } from '../utils';
 import { HttpService } from '../net';
 import * as helpers from '../helpers';
 
@@ -165,6 +165,10 @@ export class InjectorControl implements OnInit, OnDestroy {
 
   get tokenSrv() {
     return this.injector.get(TokenService);
+  }
+
+  get lodopPrtSrv() {
+    return this.injector.get(LodopPrintService);
   }
 
   get cdr() {

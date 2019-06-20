@@ -7,21 +7,24 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  ViewEncapsulation,
 } from '@angular/core';
-import { Subscription } from 'rxjs';
-
 import { DelonLocaleService, LocaleData } from '@delon/theme';
 import { InputBoolean } from '@delon/util';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'tag-select',
+  exportAs: 'tagSelect',
   templateUrl: './tag-select.component.html',
   host: {
     '[class.tag-select]': 'true',
     '[class.tag-select__has-expand]': 'expandable',
     '[class.tag-select__expanded]': 'expand',
   },
+  preserveWhitespaces: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class TagSelectComponent implements OnInit, OnDestroy {
   private i18n$: Subscription;

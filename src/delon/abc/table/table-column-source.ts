@@ -5,7 +5,7 @@ import { deepCopy } from '@delon/util';
 
 import { STRowSource } from './table-row.directive';
 import { STConfig } from './table.config';
-import { STColumn, STColumnButton, STColumnFilter, STColumnSort } from './table.interfaces';
+import { STColumn, STColumnButton, STColumnFilter, STColumnSort, STIcon } from './table.interfaces';
 
 export interface STSortMap extends STColumnSort {
   [key: string]: any;
@@ -39,9 +39,9 @@ export class STColumnSource {
           item.modal = {
             component: item.component,
             params: item.params,
-            paramsName: item.paramName || modal.paramsName,
-            size: item.size || modal.size,
-            modalOptions: item.modalOptions || modal.modalOptions,
+            paramsName: item.paramName || modal!.paramsName,
+            size: item.size || modal!.size,
+            modalOptions: item.modalOptions || modal!.modalOptions,
           };
         }
         if (item.modal == null || item.modal.component == null) {
@@ -78,8 +78,7 @@ export class STColumnSource {
         };
       }
 
-      item.children =
-        item.children && item.children.length > 0 ? this.btnCoerce(item.children) : [];
+      item.children = item.children && item.children.length > 0 ? this.btnCoerce(item.children) : [];
 
       // i18n
       if (item.i18n && this.i18nSrv) {
@@ -95,14 +94,17 @@ export class STColumnSource {
   private btnCoerceIf(list: STColumnButton[]) {
     for (const item of list) {
       if (!item.iif) item.iif = () => true;
-      if (item.children.length > 0) {
+      item.iifBehavior = item.iifBehavior || this.cog.iifBehavior;
+      if (item.children && item.children.length > 0) {
         this.btnCoerceIf(item.children);
+      } else {
+        item.children = [];
       }
     }
   }
 
   private fixedCoerce(list: STColumn[]) {
-    const countReduce = (a: number, b: STColumn) => a + +b.width.toString().replace('px', '');
+    const countReduce = (a: number, b: STColumn) => a + +b.width!.toString().replace('px', '');
     // left width
     list
       .filter(w => w.fixed && w.fixed === 'left' && w.width)
@@ -111,10 +113,7 @@ export class STColumnSource {
     list
       .filter(w => w.fixed && w.fixed === 'right' && w.width)
       .reverse()
-      .forEach(
-        (item, idx) =>
-          (item._right = (idx > 0 ? list.slice(-idx).reduce(countReduce, 0) : 0) + 'px'),
-      );
+      .forEach((item, idx) => (item._right = (idx > 0 ? list.slice(-idx).reduce(countReduce, 0) : 0) + 'px'));
   }
 
   private sortCoerce(item: STColumn): STSortMap {
@@ -150,8 +149,8 @@ export class STColumnSource {
     return res;
   }
 
-  private filterCoerce(item: STColumn): STColumnFilter {
-    let res: STColumnFilter = null;
+  private filterCoerce(item: STColumn): STColumnFilter | null {
+    let res: STColumnFilter | null = null;
     // compatible
     if (item.filters && item.filters.length > 0) {
       res = {
@@ -166,10 +165,26 @@ export class STColumnSource {
         reName: item.filterReName,
       };
     } else {
-      res = item.filter;
+      res = item.filter as STColumnFilter;
     }
 
-    if (res == null || res.menus.length === 0) {
+    if (res == null) {
+      return null;
+    }
+
+    res.type = res.type || 'default';
+
+    let icon = 'filter';
+    let iconTheme = 'fill';
+    if (res.type === 'keyword') {
+      if (res.menus == null || res.menus!.length === 0) {
+        res.menus = [{ value: '' }];
+      }
+      icon = 'search';
+      iconTheme = 'outline';
+    }
+
+    if (res.menus!.length === 0) {
       return null;
     }
 
@@ -182,20 +197,26 @@ export class STColumnSource {
     if (!res.clearText) {
       res.clearText = this.cog.filterClearText;
     }
-    if (!res.icon) {
-      res.icon = `filter`;
-    }
     if (!res.key) {
       res.key = item.indexKey;
     }
-
-    res.default = res.menus.findIndex(w => w.checked) !== -1;
-
-    if (this.acl) {
-      res.menus = res.menus.filter(w => this.acl.can(w.acl));
+    if (!res.icon) {
+      res.icon = icon;
+    }
+    const baseIcon = { type: icon, theme: iconTheme } as STIcon;
+    if (typeof res.icon === 'string') {
+      res.icon = { ...baseIcon, type: res.icon } as STIcon;
+    } else {
+      res.icon = { ...baseIcon, ...res.icon };
     }
 
-    if (res.menus.length <= 0) {
+    this.updateDefault(res);
+
+    if (this.acl) {
+      res.menus = res.menus!.filter(w => this.acl.can(w.acl));
+    }
+
+    if (res.menus!.length <= 0) {
       res = null;
     }
 
@@ -284,15 +305,19 @@ export class STColumnSource {
           number: 'text-right',
           currency: 'text-right',
           date: 'text-center',
-        }[item.type];
+        }[item.type!];
+      }
+      // width
+      if (typeof item.width === 'number') {
+        item.width = `${item.width}px`;
       }
 
       // sorter
       item._sort = this.sortCoerce(item);
       // filter
-      item.filter = this.filterCoerce(item);
+      item.filter = this.filterCoerce(item) as STColumnFilter;
       // buttons
-      item.buttons = this.btnCoerce(item.buttons);
+      item.buttons = this.btnCoerce(item.buttons!);
       // restore custom row
       this.restoreRender(item);
 
@@ -313,5 +338,25 @@ export class STColumnSource {
 
   restoreAllRender(columns: STColumn[]) {
     columns.forEach(i => this.restoreRender(i));
+  }
+
+  updateDefault(filter: STColumnFilter): this {
+    if (filter.type === 'default') {
+      filter.default = filter.menus!.findIndex(w => w.checked!) !== -1;
+    } else {
+      filter.default = !!filter.menus![0].value;
+    }
+    return this;
+  }
+
+  cleanFilter(col: STColumn): this {
+    const f = col.filter!;
+    f.default = false;
+    if (f.type === 'default') {
+      f.menus!.forEach(i => (i.checked = false));
+    } else {
+      f.menus![0].value = undefined;
+    }
+    return this;
   }
 }

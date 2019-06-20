@@ -1,17 +1,16 @@
 @import '../../../theme/styles/default.less';
-
-@g2-water-wave-prefix: ~'.g2-water-wave';
+@import './variable.less';
 
 @{g2-water-wave-prefix} {
-  display: inline-block;
   position: relative;
+  display: inline-block;
   transform-origin: left;
   &__desc {
     position: absolute;
-    left: 0;
     top: 32px;
-    text-align: center;
+    left: 0;
     width: 100%;
+    text-align: center;
     &-title {
       color: @text-color-secondary;
       font-size: 14px;
@@ -19,8 +18,8 @@
     }
     &-percent {
       color: @heading-color;
-      line-height: 32px;
       font-size: 24px;
+      line-height: 32px;
     }
   }
   &__canvas {

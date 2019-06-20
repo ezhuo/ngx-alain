@@ -16,18 +16,14 @@ import { JWTTokenModel } from './jwt.model';
 @Injectable({ providedIn: 'root' })
 export class JWTGuard implements CanActivate, CanActivateChild, CanLoad {
   private cog: DelonAuthConfig;
-  private url: string;
+  private url: string | undefined;
 
-  constructor(
-    @Inject(DA_SERVICE_TOKEN) private srv: ITokenService,
-    private injector: Injector,
-    cog: DelonAuthConfig,
-  ) {
+  constructor(@Inject(DA_SERVICE_TOKEN) private srv: ITokenService, private injector: Injector, cog: DelonAuthConfig) {
     this.cog = { ...new DelonAuthConfig(), ...cog };
   }
 
   private process(): boolean {
-    const res = CheckJwt(this.srv.get<JWTTokenModel>(JWTTokenModel), this.cog.token_exp_offset);
+    const res = CheckJwt(this.srv.get<JWTTokenModel>(JWTTokenModel), this.cog.token_exp_offset!);
     if (!res) {
       ToLogin(this.cog, this.injector, this.url);
     }
@@ -35,17 +31,17 @@ export class JWTGuard implements CanActivate, CanActivateChild, CanLoad {
   }
 
   // lazy loading
-  canLoad(route: Route, segments: UrlSegment[]): boolean {
+  canLoad(route: Route, _segments: UrlSegment[]): boolean {
     this.url = route.path;
     return this.process();
   }
   // all children route
-  canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  canActivateChild(_childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     this.url = state.url;
     return this.process();
   }
   // route
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  canActivate(_route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     this.url = state.url;
     return this.process();
   }

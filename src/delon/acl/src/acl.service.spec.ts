@@ -1,3 +1,4 @@
+import { DelonACLConfig } from './acl.config';
 import { ACLService } from './acl.service';
 import { ACLType } from './acl.type';
 
@@ -8,10 +9,12 @@ describe('acl: service', () => {
   const ABILITY_CREATE = 'order-create';
   const ABILITY_NUMBER = 1;
 
-  let srv: ACLService = null;
+  let srv: ACLService;
+  const mockOptions = new DelonACLConfig();
 
   beforeEach(() => {
-    srv = new ACLService();
+    mockOptions.preCan = null;
+    srv = new ACLService(mockOptions);
     srv.set({ role: [ADMIN] } as ACLType);
   });
 
@@ -81,16 +84,25 @@ describe('acl: service', () => {
     expect(srv.canAbility(ABILITY)).toBe(false);
   });
 
-  it(`#can()`, () => {
-    srv.attachAbility([ABILITY_NUMBER]);
-    expect(srv.can(ADMIN)).toBe(true, 'can ' + ADMIN);
-    expect(srv.can(ABILITY_NUMBER)).toBe(true, 'ability muse be true');
-    expect(srv.can([ABILITY_NUMBER])).toBe(true, 'ability array muse be true');
-    expect(srv.can([ADMIN])).toBe(true, 'role array muse be true');
-    expect(srv.can({ role: [ADMIN] } as ACLType)).toBe(true, 'ACLType item muse be true');
-    expect(srv.can(ADMIN + '1')).toBe(false);
-    expect(srv.can(null)).toBe(true);
-    expect(srv.can({})).toBe(false);
+  describe('#can()', () => {
+    it('should working', () => {
+      srv.attachAbility([ABILITY_NUMBER]);
+      expect(srv.can(ADMIN)).toBe(true, 'can ' + ADMIN);
+      expect(srv.can(ABILITY_NUMBER)).toBe(true, 'ability muse be true');
+      expect(srv.can([ABILITY_NUMBER])).toBe(true, 'ability array muse be true');
+      expect(srv.can([ADMIN])).toBe(true, 'role array muse be true');
+      expect(srv.can({ role: [ADMIN] } as ACLType)).toBe(true, 'ACLType item muse be true');
+      expect(srv.can(ADMIN + '1')).toBe(false);
+      expect(srv.can(null)).toBe(true);
+      expect(srv.can({})).toBe(false);
+    });
+    it('should be allow ability is string in can method by preCan', () => {
+      mockOptions.preCan = a => {
+        return a.toString().startsWith('order') ? { ability: [a.toString()] } : null;
+      };
+      srv.attachAbility([ABILITY_CREATE]);
+      expect(srv.can(ABILITY_CREATE)).toBe(true);
+    });
   });
 
   it('should be valid when all of for is array roles', () => {
@@ -120,11 +132,30 @@ describe('acl: service', () => {
     expect(srv.canAbility({ ability: [ABILITY, ABILITY_CREATE], mode: 'allOf' })).toBe(false);
   });
 
-  it('#change', (done: () => void) => {
-    srv.change.subscribe((res: ACLType) => {
-      expect(res.role.length).toBe(1);
-      expect(res.role[0]).toBe(ADMIN);
+  it('#change', done => {
+    srv.change.subscribe(res => {
+      res = res as ACLType;
+      expect(res.role!.length).toBe(1);
+      expect(res.role![0]).toBe(ADMIN);
       done();
+    });
+  });
+
+  describe('#except', () => {
+    it('should be true is false', () => {
+      srv.attachRole([ADMIN]);
+      expect(srv.can({ role: [ADMIN], except: true })).toBe(false);
+    });
+    it('should be false is true', () => {
+      srv.attachRole([ADMIN]);
+      expect(srv.can({ role: [ADMIN + ADMIN], except: true })).toBe(true);
+    });
+    it('should be false when is full roles', () => {
+      srv.setFull(true);
+      expect(srv.can({ role: [ADMIN], except: true })).toBe(false);
+    });
+    it('should be true when arguments is null', () => {
+      expect(srv.can(null)).toBe(true);
     });
   });
 });

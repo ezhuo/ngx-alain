@@ -15,7 +15,7 @@ Use print design for font, font size, object layout, etc., and use `attachCode` 
 
 ```ts
 import { Component } from '@angular/core';
-import { NzMessageService, NzNotificationService } from 'ng-zorro-antd';
+import { NzMessageService } from 'ng-zorro-antd';
 import { LodopService, Lodop } from '@delon/abc';
 
 @Component({
@@ -59,7 +59,7 @@ import { LodopService, Lodop } from '@delon/abc';
 export class DemoComponent {
   doing = false;
   error = false;
-  lodop: Lodop = null;
+  lodop: Lodop | null = null;
   context: any = {
     标题: '自定义标题',
     费用: '100.00 元'
@@ -78,7 +78,7 @@ LODOP.ADD_PRINT_TEXT(260,520,58,24,"合计：");`;
         return;
       }
       this.error = false;
-      this.lodop = lodop;
+      this.lodop = lodop as Lodop;
     });
   }
 
@@ -93,17 +93,17 @@ LODOP.ADD_PRINT_TEXT(260,520,58,24,"合计：");`;
 
   setup() {
     this.lodopSrv.attachCode(this.code);
-    this.lodop.PRINT_SETUP();
+    this.lodop!.PRINT_SETUP();
   }
 
   print() {
     this.lodopSrv.attachCode(this.code, this.context);
-    this.lodop.PREVIEW();
+    this.lodop!.PREVIEW();
   }
 
   printBatch() {
     this.doing = true;
-    const data = new Array(3).fill({}).map((item, index) => Object.assign({ index: index + 1 }, this.context));
+    const data = new Array(3).fill({}).map((_item, index) => Object.assign({ index: index + 1 }, this.context));
     this.lodopSrv.print(this.code + `
     LODOP.ADD_PRINT_TEXT(10,10,100,100,"第{{index}}张");
     `, data);

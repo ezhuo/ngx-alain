@@ -12,9 +12,11 @@ export interface UserInfo {
   org_fdn?: string;
   org_id?: number;
   org_name?: string;
+  org_type?: string;
   phone?: string;
   role_id?: string;
   role_name?: string;
+  role_level?: string;
   style?: string;
 }
 

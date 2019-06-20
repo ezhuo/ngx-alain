@@ -1,4 +1,4 @@
-// tslint:disable:no-invalid-this
+// tslint:disable:no-invalid-this only-arrow-functions
 import { HttpHeaders } from '@angular/common/http';
 import { Inject, Injector } from '@angular/core';
 import { ACLService } from '@delon/acl';
@@ -41,9 +41,7 @@ function setParam(target: any, key = paramKey) {
  * - 有效范围：类
  */
 export function BaseUrl(url: string) {
-  return function <TClass extends { new(...args: any[]): BaseApi }>(
-    target: TClass,
-  ): TClass {
+  return function <TClass extends new (...args: any[]) => BaseApi>(target: TClass): TClass {
     const params = setParam(target.prototype);
     params.baseUrl = url;
     return target;
@@ -61,9 +59,7 @@ export function BaseHeaders(
       [header: string]: string | string[];
     },
 ) {
-  return function <TClass extends { new(...args: any[]): BaseApi }>(
-    target: TClass,
-  ): TClass {
+  return function <TClass extends new (...args: any[]) => BaseApi>(target: TClass): TClass {
     const params = setParam(target.prototype);
     params.baseHeaders = headers;
     return target;
@@ -114,12 +110,8 @@ export const Headers = makeParam('headers');
 
 function makeMethod(method: string) {
   return function (url: string = '', options?: HttpOptions) {
-    return (
-      target: BaseApi,
-      targetKey?: string,
-      descriptor?: PropertyDescriptor,
-    ) => {
-      descriptor.value = function (...args: any[]): Observable<any> {
+    return (_target: BaseApi, targetKey?: string, descriptor?: PropertyDescriptor) => {
+      descriptor!.value = function (...args: any[]): Observable<any> {
         options = options || {};
 
         const http = this.injector.get(_HttpClient, null);
@@ -133,10 +125,7 @@ function makeMethod(method: string) {
         const data = setParam(baseData, targetKey);
 
         let requestUrl = url || '';
-        requestUrl = [
-          baseData.baseUrl || '',
-          requestUrl.startsWith('/') ? requestUrl.substr(1) : requestUrl,
-        ].join('/');
+        requestUrl = [baseData.baseUrl || '', requestUrl.startsWith('/') ? requestUrl.substr(1) : requestUrl].join('/');
         // fix last split
         if (requestUrl.length > 1 && requestUrl.endsWith('/')) {
           requestUrl = requestUrl.substr(0, requestUrl.length - 1);
@@ -155,10 +144,7 @@ function makeMethod(method: string) {
         }
 
         (data.path || []).forEach((i: ParamType) => {
-          requestUrl = requestUrl.replace(
-            new RegExp(`:${i.key}`, 'g'),
-            encodeURIComponent(args[i.index]),
-          );
+          requestUrl = requestUrl.replace(new RegExp(`:${i.key}`, 'g'), encodeURIComponent(args[i.index]));
         });
 
         const params = (data.query || []).reduce((p, i: ParamType) => {
@@ -172,8 +158,7 @@ function makeMethod(method: string) {
         }, {});
 
         return http.request(method, requestUrl, {
-          body:
-            data.body && data.body.length > 0 ? args[data.body[0].index] : null,
+          body: data.body && data.body.length > 0 ? args[data.body[0].index] : null,
           params,
           headers: { ...baseData.baseHeaders, ...headers },
           ...options,

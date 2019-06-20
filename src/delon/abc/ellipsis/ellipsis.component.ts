@@ -10,6 +10,7 @@ import {
   NgZone,
   OnChanges,
   ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { InputBoolean, InputNumber } from '@delon/util';
@@ -17,8 +18,11 @@ import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'ellipsis',
+  exportAs: 'ellipsis',
   templateUrl: './ellipsis.component.html',
+  preserveWhitespaces: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class EllipsisComponent implements AfterViewInit, OnChanges {
   // tslint:disable-next-line:no-string-literal
@@ -49,7 +53,7 @@ export class EllipsisComponent implements AfterViewInit, OnChanges {
     private dom: DomSanitizer,
     @Inject(DOCUMENT) private doc: Document,
     private cdr: ChangeDetectorRef,
-  ) {}
+  ) { }
 
   private getStrFullLength(str: string): number {
     return str.split('').reduce((pre, cur) => {
@@ -77,14 +81,7 @@ export class EllipsisComponent implements AfterViewInit, OnChanges {
     }, '');
   }
 
-  private bisection(
-    th: number,
-    m: number,
-    b: number,
-    e: number,
-    text: string,
-    shadowNode: HTMLElement,
-  ): number {
+  private bisection(th: number, m: number, b: number, e: number, text: string, shadowNode: HTMLElement): number {
     const suffix = this.tail;
     let mid = m;
     let end = e;
@@ -99,11 +96,7 @@ export class EllipsisComponent implements AfterViewInit, OnChanges {
         return mid;
       }
       begin = mid;
-      if (end - begin === 1) {
-        mid = begin + 1;
-      } else {
-        mid = Math.floor((end - begin) / 2) + begin;
-      }
+      mid = (end - begin) === 1 ? begin + 1 : Math.floor((end - begin) / 2) + begin;
       return this.bisection(th, mid, begin, end, text, shadowNode);
     }
     if (mid - 1 < 0) {
@@ -145,7 +138,7 @@ export class EllipsisComponent implements AfterViewInit, OnChanges {
       if (el.children.length > 0) {
         throw new Error('Ellipsis content must be string.');
       }
-      const text = el.textContent;
+      const text = el.textContent!;
       const textLength = fullWidthRecognition ? this.getStrFullLength(text) : text.length;
       if (textLength <= length || length < 0) {
         this.text = text;
@@ -154,9 +147,7 @@ export class EllipsisComponent implements AfterViewInit, OnChanges {
         if (length - tail.length <= 0) {
           displayText = '';
         } else {
-          displayText = fullWidthRecognition
-            ? this.cutStrByFullLength(text, length)
-            : text.slice(0, length);
+          displayText = fullWidthRecognition ? this.cutStrByFullLength(text, length) : text.slice(0, length);
         }
         this.text = displayText + tail;
       }
@@ -164,8 +155,8 @@ export class EllipsisComponent implements AfterViewInit, OnChanges {
     } else if (type === 'line') {
       const { shadowOrgEl, shadowTextEl } = this;
       const orgNode = shadowOrgEl.nativeElement as HTMLElement;
-      const text = orgNode.innerText || orgNode.textContent;
-      const lineHeight = parseInt(getComputedStyle(this.getEl('.ellipsis')).lineHeight, 10);
+      const text = orgNode.innerText || orgNode.textContent!;
+      const lineHeight = parseInt(getComputedStyle(this.getEl('.ellipsis')).lineHeight!, 10);
       const targetHeight = lines * lineHeight;
       this.getEl('.ellipsis__handle').style.height = `${targetHeight}px`;
 
@@ -177,14 +168,7 @@ export class EllipsisComponent implements AfterViewInit, OnChanges {
         const len = text.length;
         const mid = Math.ceil(len / 2);
 
-        const count = this.bisection(
-          targetHeight,
-          mid,
-          0,
-          len,
-          text,
-          shadowTextEl.nativeElement.firstChild,
-        );
+        const count = this.bisection(targetHeight, mid, 0, len, text, shadowTextEl.nativeElement.firstChild);
         this.text = text;
         this.targetCount = count;
       }

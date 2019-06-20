@@ -1,20 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { Component, Injector, NgModule } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, NgModule } from '@angular/core';
+import { ComponentFixture, TestBed, TestBedStatic } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { NgZorroAntdModule, NzDrawerRef, NzDrawerService } from 'ng-zorro-antd';
+import { NzDrawerModule, NzDrawerRef } from 'ng-zorro-antd/drawer';
 import { AlainThemeModule } from '../../theme.module';
 import { DrawerHelper } from './drawer.helper';
 
 describe('theme: DrawerHelper', () => {
-  let injector: Injector;
+  let injector: TestBedStatic;
   let drawer: DrawerHelper;
-  let srv: NzDrawerService;
   let fixture: ComponentFixture<TestComponent>;
 
   beforeEach(() => {
     @NgModule({
-      imports: [CommonModule, NgZorroAntdModule, NoopAnimationsModule, AlainThemeModule.forChild()],
+      imports: [CommonModule, NoopAnimationsModule, AlainThemeModule.forChild(), NzDrawerModule],
       declarations: [TestDrawerComponent, TestComponent],
       entryComponents: [TestDrawerComponent],
     })
@@ -23,7 +22,6 @@ describe('theme: DrawerHelper', () => {
     injector = TestBed.configureTestingModule({ imports: [TestModule] });
     fixture = TestBed.createComponent(TestComponent);
     drawer = injector.get(DrawerHelper);
-    srv = injector.get(NzDrawerService);
   });
 
   afterEach(() => {
@@ -36,7 +34,7 @@ describe('theme: DrawerHelper', () => {
       .create('', TestDrawerComponent, {
         ret: 'true',
       })
-      .subscribe(res => {
+      .subscribe(() => {
         expect(true).toBeTruthy();
         done();
       });
@@ -49,7 +47,7 @@ describe('theme: DrawerHelper', () => {
         ret: 'destroy',
       })
       .subscribe(
-        res => {
+        () => {
           expect(false).toBeTruthy();
           done();
         },
@@ -67,7 +65,7 @@ describe('theme: DrawerHelper', () => {
       .static('', TestDrawerComponent, {
         ret: 'true',
       })
-      .subscribe(res => {
+      .subscribe(() => {
         expect(true).toBeTruthy();
         done();
       });
@@ -161,7 +159,6 @@ describe('theme: DrawerHelper', () => {
               footerHeight,
               drawerOptions: {
                 nzWrapClassName: 'ccc',
-                nzPlacement: 'right',
               },
             },
           )
@@ -170,7 +167,7 @@ describe('theme: DrawerHelper', () => {
         const els = document.getElementsByClassName('ccc');
         expect(els.length).toBe(1);
         const bodyEl = (els[0] as HTMLElement).querySelector('.ant-drawer-body') as HTMLElement;
-        expect(bodyEl.style.height).toBe(`calc(100% - ${(footerHeight * 2) - 2}px)`);
+        expect(bodyEl.style.height).toBe(`calc(100% - ${footerHeight * 2 - 2}px)`);
       });
       it('when nzPlacement is top', () => {
         const height = 300;
@@ -198,7 +195,7 @@ describe('theme: DrawerHelper', () => {
         const els = document.getElementsByClassName('eee');
         expect(els.length).toBe(1);
         const bodyEl = (els[0] as HTMLElement).querySelector('.ant-drawer-body') as HTMLElement;
-        expect(bodyEl.style.height).toBe(`${height - ((footerHeight * 2) - 2)}px`);
+        expect(bodyEl.style.height).toBe(`${height - (footerHeight * 2 - 2)}px`);
       });
     });
     it('with false', () => {
@@ -223,6 +220,59 @@ describe('theme: DrawerHelper', () => {
       expect(els.length).toBe(1);
       const bodyEl = (els[0] as HTMLElement).querySelector('.ant-drawer-body') as HTMLElement;
       expect(bodyEl.style.height).toBe(``);
+    });
+  });
+
+  describe('#exact', () => {
+    it('width true, should be only truth subscript', done => {
+      drawer
+        .create(
+          '',
+          TestDrawerComponent,
+          {
+            ret: undefined,
+          },
+          {
+            exact: true,
+          },
+        )
+        .subscribe(
+          () => {
+            expect(false).toBe(true);
+          },
+          () => {
+            expect(false).toBe(true);
+          },
+          () => {
+            expect(true).toBe(true);
+            done();
+          },
+        );
+      fixture.detectChanges();
+    });
+    it('width false, should be always subscript', done => {
+      drawer
+        .create(
+          '',
+          TestDrawerComponent,
+          {
+            ret: undefined,
+          },
+          {
+            exact: false,
+          },
+        )
+        .subscribe(
+          res => {
+            expect(res).toBe(undefined);
+            done();
+          },
+          () => {
+            expect(false).toBe(true);
+            done();
+          },
+        );
+      fixture.detectChanges();
     });
   });
 });

@@ -7,7 +7,7 @@ import { STColumn } from '@delon/abc';
   selector: 'app-profile-advanced',
   templateUrl: './advanced.component.html',
   styleUrls: ['./advanced.component.less'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProProfileAdvancedComponent implements OnInit {
   list: any[] = [];
@@ -31,7 +31,7 @@ export class ProProfileAdvancedComponent implements OnInit {
   ngOnInit() {
     this.http.get('/profile/advanced').subscribe((res: any) => {
       this.data = res;
-      this.change({ index: 0, tab: null });
+      this.change({ index: 0, tab: null! });
       this.cdr.detectChanges();
     });
   }

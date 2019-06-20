@@ -11,22 +11,19 @@ import {
 import { DelonAuthConfig } from '../../auth.config';
 import { CheckSimple, ToLogin } from '../helper';
 import { DA_SERVICE_TOKEN, ITokenService } from '../interface';
+import { SimpleTokenModel } from './simple.model';
 
 @Injectable({ providedIn: 'root' })
 export class SimpleGuard implements CanActivate, CanActivateChild, CanLoad {
   private cog: DelonAuthConfig;
-  private url: string;
+  private url: string | null | undefined;
 
-  constructor(
-    @Inject(DA_SERVICE_TOKEN) private srv: ITokenService,
-    private injector: Injector,
-    cog: DelonAuthConfig,
-  ) {
+  constructor(@Inject(DA_SERVICE_TOKEN) private srv: ITokenService, private injector: Injector, cog: DelonAuthConfig) {
     this.cog = { ...new DelonAuthConfig(), ...cog };
   }
 
   private process(): boolean {
-    const res = CheckSimple(this.srv.get());
+    const res = CheckSimple(this.srv.get() as SimpleTokenModel);
     if (!res) {
       ToLogin(this.cog, this.injector, this.url);
     }
@@ -34,17 +31,17 @@ export class SimpleGuard implements CanActivate, CanActivateChild, CanLoad {
   }
 
   // lazy loading
-  canLoad(route: Route, segments: UrlSegment[]): boolean {
+  canLoad(route: Route, _segments: UrlSegment[]): boolean {
     this.url = route.path;
     return this.process();
   }
   // all children route
-  canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  canActivateChild(_childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     this.url = state.url;
     return this.process();
   }
   // route
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+  canActivate(_route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     this.url = state.url;
     return this.process();
   }

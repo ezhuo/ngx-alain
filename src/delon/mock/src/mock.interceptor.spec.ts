@@ -20,7 +20,6 @@ import { mapTo } from 'rxjs/operators';
 import { MockRequest } from './interface';
 import { DelonMockConfig } from './mock.config';
 import { DelonMockModule } from './mock.module';
-import { MockService } from './mock.service';
 import { MockStatusError } from './status.error';
 
 const DATA = {
@@ -31,8 +30,7 @@ const DATA = {
     '/array': [1, 2],
     '/fn/queryString': (req: MockRequest) => req.queryString,
     '/fn/header': (req: MockRequest) => req.headers,
-    '/HttpResponse': () =>
-      new HttpResponse({ body: 'Body', headers: new HttpHeaders({ token: '1' }) }),
+    '/HttpResponse': () => new HttpResponse({ body: 'Body', headers: new HttpHeaders({ token: '1' }) }),
     'POST /fn/body': (req: MockRequest) => req.body,
     'POST /users/1': { uid: 1, action: 'add' },
     '/404': () => {
@@ -53,19 +51,13 @@ class OtherInterceptor implements HttpInterceptor {
 
 describe('mock: interceptor', () => {
   let injector: TestBedStatic;
-  let srv: MockService = null;
   let http: HttpClient;
   let httpMock: HttpTestingController;
 
-  function genModule(
-    options: DelonMockConfig,
-    imports: any[] = [],
-    spyConsole = true,
-    providers?: any[],
-  ) {
+  function genModule(options: DelonMockConfig, imports: any[] = [], spyConsole = true, providers?: any[]) {
     options = Object.assign(new DelonMockConfig(), options);
     injector = TestBed.configureTestingModule({
-      declarations: [RootCmp],
+      declarations: [RootComponent],
       imports: [
         HttpClientTestingModule,
         RouterTestingModule.withRoutes([
@@ -76,9 +68,8 @@ describe('mock: interceptor', () => {
         ]),
         DelonMockModule.forRoot(options),
       ].concat(imports),
-      providers: [].concat(providers || []),
+      providers: ([] as any[]).concat(providers || []),
     });
-    srv = injector.get(MockService);
     http = injector.get(HttpClient);
     httpMock = injector.get(HttpTestingController);
     if (spyConsole) {
@@ -98,7 +89,7 @@ describe('mock: interceptor', () => {
       });
     });
     it('should response array', (done: () => void) => {
-      http.get('/array').subscribe((res: any[]) => {
+      http.get('/array').subscribe((res: any) => {
         expect(res).not.toBeNull();
         expect(Array.isArray(res)).toBe(true);
         done();
@@ -177,14 +168,12 @@ describe('mock: interceptor', () => {
       );
     });
     it('should request POST', (done: () => void) => {
-      http
-        .post('/users/1', { data: true }, { observe: 'response' })
-        .subscribe((res: HttpResponse<any>) => {
-          expect(res.body).not.toBeNull();
-          expect(res.body.uid).toBe(1);
-          expect(res.body.action).toBe('add');
-          done();
-        });
+      http.post('/users/1', { data: true }, { observe: 'response' }).subscribe((res: HttpResponse<any>) => {
+        expect(res.body).not.toBeNull();
+        expect(res.body.uid).toBe(1);
+        expect(res.body.action).toBe('add');
+        done();
+      });
     });
     it('should normal request if non-mock url', (done: () => void) => {
       http.get('/non-mock', { responseType: 'text' }).subscribe(value => {
@@ -206,7 +195,7 @@ describe('mock: interceptor', () => {
   describe('[disabled log]', () => {
     it('with request', (done: () => void) => {
       genModule({ data: DATA, delay: 1, log: false });
-      http.get('/users').subscribe((res: any) => {
+      http.get('/users').subscribe(() => {
         expect(console.log).not.toHaveBeenCalled();
         done();
       });
@@ -230,45 +219,39 @@ describe('mock: interceptor', () => {
     beforeEach(() => genModule({ data: DATA, delay: 1 }));
 
     it('should work', fakeAsync(
-      inject(
-        [Router, NgModuleFactoryLoader],
-        (router: Router, loader: SpyNgModuleFactoryLoader) => {
-          @Component({
-            selector: 'lazy',
-            template: '<router-outlet></router-outlet>',
-          })
-          class LayoutComponent {}
+      inject([Router, NgModuleFactoryLoader], (router: Router, loader: SpyNgModuleFactoryLoader) => {
+        @Component({
+          selector: 'lazy',
+          template: '<router-outlet></router-outlet>',
+        })
+        class LayoutComponent { }
 
-          @Component({
-            selector: 'child',
-            template: 'length-{{res.users.length}}',
-          })
-          class ChildComponent {
-            res: any = {};
-            constructor(HTTP: HttpClient) {
-              HTTP.get('/users').subscribe(res => (this.res = res));
-            }
+        @Component({
+          selector: 'child',
+          template: 'length-{{res.users.length}}',
+        })
+        class ChildComponent {
+          res: any = {};
+          constructor(HTTP: HttpClient) {
+            HTTP.get('/users').subscribe(res => (this.res = res));
           }
+        }
 
-          @NgModule({
-            declarations: [LayoutComponent, ChildComponent],
-            imports: [
-              DelonMockModule.forChild(),
-              RouterModule.forChild([{ path: 'child', component: ChildComponent }]),
-            ],
-          })
-          class LazyModule {}
+        @NgModule({
+          declarations: [LayoutComponent, ChildComponent],
+          imports: [DelonMockModule.forChild(), RouterModule.forChild([{ path: 'child', component: ChildComponent }])],
+        })
+        class LazyModule { }
 
-          loader.stubbedModules = { expected: LazyModule };
-          const fixture = TestBed.createComponent(RootCmp);
-          fixture.detectChanges();
-          router.navigateByUrl(`/lazy/child`);
-          tick(500);
-          fixture.detectChanges();
-          const text = (fixture.nativeElement as HTMLElement).textContent;
-          expect(text).toContain('length-2');
-        },
-      ),
+        loader.stubbedModules = { expected: LazyModule };
+        const fixture = TestBed.createComponent(RootComponent);
+        fixture.detectChanges();
+        router.navigateByUrl(`/lazy/child`);
+        tick(500);
+        fixture.detectChanges();
+        const text = (fixture.nativeElement as HTMLElement).textContent;
+        expect(text).toContain('length-2');
+      }),
     ));
   });
   describe('[executeOtherInterceptors]', () => {
@@ -295,4 +278,4 @@ describe('mock: interceptor', () => {
     <router-outlet></router-outlet>
   `,
 })
-class RootCmp {}
+class RootComponent { }

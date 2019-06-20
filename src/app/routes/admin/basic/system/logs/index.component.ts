@@ -180,6 +180,7 @@ export class LogsComponent extends IndexControl implements OnInit {
     };
 
     this.tableData.col = [
+      this.configSrv.define.tableIndexColumn,
       { title: '事件名称', index: 'title', width: '180px' },
       { title: '事件内容', index: 'content' },
       {

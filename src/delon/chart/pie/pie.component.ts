@@ -11,6 +11,7 @@ import {
   Renderer2,
   TemplateRef,
   ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { updateHostClass, InputBoolean, InputNumber } from '@delon/util';
 import { fromEvent, Subscription } from 'rxjs';
@@ -27,8 +28,11 @@ export interface G2PieData {
 
 @Component({
   selector: 'g2-pie',
+  exportAs: 'g2Pie',
   templateUrl: './pie.component.html',
+  preserveWhitespaces: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class G2PieComponent implements OnInit, OnDestroy, OnChanges {
   private resize$: Subscription;
@@ -88,8 +92,7 @@ export class G2PieComponent implements OnInit, OnDestroy, OnChanges {
     if (this.isPercent) {
       this.select = false;
       this.tooltip = false;
-      this.percentColor = value =>
-        value === '占比' ? color || 'rgba(24, 144, 255, 0.85)' : '#F0F2F5';
+      this.percentColor = value => (value === '占比' ? color || 'rgba(24, 144, 255, 0.85)' : '#F0F2F5');
       this.data = [
         {
           x: '占比',
@@ -120,8 +123,7 @@ export class G2PieComponent implements OnInit, OnDestroy, OnChanges {
     } else {
       chart.tooltip({
         showTitle: false,
-        itemTpl:
-          '<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value} %</li>',
+        itemTpl: '<li><span style="background-color:{color};" class="g2-tooltip-marker"></span>{name}: {value} %</li>',
       });
     }
 
@@ -130,7 +132,7 @@ export class G2PieComponent implements OnInit, OnDestroy, OnChanges {
 
     chart.coord('theta', { innerRadius: inner });
 
-    chart.filter('x', (val: any, item: any) => item.checked !== false);
+    chart.filter('x', (_val: any, item: any) => item.checked !== false);
 
     chart
       .intervalStack()
@@ -148,17 +150,7 @@ export class G2PieComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   private attachChart() {
-    const {
-      chart,
-      height,
-      padding,
-      animate,
-      data,
-      lineWidth,
-      isPercent,
-      percentColor,
-      colors,
-    } = this;
+    const { chart, height, padding, animate, data, lineWidth, isPercent, percentColor, colors } = this;
     if (!chart) return;
 
     chart.set('height', height);
@@ -181,9 +173,6 @@ export class G2PieComponent implements OnInit, OnDestroy, OnChanges {
       x: {
         type: 'cat',
         range: [0, 1],
-      },
-      y: {
-        min: 0,
       },
     });
     chart.repaint();

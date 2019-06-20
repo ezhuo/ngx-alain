@@ -31,7 +31,7 @@ import { STColumn } from '@delon/abc';
     <ng-template st-row="customTitle" type="title" let-c>
       {{ c.title }}
       <nz-dropdown nzTrigger="click" [nzClickHide]="false" nzPlacement="bottomRight" class="position-relative">
-        <div nz-dropdown class="d-inline-block pl-lg"><i nz-icon type="down" class="ant-table-filter-icon"></i></div>
+        <div nz-dropdown class="d-inline-block pl-lg"><i nz-icon nzType="down" class="ant-table-filter-icon"></i></div>
         <div class="ant-table-filter-dropdown p-sm">
           <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" class="width-sm mr-sm">
           <button nz-button [nzType]="'primary'" (click)="st.load(2)">Search</button>
@@ -49,7 +49,7 @@ import { STColumn } from '@delon/abc';
 export class DemoComponent {
   users: any[] = Array(10)
     .fill({})
-    .map((item: any, idx: number) => {
+    .map((_item: any, idx: number) => {
       return {
         id: idx + 1,
         name: `name ${idx + 1}`,

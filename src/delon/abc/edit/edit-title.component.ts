@@ -6,16 +6,20 @@ import {
   OnInit,
   Optional,
   Renderer2,
+  ViewEncapsulation,
 } from '@angular/core';
 import { SEContainerComponent } from './edit-container.component';
 
 @Component({
   selector: 'se-title, [se-title]',
+  exportAs: 'seTitle',
   template: '<ng-content></ng-content>',
   host: {
     '[class.se__title]': 'true',
   },
+  preserveWhitespaces: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class SETitleComponent implements OnInit {
   private el: HTMLElement;

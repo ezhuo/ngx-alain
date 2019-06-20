@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ControlWidget } from '../../widget';
 
 @Component({
   selector: 'sf-number',
   templateUrl: './number.widget.html',
+  preserveWhitespaces: false,
+  encapsulation: ViewEncapsulation.None,
 })
 export class NumberWidget extends ControlWidget implements OnInit {
   min: number;
@@ -27,11 +29,11 @@ export class NumberWidget extends ControlWidget implements OnInit {
       this.step = Math.trunc(this.step);
     }
     if (ui.prefix != null) {
-      ui.formatter = value => `${ui.prefix} ${value}`;
+      ui.formatter = value => (value == null ? '' : `${ui.prefix} ${value}`);
       ui.parser = value => value.replace(`${ui.prefix} `, '');
     }
     if (ui.unit != null) {
-      ui.formatter = value => `${value} ${ui.unit}`;
+      ui.formatter = value => (value == null ? '' : `${value} ${ui.unit}`);
       ui.parser = value => value.replace(` ${ui.unit}`, '');
     }
     if (ui.formatter) this.formatter = ui.formatter;

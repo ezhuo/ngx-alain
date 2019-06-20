@@ -27,7 +27,7 @@ export class ACLGuard implements CanActivate, CanActivateChild, CanLoad {
       map(v => this.srv.can(v)),
       tap(v => {
         if (v) return;
-        this.router.navigateByUrl(this.options.guard_url);
+        this.router.navigateByUrl(this.options.guard_url!);
       }),
     );
   }
@@ -37,14 +37,11 @@ export class ACLGuard implements CanActivate, CanActivateChild, CanLoad {
     return this.process((route.data && route.data.guard) || null);
   }
   // all children route
-  canActivateChild(
-    childRoute: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ): Observable<boolean> {
+  canActivateChild(childRoute: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
     return this.canActivate(childRoute, state);
   }
   // route
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+  canActivate(route: ActivatedRouteSnapshot, _state: RouterStateSnapshot | null): Observable<boolean> {
     return this.process((route.data && route.data.guard) || null);
   }
 }

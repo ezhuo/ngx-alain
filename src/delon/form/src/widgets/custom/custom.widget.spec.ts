@@ -1,11 +1,9 @@
-import { DebugElement } from '@angular/core';
 import { ComponentFixture } from '@angular/core/testing';
 import { builder, SFPage, TestFormComponent } from '../../../spec/base.spec';
 import { SFSchema } from '../../../src/schema/index';
 
 describe('form: widget: custom', () => {
   let fixture: ComponentFixture<TestFormComponent>;
-  let dl: DebugElement;
   let context: TestFormComponent;
   let page: SFPage;
   const schema: SFSchema = {
@@ -13,13 +11,13 @@ describe('form: widget: custom', () => {
   };
 
   function detectChanges(path = '/a') {
-    context.comp.rootProperty.searchProperty(path).widget.detectChanges();
+    context.comp.rootProperty!.searchProperty(path)!.widget.detectChanges();
     fixture.detectChanges();
     return page;
   }
 
   it('should be auto fix path when not start with /', () => {
-    ({ fixture, dl, context, page } = builder({
+    ({ fixture, context, page } = builder({
       detectChanges: false,
       template: `<sf [schema]="schema" #comp><ng-template sf-template="a">custom:<div class="custom-el">{{ id }}</div></ng-template></sf>`,
     }));
@@ -29,7 +27,7 @@ describe('form: widget: custom', () => {
 
   it('should be warn when duplicate definition', () => {
     spyOn(console, 'warn');
-    ({ fixture, dl, context, page } = builder({
+    ({ fixture, context, page } = builder({
       detectChanges: false,
       template: `<sf [schema]="schema" #comp>
       <ng-template sf-template="a">custom:<div class="custom-el">{{ id }}</div></ng-template>
@@ -41,7 +39,7 @@ describe('form: widget: custom', () => {
   });
 
   it('should be re-attach custom template when refresh schema', () => {
-    ({ fixture, dl, context, page } = builder({
+    ({ fixture, context, page } = builder({
       detectChanges: false,
       template: `<sf [schema]="schema" [formData]="formData" #comp>
       <ng-template sf-template="/a">custom:<div class="custom-el">{{ id }}</div></ng-template>

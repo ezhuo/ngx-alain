@@ -240,6 +240,7 @@ export class OrgInfoComponent extends IndexControl implements OnInit {
     };
 
     this.tableData.col = [
+      this.configSrv.define.tableIndexColumn,
       { title: '简称', index: 'org_name', width: '100px' },
       { title: '全称', index: 'org_corpname', width: '100px' },
       { title: '联系人', index: 'linkman' },
@@ -300,7 +301,11 @@ export class OrgInfoComponent extends IndexControl implements OnInit {
     ];
   }
 
-  add() {
+  add($event) {
+    if ($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+    }
     this.treeSelectNodeEvent();
     this.freeData.add = this.modalEditStatic(OrgInfoEditComponent).subscribe(
       result => {

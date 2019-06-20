@@ -9,8 +9,12 @@ import { deepGet } from '../other/other';
  * // output: this is asdf
  * ```
  */
-export function format(str: string, obj: {}, needDeepGet: boolean = false): string {
-  return (str || '').replace(/\${([^}]+)}/g, (work: string, key: string) =>
+export function format(
+  str: string | null | undefined,
+  obj: {} | null | undefined,
+  needDeepGet: boolean = false,
+): string {
+  return (str || '').replace(/\${([^}]+)}/g, (_work: string, key: string) =>
     needDeepGet ? deepGet(obj, key.split('.'), '') : (obj || {})[key] || '',
   );
 }

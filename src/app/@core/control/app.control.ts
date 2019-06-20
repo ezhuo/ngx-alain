@@ -72,6 +72,7 @@ export class AppControl extends InjectorControl implements OnInit, OnDestroy {
       params: {
         ps: config.define.tablePageSize,
       },
+      reName: {},
     },
   };
 
@@ -136,6 +137,7 @@ export class AppControl extends InjectorControl implements OnInit, OnDestroy {
   set pageTitle(value) {
     this.___pageData.title = value;
     this.titleSrv.default = value;
+    this.titleSrv.setTitle(value);
   }
 
   get pageTitle() {

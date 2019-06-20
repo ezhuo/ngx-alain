@@ -29,6 +29,7 @@ export const router: Router = deepExtend(
 export const api: Api = {
   base: 'api',
   upload: '/api/file/upload',
+  uploadImg: '/api/file/uploadImg',
   show: '/file/show/',
   down: '/uploads/',
   canton: 'canton/selectselectselect', // 获取区域的默认URL
@@ -44,6 +45,13 @@ export const editor = assetsHelper.getCkeditorConfig();
  */
 export const define: Define = deepExtend(
   {
+    tableIndexColumn: {
+      title: '序号',
+      index: '_index_',
+      type: 'no',
+      // fixed: 'left',
+      width: 30,
+    },
     tablePageSize: 10,
   },
   env.define,

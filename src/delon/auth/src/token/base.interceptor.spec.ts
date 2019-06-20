@@ -8,11 +8,7 @@ import {
   HttpResponse,
   HTTP_INTERCEPTORS,
 } from '@angular/common/http';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-  TestRequest,
-} from '@angular/common/http/testing';
+import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
 import { TestBed, TestBedStatic } from '@angular/core/testing';
 import { DefaultUrlSerializer, Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -25,7 +21,7 @@ import { AuthReferrer, DA_SERVICE_TOKEN, ITokenModel, ITokenService } from './in
 import { SimpleInterceptor } from './simple/simple.interceptor';
 import { SimpleTokenModel } from './simple/simple.model';
 
-function genModel<T extends ITokenModel>(modelType: { new (): T }, token: string = `123`) {
+function genModel<T extends ITokenModel>(modelType: new () => T, token: string | null = `123`) {
   const model = new modelType();
   model.token = token;
   model.uid = 1;
@@ -35,6 +31,7 @@ function genModel<T extends ITokenModel>(modelType: { new (): T }, token: string
 class MockTokenService implements ITokenService {
   [key: string]: any;
   _data: any;
+  referrer: AuthReferrer = {};
   set(data: ITokenModel): boolean {
     this._data = data;
     return true;
@@ -51,7 +48,6 @@ class MockTokenService implements ITokenService {
   get login_url() {
     return '/login';
   }
-  referrer: AuthReferrer = {};
 }
 
 let otherRes = new HttpResponse();
@@ -127,9 +123,7 @@ describe('auth: base.interceptor', () => {
     describe('#with allow_anonymous_key', () => {
       it(`in params`, (done: () => void) => {
         genModule({}, genModel(SimpleTokenModel, null));
-        http
-          .get('/user', { responseType: 'text', params: { _allow_anonymous: '' } })
-          .subscribe(done);
+        http.get('/user', { responseType: 'text', params: { _allow_anonymous: '' } }).subscribe(done);
         const ret = httpBed.expectOne(() => true);
         expect(ret.request.headers.get('Authorization')).toBeNull();
         ret.flush('ok!');
@@ -155,9 +149,7 @@ describe('auth: base.interceptor', () => {
       });
       it(`in url (full url)`, (done: () => void) => {
         genModule({}, genModel(SimpleTokenModel, null));
-        http
-          .get('https://ng-alain.com/api/user?_allow_anonymous=1', { responseType: 'text' })
-          .subscribe(done);
+        http.get('https://ng-alain.com/api/user?_allow_anonymous=1', { responseType: 'text' }).subscribe(done);
         const ret = httpBed.expectOne(() => true);
         expect(ret.request.headers.get('Authorization')).toBeNull();
         ret.flush('ok!');

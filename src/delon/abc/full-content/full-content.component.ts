@@ -12,6 +12,7 @@ import {
   OnDestroy,
   OnInit,
   Output,
+  ViewEncapsulation,
 } from '@angular/core';
 import { ActivationEnd, ActivationStart, Event, Router } from '@angular/router';
 import { InputBoolean, InputNumber } from '@delon/util';
@@ -26,6 +27,7 @@ const hideTitleCls = `full-content__hidden-title`;
 
 @Component({
   selector: 'full-content',
+  exportAs: 'fullContent',
   template: `
     <ng-content></ng-content>
   `,
@@ -33,7 +35,9 @@ const hideTitleCls = `full-content__hidden-title`;
     '[class.full-content]': 'true',
     '[style.height.px]': '_height',
   },
+  preserveWhitespaces: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class FullContentComponent implements AfterViewInit, OnInit, OnChanges, OnDestroy {
   private bodyEl: HTMLElement;
@@ -43,7 +47,7 @@ export class FullContentComponent implements AfterViewInit, OnInit, OnChanges, O
   private id = `_full-content-${Math.random()
     .toString(36)
     .substring(2)}`;
-  private scroll$: Subscription = null;
+  private scroll$: Subscription | null = null;
 
   _height = 0;
 
@@ -145,7 +149,7 @@ export class FullContentComponent implements AfterViewInit, OnInit, OnChanges, O
 
   ngOnDestroy(): void {
     this.removeInBody();
-    this.scroll$.unsubscribe();
+    this.scroll$!.unsubscribe();
     this.srv$.unsubscribe();
     this.route$.unsubscribe();
   }
