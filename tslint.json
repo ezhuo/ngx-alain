@@ -3,7 +3,8 @@
     "tslint-config-prettier"
   ],
   "rulesDirectory": [
-    "node_modules/codelyzer"
+    "codelyzer",
+    "ng-alain-codelyzer"
   ],
   "rules": {
     "arrow-return-shorthand": true,

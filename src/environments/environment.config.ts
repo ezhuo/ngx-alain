@@ -14,7 +14,7 @@ export const define: Define = {
   userCutImages: './assets/images/user/default_user.png', // 默认用户的图片
   logoLogin: './assets/images/logo/logo.png',
   logoTopLarge: './assets/images/logo/logo.png',
-  logoTopSmall: './assets/images/logo/logo-small.png',
+  logoTopSmall: './assets/images/logo/logo-small.png'
 };
 
 /**

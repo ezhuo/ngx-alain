@@ -37,6 +37,4 @@ export interface Define {
   logoLogin: string;
   logoTopLarge: string;
   logoTopSmall: string;
-  caseFileType: string;
-  caseFileTip: string;
 }

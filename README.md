@@ -55,9 +55,8 @@ src
 ### 1. st
 
 ```
-1. abc\table\table.component.html：添加了表格序号；
-2. abc\table\style\index.less：添加了表格序号样式；
-3. table\table-data-source.ts： 将 \_HttpClient 更换为 HttpService
+1. table\table.component.ts 添加 get stLoading() 
+2. table\table-data-source.ts： 将 \_HttpClient 更换为 HttpService
 ```
 
 ### 2. title.service
