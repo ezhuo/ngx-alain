@@ -1,5 +1,5 @@
 import { Component, OnInit, Injector,ChangeDetectionStrategy } from '@angular/core';
-import { ModalControl } from '@core';
+import { IndexControl } from '@core';
 import { tplModalEditHTML } from '@layout';
 
 @Component({
@@ -8,7 +8,7 @@ import { tplModalEditHTML } from '@layout';
   styles: [``],
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class SchemaEditComponent extends ModalControl implements OnInit {
+export class SchemaEditComponent extends IndexControl implements OnInit {
 
   constructor(protected injector: Injector) {
     super(injector);

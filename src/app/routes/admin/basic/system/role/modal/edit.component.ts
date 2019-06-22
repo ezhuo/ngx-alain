@@ -6,7 +6,7 @@ import {
   ViewChild,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { ModalControl } from '@core';
+import { IndexControl } from '@core';
 import { NzTreeNode, NzTreeComponent } from 'ng-zorro-antd';
 
 const changeDetection = ChangeDetectionStrategy.Default;
@@ -17,7 +17,7 @@ const changeDetection = ChangeDetectionStrategy.Default;
   styles: [``],
   changeDetection,
 })
-export class RoleEditComponent extends ModalControl
+export class RoleEditComponent extends IndexControl
   implements OnInit, OnDestroy {
   @ViewChild('tree') tree: NzTreeComponent;
 
@@ -53,7 +53,6 @@ export class RoleEditComponent extends ModalControl
     this.httpSrv
       .update(this.dataSource.url, formData, this.dataSource.val)
       .subscribe(result => {
-        // console.log(result);
         this.modalClose(result);
       });
   }
@@ -66,11 +65,15 @@ export class RoleEditComponent extends ModalControl
     this.freeData.menu = this.httpSrv
       .post('/menu/get_menu_list', { role_id: this.dataSource.val })
       .subscribe((result: any) => {
+        this.treeData = [];
+        this.treeDataExpandKeys = [];
+        this.treeDataSelectKeys = [];
+        this.treeDataCheckedKeys = [];
         result.data.list.forEach((node, idx) => {
           this.treeData.push(new NzTreeNode(node));
         });
 
-        this.treeDataCheckedKeys = result.data.sel;
+        this.treeDataCheckedKeys = result.data.sel || [];
       });
   }
 }

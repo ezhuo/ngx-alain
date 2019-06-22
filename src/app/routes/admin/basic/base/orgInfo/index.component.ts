@@ -6,13 +6,12 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 
-import { STComponent } from '@delon/abc';
+import { STComponent, STColumnButton, STColumn } from '@delon/abc';
 import { SFComponent } from '@delon/form';
-import { STColumnButton, STColumn } from '@delon/abc';
 import { IndexControl } from '@core';
+import { JsTreeOptions } from '@shared';
 import { OrgInfoEditComponent } from './modal/edit.component';
 import { OrgInfoShowComponent } from './modal/show.component';
-import { NzFormatEmitEvent, NzTreeNode, NzTreeComponent } from 'ng-zorro-antd';
 
 const changeDetection = ChangeDetectionStrategy.OnPush;
 
@@ -23,12 +22,8 @@ const changeDetection = ChangeDetectionStrategy.OnPush;
   changeDetection,
 })
 export class OrgInfoComponent extends IndexControl implements OnInit {
-  @ViewChild('st')
-  st: STComponent;
-  @ViewChild('sf')
-  sf: SFComponent;
-  @ViewChild('tree')
-  tree: NzTreeComponent;
+  @ViewChild('st') st: STComponent;
+  @ViewChild('sf') sf: SFComponent;
 
   constructor(protected injector: Injector) {
     super(injector);
@@ -98,11 +93,22 @@ export class OrgInfoComponent extends IndexControl implements OnInit {
               },
             },
           },
-          parent_org_name: {
+          parent_id: {
             type: 'string',
             title: '上级机构',
             ui: {
-              widget: 'text',
+              widget: 'select',
+              asyncData: res => {
+                return this.httpSrv.getOfDict(
+                  '/orginfo/dict',
+                  null,
+                  null,
+                  null,
+                  false,
+                );
+              },
+              defaultExpandAll: true,
+              showLine: true,
             },
           },
           is_group: {
@@ -306,7 +312,10 @@ export class OrgInfoComponent extends IndexControl implements OnInit {
       $event.preventDefault();
       $event.stopPropagation();
     }
-    this.treeSelectNodeEvent();
+    if (!this.modalData.data) {
+      this.noticeSrv.sweet.alert('请提前选中左侧站场树后，再操作！');
+      return;
+    }
     this.freeData.add = this.modalEditStatic(OrgInfoEditComponent).subscribe(
       result => {
         if (result) {
@@ -316,48 +325,32 @@ export class OrgInfoComponent extends IndexControl implements OnInit {
     );
   }
 
-  treeData = [];
-  treeDataExpandKeys = [];
-  treeDataSelectKeys = [];
-  getTreeData() {
-    if (this.freeData.company) {
-      this.freeData.company.unsubscribe();
-    }
-    this.freeData.company = this.httpSrv
-      .get('/orginfo/tree')
-      .subscribe((result: any) => {
-        result.data.list.forEach((node, idx) => {
-          this.treeData = [];
-          this.treeDataExpandKeys = [];
-          this.treeDataSelectKeys = [];
-          if (idx === 0) {
-            this.treeDataExpandKeys.push(node.key);
-            this.treeDataSelectKeys.push(node.key);
-          }
-          this.treeData.push(new NzTreeNode(node));
-        });
-        this.detectChanges();
-      });
-  }
-
-  mouseTreeAction(name: string, event: NzFormatEmitEvent): void {
-    this.treeSelectNodeEvent(event.node);
-  }
-
-  treeSelectNodeEvent(node?: NzTreeNode) {
-    if (!node) {
-      // 获取选中节点数组中，最后一个
-      const sel = this.tree.getSelectedNodeList();
-      if (sel.length > 0) node = sel[sel.length - 1];
-    }
-
+  treeSelectNodeEvent(node?: any) {
     if (node) {
       this.modalData.data = node;
-      this.sf.value['org_fdn%'] = node.key;
+      this.sf.value['org_fdn%'] = node.original.key;
     }
 
     this.searchSubmit(this.st, this.sf.value);
     this.detectChanges();
+  }
+
+  jstree: JsTreeOptions = null;
+
+  getTreeData() {
+    this.freeData['getTreeData'] = this.httpSrv
+      .get('/orginfo/tree')
+      .subscribe((result: any) => {
+        this.jstree = {
+          isOpenAll: false,
+          data: result.data.list,
+        };
+        this.cdr.detectChanges();
+      });
+  }
+
+  jstreeChange($event) {
+    this.treeSelectNodeEvent($event);
   }
 
   refresh() {

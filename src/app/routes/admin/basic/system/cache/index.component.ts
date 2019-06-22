@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 import { IndexControl } from '@core';
 
-const changeDetection = ChangeDetectionStrategy.OnPush;
+const changeDetection = ChangeDetectionStrategy.Default;
 
 @Component({
   selector: 'app-system-cache',
@@ -38,5 +38,6 @@ export class CacheComponent extends IndexControl implements OnInit {
         this.detectChanges();
         console.log(result);
       });
+    this.detectChanges();
   }
 }

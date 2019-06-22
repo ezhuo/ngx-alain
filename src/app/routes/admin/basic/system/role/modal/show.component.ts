@@ -4,7 +4,7 @@ import {
   OnInit,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { ModalControl } from '@core';
+import { IndexControl } from '@core';
 import { tplModalShowHTML } from '@layout';
 
 const changeDetection = ChangeDetectionStrategy.OnPush;
@@ -12,10 +12,9 @@ const changeDetection = ChangeDetectionStrategy.OnPush;
 @Component({
   selector: 'app-system-role-show',
   template: tplModalShowHTML,
-  styles: [``],
   changeDetection,
 })
-export class RoleShowComponent extends ModalControl implements OnInit {
+export class RoleShowComponent extends IndexControl implements OnInit {
   constructor(protected injector: Injector) {
     super(injector);
   }

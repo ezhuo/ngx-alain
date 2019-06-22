@@ -4,7 +4,7 @@ import {
   OnInit,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { ModalControl } from '@core';
+import { IndexControl } from '@core';
 import { tplModalPasswordHTML } from '@layout';
 
 const changeDetection = ChangeDetectionStrategy.Default;
@@ -15,7 +15,7 @@ const changeDetection = ChangeDetectionStrategy.Default;
   styles: [``],
   changeDetection,
 })
-export class AccountPwdComponent extends ModalControl implements OnInit {
+export class AccountPwdComponent extends IndexControl implements OnInit {
   constructor(protected injector: Injector) {
     super(injector);
   }

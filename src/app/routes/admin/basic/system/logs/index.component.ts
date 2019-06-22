@@ -18,10 +18,8 @@ const changeDetection = ChangeDetectionStrategy.OnPush;
   changeDetection,
 })
 export class LogsComponent extends IndexControl implements OnInit {
-  @ViewChild('st')
-  st: STComponent;
-  @ViewChild('sf')
-  sf: SFComponent;
+  @ViewChild('st') st: STComponent;
+  @ViewChild('sf') sf: SFComponent;
 
   constructor(protected injector: Injector) {
     super(injector);

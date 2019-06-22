@@ -55,7 +55,7 @@ src
 ### 1. st
 
 ```
-1. table\table.component.ts 添加 get stLoading() 
+1. table\table.component.ts 添加 get stloading()  set stloading() 
 2. table\table-data-source.ts： 将 \_HttpClient 更换为 HttpService
 ```
 

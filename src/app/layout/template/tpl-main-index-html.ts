@@ -30,7 +30,7 @@ export const tplMainIndexHTML =
 
 <div nz-row>
   <div nz-col nzSpan="24">
-    <st #st class="simple-table" [data]="dataSource.url" [columns]="tableData.col" [req]="tableReq"></st>
+    <st #st [data]="dataSource.url" [columns]="tableData.col" [req]="tableReq"></st>
   </div>
 </div>
 

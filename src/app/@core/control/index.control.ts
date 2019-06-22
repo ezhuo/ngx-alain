@@ -1,5 +1,5 @@
 import { OnInit, OnDestroy, Injector } from '@angular/core';
-import { STComponent, STColumnButtonModal, STData } from '@delon/abc';
+import { STComponent, STColumnButtonModal, STData, STChange } from '@delon/abc';
 import { ModalOptionsForService, NzModalRef } from 'ng-zorro-antd';
 import { Observable } from 'rxjs';
 import { AppControl } from './app.control';
@@ -113,4 +113,9 @@ export class IndexControl extends AppControl implements OnInit, OnDestroy {
     this.detectChanges();
     return st;
   };
+
+  public stChange(e: STChange) {
+    this.detectChanges();
+    // console.log('change', e);
+  }
 }

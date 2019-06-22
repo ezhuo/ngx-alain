@@ -46,7 +46,7 @@ export const editor = assetsHelper.getCkeditorConfig();
 export const define: Define = deepExtend(
   {
     tableIndexColumn: {
-      title: '序号',
+      title: '#',
       index: '_index_',
       type: 'no',
       // fixed: 'left',

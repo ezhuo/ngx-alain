@@ -12,14 +12,14 @@
     <nz-card style="width:100%;">
         
       <nz-tree #tree
-          [(nzData)]="treeData"
+          [nzData]="treeData"
           [nzShowLine]="true" 
           [nzCheckable]="true"
           [nzMultiple]="true"
-          [nzDefaultExpandedKeys]="treeDataExpandKeys"
-          [nzDefaultCheckedKeys]="treeDataCheckedKeys"
-          [nzDefaultSelectedKeys]="treeDataSelectKeys"
-          [nzDefaultExpandAll]="false">
+          [nzExpandedKeys]="treeDataExpandKeys"
+          [nzCheckedKeys]="treeDataCheckedKeys"
+          [nzSelectedKeys]="treeDataSelectKeys"
+          [nzExpandAll]="false">
       </nz-tree>
 
     </nz-card>

@@ -1,6 +1,6 @@
 import { Component, Injector, OnInit, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { ModalControl } from '@core';
+import { IndexControl } from '@core';
 import { Observable, Observer } from 'rxjs';
 
 import { ValidationErrors } from '@angular/forms';
@@ -9,7 +9,7 @@ import { ValidationErrors } from '@angular/forms';
     selector: 'header-user-pwd',
     templateUrl: `pwd.component.html`,
 })
-export class HeaderUserPwdComponent extends ModalControl
+export class HeaderUserPwdComponent extends IndexControl
     implements OnInit, OnDestroy {
     validateForm: any;
     error = '';

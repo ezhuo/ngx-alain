@@ -4,7 +4,7 @@ import {
   OnInit,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { ModalControl } from '@core';
+import { IndexControl } from '@core';
 import { tplModalShowHTML } from '@layout';
 
 const changeDetection = ChangeDetectionStrategy.OnPush;
@@ -15,7 +15,7 @@ const changeDetection = ChangeDetectionStrategy.OnPush;
   styles: [``],
   changeDetection,
 })
-export class LogsShowComponent extends ModalControl implements OnInit {
+export class LogsShowComponent extends IndexControl implements OnInit {
   constructor(protected injector: Injector) {
     super(injector);
     super.__init__(this, null, { changeDetection });

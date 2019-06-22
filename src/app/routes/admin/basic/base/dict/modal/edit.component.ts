@@ -5,7 +5,7 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 
-import { ModalControl } from '@core';
+import { IndexControl } from '@core';
 
 const changeDetection = ChangeDetectionStrategy.Default;
 
@@ -15,7 +15,7 @@ const changeDetection = ChangeDetectionStrategy.Default;
   styles: [``],
   changeDetection,
 })
-export class DictEditComponent extends ModalControl implements OnInit {
+export class DictEditComponent extends IndexControl implements OnInit {
   constructor(protected injector: Injector) {
     super(injector);
     super.__init__(this, null, { changeDetection });

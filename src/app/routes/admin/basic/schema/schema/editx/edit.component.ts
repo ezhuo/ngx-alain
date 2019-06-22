@@ -4,7 +4,7 @@ import {
   Injector,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { ModalControl } from '@core';
+import { IndexControl } from '@core';
 
 const changeDetection = ChangeDetectionStrategy.Default;
 
@@ -13,7 +13,7 @@ const changeDetection = ChangeDetectionStrategy.Default;
   templateUrl: './edit.component.html',
   changeDetection,
 })
-export class SchemaFormEditxComponent extends ModalControl implements OnInit {
+export class SchemaFormEditxComponent extends IndexControl implements OnInit {
   i: any;
   pp: any;
   cat: string[] = ['美食', '美食,粤菜', '美食,粤菜,湛江菜'];

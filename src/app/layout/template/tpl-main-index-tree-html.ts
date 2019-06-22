@@ -48,7 +48,7 @@ export const tplMainIndexTreeHTML =
     </nz-card>
   </div>
   <div nz-col nzSpan="20">
-    <st #st class="simple-table" [data]="dataSource.url" [columns]="tableData.col" [req]="tableReq"></st>
+    <st #st [data]="dataSource.url" [columns]="tableData.col" [req]="tableReq"></st>
   </div>
 </div>
 

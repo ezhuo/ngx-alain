@@ -99,7 +99,7 @@
     </nz-form-item>
 </form>
 
-<st #st class="simple-table" [columns]="tableData.col" [data]="url" [req]="tableReq">
+<st #st [columns]="tableData.col" [data]="url" [req]="tableReq">
     <ng-template st-row="custom" type="title" let-c>
         {{ c.title }}
         <nz-dropdown nzTrigger="click" [nzClickHide]="false">

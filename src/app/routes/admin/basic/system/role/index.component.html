@@ -1,5 +1,14 @@
 <page-header [title]="pageTitle" [autoBreadcrumb]="false" [action]="action">
-  <ng-template #action> </ng-template>
+  <ng-template #action>
+    <button
+      nz-button
+      (click)="add($event)"
+      [nzType]="'primary'"
+      [nzSize]="'large'"
+    >
+      新建
+    </button>
+  </ng-template>
 </page-header>
 
 <div class="ngx-alain__page-content-nz-card">
@@ -21,14 +30,12 @@
               type="submit"
               nz-button
               [nzType]="'primary'"
-              [nzLoading]="httpSrv.loading"
+              [nzLoading]="st.stloading"
             >
               查询
             </button>
           </div>
         </nz-form-control>
-      </nz-form-item>
-      <nz-form-item class="sf-btns">
         <nz-form-control class="ant-form-item-control-wrapper">
           <div class="ant-form-item-control">
             <button nz-button (click)="appCase.exportXlsFromSt(st)">
@@ -41,16 +48,12 @@
   </nz-card>
 
   <nz-card [nzBordered]="false">
-    <div nz-row nzGutter="16">
-      <div nz-col nzSpan="24">
-        <st
-          #st
-          class="simple-table"
-          [data]="dataSource.url"
-          [columns]="tableData.col"
-          [req]="tableReq"
-        ></st>
-      </div>
-    </div>
+    <st
+      #st
+      [data]="dataSource.url"
+      [columns]="tableData.col"
+      [req]="tableReq"
+      (change)="stChange($event)"
+    ></st>
   </nz-card>
 </div>

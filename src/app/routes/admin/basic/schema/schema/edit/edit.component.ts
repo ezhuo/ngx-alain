@@ -5,7 +5,7 @@ import {
   Injector,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { ModalControl } from '@core';
+import { IndexControl } from '@core';
 
 const changeDetection = ChangeDetectionStrategy.Default;
 
@@ -14,7 +14,7 @@ const changeDetection = ChangeDetectionStrategy.Default;
   templateUrl: './edit.component.html',
   changeDetection,
 })
-export class SchemaFormEditComponent extends ModalControl
+export class SchemaFormEditComponent extends IndexControl
   implements OnInit, OnDestroy {
   validateForm: any;
 

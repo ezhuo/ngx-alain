@@ -12,7 +12,7 @@ import { IndexControl } from '@core';
 import { AccountEditComponent } from './modal/edit.component';
 import { AccountShowComponent } from './modal/show.component';
 import { AccountPwdComponent } from './modal/pwd.component';
-import { NzFormatEmitEvent, NzTreeNode, NzTreeComponent } from 'ng-zorro-antd';
+import { JsTreeOptions } from '@shared';
 
 const changeDetection = ChangeDetectionStrategy.Default;
 
@@ -25,7 +25,6 @@ const changeDetection = ChangeDetectionStrategy.Default;
 export class AccountComponent extends IndexControl implements OnInit {
   @ViewChild('st') st: STComponent;
   @ViewChild('sf') sf: SFComponent;
-  @ViewChild('tree') tree: NzTreeComponent;
 
   constructor(protected injector: Injector) {
     super(injector);
@@ -38,7 +37,6 @@ export class AccountComponent extends IndexControl implements OnInit {
 
   ngOnInit() {
     super.ngOnInit();
-    this.getTreeData();
 
     this.schemaData = {
       // 查询
@@ -82,6 +80,7 @@ export class AccountComponent extends IndexControl implements OnInit {
             format: 'uri',
             ui: {
               widget: 'uploadx',
+              urlReName: 'url',
               action: this.configSrv.api.upload,
               change: this.appCase.nzUploadHandleChange,
               spanLabel: 3,
@@ -253,6 +252,7 @@ export class AccountComponent extends IndexControl implements OnInit {
     };
 
     this.tableData.col = [
+      this.configSrv.define.tableIndexColumn,
       { title: '登录名', index: 'login_username', width: '100px' },
       { title: '真实姓名', index: 'true_name' },
       { title: '角色', index: 'role_name' },
@@ -289,7 +289,7 @@ export class AccountComponent extends IndexControl implements OnInit {
                 modal: this.modalTable(AccountEditComponent),
                 click: (record, btnRes) => {
                   console.log(btnRes);
-                  if (btnRes) this.st.load();
+                  if (btnRes) this.st.reload();
                 },
               },
               {
@@ -329,8 +329,15 @@ export class AccountComponent extends IndexControl implements OnInit {
     ];
   }
 
-  add() {
-    this.treeSelectNodeEvent();
+  add($event) {
+    if ($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+    }
+    if (!this.form.data) {
+      this.noticeSrv.sweet.alert('请提前选择左边的目录树！');
+      return false;
+    }
     this.freeData.add = this.modalEditStatic(AccountEditComponent).subscribe(
       result => {
         if (result) {
@@ -340,43 +347,12 @@ export class AccountComponent extends IndexControl implements OnInit {
     );
   }
 
-  treeData = [];
-  treeDataExpandKeys = [];
-  treeDataSelectKeys = [];
-  getTreeData() {
-    if (this.freeData.company) {
-      this.freeData.company.unsubscribe();
-    }
-    this.freeData.company = this.httpSrv
-      .get('/orginfo/tree')
-      .subscribe((result: any) => {
-        result.data.list.forEach((node, idx) => {
-          this.treeData = [];
-          this.treeDataExpandKeys = [];
-          this.treeDataSelectKeys = [];
-          if (idx === 0) {
-            this.treeDataExpandKeys.push(node.key);
-            this.treeDataSelectKeys.push(node.key);
-          }
-          this.treeData.push(new NzTreeNode(node));
-        });
-        this.detectChanges();
-      });
-  }
-
-  mouseTreeAction(name: string, event: NzFormatEmitEvent): void {
-    this.treeSelectNodeEvent(event.node);
-  }
-
-  treeSelectNodeEvent(node?: NzTreeNode) {
-    if (!node && this.tree) {
-      // 获取选中节点数组中，最后一个
-      const sel = this.tree.getSelectedNodeList();
-      if (sel.length > 0) node = sel[sel.length - 1];
-    }
+  treeSelectNodeEvent(node?: any) {
     if (node) {
-      this.modalData.data = node;
-      this.sf.value['org_fdn%'] = node.key;
+      this.modalData.data = {
+        origin: node.original,
+      };
+      this.sf.value['org_fdn%'] = node.original.key;
     } else {
       this.modalData.data = {
         origin: {
@@ -389,5 +365,14 @@ export class AccountComponent extends IndexControl implements OnInit {
 
     this.searchSubmit(this.st, this.sf.value);
     this.detectChanges();
+  }
+
+  jstree: JsTreeOptions = {
+    data: '/orginfo/tree',
+    isOpenAll: false,
+  };
+
+  jstreeChange($event) {
+    this.treeSelectNodeEvent($event);
   }
 }

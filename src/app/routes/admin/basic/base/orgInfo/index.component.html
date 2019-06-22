@@ -1,7 +1,12 @@
 <page-header [title]="pageTitle" [autoBreadcrumb]="false" [action]="action">
   <ng-template #action>
     <div *ngIf="userSrv.userInfo.is_group">
-      <button nz-button (click)="add()" [nzType]="'primary'" [nzSize]="'large'">
+      <button
+        nz-button
+        (click)="add($event)"
+        [nzType]="'primary'"
+        [nzSize]="'large'"
+      >
         新建
       </button>
     </div>
@@ -33,8 +38,6 @@
             </button>
           </div>
         </nz-form-control>
-      </nz-form-item>
-      <nz-form-item class="sf-btns">
         <nz-form-control class="ant-form-item-control-wrapper">
           <div class="ant-form-item-control">
             <button nz-button (click)="appCase.exportXlsFromSt(st)">
@@ -49,38 +52,31 @@
     <div nz-row nzGutter="16">
       <div
         nz-col
-        [nzSpan]="userSrv.userInfo.is_group ? '4' : '24'"
-        [nzLg]="userSrv.userInfo.is_group ? '4' : '24'"
+        [nzSpan]="userSrv.userInfo.is_group ? '5' : '24'"
+        [nzLg]="userSrv.userInfo.is_group ? '5' : '24'"
         nzXs="24"
         *ngIf="userSrv.userInfo.is_group"
       >
         <nz-card>
-          <p>
-            <nz-tree
-              #tree
-              [(nzData)]="treeData"
-              [nzShowLine]="true"
-              [nzDefaultExpandedKeys]="treeDataExpandKeys"
-              [nzDefaultSelectedKeys]="treeDataSelectKeys"
-              (nzClick)="mouseTreeAction('click', $event)"
-              (nzContextMenu)="mouseTreeAction('click', $event)"
-            >
-            </nz-tree>
-          </p>
+          <div
+            [jstree]="jstree"
+            (jstreeChange)="jstreeChange($event)"
+            class="jstree"
+          ></div>
         </nz-card>
       </div>
       <div
         nz-col
-        [nzSpan]="userSrv.userInfo.is_group ? '20' : '24'"
-        [nzLg]="userSrv.userInfo.is_group ? '20' : '24'"
+        [nzSpan]="userSrv.userInfo.is_group ? '19' : '24'"
+        [nzLg]="userSrv.userInfo.is_group ? '19' : '24'"
         nzXs="24"
       >
         <st
           #st
-          class="simple-table"
           [data]="dataSource.url"
           [columns]="tableData.col"
           [req]="tableReq"
+          (change)="stChange($event)"
         ></st>
       </div>
     </div>

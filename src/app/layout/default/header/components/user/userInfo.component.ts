@@ -5,7 +5,7 @@ import {
   OnDestroy,
   ChangeDetectionStrategy,
 } from '@angular/core';
-import { ModalControl } from '@core';
+import { IndexControl } from '@core';
 
 @Component({
   selector: 'header-user-info',
@@ -13,7 +13,7 @@ import { ModalControl } from '@core';
   styleUrls: [`./userInfo.component.less`],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderUserInfoComponent extends ModalControl
+export class HeaderUserInfoComponent extends IndexControl
   implements OnInit, OnDestroy {
   constructor(protected injector: Injector) {
     super(injector);

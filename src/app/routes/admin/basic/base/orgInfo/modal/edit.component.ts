@@ -5,7 +5,7 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 
-import { ModalControl } from '@core';
+import { IndexControl } from '@core';
 import { tplModalEditHTML } from '@layout';
 
 const changeDetection = ChangeDetectionStrategy.Default;
@@ -16,16 +16,17 @@ const changeDetection = ChangeDetectionStrategy.Default;
   styles: [``],
   changeDetection,
 })
-export class OrgInfoEditComponent extends ModalControl implements OnInit {
+export class OrgInfoEditComponent extends IndexControl implements OnInit {
   constructor(protected injector: Injector) {
     super(injector);
-    super.__init__(this, {}, changeDetection);
+    super.__init__(this, {}, {changeDetection});
   }
 
   ngOnInit() {
     super.ngOnInit();
     if (!this.dataSource.val) {
-      this.form.data['parent_org_name'] = this.modalData.data.origin.title;
+      this.form.data['parent_id'] = this.modalData.data.original.org_id;
+      // this.form.data['parent_org_name'] = this.modalData.data.origin.title;
     }
   }
 
@@ -35,12 +36,12 @@ export class OrgInfoEditComponent extends ModalControl implements OnInit {
       this.schemaData.edit,
     );
     // 如果是新增状态，就添加所属机构值
-    if (!this.dataSource.val) {
-      formData['parent_id'] = this.modalData.data.origin.org_id;
-    } else {
-      // 编辑状态下不允许修改机构
-      delete formData['parent_id'];
-    }
+    // if (!this.dataSource.val) {
+    //   formData['parent_id'] = this.modalData.data.origin.org_id;
+    // } else {
+    //   // 编辑状态下不允许修改机构
+    //   delete formData['parent_id'];
+    // }
     this.httpSrv
       .update(this.dataSource.url, formData, this.dataSource.val)
       .subscribe(

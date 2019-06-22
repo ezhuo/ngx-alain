@@ -5,7 +5,7 @@ import {
   ChangeDetectionStrategy,
 } from '@angular/core';
 
-import { ModalControl } from '@core';
+import { IndexControl } from '@core';
 import { tplModalShowHTML } from '@layout';
 
 @Component({
@@ -14,7 +14,7 @@ import { tplModalShowHTML } from '@layout';
   styles: [``],
   changeDetection: ChangeDetectionStrategy.Default,
 })
-export class SchemaShowComponent extends ModalControl implements OnInit {
+export class SchemaShowComponent extends IndexControl implements OnInit {
   constructor(protected injector: Injector) {
     super(injector);
   }

@@ -300,6 +300,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   private setLoading(val: boolean): void {
+    this.stloading = val;
     if (this.loading == null) {
       this._loading = val;
     }
@@ -756,8 +757,14 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
     unsubscribe$.complete();
   }
 
-    /** 是否正在加载中 */
-    get stLoading(): boolean {
-      return this._loading;
-    }
+  private _stLoading = false;
+
+  /** 是否正在加载中 */
+  get stloading(): boolean {
+    return this._stLoading;
+  }
+
+  set stloading(val:boolean){
+    setTimeout(() => (this._stLoading = val));
+  }
 }

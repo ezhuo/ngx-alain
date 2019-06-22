@@ -21,35 +21,30 @@
               type="submit"
               nz-button
               [nzType]="'primary'"
-              [nzLoading]="httpSrv.loading"
+              [nzLoading]="st.stloading"
             >
               查询
             </button>
           </div>
         </nz-form-control>
       </nz-form-item>
-      <nz-form-item class="sf-btns">
-        <nz-form-control class="ant-form-item-control-wrapper">
-          <div class="ant-form-item-control">
-            <button nz-button (click)="appCase.exportXlsFromSt(st)">
-              导出
-            </button>
-          </div>
-        </nz-form-control>
-      </nz-form-item>
+      <nz-form-control class="ant-form-item-control-wrapper">
+        <div class="ant-form-item-control">
+          <button nz-button (click)="appCase.exportXlsFromSt(st)">
+            导出
+          </button>
+        </div>
+      </nz-form-control>
     </sf>
   </nz-card>
 
   <nz-card [nzBordered]="false">
-    <div nz-row nzGutter="16">
-      <div nz-col nzSpan="24">
-        <st
-          #st
-          [data]="dataSource.url"
-          [columns]="tableData.col"
-          [req]="tableReq"
-        ></st>
-      </div>
-    </div>
+    <st
+      #st
+      [data]="dataSource.url"
+      [columns]="tableData.col"
+      [req]="tableReq"
+      (change)="stChange($event)"
+    ></st>
   </nz-card>
 </div>

@@ -1,6 +1,11 @@
 <page-header [title]="pageTitle" [autoBreadcrumb]="false" [action]="action">
   <ng-template #action>
-    <button nz-button (click)="add($event)" [nzType]="'primary'" [nzSize]="'large'">
+    <button
+      nz-button
+      (click)="add($event)"
+      [nzType]="'primary'"
+      [nzSize]="'large'"
+    >
       新建
     </button>
   </ng-template>
@@ -24,10 +29,10 @@
       <div class="content">
         <st
           #st
-          class="simple-table"
           [data]="url"
           [columns]="tableData.col"
           [req]="tableReq"
+          (change)="stChange($event)"
         ></st>
       </div>
     </div>

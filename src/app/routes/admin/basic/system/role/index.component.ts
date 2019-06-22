@@ -97,6 +97,7 @@ export class RoleComponent extends IndexControl implements OnInit {
     };
 
     this.tableData.col = [
+      this.configSrv.define.tableIndexColumn,
       { title: '名称', index: 'name' },
       {
         title: '状态',
@@ -145,7 +146,11 @@ export class RoleComponent extends IndexControl implements OnInit {
     ];
   }
 
-  add() {
+  add($event) {
+    if ($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+    }
     this.freeData.add = this.modalEditStatic(RoleEditComponent).subscribe(
       result => {
         if (result) {

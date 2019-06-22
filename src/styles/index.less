@@ -1,7 +1,9 @@
 // 建议所有项目自定义样式放在该文件夹下
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', SimSun, sans-serif;
-    -webkit-font-smoothing: antialiased !important;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', SimSun, sans-serif;
+  -webkit-font-smoothing: antialiased !important;
 }
 
 h1,
@@ -9,103 +11,112 @@ h2,
 h3,
 h4,
 h5 {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', SimSun, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Helvetica, 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', SimSun, sans-serif;
 }
 
 // jstree icon style
 .icon-state-default {
-    color: #c6c6c6;
+  color: #c6c6c6;
 }
 
 .icon-state-success {
-    color: #45b6af;
+  color: #45b6af;
 }
 
 .icon-state-info {
-    color: #89c4f4;
+  color: #89c4f4;
 }
 
 .icon-state-warning {
-    color: #dfba49;
+  color: #dfba49;
 }
 
 .icon-state-danger {
-    color: #f3565d;
+  color: #f3565d;
 }
 
 .jstree-icon.icon-lg {
-    margin-top: 1px;
-    font-size: 16px !important;
+  margin-top: 1px;
+  font-size: 16px !important;
 }
 
 .jstree {
-    min-height: 380px;
-    max-height: 470px;
-    margin-top: 10px;
-    overflow-y: scroll;
+  min-height: 380px;
+  max-height: 470px;
+  margin-top: 10px;
+  overflow-y: scroll;
 }
 
 // 动态表单视图
 .sf-view {
-    sf {
-        border: 1px dotted rgba(0, 0, 0, 0.397);
-        nz-row,
-        [nz-row] {
-            nz-form-item {
-                border-bottom: 1px dotted rgba(0, 0, 0, 0.397);
-                margin-bottom: 0px;
-                nz-col,
-                [nz-col] {
-                    margin-top: 5px;
-                    margin-bottom: 5px;
-                    padding-left: 5px;
-                    padding-right: 5px;
-                    .avatar {
-                        width: 128px;
-                        height: 128px;
-                    }
-                    .avatar-show {
-                        margin-right: 10px;
-                    }
-                }
-                .ant-form-item-label {}
-                .ant-form-item-control-wrapper {}
-            }
+  sf {
+    border: 1px dotted rgba(0, 0, 0, 0.397);
+    nz-row,
+    [nz-row] {
+      nz-form-item {
+        border-bottom: 1px dotted rgba(0, 0, 0, 0.397);
+        margin-bottom: 0px;
+        nz-col,
+        [nz-col] {
+          margin-top: 5px;
+          margin-bottom: 5px;
+          padding-left: 5px;
+          padding-right: 5px;
+          .avatar {
+            width: 128px;
+            height: 128px;
+          }
+          .avatar-show {
+            margin-right: 10px;
+          }
         }
+        .ant-form-item-label {
+        }
+        .ant-form-item-control-wrapper {
+        }
+      }
     }
+  }
 }
 
 .page-index-card .ant-card-body {
-    padding: 12px !important;
+  padding: 12px !important;
 }
 
 // 安全HTML视图
 .safeHTML-View {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 .ant-modal-close:focus {
-    outline: 0;
+  outline: 0;
 }
 
 .ant-drawer-close:focus {
-    outline: 0;
+  outline: 0;
 }
 
 .cke_editable {
-    font-size: 16px;
-    line-height: 1.6;
-    /* Fix for missing scrollbars with RTL texts. (#10488) */
-    word-wrap: break-word;
-    p {
-        margin: 0 auto;
-    }
+  font-size: 16px;
+  line-height: 1.6;
+  /* Fix for missing scrollbars with RTL texts. (#10488) */
+  word-wrap: break-word;
+  p {
+    margin: 0 auto;
+  }
 }
 
 .ngx-alain__page-content-nz-card {
-    nz-card {
-        .ant-card-body {
-            padding: 8px;
-        }
+  nz-card {
+    .ant-card-body {
+      padding: 8px;
     }
+    .sf-btns {
+      .ant-form-item-control-wrapper {
+        margin-left: 20px;
+      }
+    }
+  }
 }
