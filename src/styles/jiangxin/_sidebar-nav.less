@@ -1,0 +1,72 @@
+// Main Nav
+@nav-active-color : #020F21;
+
+@alain-default-aside-bg: #011f2b;
+
+@alain-default-aside-nav-fs: 15px;
+@alain-default-aside-nav-icon-width: 16px;
+@alain-default-aside-nav-img-wh: 16px;
+
+@alain-default-aside-nav-text-color: @nav-active-color;
+@alain-default-aside-nav-text-hover-color: @nav-active-color;
+@alain-default-aside-nav-group-text-color: @nav-active-color;
+@alain-default-aside-nav-selected-text-color: @nav-active-color;
+@alain-default-aside-nav-selected-bg: @nav-active-color;
+
+// 导航栏
+.@{sidebar-nav-prefix-cls} {
+  &__item {
+    color: #fcfcfc;
+    &__item-icon {
+      width: @alain-default-aside-nav-icon-width;
+      height: @alain-default-aside-nav-icon-width;
+    }
+    &-link {
+      padding: 9px @layout-gutter * 2;
+    }
+  }
+
+  &__group-title {
+    color: #968c8c !important;
+  }
+
+  &__open {
+    // Selected
+    &.@{sidebar-nav-prefix-cls}__selected {
+      background-color: @nav-active-color;
+      > a {
+        color: #fcfcfc;
+        background-color: @primary-color;
+      }
+    }
+  }
+
+  :not(&__open) {
+    // Selected
+    &.@{sidebar-nav-prefix-cls}__selected {
+      > a {
+        background-color: @primary-color;
+      }
+    }
+  }
+}
+
+// .sidebar-nav {
+//   > li.sidebar-nav__open {
+//     // Selected
+//     &.sidebar-nav__selected {
+//       > a {
+//         color: #fff;
+//         background-color: @primary-color;
+//       }
+//     }
+//   }
+//   > li:not(.sidebar-nav__open) {
+//     // Selected
+//     &.sidebar-nav__selected {
+//       > a {
+//         background-color: @primary-color;
+//       }
+//     }
+//   }
+// }

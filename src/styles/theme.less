@@ -1,68 +1,12 @@
 // 可以通过 https://ng-alain.github.io/ng-alain/ 获取主题参数代码
 // The theme paraments can be generated at https://ng-alain.github.io/ng-alain/
-@header-bg: #c10000;
-@aside-nav-selected-text-color : #fff;
-@aside-nav-text-hover-color : #C10000;
-// 导航栏
-.sidebar-nav {
-  > li.sidebar-nav__open {
-    // Selected
-    &.sidebar-nav__selected {
-      > a {
-        color: #fff;
-        background-color: @primary-color;
-      }
-    }
-  }
-  > li:not(.sidebar-nav__open) {
-    // Selected
-    &.sidebar-nav__selected {
-      > a {
-        background-color: @primary-color;
-      }
-    }
-  }
-}
+
+@import './jiangxin/_sidebar-nav.less';
+@import './jiangxin/_table.less';
+
+@alain-default-header-bg: @primary-color;
 
 // @icon-url : "/assets/vendor/font/iconfont/3.x/iconfont";
-// ng-zorro ---------------------------
-@table-padding-vertical: 12px;
-@table-padding-horizontal: 12px;
-@card-padding-base: 12px;
-
-// ---define----------------------------------
-.modal-lg,
-.modal-md {
-  max-width: 100% !important;
-}
-
-.alain-default__content-title {
-  line-height: 64px;
-  height: 64px;
-}
-
-.ant-table-thead {
-  tr {
-    th[data-col='_index_'] {
-      padding: 12px 1px;
-      text-align: center;
-    }
-  }
-}
-
-.ant-table-body {
-  thead {
-    th {
-      text-align: center;
-    }
-  }
-}
-
-.ant-table-row {
-  td:first-child {
-    text-align: center;
-  }
-}
 
 .py-lg {
   padding-top: 0px !important;
