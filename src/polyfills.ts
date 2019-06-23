@@ -20,6 +20,10 @@
 
  // 兼容ie10
 (function() {
+  if (typeof SVGElement.prototype.contains === 'undefined') {
+    SVGElement.prototype.contains = HTMLDivElement.prototype.contains;
+  }
+  
   Object.setPrototypeOf =
     Object.setPrototypeOf ||
     ({ __proto__: [] } instanceof Array ? setProtoOf : mixinProperties);
@@ -54,10 +58,10 @@ import 'core-js/es6/regexp';
 import 'core-js/es6/map';
 import 'core-js/es6/weak-map';
 import 'core-js/es6/set';
-// import 'core-js/es6/promise';
+import 'core-js/es6/promise';
 
 /** IE10 and IE11 requires the following for NgClass support on SVG elements */
-// import 'classlist.js'; // Run `npm install --save classlist.js`.
+import 'classlist.js'; // Run `npm install --save classlist.js`.
 
 /** Evergreen browsers require these. **/
 import 'core-js/es6/reflect';
@@ -70,7 +74,7 @@ import 'core-js/es7/object';
  * Required to support Web Animations `@angular/animation`.
  * Needed for: All but Chrome, Firefox and Opera. http://caniuse.com/#feat=web-animation
  **/
-// import 'web-animations-js'; // Run `npm install --save web-animations-js`.
+import 'web-animations-js'; // Run `npm install --save web-animations-js`.
 
 /***************************************************************************************************
  * Zone JS is required by Angular itself.
@@ -87,12 +91,8 @@ import 'babel-polyfill';
  * Date, currency, decimal and percent pipes.
  * Needed for: All but Chrome, Firefox, Edge, IE11 and Safari 10
  */
-// import 'intl'; // Run `npm install --save intl`.
+import 'intl'; // Run `npm install --save intl`.
 /**
  * Need to import at least one locale-data with intl.
  */
 // import 'intl/locale-data/jsonp/zh';
-
-if (typeof SVGElement.prototype.contains === 'undefined') {
-  SVGElement.prototype.contains = HTMLDivElement.prototype.contains;
-}
