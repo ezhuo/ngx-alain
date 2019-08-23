@@ -1,9 +1,9 @@
 import { Component, DebugElement } from '@angular/core';
 import { fakeAsync, tick, ComponentFixture, TestBed, TestBedStatic } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ACLService } from '@delon/acl';
+import { ACLService, DelonACLModule } from '@delon/acl';
 import { configureTestSuite, createTestContext } from '@delon/testing';
-import { en_US, AlainThemeModule, DelonLocaleService } from '@delon/theme';
+import { en_US, AlainThemeModule, DelonLocaleService, ALAIN_I18N_TOKEN, AlainI18NService } from '@delon/theme';
 import { deepCopy } from '@delon/util';
 import { of } from 'rxjs';
 import { FormPropertyFactory } from '../src/model/form.property.factory';
@@ -19,12 +19,22 @@ describe('form: component', () => {
   let context: TestFormComponent;
   let page: SFPage;
 
-  configureTestSuite(() => {
-    injector = TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, AlainThemeModule.forRoot(), DelonFormModule.forRoot()],
-      declarations: [TestFormComponent, TestModeComponent],
+  function genModule(options: { acl?: boolean; i18n?: boolean } = {}) {
+    options = { acl: false, i18n: false, ...options };
+    configureTestSuite(() => {
+      const imports = [NoopAnimationsModule, DelonFormModule.forRoot()];
+      if (options.i18n) {
+        imports.push(AlainThemeModule.forRoot());
+      }
+      if (options.acl) {
+        imports.push(DelonACLModule.forRoot());
+      }
+      injector = TestBed.configureTestingModule({
+        imports,
+        declarations: [TestFormComponent, TestModeComponent],
+      });
     });
-  });
+  }
 
   function createComp() {
     fixture.detectChanges();
@@ -33,6 +43,8 @@ describe('form: component', () => {
   }
 
   describe('', () => {
+    genModule();
+
     beforeEach(() => {
       ({ fixture, dl, context } = createTestContext(TestFormComponent));
       createComp();
@@ -41,9 +53,10 @@ describe('form: component', () => {
     describe('[default]', () => {
       it('should throw error when parent is not object or array', () => {
         expect(() => {
-          const factory = dl.injector.get<FormPropertyFactory>(FormPropertyFactory);
+          // tslint:disable-next-line: no-string-literal
+          const factory = context.comp['formPropertyFactory'] as FormPropertyFactory;
           factory.createProperty({}, {}, {}, { type: 'invalid', path: 'a' } as any, 'a');
-        }).toThrowError();
+        }).toThrowError(`Instanciation of a FormProperty with an unknown parent type: invalid`);
       });
 
       it('should throw error when type is invalid', () => {
@@ -237,7 +250,7 @@ describe('form: component', () => {
       });
       it('should be update button text when i18n changed', () => {
         page.checkElText('.ant-btn-primary', '提交');
-        const i18n = injector.get(DelonLocaleService) as DelonLocaleService;
+        const i18n = injector.get<DelonLocaleService>(DelonLocaleService) as DelonLocaleService;
         i18n.setLocale(en_US);
         fixture.detectChanges();
         page.checkElText('.ant-btn-primary', 'Submit');
@@ -337,12 +350,12 @@ describe('form: component', () => {
         it('with false', () => {
           context.firstVisual = false;
           fixture.detectChanges();
-          page.checkCount('nz-form-explain', 0);
+          page.checkCount('.ant-form-explain', 0);
         });
         it('with true', () => {
           context.firstVisual = true;
           fixture.detectChanges();
-          page.checkCount('nz-form-explain', 2);
+          page.checkCount('.ant-form-explain', 2);
         });
       });
 
@@ -351,13 +364,13 @@ describe('form: component', () => {
           context.onlyVisual = false;
           fixture.detectChanges();
           page.checkCount('.sf__no-error', 0);
-          page.checkCount('nz-form-explain', 2);
+          page.checkCount('.ant-form-explain', 2);
         });
         it('with true', () => {
           context.onlyVisual = true;
           fixture.detectChanges();
           page.checkCount('.sf__no-error', 1);
-          page.checkCount('nz-form-explain', 0);
+          page.checkCount('.ant-form-explain', 0);
         });
       });
 
@@ -605,36 +618,42 @@ describe('form: component', () => {
         expect(page.getProperty('/a').errors![0].message).toBe('A');
         expect((s.properties!.a.ui as any).errors.required).toHaveBeenCalled();
       });
-    });
 
-    describe('ACL', () => {
-      let acl: ACLService;
-      beforeEach(() => (acl = injector.get(ACLService)));
-      it('shoule be working', fakeAsync(() => {
-        acl.setFull(false);
-        acl.setRole(['admin']);
+      it('should be i18n', () => {
         const s: SFSchema = {
           properties: {
             a: {
               type: 'string',
-              ui: {
-                acl: 'admin',
+            },
+            arr: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  name: {
+                    type: 'string',
+                  },
+                },
+                required: ['name'],
               },
             },
           },
           required: ['a'],
         };
-        page.newSchema(s);
-        page.checkUI('/a', 'hidden', false);
-        acl.setRole(['user']);
-        tick();
+        page.newSchema(s, undefined, { a: '', arr: [{ name: '' }] });
+        expect(page.getProperty('/a').errors![0].message).toBe(context.comp.locale.error.required);
+        const i18n = injector.get<DelonLocaleService>(DelonLocaleService) as DelonLocaleService;
+        i18n.setLocale(en_US);
         fixture.detectChanges();
-        page.checkUI('/a', 'hidden', true);
-      }));
+        expect(page.getProperty('/a').errors![0].message).toBe(context.comp.locale.error.required);
+        expect(page.getProperty('/arr').errors![0].message).toBe(context.comp.locale.error.required);
+      });
     });
   });
 
   describe('#mode', () => {
+    genModule();
+
     beforeEach(() => ({ fixture, dl, context } = createTestContext(TestModeComponent)));
     it('should be auto 搜索 in submit', () => {
       context.mode = 'search';
@@ -662,6 +681,85 @@ describe('form: component', () => {
       createComp();
       expect(page.getEl('.ant-btn-primary').textContent).toContain('SAVE');
     });
+  });
+
+  describe('ACL', () => {
+    genModule({ acl: true });
+
+    it('should working', fakeAsync(() => {
+      ({ fixture, dl, context } = createTestContext(TestFormComponent));
+      createComp();
+      const acl = injector.get<ACLService>(ACLService);
+      acl.setFull(false);
+      acl.setRole(['admin']);
+      const s: SFSchema = {
+        properties: {
+          a: {
+            type: 'string',
+            ui: {
+              acl: 'admin',
+            },
+          },
+        },
+        required: ['a'],
+      };
+      page.newSchema(s);
+      page.checkUI('/a', 'hidden', false);
+      acl.setRole(['user']);
+      tick();
+      fixture.detectChanges();
+      page.checkUI('/a', 'hidden', true);
+    }));
+  });
+
+  describe('I18N', () => {
+    genModule({ i18n: true });
+
+    it('should working', fakeAsync(() => {
+      ({ fixture, dl, context } = createTestContext(TestFormComponent));
+      createComp();
+      const i18n = injector.get(ALAIN_I18N_TOKEN) as AlainI18NService;
+      let lang = 'en';
+      spyOn(i18n, 'fanyi').and.callFake(((key: string) => {
+        if (key === 'null') return null;
+        return lang === 'en' ? key : `zh-${key}`;
+      }) as any);
+      const s: SFSchema = {
+        properties: {
+          a: {
+            type: 'string',
+            title: 'title',
+            description: 'title',
+            ui: {
+              i18n: 'i18n',
+              descriptionI18n: 'descriptionI18n',
+              optionalHelp: {
+                i18n: 'ohi18n',
+              },
+            },
+          },
+          b: {
+            type: 'string',
+            title: 'a',
+            ui: {
+              i18n: 'null',
+            },
+          },
+        },
+      };
+      page.newSchema(s);
+      page
+        .checkSchema('/a', 'title', 'i18n')
+        .checkSchema('/b', 'title', 'null')
+        .checkSchema('/a', 'description', 'descriptionI18n')
+        .checkUI('/a', 'optionalHelp.text', 'ohi18n');
+      lang = 'zh';
+      i18n.use(lang);
+      page
+        .checkSchema('/a', 'title', 'zh-i18n')
+        .checkSchema('/a', 'description', 'zh-descriptionI18n')
+        .checkUI('/a', 'optionalHelp.text', 'zh-ohi18n');
+    }));
   });
 });
 

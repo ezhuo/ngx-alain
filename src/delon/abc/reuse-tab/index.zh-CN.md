@@ -199,6 +199,7 @@ export class DemoComponent {
 `[tabBarExtraContent]` | tab bar 上额外的元素 | `TemplateRef<void>` | -
 `[tabBarStyle]` | tab bar 的样式对象 | `object` | -
 `[tabBarGutter]` | tabs 之间的间隙 | `number` | -
+`[tabType]` | tabs 页签的基本样式 | `line, card` | `line`
 `(close)` | 关闭回调 | `EventEmitter` | -
 `(change)` | 切换时回调，接收的参数至少包含：`active`、`list` 两个参数 | `EventEmitter` | -
 
@@ -274,3 +275,7 @@ export class DemoComponent {
 
 - `max` 参数值发生变更时会强制关闭且忽略可关闭条件
 - 超出 `max` 值时，会关掉最先打开 **可关闭** 的页面，若所有页面都为 **不可关闭** 则忽略关闭
+
+### 不支持 QueryString 查询参数
+
+复用采用URL来区分是否同一个页面，而 QueryString 查询参数很容易产生重复性误用，因此不支持查询参数，且在复用过程中会强制忽略掉 QueryString 部分。

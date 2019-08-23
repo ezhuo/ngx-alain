@@ -16,7 +16,7 @@ import { InjectorControl } from '@core';
   template: `
     <nz-input-group
       [nzAddOnBeforeIcon]="
-        focus ? 'anticon anticon-arrow-down' : 'anticon anticon-search'
+        focus ? 'arrow-down' : 'search'
       "
     >
       <input

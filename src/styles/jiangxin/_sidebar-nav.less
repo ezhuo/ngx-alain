@@ -1,22 +1,22 @@
 // Main Nav
-@nav-active-color : #020F21;
+@nav-active-bg-color : #020F21;
 
-@alain-default-aside-bg: #011f2b;
+@nav-text-color : #fcfcfc;
 
 @alain-default-aside-nav-fs: 15px;
 @alain-default-aside-nav-icon-width: 16px;
 @alain-default-aside-nav-img-wh: 16px;
 
-@alain-default-aside-nav-text-color: @nav-active-color;
-@alain-default-aside-nav-text-hover-color: @nav-active-color;
-@alain-default-aside-nav-group-text-color: @nav-active-color;
-@alain-default-aside-nav-selected-text-color: @nav-active-color;
-@alain-default-aside-nav-selected-bg: @nav-active-color;
+@alain-default-aside-bg: #011f2b;
+@alain-default-aside-nav-group-text-color: @nav-active-bg-color;
+@alain-default-aside-nav-selected-text-color: @nav-active-bg-color;
+@alain-default-aside-nav-selected-bg: @nav-active-bg-color;
 
 // 导航栏
+
 .@{sidebar-nav-prefix-cls} {
   &__item {
-    color: #fcfcfc;
+    color: @nav-text-color;
     &__item-icon {
       width: @alain-default-aside-nav-icon-width;
       height: @alain-default-aside-nav-icon-width;
@@ -33,9 +33,9 @@
   &__open {
     // Selected
     &.@{sidebar-nav-prefix-cls}__selected {
-      background-color: @nav-active-color;
+      background-color: @nav-active-bg-color;
       > a {
-        color: #fcfcfc;
+        color: @nav-text-color;
         background-color: @primary-color;
       }
     }
@@ -51,19 +51,20 @@
   }
 }
 
-// .sidebar-nav {
-//   > li.sidebar-nav__open {
+// .@{sidebar-nav-prefix-cls} {
+//   &__open {
 //     // Selected
-//     &.sidebar-nav__selected {
+//     &.@{sidebar-nav-prefix-cls}__selected {
 //       > a {
-//         color: #fff;
+//         color: @nav-text-color;
 //         background-color: @primary-color;
 //       }
 //     }
 //   }
-//   > li:not(.sidebar-nav__open) {
+
+//   :not(&__open) {
 //     // Selected
-//     &.sidebar-nav__selected {
+//     &.@{sidebar-nav-prefix-cls}__selected {
 //       > a {
 //         background-color: @primary-color;
 //       }

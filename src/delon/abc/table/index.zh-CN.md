@@ -109,7 +109,7 @@ config: STConfig
   `
 })
 class TestComponent {
-  @ViewChild('st') comp: STComponent;
+  @ViewChild('st', { static: false }) comp: STComponent;
   // this.comp.load();
 }
 ```
@@ -125,6 +125,7 @@ class TestComponent {
 `[headers]` | 请求体 `headers` | `any` | -
 `[reName]` | 重命名请求参数 `pi`、`ps` | `STReqReNameType` | `{ pi: 'pi', ps: 'ps', skip: 'skip', limit: 'limit' }`
 `[allInBody]` | 是否将请求所有参数数据都放入 `body` 当中（`url` 地址本身参数除外），仅当 `method: 'POST'` 时有效 | `boolean` | `false`
+`[lazyLoad]` | 是否延迟加载数据，即渲染结束后不会主动发起请求 | `boolean` | `false`
 `[process]` | 请求前数据处理 | `(requestOptions: STRequestOptions) => STRequestOptions` | -
 
 ### STRes
@@ -218,7 +219,7 @@ class TestComponent {
 
 参数 | 说明 | 类型 | 默认值
 ----|------|-----|------
-`[title]` | 列名 | `string` | -
+`[title]` | 列名 | `string, STColumnTitle` | -
 `[i18n]` | 列名i18n | `string` | -
 `[type]` | `no` 行号<br>`checkbox` 多选<br>`radio` 单选<br>`link` 链接，可触发 `click`<br>`img` 图像且居中<br>`number` 数字且居右<br>`currency` 货币且居右<br>`date` 日期格式且居中<br>`badge` [徽标](https://ng.ant.design/components/badge/zh)<br>`tag` [标签](https://ng.ant.design/components/tag/zh)<br>`yn` 将`boolean`类型徽章化 [document](/theme/yn) | `string` | -
 `[index]` | 列数据在数据项中对应的 key，支持 `a.b.c` 的嵌套写法 | `string, string[]` | -
@@ -228,7 +229,7 @@ class TestComponent {
 `[buttons]` | 按钮组 | `STColumnButton[]` | -
 `[width]` | 列宽（数字型表示 `px` 值，**注意：** 若固定列必须是数字），例如：`100`、`10%`、`100px` | `string,number` | -
 `[fixed]` | 固定前后列，当指定时务必指定 `width` 否则视为无效 | `left,right` | -
-`[format]` | 格式化列值 | `(item: STData, col: STColumn) => string` | -
+`[format]` | 格式化列值 | `(item: STData, col: STColumn, index: number) => string` | -
 `[className]` | 列 `class` 属性值，例如：；`text-center` 居中； `text-right` 居右； `text-danger` 异常色，更多参考[样式工具类](/theme/tools) | `string` | -
 `[colSpan]` | 合并列 | `number` | -
 `[sort]` | 排序配置项，远程数据配置**优先**规则：<br>`true` 表示允许排序<br>`string` 表示远程数据排序相对应 `key` 值 | `true,string,STColumnSort` | -
@@ -245,6 +246,15 @@ class TestComponent {
 `[noIndex]` | 行号索引开始值 | `number,(item: STData, col: STColumn, idx: number) => number` | `1`
 `[iif]` | 条件表达式<br>1、仅赋值 `columns` 时执行一次<br>2、可调用 `resetColumns()` 再一次触发 | `(item: STColumn) => boolean` | -
 `[statistical]` | 统计信息 | `STStatisticalType,STStatistical` | -
+
+### STColumnTitle
+
+参数 | 说明 | 类型 | 默认值
+----|------|-----|------
+`[text]` | 列标题，`text` 与 `i18n` 必选其一 | `string` | -
+`[i18n]` | 列标题i18n主键，`text` 与 `i18n` 必选其一 | `string` | -
+`[optional]` | 标签可选信息 | `string` | -
+`[optionalHelp]` | 标签可选帮助 | `string` | -
 
 ### STColumnSort
 
@@ -265,8 +275,8 @@ class TestComponent {
 `[default]` | 标识数据是否经过过滤，筛选图标会高亮 | `boolean` | -
 `[icon]` | 自定义 fiter 图标<br>当 `type='default'` 默认 `filter`<br>当 `type='keyword'` 默认 `search` | `string | STIcon` | `filter`
 `[multiple]` | 是否多选 | `boolean` | `true`
-`[confirmText]` | filter 确认按钮文本 | `string` | `确认`
-`[clearText]` | filter 清除按钮文本 | `string` | `重置`
+`[confirmText]` | filter 确认按钮文本 | `string` | -
+`[clearText]` | filter 清除按钮文本 | `string` | -
 `[key]` | 远程数据的过滤时后端相对应的KEY，默认使用 `index` 属性 | `string` | -
 `[reName]` | 远程数据的过滤时后端相对应的VALUE | `(list: STColumnFilterMenu[], col: STColumn) => Object` | -
 
@@ -289,7 +299,7 @@ class TestComponent {
 (deprecated) `[format]` | 格式化文本 | `(record: STData, btn: STColumnButton) => string` | -
 `[type]` | 按钮类型 | `none,del,modal,static,drawer,link` | -
 `[click]` | 点击回调；**函数：** `type=modal` 只会在 `确认` 时触发且 `modal` 参数有效<br>**reload：** 重新刷新当前页<br>**load：** 重新加载数据，并重置页码为：`1` | `(record: STData, modal?: any, instance?: STComponent) => void | reload` | -
-`[pop]` | 是否需要气泡确认框 | `string` | -
+`[pop]` | 是否需要气泡确认框 | `boolean` | `false`
 `[popTitle]` | 气泡确认框内容 | `string` | 确认删除吗？
 `[modal]` | 模态框配置 | `STColumnButtonModal` | -
 `[drawer]` | 抽屉配置 | `STColumnButtonDrawer` | -
@@ -297,6 +307,7 @@ class TestComponent {
 `[acl]` | ACL权限，等同 `can()` 参数值 | `ACLCanType` | -
 `[iif]` | 自定义条件表达式 | `(item: STData, btn: STColumnButton, column: STColumn) => boolean` | `() => true`
 `[iifBehavior]` | 表达式 `false` 值时渲染方式 | `hide,disabled` | `hide`
+`[tooltip]` | 按钮文字提示 | `string` | -
 
 ### STIcon
 

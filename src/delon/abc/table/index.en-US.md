@@ -109,7 +109,7 @@ Some details:
   `
 })
 class TestComponent {
-  @ViewChild('st') comp: STComponent;
+  @ViewChild('st', { static: false }) comp: STComponent;
   // this.comp.load();
 }
 ```
@@ -125,6 +125,7 @@ Property | Description | Type | Default
 `[headers]` | Request header | `any` | -
 `[reName]` | Map name `pi`、`ps` | `STReqReNameType` | `{ pi: 'pi', ps: 'ps', skip: 'skip', limit: 'limit' }`
 `[allInBody]` | Whether to request all parameter data into `body` (except `url` itself parameter) | `boolean` | `false`
+`[lazyLoad]` | Whether to dealy loading data in first render `st` component | `boolean` | `false`
 `[process]` | Pre-request data processing | `(requestOptions: STRequestOptions) => STRequestOptions` | -
 
 ### STRes
@@ -225,7 +226,7 @@ Property | Description | Type | Default
 
 Property | Description | Type | Default
 -------- | ----------- | ---- | -------
-`[title]` | Name of this column | `string` | -
+`[title]` | Name of this column | `string, STColumnTitle` | -
 `[i18n]` | I18n key of this column | `string` | -
 `[type]` | `no` Rows number<br>`checkbox` selection<br>`radio` selection<br>`link` Link that triggers `click`<br>`img` Align to the center<br>`number` Align to the right<br>`currency` Align to the right<br>`date` Align to the center<br>`badge` [Nz-Badge](https://ng.ant.design/components/badge/en)<br>`tag` [Nz-Tag](https://ng.ant.design/components/tag/en)<br>`yn` Make boolean as [badge](/theme/yn) | `string` | -
 `[index]` | Display field of the data record, could be set like `a.b.c` | `string, string[]` | -
@@ -235,7 +236,7 @@ Property | Description | Type | Default
 `[buttons]` | Buttons of this column | `STColumnButton[]` | -
 `[width]` | Width of this column (**NOTICE:** If the fixed column must be a number), e.g: `100`, `10%`, `100px` | `string,number` | -
 `[fixed]` | Set column to be fixed, must specify `width` | `left,right` | -
-`[format]` | Format value of this column | `(item: STData, col: STColumn) => string` | -
+`[format]` | Format value of this column | `(item: STData, col: STColumn, index: number) => string` | -
 `[className]` | Class name of this column, e.g: `text-center`, `text-right`, `text-danger`, pls refer to [Style Tools](/theme/tools) | `string` | -
 `[colSpan]` | Span of this column's title | `number` | -
 `[sort]` | Sort config of this column, Remote Data Configuration**Priority** Rule: <br>`true` allow sorting<br>`string` corresponding `key` value| `true,string,STColumnSort` | -
@@ -252,6 +253,15 @@ Property | Description | Type | Default
 `[noIndex]` | Line number index start value | `number,(item: STData, col: STColumn, idx: number) => number` | `1`
 `[iif]` | Custom conditional expression<br>1. Execute only once when `columns` is assigned<br>2. Call `resetColumns()` to trigger again | `(item: STColumn) => boolean` | -
 `[statistical]` | Statistics | `STStatisticalType,STStatistical` | -
+
+### STColumnTitle
+
+Property | Description | Type | Default
+-------- | ----------- | ---- | -------
+`[text]` | Text of header, can be choose one of `text` or `i18n` | `string` | -
+`[i18n]` | I18n key of header, can be choose one of `text` or `i18n` | `string` | -
+`[optional]` | Optional information of header | `string` | -
+`[optionalHelp]` | Optional help of header | `string` | -
 
 ### STColumnSort
 
@@ -272,8 +282,8 @@ Property | Description | Type | Default
 `[default]` | Whether the `data` is filtered | `boolean` | -
 `[icon]` | Customized filter icon<br>When `type='default'` default `filter`<br> when `type='keyword'` default `search` | `string | STIcon` | `filter`
 `[multiple]` | Whether multiple filters can be selected | `boolean` | `true`
-`[confirmText]` | Text of the confirm button | `string` | `确认`
-`[clearText]` | Text of the clear button | `string` | `重置`
+`[confirmText]` | Text of the confirm button | `string` | -
+`[clearText]` | Text of the clear button | `string` | -
 `[key]` | Unique key of this column, default is `index` property value | `string` | -
 `[reName]` | Map name | `(list: STColumnFilterMenu[], col: STColumn) => Object` | -
 
@@ -306,7 +316,7 @@ Property | Description | Type | Default
 (deprecated) `[format]` | Format value of button text | `(record: STData, btn: STColumnButton) => string` | -
 `[type]` | Type of button | `none,del,modal,static,drawer,link` | -
 `[click]` | Click callback; <br>**function** when `type=modal` will only fire when `confirmed`<br>**reload** Refresh current page<br>**load** load `1` page | `(record: STData, modal?: any, instance?: STComponent) => void | reload` | -
-`[pop]` | Whether to pop confirm | `string` | -
+`[pop]` | Whether to pop confirm | `boolean` | `false`
 `[popTitle]` | Title of pop confirm | `string` | `确认删除吗？`
 `[modal]` | Config of type is modal or static | `STColumnButtonModal` | -
 `[drawer]` | Config of type is drawer | `STColumnButtonDrawer` | -
@@ -314,6 +324,7 @@ Property | Description | Type | Default
 `[acl]` | ACL permission (Use `can()` verify) | `ACLCanType` | -
 `[iif]` | Custom conditional expression | `(item: STData, btn: STColumnButton, column: STColumn) => boolean` | `() => true`
 `[iifBehavior]` | Render button mode when the conditional expression `false` value | `hide,disabled` | `hide`
+`[tooltip]` | Button popup tip | `string` | -
 
 ### STColumnButtonModal
 

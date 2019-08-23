@@ -22,8 +22,8 @@ const changeDetection = ChangeDetectionStrategy.OnPush;
   changeDetection,
 })
 export class OrgInfoComponent extends IndexControl implements OnInit {
-  @ViewChild('st') st: STComponent;
-  @ViewChild('sf') sf: SFComponent;
+  @ViewChild('st', { static: true }) st: STComponent;
+  @ViewChild('sf', { static: true }) sf: SFComponent;
 
   constructor(protected injector: Injector) {
     super(injector);

@@ -27,9 +27,9 @@ import { take } from 'rxjs/operators';
 export class EllipsisComponent implements AfterViewInit, OnChanges {
   // tslint:disable-next-line:no-string-literal
   private isSupportLineClamp = this.doc.body.style['webkitLineClamp'] !== undefined;
-  @ViewChild('orgEl') private orgEl: ElementRef;
-  @ViewChild('shadowOrgEl') private shadowOrgEl: ElementRef;
-  @ViewChild('shadowTextEl') private shadowTextEl: ElementRef;
+  @ViewChild('orgEl', { static: false }) private orgEl: ElementRef;
+  @ViewChild('shadowOrgEl', { static: false }) private shadowOrgEl: ElementRef;
+  @ViewChild('shadowTextEl', { static: false }) private shadowTextEl: ElementRef;
   private inited = false;
   orgHtml: SafeHtml;
   type = 'default';
@@ -47,13 +47,18 @@ export class EllipsisComponent implements AfterViewInit, OnChanges {
 
   // #endregion
 
+  get linsWord(): string {
+    const { targetCount, text, tail } = this;
+    return (targetCount > 0 ? text.substring(0, targetCount) : '') + (targetCount > 0 && targetCount < text.length ? tail : '');
+  }
+
   constructor(
     private el: ElementRef,
     private ngZone: NgZone,
     private dom: DomSanitizer,
     @Inject(DOCUMENT) private doc: Document,
     private cdr: ChangeDetectorRef,
-  ) { }
+  ) {}
 
   private getStrFullLength(str: string): number {
     return str.split('').reduce((pre, cur) => {
@@ -81,39 +86,36 @@ export class EllipsisComponent implements AfterViewInit, OnChanges {
     }, '');
   }
 
-  private bisection(th: number, m: number, b: number, e: number, text: string, shadowNode: HTMLElement): number {
+  private bisection(targetHeight: number, mid: number, begin: number, end: number, text: string, node: HTMLElement): number {
     const suffix = this.tail;
-    let mid = m;
-    let end = e;
-    let begin = b;
-    shadowNode.innerHTML = text.substring(0, mid) + suffix;
-    let sh = shadowNode.offsetHeight;
+    node.innerHTML = text.substring(0, mid) + suffix;
+    let sh = node.offsetHeight;
 
-    if (sh <= th) {
-      shadowNode.innerHTML = text.substring(0, mid + 1) + suffix;
-      sh = shadowNode.offsetHeight;
-      if (sh > th || mid === begin) {
+    if (sh <= targetHeight) {
+      node.innerHTML = text.substring(0, mid + 1) + suffix;
+      sh = node.offsetHeight;
+      if (sh > targetHeight || mid === begin) {
         return mid;
       }
       begin = mid;
-      mid = (end - begin) === 1 ? begin + 1 : Math.floor((end - begin) / 2) + begin;
-      return this.bisection(th, mid, begin, end, text, shadowNode);
+      mid = end - begin === 1 ? begin + 1 : Math.floor((end - begin) / 2) + begin;
+      return this.bisection(targetHeight, mid, begin, end, text, node);
     }
     if (mid - 1 < 0) {
       return mid;
     }
-    shadowNode.innerHTML = text.substring(0, mid - 1) + suffix;
-    sh = shadowNode.offsetHeight;
-    if (sh <= th) {
+    node.innerHTML = text.substring(0, mid - 1) + suffix;
+    sh = node.offsetHeight;
+    if (sh <= targetHeight) {
       return mid - 1;
     }
     end = mid;
     mid = Math.floor((end - begin) / 2) + begin;
-    return this.bisection(th, mid, begin, end, text, shadowNode);
+    return this.bisection(targetHeight, mid, begin, end, text, node);
   }
 
   private genType() {
-    const { lines, length, isSupportLineClamp, cdr } = this;
+    const { lines, length, isSupportLineClamp } = this;
     this.cls = {
       ellipsis: true,
       ellipsis__lines: lines && !isSupportLineClamp,
@@ -128,51 +130,50 @@ export class EllipsisComponent implements AfterViewInit, OnChanges {
     } else {
       this.type = 'line';
     }
-    cdr.detectChanges();
   }
 
   private gen() {
-    const { type, lines, length, fullWidthRecognition, tail, orgEl, cdr } = this;
+    const { type, lines, length, fullWidthRecognition, tail, orgEl, cdr, ngZone } = this;
     if (type === 'length') {
       const el = orgEl.nativeElement as HTMLElement;
       if (el.children.length > 0) {
         throw new Error('Ellipsis content must be string.');
       }
-      const text = el.textContent!;
-      const textLength = fullWidthRecognition ? this.getStrFullLength(text) : text.length;
+      const lengthText = el.textContent!;
+      const textLength = fullWidthRecognition ? this.getStrFullLength(lengthText) : lengthText.length;
       if (textLength <= length || length < 0) {
-        this.text = text;
+        this.text = lengthText;
       } else {
         let displayText: string;
         if (length - tail.length <= 0) {
           displayText = '';
         } else {
-          displayText = fullWidthRecognition ? this.cutStrByFullLength(text, length) : text.slice(0, length);
+          displayText = fullWidthRecognition ? this.cutStrByFullLength(lengthText, length) : lengthText.slice(0, length);
         }
         this.text = displayText + tail;
       }
-      cdr.detectChanges();
+      ngZone.run(() => cdr.detectChanges());
     } else if (type === 'line') {
       const { shadowOrgEl, shadowTextEl } = this;
       const orgNode = shadowOrgEl.nativeElement as HTMLElement;
-      const text = orgNode.innerText || orgNode.textContent!;
+      const lineText = orgNode.innerText || orgNode.textContent!;
       const lineHeight = parseInt(getComputedStyle(this.getEl('.ellipsis')).lineHeight!, 10);
       const targetHeight = lines * lineHeight;
       this.getEl('.ellipsis__handle').style.height = `${targetHeight}px`;
 
       if (orgNode.offsetHeight <= targetHeight) {
-        this.text = text;
-        this.targetCount = text.length;
+        this.text = lineText;
+        this.targetCount = lineText.length;
       } else {
         // bisection
-        const len = text.length;
+        const len = lineText.length;
         const mid = Math.ceil(len / 2);
 
-        const count = this.bisection(targetHeight, mid, 0, len, text, shadowTextEl.nativeElement.firstChild);
-        this.text = text;
+        const count = this.bisection(targetHeight, mid, 0, len, lineText, shadowTextEl.nativeElement.firstChild);
+        this.text = lineText;
         this.targetCount = count;
       }
-      cdr.detectChanges();
+      ngZone.run(() => cdr.detectChanges());
     }
   }
 
@@ -193,11 +194,11 @@ export class EllipsisComponent implements AfterViewInit, OnChanges {
 
   refresh(): void {
     this.genType();
+    const { type, dom, orgEl, cdr } = this;
+    const html = orgEl.nativeElement.innerHTML;
+    this.orgHtml = dom.bypassSecurityTrustHtml(html);
+    cdr.detectChanges();
     this.executeOnStable(() => {
-      const { type, dom, orgEl, cdr } = this;
-      const html = orgEl.nativeElement.innerHTML;
-      this.orgHtml = dom.bypassSecurityTrustHtml(html);
-      cdr.detectChanges();
       this.gen();
       if (type !== 'line') {
         const el = this.getEl('.ellipsis');

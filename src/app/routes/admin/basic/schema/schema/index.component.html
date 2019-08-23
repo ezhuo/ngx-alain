@@ -1,118 +1,148 @@
 <div class="alain-default__content-title">
-    <h1>schema-demo
-
-    </h1>
-    <div>
-        <button nz-button (click)="addNgModel()" [nzType]="'primary'">添加ngModel</button>
-        <button nz-button (click)="addGroup()" [nzType]="'primary'">添加formGroup</button>
-        <button nz-button (click)="addShow()" [nzType]="'primary'">schema-show</button>
-        <button nz-button (click)="addEdit()" [nzType]="'primary'">schema-edit</button>
-    </div>
+  <h1>schema-demo</h1>
+  <div>
+    <button nz-button (click)="addNgModel()" [nzType]="'primary'">添加ngModel</button>
+    <button nz-button (click)="addGroup()" [nzType]="'primary'">添加formGroup</button>
+    <button nz-button (click)="addShow()" [nzType]="'primary'">schema-show</button>
+    <button nz-button (click)="addEdit()" [nzType]="'primary'">schema-edit</button>
+  </div>
 </div>
 <form nz-form [nzLayout]="'inline'" class="search-form">
-    <nz-form-item>
-        <nz-form-control>
-            <nz-select [(ngModel)]="tableParams.s" name="s" [nzAllowClear]="false">
-                <nz-option nzValue="" nzLabel="状态不限"></nz-option>
-                <nz-option nzValue="1" nzLabel="正常"></nz-option>
-                <nz-option nzValue="2" nzLabel="已取消"></nz-option>
-                <nz-option nzValue="3" nzLabel="已删除"></nz-option>
-                <nz-option nzValue="10" nzLabel="待提交"></nz-option>
-                <nz-option nzValue="11" nzLabel="待审核"></nz-option>
-            </nz-select>
-        </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-        <nz-form-control>
-            <input nz-input [(ngModel)]="tableParams.user_id" name="user_id" nzPlaceHolder="用户编号">
-        </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-        <nz-form-control>
-            <input nz-input [(ngModel)]="tableParams.q" name="q" nzPlaceHolder="门店、分店名称">
-        </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-        <nz-form-control>
-            <button nz-button (click)="st.reset(tableParams)">搜索</button>
-        </nz-form-control>
-    </nz-form-item>
+  <nz-form-item>
+    <nz-form-control>
+      <nz-select [(ngModel)]="tableParams.s" name="s" [nzAllowClear]="false">
+        <nz-option nzValue="" nzLabel="状态不限"></nz-option>
+        <nz-option nzValue="1" nzLabel="正常"></nz-option>
+        <nz-option nzValue="2" nzLabel="已取消"></nz-option>
+        <nz-option nzValue="3" nzLabel="已删除"></nz-option>
+        <nz-option nzValue="10" nzLabel="待提交"></nz-option>
+        <nz-option nzValue="11" nzLabel="待审核"></nz-option>
+      </nz-select>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control>
+      <input nz-input [(ngModel)]="tableParams.user_id" name="user_id" nzPlaceHolder="用户编号" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control>
+      <input nz-input [(ngModel)]="tableParams.q" name="q" nzPlaceHolder="门店、分店名称" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control>
+      <button nz-button (click)="st.reset(tableParams)">搜索</button>
+    </nz-form-control>
+  </nz-form-item>
 </form>
 
 <form nz-form [nzLayout]="'Horizontal'" class="search-form">
-    <nz-form-item>
-        <nz-form-control nzSpan="24">
-            <ckeditor [(ngModel)]="html" [config]="configSrv.ckeditor" [readonly]="false" debounce="500" name='ckedit'></ckeditor>
-            {{html}}
-        </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-        <nz-form-control>
-            <!-- <nz-upload [nzAction]="configSrv.api.upload" nzMultiple nzListType="picture-card" [nzFileList]='fileList' (nzChange)='appCase.nzUploadHandleChange($event)'>
+  <nz-form-item>
+    <nz-form-control nzSpan="24">
+      <ckeditor
+        [(ngModel)]="html"
+        [config]="configSrv.ckeditor"
+        [readonly]="false"
+        debounce="500"
+        name="ckedit"
+      ></ckeditor>
+      {{ html }}
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control>
+      <!-- <nz-upload [nzAction]="configSrv.api.upload" nzMultiple nzListType="picture-card" [nzFileList]='fileList' (nzChange)='appCase.nzUploadHandleChange($event)'>
                 <button nz-button>
-                    <i nz-icon type="upload"></i><span>Click to Upload</span>
+                    <i nz-icon nzType="upload"></i><span>Click to Upload</span>
                     <span>Click to Upload</span>
                 </button>
             </nz-upload> -->
-            <nz-upload nzAction="https://jsonplaceholder.typicode.com/posts/" nzListType="picture-card" [(nzFileList)]="fileList" [nzShowButton]="fileList.length < 3" [nzPreview]="handlePreview">
-                <i nz-icon type="plus"></i>
-                <div class="ant-upload-text">Upload</div>
-            </nz-upload>
-            <nz-modal [nzVisible]="previewVisible" [nzContent]="modalContent" [nzFooter]="null" (nzOnCancel)="previewVisible=false">
-                <ng-template #modalContent>
-                    <img [src]="previewImage" [ngStyle]="{ 'width': '100%' }" />
-                </ng-template>
-            </nz-modal>
-        </nz-form-control>
-    </nz-form-item>
-    <nz-form-item>
-        <nz-form-control>
-            {{values|json}}
-            <nz-cascader name="nzcascader" [(ngModel)]='values' nzChangeOnSelect [nzLoadData]="appCase.nzCascaderLoadData" (ngModelChange)="onChanges($event)">
-            </nz-cascader>
-        </nz-form-control>
-    </nz-form-item>
+      <nz-upload
+        nzAction="https://jsonplaceholder.typicode.com/posts/"
+        nzListType="picture-card"
+        [(nzFileList)]="fileList"
+        [nzShowButton]="fileList.length < 3"
+        [nzPreview]="handlePreview"
+      >
+        <i nz-icon nzType="plus"></i>
+        <div class="ant-upload-text">Upload</div>
+      </nz-upload>
+      <nz-modal
+        [nzVisible]="previewVisible"
+        [nzContent]="modalContent"
+        [nzFooter]="null"
+        (nzOnCancel)="previewVisible = false"
+      >
+        <ng-template #modalContent>
+          <img [src]="previewImage" [ngStyle]="{ width: '100%' }" />
+        </ng-template>
+      </nz-modal>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-control>
+      {{ values | json }}
+      <nz-cascader
+        name="nzcascader"
+        [(ngModel)]="values"
+        nzChangeOnSelect
+        [nzLoadData]="appCase.nzCascaderLoadData"
+        (ngModelChange)="onChanges($event)"
+      >
+      </nz-cascader>
+    </nz-form-control>
+  </nz-form-item>
 </form>
 
 <form nz-form [nzLayout]="'Horizontal'" class="search-form">
-    <nz-form-item>
-        <nz-form-control>
-            <nz-tree 
-                    [nzData]="nodes2" 
-                    [nzShowLine]="true" 
-                    [nzCheckable]="false" 
-                    [nzExpandedKeys]="expandKeys" 
-                    [nzCheckedKeys]="checkedKeys"
-                    [nzSelectedKeys]="selectedKeys" 
-                    [nzExpandAll]="true" 
-                    (nzClick)="mouseAction('click',$event)" 
-                    (nzDblClick)="mouseAction('dblclick', $event)" 
-                    (nzContextMenu)="contextMenu2($event , contextTemplate)">
-                <ng-template #contextTemplate>
-                    <ul nz-menu nzInDropDown>
-                        <li nz-menu-item (click)="selectDropdown()">新建文件</li>
-                        <li nz-menu-item (click)="selectDropdown()">新建文件夹</li>
-                    </ul>
-                </ng-template>
-            </nz-tree>
-        </nz-form-control>
-    </nz-form-item>
+  <nz-form-item>
+    <nz-form-control>
+      <nz-tree
+        [nzData]="nodes2"
+        [nzShowLine]="true"
+        [nzCheckable]="false"
+        [nzExpandedKeys]="expandKeys"
+        [nzCheckedKeys]="checkedKeys"
+        [nzSelectedKeys]="selectedKeys"
+        [nzExpandAll]="true"
+        (nzClick)="mouseAction('click', $event)"
+        (nzDblClick)="mouseAction('dblclick', $event)"
+        (nzContextMenu)="contextMenu2($event, contextTemplate)"
+      >
+        <ng-template #contextTemplate>
+          <ul nz-menu nzInDropDown>
+            <li nz-menu-item (click)="selectDropdown()">新建文件</li>
+            <li nz-menu-item (click)="selectDropdown()">新建文件夹</li>
+          </ul>
+        </ng-template>
+      </nz-tree>
+    </nz-form-control>
+  </nz-form-item>
 </form>
 
 <st #st [columns]="tableData.col" [data]="url" [req]="tableReq">
-    <ng-template st-row="custom" type="title" let-c>
-        {{ c.title }}
-        <nz-dropdown nzTrigger="click" [nzClickHide]="false">
-            <i nz-icon type="smile" theme="outline" nz-dropdown></i>
-            <div class="ant-table-filter-dropdown p-sm">
-                <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" class="width-sm mr-sm">
-                <button nz-button [nzType]="'primary'" (click)="st.load(2)">Search</button>
-            </div>
-        </nz-dropdown>
-    </ng-template>
-    <ng-template st-row="custom" let-item let-index="index">
-        <nz-tooltip [nzTitle]="'年龄：' + item.age">
-            <span nz-tooltip>tooltip: {{item.age}}-{{index}}</span>
-        </nz-tooltip>
-    </ng-template>
+  <ng-template st-row="custom" type="title" let-c>
+    {{ c.title }}
+    <i
+      nz-icon
+      nzType="smile"
+      theme="outline"
+      nz-dropdown
+      nzTrigger="click"
+      [nzClickHide]="false"
+      [nzDropdownMenu]="buttonoptions"
+    ></i>
+    <nz-dropdown-menu #buttonoptions="nzDropdownMenu">
+      <div class="ant-table-filter-dropdown p-sm">
+        <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" class="width-sm mr-sm" />
+        <button nz-button [nzType]="'primary'" (click)="st.load(2)">Search</button>
+      </div>
+    </nz-dropdown-menu>
+  </ng-template>
+  <ng-template st-row="custom" let-item let-index="index">
+    <nz-tooltip [nzTitle]="'年龄：' + item.age">
+      <span nz-tooltip>tooltip: {{ item.age }}-{{ index }}</span>
+    </nz-tooltip>
+  </ng-template>
 </st>

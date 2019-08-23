@@ -191,18 +191,12 @@ export class STColumnSource {
     if (typeof res.multiple === 'undefined') {
       res.multiple = true;
     }
-    if (!res.confirmText) {
-      res.confirmText = this.cog.filterConfirmText;
-    }
-    if (!res.clearText) {
-      res.clearText = this.cog.filterClearText;
-    }
-    if (!res.key) {
-      res.key = item.indexKey;
-    }
-    if (!res.icon) {
-      res.icon = icon;
-    }
+
+    res.confirmText = res.confirmText || this.cog.filterConfirmText;
+    res.clearText = res.clearText || this.cog.filterClearText;
+    res.key = res.key || item.indexKey;
+    res.icon = res.icon || icon;
+
     const baseIcon = { type: icon, theme: iconTheme } as STIcon;
     if (typeof res.icon === 'string') {
       res.icon = { ...baseIcon, type: res.icon } as STIcon;
@@ -255,10 +249,23 @@ export class STColumnSource {
         }
         item.indexKey = item.index.join('.');
       }
-      // title
-      if (item.i18n && this.i18nSrv) {
-        item.title = this.i18nSrv.fanyi(item.i18n);
+
+      // #region title
+      if (typeof item.title === 'string') {
+        item.title = { text: item.title };
       }
+      if (!item.title) {
+        item.title = {};
+      }
+      // Compatible， TODO: ng-alain 9.x
+      if (item.i18n) {
+        item.title!.i18n = item.i18n;
+      }
+      if (item.title!.i18n && this.i18nSrv) {
+        item.title!.text = this.i18nSrv.fanyi(item.title!.i18n);
+      }
+      // #endregion
+      
       // no
       if (item.type === 'no') {
         item.noIndex = item.noIndex == null ? noIndex : item.noIndex;

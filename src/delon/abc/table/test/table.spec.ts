@@ -31,6 +31,7 @@ import {
   STRes,
   STResReNameType,
   STWidthMode,
+  STColumnTitle,
 } from '../table.interfaces';
 import { STModule } from '../table.module';
 
@@ -138,6 +139,21 @@ describe('abc: table', () => {
     configureTestSuite(() => genModule({ createComp: false }));
     beforeEach(() => createComp(true, TestComponent));
     describe('#columns', () => {
+      describe('[title]', () => {
+        it('with STColumnTitle type', done => {
+          page.newColumn([{ title: { text: 'a' }, index: 'id' }]).then(() => {
+            page.expectHead('a', 'id', '.ant-table-column-title');
+            done();
+          });
+        });
+        it('should be render optional', done => {
+          page.newColumn([{ title: { text: 'a', optional: 'b', optionalHelp: 'help' }, index: 'id' }]).then(() => {
+            page.expectHead('b', 'id', '.st__head-optional');
+            expect(page.getHead('id').querySelector('.st__head-tip') != null).toBe(true);
+            done();
+          });
+        });
+      });
       describe('[type]', () => {
         describe(`with checkbox`, () => {
           it(`should be render checkbox`, done => {
@@ -260,7 +276,7 @@ describe('abc: table', () => {
             });
           });
           it('should be navigate url when click is string value', done => {
-            const router = injector.get(Router);
+            const router = injector.get<Router>(Router);
             spyOn(router, 'navigateByUrl');
             context.data = [{ link: '/a' }];
             page
@@ -497,7 +513,7 @@ describe('abc: table', () => {
             },
           ];
           page.newColumn(columns).then(() => {
-            page.expectCell('del', 1, 1, 'nz-popconfirm');
+            page.expectCell('del', 1, 1, '[nz-popconfirm]');
             // mock trigger
             comp._btnClick(comp._data[0], comp._columns[0].buttons![0]);
             expect(columns[0].buttons![1].click).not.toHaveBeenCalled();
@@ -624,7 +640,7 @@ describe('abc: table', () => {
                   ],
                 },
               ];
-              const modalHelp = injector.get(ModalHelper);
+              const modalHelp = injector.get<ModalHelper>(ModalHelper);
               const mock$ = new Subject();
               spyOn(modalHelp, 'create').and.callFake(() => mock$);
               page.newColumn(columns).then(() => {
@@ -655,7 +671,7 @@ describe('abc: table', () => {
                   ],
                 },
               ];
-              const modalHelp = injector.get(ModalHelper);
+              const modalHelp = injector.get<ModalHelper>(ModalHelper);
               const mock$ = new Subject();
               spyOn(modalHelp, 'createStatic').and.callFake(() => mock$);
               page.newColumn(columns).then(() => {
@@ -688,7 +704,7 @@ describe('abc: table', () => {
                   ],
                 },
               ];
-              const drawerHelp = injector.get(DrawerHelper);
+              const drawerHelp = injector.get<DrawerHelper>(DrawerHelper);
               const mock$ = new Subject();
               spyOn(drawerHelp, 'create').and.callFake(() => mock$);
               page.newColumn(columns).then(() => {
@@ -711,7 +727,7 @@ describe('abc: table', () => {
                   buttons: [{ text: 'a', type: 'link', click: () => null }],
                 },
               ];
-              const router = injector.get(Router);
+              const router = injector.get<Router>(Router);
               spyOn(router, 'navigateByUrl');
               page.newColumn(columns).then(() => {
                 expect(router.navigateByUrl).not.toHaveBeenCalled();
@@ -727,7 +743,7 @@ describe('abc: table', () => {
                   buttons: [{ text: 'a', type: 'link', click: () => '/a' }],
                 },
               ];
-              const router = injector.get(Router);
+              const router = injector.get<Router>(Router);
               spyOn(router, 'navigateByUrl');
               page.newColumn(columns).then(() => {
                 expect(router.navigateByUrl).not.toHaveBeenCalled();
@@ -743,11 +759,12 @@ describe('abc: table', () => {
                   buttons: [{ text: 'a', type: 'link', click: () => '/a' }],
                 },
               ];
-              const router = injector.get(Router);
+              const router = injector.get<Router>(Router);
               const spy = spyOn(router, 'navigateByUrl');
               page.newColumn(columns).then(() => {
                 page.clickCell('a');
-                expect(spy.calls.mostRecent().args[1].state.pi).toBe(1);
+                const arg = spy.calls.mostRecent().args[1] as any;
+                expect(arg.state.pi).toBe(1);
                 done();
               });
             });
@@ -788,7 +805,7 @@ describe('abc: table', () => {
     describe('[data source]', () => {
       let httpBed: HttpTestingController;
       beforeEach(() => {
-        httpBed = injector.get(HttpTestingController);
+        httpBed = injector.get(HttpTestingController as Type<HttpTestingController>);
       });
       it('support null data', done => {
         context.data = null;
@@ -809,7 +826,7 @@ describe('abc: table', () => {
       it('should only restore data', () => {
         // tslint:disable-next-line:no-string-literal
         const dataSource: STDataSource = comp['dataSource'];
-        spyOn(dataSource, 'process').and.callFake(() => Promise.resolve({}));
+        spyOn(dataSource, 'process').and.callFake(() => of({} as any));
         fixture.detectChanges();
         expect(comp.ps).toBe(PS);
       });
@@ -826,8 +843,8 @@ describe('abc: table', () => {
           done();
         });
       });
-      describe('HTTP Status', () => {
-        it('error request', done => {
+      describe('Http Request', () => {
+        it('when error request', done => {
           context.data = '/mock';
           fixture.detectChanges();
           httpBed.expectOne(() => true).error(new ErrorEvent('cancel'));
@@ -836,7 +853,7 @@ describe('abc: table', () => {
             done();
           });
         });
-        it('0', done => {
+        it('when http status: 0', done => {
           context.data = '/mock';
           fixture.detectChanges();
           httpBed.expectOne(() => true).flush(null, { status: 0, statusText: '' });
@@ -845,7 +862,7 @@ describe('abc: table', () => {
             done();
           });
         });
-        it('404', done => {
+        it('when http status: 404', done => {
           context.data = '/mock';
           fixture.detectChanges();
           httpBed.expectOne(() => true).flush(null, { status: 404, statusText: 'Not found' });
@@ -854,12 +871,22 @@ describe('abc: table', () => {
             done();
           });
         });
-        it('403', done => {
+        it('when http status: 403', done => {
           context.data = '/mock';
           fixture.detectChanges();
           httpBed.expectOne(() => true).flush(null, { status: 403, statusText: 'Forbidden' });
           fixture.whenStable().then(() => {
             expect(comp._data.length).toBe(0);
+            done();
+          });
+        });
+        it('should be ingore catch error when component is destroyed', done => {
+          expect(context.error).not.toHaveBeenCalled();
+          context.data = '/mock';
+          fixture.detectChanges();
+          comp.ngOnDestroy();
+          fixture.whenStable().then(() => {
+            expect(context.error).not.toHaveBeenCalled();
             done();
           });
         });
@@ -872,6 +899,13 @@ describe('abc: table', () => {
         expect(comp.req.reName).not.toBeNull();
         expect(comp.req.reName!.pi).toBe('PI');
         expect(comp.req.reName!.ps).toBe('ps');
+      });
+      it('should be ingore request when lazyLoad is true', () => {
+        const anyComp = comp as any;
+        spyOn(anyComp, 'loadPageData');
+        context.req = { lazyLoad: true };
+        fixture.detectChanges();
+        expect(anyComp.loadPageData).not.toHaveBeenCalled();
       });
     });
     describe('#res', () => {
@@ -1553,6 +1587,16 @@ describe('abc: table', () => {
             done();
           });
         });
+        it('should be ingore data reload', done => {
+          page.newColumn([{ title: '1', index: 'name' }]).then(() => {
+            expect(comp.ps).toBe(PS);
+            const compAny = comp as any;
+            spyOn(compAny, 'loadPageData');
+            comp.resetColumns({ emitReload: false });
+            expect(compAny.loadPageData).not.toHaveBeenCalled();
+            done();
+          });
+        });
       });
       it('#filteredData', done => {
         fixture.detectChanges();
@@ -1667,6 +1711,16 @@ describe('abc: table', () => {
             done();
           });
         });
+        it('should be ingore add text-truncate class when type is img', done => {
+          context.widthMode = { type: 'strict', strictBehavior: 'truncate' };
+          fixture.detectChanges();
+          page.newColumn([{ index: 'img', type: 'img', width: 50 }]).then(() => {
+            page.expectElCount(`.st__width-strict`, 1);
+            page.expectElCount(`.st__width-strict-truncate`, 1);
+            page.expectElCount(`td.text-truncate`, 0);
+            done();
+          });
+        });
       });
     });
     describe('#loading', () => {
@@ -1717,6 +1771,19 @@ describe('abc: table', () => {
               done();
             });
         });
+      });
+      it('#tooltip', done => {
+        page
+          .newColumn([
+            {
+              title: '',
+              buttons: [{ text: 'a', click: () => 'load', tooltip: 't' }],
+            },
+          ])
+          .then(() => {
+            page.expectElCount('.st__body [nz-tooltip]', PS);
+            done();
+          });
       });
     });
   });
@@ -1792,10 +1859,10 @@ describe('abc: table', () => {
         spyOn(i18nSrv, 'fanyi').and.callFake(() => curLang);
       });
       it('should working', done => {
-        page.newColumn([{ title: '', i18n: curLang, index: 'id' }]).then(() => {
+        page.newColumn([{ title: { i18n: curLang }, index: 'id' }]).then(() => {
           const el = page.getEl('.ant-pagination-total-text');
           expect(el.textContent!.trim()).toContain(`共`);
-          injector.get(DelonLocaleService).setLocale(en_US);
+          injector.get<DelonLocaleService>(DelonLocaleService).setLocale(en_US);
           fixture.detectChanges();
           expect(el.textContent!.trim()).toContain(`of`);
           done();
@@ -1803,12 +1870,22 @@ describe('abc: table', () => {
       });
       it('should be re-render columns when i18n changed', done => {
         curLang = 'en';
-        page.newColumn([{ title: '', i18n: curLang, index: 'id' }]).then(() => {
+        page.newColumn([{ title: { i18n: curLang }, index: 'id' }]).then(() => {
           page.expectHead(curLang, 'id');
           curLang = 'zh';
           i18nSrv.use(curLang);
           fixture.detectChanges();
           page.expectHead(curLang, 'id');
+          done();
+        });
+      });
+      it('should be compatible', done => {
+        page.newColumn([{ title: '', i18n: curLang, index: 'id' }]).then(() => {
+          const el = page.getEl('.ant-pagination-total-text');
+          expect(el.textContent!.trim()).toContain(`共`);
+          injector.get<DelonLocaleService>(DelonLocaleService).setLocale(en_US);
+          fixture.detectChanges();
+          expect(el.textContent!.trim()).toContain(`of`);
           done();
         });
       });
@@ -1820,7 +1897,7 @@ describe('abc: table', () => {
     changeSpy: jasmine.Spy;
     constructor() {
       spyOn(context, 'error');
-      this.changeSpy = spyOn(context, 'change').and.callFake(e => (this._changeData = e));
+      this.changeSpy = spyOn(context, 'change').and.callFake((e => (this._changeData = e)) as any);
       comp = context.comp;
     }
     get(cls: string): DebugElement {
@@ -1900,7 +1977,7 @@ describe('abc: table', () => {
     }
     /** 断言组件内 `_columns` 值 */
     expectColumn(title: string, path: string, valule: any): this {
-      const ret = deepGet(comp._columns.find(w => w.title === title), path);
+      const ret = deepGet(comp._columns.find(w => (w.title as STColumnTitle).text === title), path);
       expect(ret).toBe(valule);
       return this;
     }
@@ -2007,7 +2084,7 @@ describe('abc: table', () => {
   `,
 })
 class TestComponent {
-  @ViewChild('st')
+  @ViewChild('st', { static: true })
   comp: STComponent;
   data: string | any[] | Observable<any[]> | null = deepCopy(USERS);
   res: STRes = {};

@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { LocaleData } from '@delon/theme';
 import { FormProperty } from '../../model/form.property';
 import { ArrayLayoutWidget } from '../../widget';
 
@@ -16,25 +15,26 @@ export class ArrayWidget extends ArrayLayoutWidget implements OnInit {
   arraySpan = 8;
 
   get addDisabled() {
-    return this.schema.maxItems && (this.formProperty.properties as FormProperty[]).length >= this.schema.maxItems;
+    return this.disabled || (this.schema.maxItems && (this.formProperty.properties as FormProperty[]).length >= this.schema.maxItems);
   }
 
-  get l(): LocaleData {
-    return this.formProperty.root.widget.sfComp!.locale;
+  get showRemove() {
+    return !this.disabled && this.removeTitle;
   }
 
   ngOnInit(): void {
-    if (this.ui.grid && this.ui.grid.arraySpan) {
-      this.arraySpan = this.ui.grid.arraySpan;
+    const { grid, addTitle, addType, removable, removeTitle } = this.ui;
+    if (grid && grid.arraySpan) {
+      this.arraySpan = grid.arraySpan;
     }
 
-    this.addTitle = this.ui.addTitle || this.l.addText;
-    this.addType = this.ui.addType || 'dashed';
-    this.removeTitle = this.ui.removable === false ? null : this.ui.removeTitle || this.l.removeText;
+    this.addTitle = addTitle || this.l.addText;
+    this.addType = addType || 'dashed';
+    this.removeTitle = removable === false ? null : removeTitle || this.l.removeText;
   }
 
   addItem() {
-    this.formProperty.add(null!);
+    this.formProperty.add({});
   }
 
   removeItem(index: number) {

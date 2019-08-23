@@ -32,7 +32,7 @@ const prefixCls = `sv`;
   encapsulation: ViewEncapsulation.None,
 })
 export class SVComponent implements AfterViewInit, OnChanges {
-  @ViewChild('conEl')
+  @ViewChild('conEl', { static: false })
   private conEl: ElementRef;
   private el: HTMLElement;
   private clsMap: string[] = [];
@@ -51,6 +51,11 @@ export class SVComponent implements AfterViewInit, OnChanges {
 
   get paddingValue(): number {
     return this.parent && this.parent.gutter / 2;
+  }
+
+  get labelWidth(): number | null {
+    const { labelWidth, layout } = this.parent;
+    return layout === 'horizontal' ? labelWidth : null;
   }
 
   constructor(

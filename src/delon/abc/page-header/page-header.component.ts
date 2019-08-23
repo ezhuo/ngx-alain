@@ -42,10 +42,8 @@ interface PageHeaderPath {
 export class PageHeaderComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   private inited = false;
   private unsubscribe$ = new Subject<void>();
-  @ViewChild('conTpl')
-  private conTpl: ElementRef;
-  @ViewChild('affix')
-  private affix: NzAffixComponent;
+  @ViewChild('conTpl', { static: false }) private conTpl: ElementRef;
+  @ViewChild('affix', { static: false }) private affix: NzAffixComponent;
   private _menus: Menu[] | null;
 
   private get menus() {
@@ -102,15 +100,9 @@ export class PageHeaderComponent implements OnInit, OnChanges, AfterViewInit, On
     private renderer: Renderer2,
     private router: Router,
     private menuSrv: MenuService,
-    @Optional()
-    @Inject(ALAIN_I18N_TOKEN)
-    private i18nSrv: AlainI18NService,
-    @Optional()
-    @Inject(TitleService)
-    private titleSrv: TitleService,
-    @Optional()
-    @Inject(ReuseTabService)
-    private reuseSrv: ReuseTabService,
+    @Optional() @Inject(ALAIN_I18N_TOKEN) private i18nSrv: AlainI18NService,
+    @Optional() @Inject(TitleService) private titleSrv: TitleService,
+    @Optional() @Inject(ReuseTabService) private reuseSrv: ReuseTabService,
     private cdr: ChangeDetectorRef,
   ) {
     Object.assign(this, { ...new PageHeaderConfig(), ...cog });
@@ -121,11 +113,7 @@ export class PageHeaderComponent implements OnInit, OnChanges, AfterViewInit, On
       )
       .subscribe(() => this.affix.updatePosition({} as any));
 
-    merge(
-      menuSrv.change.pipe(filter(() => this.inited)),
-      router.events.pipe(filter(e => e instanceof NavigationEnd)),
-      i18nSrv.change,
-    )
+    merge(menuSrv.change.pipe(filter(() => this.inited)), router.events.pipe(filter(e => e instanceof NavigationEnd)), i18nSrv.change)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe(() => {
         this._menus = null;
@@ -166,7 +154,7 @@ export class PageHeaderComponent implements OnInit, OnChanges, AfterViewInit, On
       const item = this.menus[this.menus.length - 1];
       let title = item.text;
       if (item.i18n && this.i18nSrv) title = this.i18nSrv.fanyi(item.i18n);
-      this._titleVal = title;
+      this._titleVal = title!;
     }
 
     if (this._titleVal && this.syncTitle) {

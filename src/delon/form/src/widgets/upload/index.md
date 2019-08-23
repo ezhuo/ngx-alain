@@ -10,7 +10,7 @@ type: Widgets
 
 - **务必** 指定 `resReName` 来获取正确数据
 - `multiple` 决定返回数组或者单体数据
-- 若指定 `asyncData` 则被转化成 `fileList` (`nzFileList`) 值，且**务必**初始保证一个 `response` 属性表示远程数据并 `resReName` 能正确获取
+- 若指定 `enum` 或 `asyncData` 将被转化成 `fileList` (`nzFileList`) 值，且**务必**初始保证一个 `response` 属性表示远程数据并 `resReName` 能正确获取
 - 图像预览：默认使用 `nzModal` 来显示包含文件对象的 `url` 或 `thumbUrl` 值
 
 ## API
@@ -48,7 +48,7 @@ type: Widgets
 `[directory]` | 支持上传文件夹（[caniuse](https://caniuse.com/#feat=input-file-directory)） | `boolean` | `false`
 `[openFileDialogOnClick]` | 点击打开文件对话框 | `boolean` | `true`
 `[beforeUpload]` | 上传文件之前的钩子，参数为上传的文件，若返回 `false` 则停止上传 | `(file: UploadFile, fileList: UploadFile[]) => boolean｜Observable<boolean>` | -
-`[customRequest]` | 通过覆盖默认的上传行为，可以自定义自己的上传实现 | `(item) => Subscription` | -
+`[customRequest]` | 通过覆盖默认的上传行为，可以自定义自己的上传实现 | `(item: UploadXHRArgs) => Subscription` | -
 `[remove]` | 点击移除文件时的回调，返回值为 `false` 时不移除 | `(file: UploadFile) => boolean｜Observable` | -
 `[preview]` | 点击文件链接或预览图标时的回调 | `(file: UploadFile) => void` | -
 `[change]` | 上传文件改变时的状态 | `(args: UploadChangeParam) => void` | -

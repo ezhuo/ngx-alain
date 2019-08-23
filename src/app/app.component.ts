@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
     private modalSrv: NzModalService,
   ) {
     // Turn off G2 tracking
-    if (typeof G2 !== 'undefined') G2.track(false);
+    // if (typeof G2 !== 'undefined') G2.track(false);
     renderer.setAttribute(
       el.nativeElement,
       'ng-alain-version',

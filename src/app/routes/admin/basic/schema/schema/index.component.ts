@@ -32,7 +32,7 @@ import {
   changeDetection: ChangeDetectionStrategy.Default,
 })
 export class SchemaDemoComponent extends IndexControl implements OnInit {
-  @ViewChild('st')
+  @ViewChild('st', { static: true })
   st: STComponent;
 
   // fileList = [];

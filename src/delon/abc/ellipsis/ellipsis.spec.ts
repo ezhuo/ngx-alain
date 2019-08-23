@@ -23,7 +23,7 @@ describe('abc: ellipsis', () => {
   describe('', () => {
     configureTestSuite(genModule);
 
-    it('should be not lengthh & line', () => {
+    it('should be not length & line', () => {
       fixture = TestBed.createComponent(TestLengthComponent);
       dl = fixture.debugElement;
       context = fixture.componentInstance;
@@ -41,36 +41,34 @@ describe('abc: ellipsis', () => {
         dl = fixture.debugElement;
         context = fixture.componentInstance;
         page = new PageObject();
-        fixture.detectChanges();
       });
 
-      it('should working', () => {
-        page.check('There were...');
-      });
+      it('should working', fakeAsync(() => {
+        page.tick().check('There were...');
+      }));
 
-      it('should be tooltip', () => {
+      it('should be tooltip', fakeAsync(() => {
         context.tooltip = true;
-        fixture.detectChanges();
-        page.hasTooltip().check('There were...');
-      });
+        page
+          .tick()
+          .hasTooltip()
+          .check('There were...');
+      }));
 
-      it('should be auto hide tail', () => {
+      it('should be auto hide tail', fakeAsync(() => {
         context.length = 4;
         context.text = 'asdf';
-        fixture.detectChanges();
-        page.check('asdf');
+        page.tick().check('asdf');
         context.length = 1;
         context.text = 'as';
-        fixture.detectChanges();
-        page.check('...');
-      });
+        page.tick().check('...');
+      }));
 
-      it('#fullWidthRecognition', () => {
+      it('#fullWidthRecognition', fakeAsync(() => {
         context.fullWidthRecognition = true;
         context.text = 'cipchk,你好吗';
-        fixture.detectChanges();
-        page.check('cipchk,你...');
-      });
+        page.tick().check('cipchk,你...');
+      }));
     });
 
     describe('#line', () => {
@@ -80,7 +78,7 @@ describe('abc: ellipsis', () => {
         context = fixture.componentInstance;
         page = new PageObject();
       });
-      describe('in chrome', () => {
+      describe('when support line clamp', () => {
         beforeEach(fakeAsync(() => {
           // tslint:disable-next-line:no-string-literal
           page.comp['isSupportLineClamp'] = true;
@@ -92,26 +90,26 @@ describe('abc: ellipsis', () => {
           expect(+page.getEl('.ellipsis')!.style!['webkitLineClamp']).toBe(context!.lines as number);
         });
       });
-      describe('in firefox', () => {
+      describe('when not support line clamp', () => {
         beforeEach(fakeAsync(() => {
-          spyOn(window, 'getComputedStyle').and.returnValue({ lineHeight: 20 });
+          spyOn(window, 'getComputedStyle').and.returnValue({ lineHeight: 20 } as any);
           // tslint:disable-next-line:no-string-literal
           page.comp['isSupportLineClamp'] = false;
           context.lines = 1;
           page.tick();
         }));
         it('should working', fakeAsync(() => {
-          context.lines = 3;
+          context.lines = 2;
           page.tick();
-          expect(page.getText()).toBe('There were injuries');
+          expect((dl.nativeElement as HTMLElement).innerHTML).toContain('...');
         }));
-        it('should be not innerText', () => {
+        it('should be not innerText', fakeAsync(() => {
           const el = page.getEl('.ellipsis__shadow');
           spyOnProperty(el!, 'innerText').and.returnValue(null);
-          // tslint:disable-next-line:no-string-literal
-          page.comp['gen']();
-          expect(page.getText()).toBe('There');
-        });
+          context.lines = 2;
+          page.tick();
+          expect((dl.nativeElement as HTMLElement).innerHTML).toContain('...');
+        }));
         it('should be raw response when html offsetHeight is smallest', () => {
           const el = page.getEl('.ellipsis__shadow');
           spyOnProperty(el!, 'offsetHeight').and.returnValue(1);
@@ -188,7 +186,7 @@ describe('abc: ellipsis', () => {
 
     tick(): this {
       fixture.detectChanges();
-      tick();
+      tick(1000);
       fixture.detectChanges();
       return this;
     }
@@ -196,7 +194,7 @@ describe('abc: ellipsis', () => {
 });
 
 class TestBaseComponent {
-  @ViewChild('comp') comp: EllipsisComponent;
+  @ViewChild('comp', { static: true }) comp: EllipsisComponent;
   tooltip = false;
   length: number | null = 10;
   lines: number | null = 3;
@@ -208,9 +206,7 @@ class TestBaseComponent {
 
 @Component({
   template: `
-    <ellipsis #comp [tooltip]="tooltip" [length]="length" [fullWidthRecognition]="fullWidthRecognition" [tail]="tail">{{
-      text
-    }}</ellipsis>
+    <ellipsis #comp [tooltip]="tooltip" [length]="length" [fullWidthRecognition]="fullWidthRecognition" [tail]="tail">{{ text }}</ellipsis>
   `,
 })
 class TestLengthComponent extends TestBaseComponent {}
@@ -223,10 +219,9 @@ class TestLengthComponent extends TestBaseComponent {}
       [lines]="lines"
       [fullWidthRecognition]="fullWidthRecognition"
       [tail]="tail"
-      style="width: 20px; display: inline-block;"
-    >
-      <div [innerHTML]="html"></div>
-    </ellipsis>
+      style="width: 1px; display: block;"
+      ><div [innerHTML]="html"></div
+    ></ellipsis>
   `,
 })
 class TestLineComponent extends TestBaseComponent {}

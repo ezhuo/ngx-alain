@@ -4,14 +4,17 @@
       <button nz-button>操作</button>
       <button nz-button>操作</button>
     </nz-button-group>
-    <nz-dropdown class="mx-sm">
-      <button nz-button nz-dropdown><i nz-icon type="ellipsis"></i></button>
+
+    <button nz-button nz-dropdown [nzDropdownMenu]="buttonoptions">
+      <i nz-icon nzType="ellipsis"></i>
+    </button>
+    <nz-dropdown-menu #buttonoptions="nzDropdownMenu">
       <ul nz-menu>
         <li nz-menu-item>选项一</li>
         <li nz-menu-item>选项二</li>
         <li nz-menu-item>选项三</li>
       </ul>
-    </nz-dropdown>
+    </nz-dropdown-menu>
     <button nz-button [nzType]="'primary'" [nzSize]="'large'">主操作</button>
   </ng-template>
 </page-header>
@@ -19,11 +22,7 @@
 <div class="ngx-alain__page-content-nz-card">
   <nz-card [nzBordered]="false">
     <div class="search-form">
-      <div
-        [jstree]="jstree"
-        (jstreeChange)="jstreeChange($event)"
-        class="jstree"
-      ></div>
+      <div [jstree]="jstree" (jstreeChange)="jstreeChange($event)" class="jstree"></div>
     </div>
   </nz-card>
 </div>

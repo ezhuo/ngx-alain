@@ -6,16 +6,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { Observable } from 'rxjs';
 
 import { configureTestSuite } from '@delon/testing';
-import {
-  en_US,
-  zh_CN,
-  ALAIN_I18N_TOKEN,
-  DelonLocaleModule,
-  DelonLocaleService,
-  MenuService,
-  ScrollService,
-  WINDOW,
-} from '@delon/theme';
+import { en_US, zh_CN, ALAIN_I18N_TOKEN, DelonLocaleModule, DelonLocaleService, MenuService, ScrollService, WINDOW } from '@delon/theme';
 
 import { AlainI18NServiceFake } from '../../theme/src/services/i18n/i18n';
 import { ReuseTabComponent } from './reuse-tab.component';
@@ -80,7 +71,7 @@ describe('abc: reuse-tab', () => {
         {
           provide: 'CanDeactivate',
           useValue: () => {
-            return Observable.create((observer: any) => observer.next(false));
+            return new Observable((observer: any) => observer.next(false));
           },
         },
       ].concat(
@@ -102,8 +93,8 @@ describe('abc: reuse-tab', () => {
     tick();
     fixture.detectChanges();
 
-    srv = injector.get(ReuseTabService);
-    const router = injector.get(Router) as Router;
+    srv = injector.get<ReuseTabService>(ReuseTabService);
+    const router = injector.get<Router>(Router) as Router;
     router.routeReuseStrategy = new ReuseTabStrategy(srv);
 
     page = new PageObject();
@@ -460,16 +451,10 @@ describe('abc: reuse-tab', () => {
         page
           .to('#e')
           .openContextMenu(1)
-          .tap(() =>
-            expect(document.querySelector(`.reuse-tab__cm li[data-type="close"]`)!.classList).toContain(
-              'ant-menu-item-disabled',
-            ),
-          )
+          .tap(() => expect(document.querySelector(`.reuse-tab__cm li[data-type="close"]`)!.classList).toContain('ant-menu-item-disabled'))
           .openContextMenu(1, { ctrlKey: true })
           .tap(() =>
-            expect(document.querySelector(`.reuse-tab__cm li[data-type="close"]`)!.classList).not.toContain(
-              'ant-menu-item-disabled',
-            ),
+            expect(document.querySelector(`.reuse-tab__cm li[data-type="close"]`)!.classList).not.toContain('ant-menu-item-disabled'),
           )
           .expectCount(2);
       }));
@@ -506,6 +491,18 @@ describe('abc: reuse-tab', () => {
             .clickContentMenu('custom2');
           expect(layoutComp.customContextMenu[1].fn).not.toHaveBeenCalled();
         }));
+      });
+      describe('#tabType', () => {
+        it('with line', () => {
+          layoutComp.tabType = 'line';
+          fixture.detectChanges();
+          expect(dl.queryAll(By.css('.reuse-tab__line')).length).toBe(1);
+        });
+        it('with card', () => {
+          layoutComp.tabType = 'card';
+          fixture.detectChanges();
+          expect(dl.queryAll(By.css('.reuse-tab__card')).length).toBe(1);
+        });
       });
     });
 
@@ -674,7 +671,7 @@ describe('abc: reuse-tab', () => {
       createComp();
       page.to('#b').openContextMenu(1);
       expect(document.querySelector('[data-type="close"]')!.textContent).toBe(zh_CN.reuseTab.close);
-      injector.get(DelonLocaleService).setLocale(en_US);
+      injector.get<DelonLocaleService>(DelonLocaleService).setLocale(en_US);
       fixture.detectChanges();
       page.to('#a').openContextMenu(1);
       expect(document.querySelector('[data-type="close"]')!.textContent).toBe(en_US.reuseTab.close);
@@ -785,7 +782,7 @@ describe('abc: reuse-tab', () => {
       return this;
     }
     go(pos: number): this {
-      const ls = document.querySelectorAll('.reuse-tab__name');
+      const ls = document.querySelectorAll('[nz-tab-label]');
       if (pos > ls.length) {
         expect(false).toBe(true, `the pos muse be 0-${ls.length}`);
         return this;
@@ -793,7 +790,7 @@ describe('abc: reuse-tab', () => {
         expect(false).toBe(true, `invalid item element`);
         return this;
       }
-      (ls[pos] as HTMLElement).click();
+      rtComp.to(pos);
       this.advance();
       return this;
     }
@@ -844,6 +841,7 @@ class AppComponent {}
       [keepingScroll]="keepingScroll"
       [keepingScrollContainer]="keepingScrollContainer"
       [customContextMenu]="customContextMenu"
+      [tabType]="tabType"
       (change)="change($event)"
       (close)="close($event)"
     >
@@ -852,7 +850,7 @@ class AppComponent {}
   `,
 })
 class LayoutComponent {
-  @ViewChild('comp')
+  @ViewChild('comp', { static: true })
   comp: ReuseTabComponent;
   mode: ReuseTabMatchMode = ReuseTabMatchMode.URL;
   debug = false;
@@ -863,6 +861,7 @@ class LayoutComponent {
   keepingScroll = false;
   keepingScrollContainer: Window | Element | string | null = null;
   customContextMenu: ReuseCustomContextMenu[] = [];
+  tabType: 'line' | 'card' = 'line';
   change() {}
   close() {}
 }

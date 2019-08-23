@@ -61,7 +61,7 @@ ui 本身也是一个 JSON 结构，为了区分 JSON Schema 属性名的对应�
 | Schema | `[required]`      | 是否必填项           | `string[]` | -      |
 | Schema | `[title]`         | 属性描述             | `string`   | -      |
 | ui     | `[optional]`      | 标签可选信息         | `string`   | -      |
-| ui     | `[optionalHelp]` | 标签可选帮助         | `string`   | -      |
+| ui     | `[optionalHelp]` | 标签可选帮助         | `string, SFOptionalHelp`   | -      |
 | ui     | `[placeholder]`   | 文字框中显示提示信息 | `string`   | -      |
 | Schema | `[description]`   | 属性目的性解释       | `string`   | -      |
 | -      | `[error]`         | 错误信息             | `string`   | -      |
@@ -256,12 +256,14 @@ UI Schema 结构由通用性和小部件API两部分组成，以下是通用性�
 | 参数             | 说明                         | 类型                  | 默认值 |
 |------------------|------------------------------|-----------------------|--------|
 | `[widget]`       | 指定采用什么小部件渲染       | `string`              | -      |
+| `[i18n]`         | 指 `schema.title` 的国际化键值       | `string`              | -      |
+| `[descriptionI18n]` | 指 `schema.description` 的国际化键值    | `string`   | - |
 | `[class]`        | 自定义类，等同 `[ngClass]` 值 | `string,string[]`  | -      |
 | `[width]`        | 指定宽度，单位：`px`           | `number`              | -      |
 | `[size]`         | 元素组件大小                 | `default,large,small` | -      |
 | `[grid]`         | 响应式属性                   | `SFGridSchema`        | -      |
 | `[optional]`     | 标签可选信息                 | `string`              | -      |
-| `[optionalHelp]` | 标签可选帮助                 | `string`              | -      |
+| `[optionalHelp]` | 标签可选帮助                 | `string, SFOptionalHelp`   | -      |
 
 ### 响应式属性 SFGridSchema
 

@@ -1,6 +1,6 @@
 import { HttpHeaders } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController, TestRequest } from '@angular/common/http/testing';
-import { Component, DebugElement, ViewChild } from '@angular/core';
+import { Component, DebugElement, ViewChild, Type } from '@angular/core';
 import { ComponentFixture, TestBed, TestBedStatic } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { configureTestSuite } from '@delon/testing';
@@ -12,9 +12,7 @@ import { DownFileModule } from './down-file.module';
 
 function genFile(isRealFile = true): Blob {
   const blob = new Blob([
-    isRealFile
-      ? `iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==`
-      : '',
+    isRealFile ? `iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==` : '',
   ]);
   return blob;
 }
@@ -37,13 +35,15 @@ describe('abc: down-file', () => {
     fixture = TestBed.createComponent(TestComponent);
     dl = fixture.debugElement;
     context = fixture.componentInstance;
-    fixture.detectChanges();
 
-    httpBed = injector.get(HttpTestingController);
+    httpBed = injector.get(HttpTestingController as Type<HttpTestingController>);
   }
 
   describe('[default]', () => {
-    beforeEach(() => createComp());
+    beforeEach(() => {
+      createComp();
+      fixture.detectChanges();
+    });
     ['xlsx', 'docx', 'pptx', 'pdf'].forEach(ext => {
       it(`should be down ${ext}`, () => {
         spyOn(fs.default, 'saveAs');
@@ -117,6 +117,7 @@ describe('abc: down-file', () => {
 
   it('should be using content-disposition filename', () => {
     createComp();
+    fixture.detectChanges();
     let fn: string;
     const filename = 'newfile.docx';
     spyOn(fs.default, 'saveAs').and.callFake((_body: {}, fileName: string) => (fn = fileName));
@@ -130,6 +131,15 @@ describe('abc: down-file', () => {
       }),
     });
     expect(fn!).toBe(filename);
+  });
+
+  it('should be down-file__not-support when not supoort fileSaver', () => {
+    spyOn(window, 'Blob').and.callThrough();
+    createComp();
+    fixture.detectChanges();
+    const el = dl.query(By.css('#down-xlsx')).nativeElement as HTMLButtonElement;
+    el.click();
+    expect(el.classList).toContain(`down-file__not-support`);
   });
 });
 
@@ -151,7 +161,7 @@ describe('abc: down-file', () => {
   `,
 })
 class TestComponent {
-  @ViewChild(DownFileDirective) comp: DownFileDirective;
+  @ViewChild(DownFileDirective, { static: true }) comp: DownFileDirective;
   fileTypes = ['xlsx', 'docx', 'pptx', 'pdf'];
 
   data: any = {

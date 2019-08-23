@@ -25,18 +25,20 @@ import { STColumn } from '@delon/abc';
   selector: 'app-demo',
   template: `
   <div class="mb-md">
-    <nz-checkbox-group [(ngModel)]="customColumns" (ngModelChange)="st.resetColumns()"></nz-checkbox-group>
+    <nz-checkbox-group [(ngModel)]="customColumns" (ngModelChange)="st.resetColumns({ emitReload: false })"></nz-checkbox-group>
   </div>
   <st #st [data]="users" [columns]="columns">
     <ng-template st-row="customTitle" type="title" let-c>
       {{ c.title }}
-      <nz-dropdown nzTrigger="click" [nzClickHide]="false" nzPlacement="bottomRight" class="position-relative">
-        <div nz-dropdown class="d-inline-block pl-lg"><i nz-icon nzType="down" class="ant-table-filter-icon"></i></div>
+      <span nz-dropdown [nzDropdownMenu]="menuTpl" nzTrigger="click" [nzClickHide]="false" nzPlacement="bottomRight">
+        <i nz-icon nzType="down"></i>
+      </span>
+      <nz-dropdown-menu #menuTpl="nzDropdownMenu">
         <div class="ant-table-filter-dropdown p-sm">
           <input type="text" nz-input placeholder="Search name" [(ngModel)]="searchValue" class="width-sm mr-sm">
           <button nz-button [nzType]="'primary'" (click)="st.load(2)">Search</button>
         </div>
-      </nz-dropdown>
+      </nz-dropdown-menu>
     </ng-template>
     <ng-template st-row="custom" let-item let-index="index">
       <nz-tooltip [nzTitle]="'年龄：' + item.age">
@@ -47,6 +49,7 @@ import { STColumn } from '@delon/abc';
   `,
 })
 export class DemoComponent {
+  searchValue: string;
   users: any[] = Array(10)
     .fill({})
     .map((_item: any, idx: number) => {

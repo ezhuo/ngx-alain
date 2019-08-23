@@ -3,10 +3,6 @@
 
 @{st-prefix} {
   display: block;
-  &__selection {
-    padding-left: 2px;
-    cursor: pointer;
-  }
   &__p-left {
     .@{ant-prefix}-table-pagination {
       display: block;
@@ -23,18 +19,15 @@
   }
   // 修复按钮block
   &__btn {
-    &-disabled {
-      &,
-      > a {
-        color: @st-btn-disabled-color;
-        pointer-events: none;
+    &-sub {
+      @{st-prefix}__btn-text {
+        color: inherit;
       }
     }
-    &-sub {
-      .@{ant-prefix}-dropdown-menu-item {
-        > span {
-          display: block;
-        }
+    &-disabled {
+      @{st-prefix}__btn-text {
+        color: @st-btn-disabled-color;
+        pointer-events: none;
       }
     }
   }
@@ -48,9 +41,25 @@
       padding: @layout-gutter;
     }
   }
+  // Title
+  .@{ant-prefix}-table-column-title {
+    display: flex;
+    align-items: center;
+  }
+  &__head {
+    &-optional,
+    &-tip {
+      margin-left: 2px;
+      color: @st-title-optional-color;
+    }
+  }
   // 修复自动定义图标无法高亮问题
   .@{ant-prefix}-table-thead > tr > th .@{ant-prefix}-table-filter-selected.@{ant-prefix}-table-filter-icon {
     color: @primary-color;
+  }
+  // 修复过滤图标优先级问题
+  .@{ant-prefix}-table-thead > tr > th .@{ant-prefix}-table-filter-icon {
+    position: absolute !important;
   }
 
   @media screen and (min-width: @nz-table-rep-min-width) {

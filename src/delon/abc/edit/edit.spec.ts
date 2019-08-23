@@ -1,14 +1,6 @@
 import { Component, DebugElement, EventEmitter, ViewChild } from '@angular/core';
 import { fakeAsync, inject, tick, ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  FormsModule,
-  FormBuilder,
-  FormControlName,
-  FormGroup,
-  NgModel,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormsModule, FormBuilder, FormControlName, FormGroup, NgModel, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { configureTestSuite, createTestContext } from '@delon/testing';
@@ -74,16 +66,25 @@ describe('abc: edit', () => {
           });
           describe('#labelWidth', () => {
             it('should working', () => {
+              context.parent_layout = 'horizontal';
               context.labelWidth = 20;
               context.label = 'aa';
               fixture.detectChanges();
-              expect(page.getEl(prefixCls + 'label').style.width).toBe(`${context.labelWidth}px`);
+              expect(page.getEl('.ant-form-item-label').style.width).toBe(`${context.labelWidth}px`);
             });
             it('should be inherit parent labelWidth value', () => {
+              context.parent_layout = 'horizontal';
               context.parent_labelWidth = 20;
               context.label = 'aa';
               fixture.detectChanges();
-              expect(page.getEl(prefixCls + 'label').style.width).toBe(`${context.parent_labelWidth}px`);
+              expect(page.getEl('.ant-form-item-label').style.width).toBe(`${context.parent_labelWidth}px`);
+            });
+            it('should be ingore width when layout not horizontal', () => {
+              context.parent_layout = 'inline';
+              context.parent_labelWidth = 20;
+              context.label = 'aa';
+              fixture.detectChanges();
+              expect(page.getEl('.ant-form-item-label').style.width).toBe(``);
             });
           });
           it('#layout', () => {
@@ -399,9 +400,9 @@ describe('abc: edit', () => {
   `,
 })
 class TestComponent {
-  @ViewChild('seComp')
+  @ViewChild('seComp', { static: true })
   seComp: SEContainerComponent;
-  @ViewChild('viewComp')
+  @ViewChild('viewComp', { static: true })
   viewComp: SEComponent;
 
   parent_gutter: number | null = 32;

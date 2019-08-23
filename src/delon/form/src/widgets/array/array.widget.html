@@ -1,16 +1,14 @@
-<nz-form-item>
-  <nz-col *ngIf="schema.title"
-          [nzSpan]="ui.spanLabel"
-          class="ant-form-item-label">
+<nz-form-item [class.ant-form-item-with-help]="showError">
+  <nz-col *ngIf="schema.title" [nzSpan]="ui.spanLabel" class="ant-form-item-label">
     <label>
       {{ schema.title }}
-      <span class="optional">
+      <span class="sf__optional">
         {{ ui.optional }}
-        <nz-tooltip *ngIf="ui.optionalHelp"
-                    [nzTitle]="ui.optionalHelp">
-          <i nz-tooltip
-             nz-icon
-             nzType="question-circle"></i>
+        <nz-tooltip *ngIf="oh"
+          [nzTitle]="oh.text" [nzPlacement]="oh.placement" [nzTrigger]="oh.trigger"
+          [nzOverlayClassName]="oh.overlayClassName" [nzOverlayStyle]="oh.overlayStyle"
+          [nzMouseEnterDelay]="oh.mouseEnterDelay" [nzMouseLeaveDelay]="oh.mouseLeaveDelay">
+          <i nz-tooltip nz-icon [nzType]="oh.icon"></i>
         </nz-tooltip>
       </span>
     </label>
@@ -23,35 +21,22 @@
               [innerHTML]="addTitle"></button>
     </div>
   </nz-col>
-  <nz-col class="ant-form-item-control-wrapper"
-          [nzSpan]="ui.spanControl"
-          [nzOffset]="ui.offsetControl">
-    <div class="ant-form-item-control"
-         [class.has-error]="showError">
-
+  <nz-col class="ant-form-item-control-wrapper" [nzSpan]="ui.spanControl" [nzOffset]="ui.offsetControl">
+    <div class="ant-form-item-control" [class.has-error]="showError">
       <nz-row class="sf__array-container">
         <ng-container *ngFor="let i of formProperty.properties; let idx=index">
-          <nz-col *ngIf="i.visible && !i.ui.hidden"
-                  [nzSpan]="arraySpan"
-                  [attr.data-index]="idx"
-                  class="sf-array-item">
+          <nz-col *ngIf="i.visible && !i.ui.hidden" [nzSpan]="arraySpan" [attr.data-index]="idx" class="sf-array-item">
             <nz-card>
               <sf-item [formProperty]="i"></sf-item>
-              <span *ngIf="removeTitle"
-                    class="remove"
-                    (click)="removeItem(idx)"
-                    [attr.title]="removeTitle">
+              <span *ngIf="showRemove" class="sf__array-remove" (click)="removeItem(idx)" [attr.title]="removeTitle">
                 <i nz-icon nzType="delete"></i>
               </span>
             </nz-card>
           </nz-col>
         </ng-container>
       </nz-row>
-
-      <nz-form-extra *ngIf="schema.description"
-                     [innerHTML]="schema.description"></nz-form-extra>
-      <nz-form-explain *ngIf="!ui.onlyVisual && showError">{{error}}</nz-form-explain>
-
+      <div *ngIf="!ui.onlyVisual && showError" class="ant-form-explain">{{error}}</div>
+      <div *ngIf="schema.description" [innerHTML]="schema.description" class="ant-form-extra"></div>
     </div>
   </nz-col>
 </nz-form-item>

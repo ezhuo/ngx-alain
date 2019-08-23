@@ -28,7 +28,7 @@
       &-container {
       nz-card {
         margin: 0 16px 0 0;
-        .remove {
+        @{sf-prefix}__array-remove {
           position: absolute;
           top: -16px;
           right: -16px;
@@ -46,7 +46,7 @@
           }
         }
         &:hover {
-          .remove {
+          @{sf-prefix}__array-remove {
             display: block;
           }
         }
@@ -56,6 +56,7 @@
   &__checkbox-list {
     display: block;
     width: 100%;
+
     @media (min-width: @mobile-min) {
       nz-col {
         margin-top: 8px;
@@ -112,12 +113,13 @@
     .sf-btns {
       margin-right: 0;
     }
+
     @media (max-width: @mobile-max) {
       sf-item-wrap {
         .@{ant-prefix}-form-item {
           display: block !important;
           width: initial !important;
-          margin-right: 0;;
+          margin-right: 0;
         }
       }
       .@{ant-prefix}-form-item-label, .@{ant-prefix}-form-item-control-wrapper {

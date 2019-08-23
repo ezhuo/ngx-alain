@@ -16,6 +16,7 @@ import {
   RouteConfigLoadStart,
   NavigationError,
   NavigationCancel,
+  RouteConfigLoadEnd
 } from '@angular/router';
 import { DOCUMENT } from '@angular/common';
 import { updateHostClass } from '@delon/util';
@@ -37,7 +38,7 @@ export class LayoutDefaultComponent extends InjectorControl
   implements OnInit, OnDestroy, AfterViewInit {
   private unsubscribe$ = new Subject<void>();
   isFetching = false;
-  @ViewChild('settingHost', { read: ViewContainerRef })
+  @ViewChild('settingHost', { read: ViewContainerRef, static: true })
   settingHost: ViewContainerRef;
 
   get resolver() {
@@ -79,7 +80,7 @@ export class LayoutDefaultComponent extends InjectorControl
         }
         return;
       }
-      if (!(evt instanceof NavigationEnd)) {
+      if (!(evt instanceof NavigationEnd || evt instanceof RouteConfigLoadEnd)) {
         return;
       }
       if (this.isFetching) {
@@ -91,7 +92,7 @@ export class LayoutDefaultComponent extends InjectorControl
   }
 
   private setClass() {
-    const { el, renderer, settings } = this;
+    const { el, doc, renderer, settings } = this;
     const layout = settings.layout;
     updateHostClass(el.nativeElement, renderer, {
       ['alain-default']: true,
@@ -99,7 +100,7 @@ export class LayoutDefaultComponent extends InjectorControl
       [`alain-default__collapsed`]: layout.collapsed,
     });
 
-    this.doc.body.classList[layout.colorWeak ? 'add' : 'remove']('color-weak');
+    doc.body.classList[layout.colorWeak ? 'add' : 'remove']('color-weak');
   }
 
   ngAfterViewInit(): void {

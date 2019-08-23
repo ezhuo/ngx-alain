@@ -198,6 +198,7 @@ Property | Description | Type | Default
 `[tabBarExtraContent]` | Extra content in tab bar | `TemplateRef<void>` | -
 `[tabBarStyle]` | Tab bar style object | `object` | -
 `[tabBarGutter]` | The gap between tabs | `number` | -
+`[tabType]` | Basic style of tabs | `line, card` | `line`
 `(close)` | Close callback event | `EventEmitter` | -
 `(change)` | Callback when switching | `EventEmitter` | -
 
@@ -273,3 +274,7 @@ Limiting the maximum number of reuse can reduce memory growth. There are several
 
 - `max` Forces a close and ignores the closable state when value changes
 - When it's out of `max` range, it will turn off the first open tab (Only **closable**), ingore close when all pages are **non-closable**
+
+### Not supported QueryString parameters
+
+Route reuse preserves uses URLs to distinguish whether the same page, and QueryString query parameters will be repeatedly misused, so not supported, and the QueryString part is forced to be ignored.

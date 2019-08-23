@@ -19,7 +19,7 @@ const changeDetection = ChangeDetectionStrategy.Default;
 })
 export class RoleEditComponent extends IndexControl
   implements OnInit, OnDestroy {
-  @ViewChild('tree') tree: NzTreeComponent;
+  @ViewChild('tree', { static: true }) tree: NzTreeComponent;
 
   constructor(protected injector: Injector) {
     super(injector);

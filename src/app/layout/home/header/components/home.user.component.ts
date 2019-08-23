@@ -4,20 +4,30 @@ import { InjectorControl } from '@core';
 @Component({
     selector: 'home-header-user',
     template: `
-  <nz-dropdown nzPlacement="bottomRight">
-    <div class="item d-flex align-items-center px-sm" nz-dropdown>
+    <div
+      class="alain-default__nav-item d-flex align-items-center px-sm"
+      nz-dropdown
+      nzPlacement="bottomRight"
+      [nzDropdownMenu]="userMenu"
+    >
       <nz-avatar [nzSrc]="userSrv.user.avatar" nzSize="small" class="mr-sm"></nz-avatar>
-      {{userSrv.user.name}}
+      {{ userSrv.user.name }}
     </div>
-    <div nz-menu class="width-sm">
-      <div nz-menu-item><i class="anticon anticon-user mr-sm"></i>个人中心</div>
-      <li nz-menu-divider></li>
-      <div nz-menu-item><i class="anticon anticon-book mr-sm"></i>我的预约</div>
-      <div nz-menu-item><i class="anticon anticon-book mr-sm"></i>我的会议</div>
-      <li nz-menu-divider></li>
-      <div nz-menu-item><i class="anticon anticon-lock mr-sm"></i>修改密码</div>
-    </div>
-  </nz-dropdown>
+
+    <nz-dropdown-menu #userMenu="nzDropdownMenu">
+      <div nz-menu class="width-sm">
+          <div nz-menu-item>
+            <i nz-icon nzType="user" class="mr-sm"></i>个人中心
+          </div>
+          <div nz-menu-item>
+            <i nz-icon nzType="book" class="mr-sm"></i>我的预约
+          </div>
+          <li nz-menu-divider></li>
+          <div nz-menu-item>
+            <i nz-icon nzType="lock" class="mr-sm"></i>修改密码
+          </div>
+      </div>
+    </nz-dropdown-menu>
   `,
 })
 export class HomeHeaderUserComponent extends InjectorControl

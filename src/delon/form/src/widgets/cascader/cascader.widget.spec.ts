@@ -19,6 +19,36 @@ describe('form: widget: cascader', () => {
     page.prop(dl, context, fixture);
   });
 
+  it('#setValue', fakeAsync(() => {
+    const data = [
+      {
+        value: 110000,
+        label: '北京',
+        parent: 0,
+      },
+      {
+        value: 120000,
+        label: '上海',
+        parent: 0,
+      },
+    ];
+    page
+      .newSchema({
+        properties: {
+          a: {
+            type: 'number',
+            ui: { widget, triggerAction: ['hover'] },
+            enum: data,
+            default: [120000],
+          },
+        },
+      })
+      .dc(1);
+    expect(page.getEl('.ant-cascader-picker-label').textContent!.trim()).toBe('上海');
+    page.setValue('/a', 110000).dc(1);
+    expect(page.getEl('.ant-cascader-picker-label').textContent!.trim()).toBe('北京');
+  }));
+
   describe('[data source]', () => {
     it('with enum', fakeAsync(() => {
       const data = [
@@ -93,7 +123,7 @@ describe('form: widget: cascader', () => {
       expect(ui.selectionChange).toHaveBeenCalled();
       comp._select(null);
       expect(ui.select).toHaveBeenCalled();
-      comp._clear(null);
+      comp._clear();
       expect(ui.clear).toHaveBeenCalled();
       page.asyncEnd();
     }));

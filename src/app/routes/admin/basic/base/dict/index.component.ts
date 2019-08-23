@@ -19,7 +19,7 @@ const changeDetection = ChangeDetectionStrategy.OnPush;
   changeDetection,
 })
 export class DictComponent extends IndexControl implements OnInit {
-  @ViewChild('st')
+  @ViewChild('st', { static: true })
   st: STComponent;
 
   dictActive = null;

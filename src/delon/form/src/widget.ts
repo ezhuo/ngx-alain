@@ -1,23 +1,25 @@
 import { AfterViewInit, ChangeDetectorRef, HostBinding, Inject, Injector } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
+import { LocaleData } from '@delon/theme';
 import { ErrorData } from './errors';
 import { SFValue } from './interface';
 import { ArrayProperty } from './model/array.property';
 import { FormProperty } from './model/form.property';
 import { ObjectProperty } from './model/object.property';
 import { SFSchema } from './schema';
-import { SFUISchemaItem } from './schema/ui';
+import { SFUISchemaItem, SFOptionalHelp } from './schema/ui';
 import { SFItemComponent } from './sf-item.component';
 import { SFComponent } from './sf.component';
 import { di } from './utils';
+import { SFArrayWidgetSchema, SFObjectWidgetSchema } from './widgets';
 
-export abstract class Widget<T extends FormProperty> implements AfterViewInit {
+export abstract class Widget<T extends FormProperty, UIT extends SFUISchemaItem> implements AfterViewInit {
   formProperty: T;
   error: string;
   showError = false;
   id = '';
   schema: SFSchema;
-  ui: SFUISchemaItem;
+  ui: UIT;
   firstVisual = false;
 
   @HostBinding('class')
@@ -31,6 +33,14 @@ export abstract class Widget<T extends FormProperty> implements AfterViewInit {
     }
 
     return null;
+  }
+
+  get l(): LocaleData {
+    return this.formProperty.root.widget.sfComp!.locale;
+  }
+
+  get oh() {
+    return this.ui.optionalHelp as SFOptionalHelp;
   }
 
   constructor(
@@ -73,14 +83,18 @@ export abstract class Widget<T extends FormProperty> implements AfterViewInit {
     }
   }
 
-  abstract reset(value: SFValue);
+  abstract reset(value: SFValue): void;
 }
 
-export class ControlWidget extends Widget<FormProperty> {
+export class ControlWidget extends Widget<FormProperty, SFUISchemaItem> {
   reset(_value: SFValue) {}
 }
 
-export class ArrayLayoutWidget extends Widget<ArrayProperty> implements AfterViewInit {
+export class ControlUIWidget<UIT extends SFUISchemaItem> extends Widget<FormProperty, UIT> {
+  reset(_value: SFValue) {}
+}
+
+export class ArrayLayoutWidget extends Widget<ArrayProperty, SFArrayWidgetSchema> implements AfterViewInit {
   reset(_value: SFValue) {}
 
   ngAfterViewInit() {
@@ -88,7 +102,7 @@ export class ArrayLayoutWidget extends Widget<ArrayProperty> implements AfterVie
   }
 }
 
-export class ObjectLayoutWidget extends Widget<ObjectProperty> implements AfterViewInit {
+export class ObjectLayoutWidget extends Widget<ObjectProperty, SFObjectWidgetSchema> implements AfterViewInit {
   reset(_value: SFValue) {}
 
   ngAfterViewInit() {

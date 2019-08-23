@@ -73,7 +73,7 @@ import { NzTableComponent } from 'ng-zorro-antd';
   encapsulation: ViewEncapsulation.None,
 })
 export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
-  @ViewChild('table') orgTable: NzTableComponent;
+  @ViewChild('table', { static: false }) orgTable: NzTableComponent;
   /** 请求体配置 */
   @Input()
   get req() {
@@ -101,7 +101,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
   set page(value: STPage) {
     this.clonePage = value;
-    const item = deepMergeKey({}, true, this.cog.page, value);
+    const item = deepMergeKey({}, true, new STConfig().page, this.cog.page, value);
     const { total } = item;
     if (typeof total === 'string' && total.length) {
       this.totalTpl = total;
@@ -180,9 +180,9 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
   private unsubscribe$ = new Subject<void>();
   private totalTpl = ``;
-  private locale: LocaleData = {};
   private clonePage: STPage;
   private copyCog: STConfig;
+  locale: LocaleData = {};
   _data: STData[] = [];
   _statistical: STStatisticalResults = {};
   _isPagination = true;
@@ -268,7 +268,7 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
   }
 
   isTruncate(column: STColumn): boolean {
-    return !!column.width && this.widthMode.strictBehavior === 'truncate';
+    return !!column.width && this.widthMode.strictBehavior === 'truncate' && column.type !== 'img';
   }
 
   columnClass(column: STColumn): string | null {
@@ -308,51 +308,54 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
 
   private loadData(options?: STDataSourceOptions): Promise<STDataSourceResult> {
     const { pi, ps, data, req, res, page, total, singleSort, multiSort, rowClassName } = this;
-    return this.dataSource.process({
-      pi,
-      ps,
-      total,
-      data,
-      req,
-      res,
-      page,
-      columns: this._columns,
-      singleSort,
-      multiSort,
-      rowClassName,
-      paginator: true,
-      ...options,
+    return new Promise((resolvePromise, rejectPromise) => {
+      return this.dataSource
+        .process({
+          pi,
+          ps,
+          total,
+          data,
+          req,
+          res,
+          page,
+          columns: this._columns,
+          singleSort,
+          multiSort,
+          rowClassName,
+          paginator: true,
+          ...options,
+        })
+        .pipe(takeUntil(this.unsubscribe$))
+        .subscribe(result => resolvePromise(result), error => rejectPromise(error));
     });
   }
 
-  private loadPageData(): Promise<this> {
+  private async loadPageData(): Promise<this> {
     this.setLoading(true);
-    return this.loadData()
-      .then(result => {
-        this.setLoading(false);
-        if (typeof result.pi !== 'undefined') {
-          this.pi = result.pi;
-        }
-        if (typeof result.ps !== 'undefined') {
-          this.ps = result.ps;
-        }
-        if (typeof result.total !== 'undefined') {
-          this.total = result.total;
-        }
-        if (typeof result.pageShow !== 'undefined') {
-          this._isPagination = result.pageShow;
-        }
-        this._data = result.list as STData[];
-        this._statistical = result.statistical as STStatisticalResults;
-        return this._data;
-      })
-      .then(() => this._refCheck())
-      .catch(error => {
-        this.setLoading(false);
-        this.cdr.detectChanges();
-        this.error.emit({ type: 'req', error });
-        return this;
-      });
+    try {
+      const result = await this.loadData();
+      this.setLoading(false);
+      if (typeof result.pi !== 'undefined') {
+        this.pi = result.pi;
+      }
+      if (typeof result.ps !== 'undefined') {
+        this.ps = result.ps;
+      }
+      if (typeof result.total !== 'undefined') {
+        this.total = result.total;
+      }
+      if (typeof result.pageShow !== 'undefined') {
+        this._isPagination = result.pageShow;
+      }
+      this._data = result.list as STData[];
+      this._statistical = result.statistical as STStatisticalResults;
+      return this._refCheck();
+    } catch (error) {
+      this.setLoading(false);
+      this.cdr.detectChanges();
+      this.error.emit({ type: 'req', error });
+      return this;
+    }
   }
 
   /** 清空所有数据 */
@@ -702,19 +705,24 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
     return this.orgTable.cdkVirtualScrollViewport;
   }
 
-  resetColumns(options?: STResetColumnsOption) {
-    if (options) {
-      if (typeof options.columns !== 'undefined') {
-        this.columns = options.columns;
-      }
-      if (typeof options.pi !== 'undefined') {
-        this.pi = options.pi;
-      }
-      if (typeof options.ps !== 'undefined') {
-        this.ps = options.ps;
-      }
+  resetColumns(options?: STResetColumnsOption): Promise<this> {
+    options = { emitReload: true, ...options };
+    if (typeof options.columns !== 'undefined') {
+      this.columns = options.columns;
     }
-    return this.refreshColumns().loadPageData();
+    if (typeof options.pi !== 'undefined') {
+      this.pi = options.pi;
+    }
+    if (typeof options.ps !== 'undefined') {
+      this.ps = options.ps;
+    }
+    this.refreshColumns();
+    if (options.emitReload === true) {
+      return this.loadPageData();
+    } else {
+      this.cd();
+      return Promise.resolve(this);
+    }
   }
 
   private refreshColumns(): this {
@@ -742,7 +750,8 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
     if (changes.columns) {
       this.refreshColumns();
     }
-    if (changes.data && changes.data.currentValue) {
+    const changeData = changes.data;
+    if (changeData && changeData.currentValue && !(this.req.lazyLoad && changeData.firstChange)) {
       this.loadPageData();
     }
     if (changes.loading) {
@@ -756,7 +765,6 @@ export class STComponent implements AfterViewInit, OnChanges, OnDestroy {
     unsubscribe$.next();
     unsubscribe$.complete();
   }
-
   private _stLoading = false;
 
   /** 是否正在加载中 */

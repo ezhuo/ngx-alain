@@ -9,9 +9,8 @@ import * as screenfull from 'screenfull';
   selector: 'header-fullscreen',
   template: `
     <div class="alain-default__nav-item">
-      <i
-        nz-icon
-        [type]="status ? 'fullscreen' : 'fullscreen-exit'"
+      <i nz-icon
+        [nzType]="status ? 'fullscreen' : 'fullscreen-exit'"
         class="alain-default__nav-item-icon"
       ></i>
       &nbsp;{{ status ? '退出全屏' : '全屏' }}&nbsp;

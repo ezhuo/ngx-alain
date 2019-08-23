@@ -20,9 +20,9 @@ const changeDetection = ChangeDetectionStrategy.Default;
   changeDetection,
 })
 export class RoleComponent extends IndexControl implements OnInit {
-  @ViewChild('st')
+  @ViewChild('st', { static: true })
   st: STComponent;
-  @ViewChild('sf')
+  @ViewChild('sf', { static: true })
   sf: SFComponent;
 
   constructor(protected injector: Injector) {

@@ -28,18 +28,18 @@ let nextUniqueId = 0;
   encapsulation: ViewEncapsulation.None,
 })
 export class SFItemComponent implements OnInit, OnChanges, OnDestroy {
-  private ref: ComponentRef<Widget<FormProperty>>;
+  private ref: ComponentRef<Widget<FormProperty, SFUISchemaItem>>;
   readonly unsubscribe$ = new Subject<void>();
-  widget: Widget<FormProperty> | null = null;
+  widget: Widget<FormProperty, SFUISchemaItem> | null = null;
 
   @Input() formProperty: FormProperty;
 
-  @ViewChild('target', { read: ViewContainerRef })
+  @ViewChild('target', { read: ViewContainerRef, static: true })
   container: ViewContainerRef;
 
   constructor(private widgetFactory: WidgetFactory, private terminator: TerminatorService) {}
 
-  onWidgetInstanciated(widget: Widget<FormProperty>) {
+  onWidgetInstanciated(widget: Widget<FormProperty, SFUISchemaItem>) {
     this.widget = widget;
     const id = `_sf-${nextUniqueId++}`;
 
@@ -57,8 +57,7 @@ export class SFItemComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(): void {
-    this.ref = this.widgetFactory.createWidget(this.container, (this.formProperty.ui.widget ||
-      this.formProperty.schema.type) as string);
+    this.ref = this.widgetFactory.createWidget(this.container, (this.formProperty.ui.widget || this.formProperty.schema.type) as string);
     this.onWidgetInstanciated(this.ref.instance);
   }
 

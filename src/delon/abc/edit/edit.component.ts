@@ -43,9 +43,10 @@ let nextUniqueId = 0;
 export class SEComponent implements OnChanges, AfterContentInit, AfterViewInit, OnDestroy {
   private el: HTMLElement;
   private status$: Subscription;
-  @ContentChild(NgModel) private readonly ngModel: NgModel;
-  @ContentChild(FormControlName) private readonly formControlName: FormControlName;
-  @ViewChild('contentElement') private readonly contentElement: ElementRef;
+  @ContentChild(NgModel, { static: true }) private readonly ngModel: NgModel;
+  @ContentChild(FormControlName, { static: true })
+  private readonly formControlName: FormControlName;
+  @ViewChild('contentElement', { static: true }) private readonly contentElement: ElementRef;
   private clsMap: string[] = [];
   private inited = false;
   private onceFlag = false;
@@ -103,11 +104,10 @@ export class SEComponent implements OnChanges, AfterContentInit, AfterViewInit, 
 
   private setClass(): this {
     const { el, ren, clsMap, col, parent, cdr, line, labelWidth, rep } = this;
-    this._labelWidth = labelWidth != null ? labelWidth : parent.labelWidth;
+    this._labelWidth = parent.nzLayout === 'horizontal' ? (labelWidth != null ? labelWidth : parent.labelWidth) : null;
     clsMap.forEach(cls => ren.removeClass(el, cls));
     clsMap.length = 0;
-    const repCls =
-      parent.nzLayout === 'horizontal' ? rep.genCls(col != null ? col : parent.colInCon || parent.col) : [];
+    const repCls = parent.nzLayout === 'horizontal' ? rep.genCls(col != null ? col : parent.colInCon || parent.col) : [];
     clsMap.push(`ant-form-item`, ...repCls, `${prefixCls}__item`);
     if (line || parent.line) {
       clsMap.push(`${prefixCls}__line`);

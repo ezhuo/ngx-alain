@@ -13,6 +13,7 @@ import { DelonFormModule } from '../src/module';
 import { SFSchema } from '../src/schema';
 import { SFUISchema } from '../src/schema/ui';
 import { SFComponent } from '../src/sf.component';
+import { SF_SEQ } from '../src/const';
 
 export const SCHEMA = {
   user: {
@@ -105,7 +106,7 @@ export class SFPage {
   }
 
   private fixPath(path: string) {
-    return path.startsWith('/') ? path : '/' + path;
+    return path.startsWith(SF_SEQ) ? path : SF_SEQ + path;
   }
 
   getValue(path: string): any {
@@ -113,9 +114,12 @@ export class SFPage {
     return this.comp.getValue(path);
   }
 
-  setValue(path: string, value: any): this {
+  setValue(path: string, value: any, dc = 0): this {
     path = this.fixPath(path);
     this.comp.setValue(path, value);
+    if (dc > 0) {
+      this.dc(dc);
+    }
     return this;
   }
 
@@ -150,7 +154,7 @@ export class SFPage {
   }
   /** 下标从 `1` 开始 */
   remove(index = 1): this {
-    this.getEl(`.sf__array-container [data-index="${index - 1}"] .remove`).click();
+    this.getEl(`.sf__array-container [data-index="${index - 1}"] .sf__array-remove`).click();
     return this;
   }
 
@@ -253,8 +257,14 @@ export class SFPage {
     return this;
   }
 
+  checkInput(cls: string, value: any, viaDocument = false): this {
+    const ipt = (viaDocument ? document.querySelector(cls) : dl.query(By.css(cls)).nativeElement) as HTMLInputElement;
+    expect(ipt.value).toBe(value);
+    return this;
+  }
+
   checkError(text: string): this {
-    const el = this.getEl('nz-form-explain');
+    const el = this.getEl('.ant-form-explain');
     if (text == null) {
       expect(el == null).toBe(true);
       return this;
@@ -292,8 +302,12 @@ export class SFPage {
     return this;
   }
 
-  dc() {
+  dc(time = 0) {
     fixture.detectChanges();
+    if (time > 0) {
+      this.time(time);
+      fixture.detectChanges();
+    }
     return this;
   }
 
@@ -327,7 +341,7 @@ export class SFPage {
   `,
 })
 export class TestFormComponent {
-  @ViewChild('comp') comp: SFComponent;
+  @ViewChild('comp', { static: true }) comp: SFComponent;
   mode: 'default' | 'search' | 'edit' = 'default';
   layout = 'horizontal';
   schema: SFSchema | null = SCHEMA.user;

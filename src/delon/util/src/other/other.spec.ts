@@ -68,7 +68,7 @@ describe('abc: utils', () => {
         });
     });
     it('[[boundary]]', (done: () => void) => {
-      spyOn(document, 'createElement').and.returnValue({ parentNode: null });
+      spyOn(document, 'createElement').and.returnValue({ parentNode: null } as any);
       copy('test')
         .then(() => {
           expect(false).toBe(true);
@@ -125,6 +125,13 @@ describe('abc: utils', () => {
       expect(original.a).toBe(null);
       expect(original.b).toBe(undefined);
       expect(original.c).toBe(undefined);
+    });
+    it('should be ingored null or undefined in objects arguments', () => {
+      original = {};
+
+      deepMerge(original, null, undefined);
+
+      expect(Object.keys(original).length).toBe(0);
     });
   });
 

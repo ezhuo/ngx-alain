@@ -1,8 +1,10 @@
 import { deepCopy, toBoolean } from '@delon/util';
 import { of, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { NzI18nService } from 'ng-zorro-antd/i18n';
 import { SFSchema, SFSchemaDefinition, SFSchemaEnum } from './schema';
 import { SFUISchema, SFUISchemaItem, SFUISchemaItemRun } from './schema/ui';
+import { SF_SEQ } from './const';
 
 export const FORMATMAPS = {
   'date-time': {
@@ -43,10 +45,10 @@ function findSchemaDefinition($ref: string, definitions: SFSchemaDefinition) {
   const match = /^#\/definitions\/(.*)$/.exec($ref);
   if (match && match[1]) {
     // parser JSON Pointer
-    const parts = match[1].split('/');
+    const parts = match[1].split(SF_SEQ);
     let current: any = definitions;
     for (let part of parts) {
-      part = part.replace(/~1/g, '/').replace(/~0/g, '~');
+      part = part.replace(/~1/g, SF_SEQ).replace(/~0/g, '~');
       if (current.hasOwnProperty(part)) {
         current = current[part];
       } else {
@@ -165,14 +167,19 @@ export function getCopyEnum(list: any[], formData: any, readOnly: boolean) {
   return getEnum(deepCopy(list || []), formData, readOnly);
 }
 
-export function getData(
-  schema: SFSchema,
-  ui: SFUISchemaItem,
-  formData: any,
-  asyncArgs?: any,
-): Observable<SFSchemaEnum[]> {
+export function getData(schema: SFSchema, ui: SFUISchemaItem, formData: any, asyncArgs?: any): Observable<SFSchemaEnum[]> {
   if (typeof ui.asyncData === 'function') {
-    return ui.asyncData(asyncArgs).pipe(map(list => getEnum(list, formData, schema.readOnly!)));
+    return ui.asyncData(asyncArgs).pipe(map((list: SFSchemaEnum[]) => getEnum(list, formData, schema.readOnly!)));
   }
   return of(getCopyEnum(schema.enum!, formData, schema.readOnly!));
+}
+
+/**
+ * Whether to using date-fns to format a date
+ */
+export function isDateFns(srv: NzI18nService): boolean {
+  if (!srv) return false;
+  const data = srv.getDateLocale();
+  // Compatible date-fns v1.x & v2.x
+  return data != null && (!!data.distanceInWords || !!data.formatDistance);
 }

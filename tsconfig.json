@@ -1,15 +1,16 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "downlevelIteration": true,
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
     "declaration": false,
-    "module": "es2015",
+    "module": "esnext",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es5",
+    "target": "es2015",
     "typeRoots": [
       "node_modules/@types"
     ],
@@ -17,18 +18,18 @@
       "es2018",
       "dom"
     ],
-    "baseUrl": "./src/",
+    "baseUrl": "./",
     "paths": {
-      "@delon/*": ["./delon/*"],
-      "@env/*": ["environments/*"],
-      "@routes/*": ["app/routes/*"],
+      "@delon/*": ["./src/delon/*"],
+      "@env/*": ["./src/environments/*"],
+      "@routes/*": ["./src/app/routes/*"],
 
-      "@shared": ["app/@shared"],
-      "@shared/*": ["app/@shared/*"],
-      "@core": ["app/@core/"],
-      "@core/*": ["app/@core/*"],
-      "@layout": ["app/layout/"],
-      "@layout/*": ["app/layout/*"],
+      "@shared": ["./src/app/@shared"],
+      "@shared/*": ["./src/app/@shared/*"],
+      "@core": ["./src/app/@core/"],
+      "@core/*": ["./src/app/@core/*"],
+      "@layout": ["./src/app/layout/"],
+      "@layout/*": ["./src/app/layout/*"],
     }
   }
 }

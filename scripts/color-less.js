@@ -1,28 +1,57 @@
-const path = require('path');
 const fs = require('fs');
-const bundle = require('less-bundle-promise');
+const path = require('path');
+const {
+  generateTheme
+} = require('antd-theme-generator');
+
+// Specify the name of the theme variables to be changed, default is `@primary-color`
+// Can be set all antd & ng-alain custom theme variables
+const themeVariables = [
+  '@primary-color'
+];
 
 const root = path.resolve(__dirname, '../');
-const allLessPath = path.join(root, '_all.less');
-const target = path.join(root, 'src/assets/alain-default.less');
+const tmpVarFilePath = path.join(root, 'scripts/var.less');
+const outputFilePath = path.join(root, './src/assets/alain-default.less');
 
-const content = `
-@import 'src/delon/theme/styles/index';
-@import 'src/delon/abc/index';
-@import 'src/delon/chart/index';
-@import 'src/delon/theme/styles/layout/default/index';
-@import 'src/delon/theme/styles/layout/fullscreen/index';
+const options = {
+  stylesDir: path.join(root, './src'),
+  antdStylesDir: path.join(root, './node_modules/ng-zorro-antd'),
+  varFile: path.join(root, './scripts/var.less'),
+  mainLessFile: path.join(root, './src/styles.less'),
+  themeVariables,
+  outputFilePath,
+};
 
+function genVarFile() {
+  const ALLVAR = `
+  @import '../src/delon/theme/styles/default';
+  @import '../src/delon/theme/styles/layout/default/variable';
+  @import '../src/delon/theme/styles/layout/fullscreen/variable';
+  @import '../src/styles/theme.less';
+  `;
 
-@import 'src/styles/index';
-@import 'src/styles/theme';
-`;
+  fs.writeFileSync(tmpVarFilePath, ALLVAR);
+}
 
-fs.writeFileSync(allLessPath, content);
+function removeVarFile() {
+  fs.unlinkSync(tmpVarFilePath);
+}
 
-bundle({
-  src: allLessPath,
-}).then(colorsLess => {
-  fs.writeFileSync(target, colorsLess);
-  fs.unlinkSync(allLessPath);
-});
+function removeOutputFile() {
+  if (fs.existsSync(outputFilePath)) {
+    fs.unlinkSync(outputFilePath);
+  }
+}
+
+genVarFile();
+removeOutputFile();
+generateTheme(options)
+  .then(() => {
+    removeVarFile();
+    console.log('Theme generated successfully');
+  })
+  .catch(error => {
+    removeVarFile();
+    console.log('Error', error);
+  });
