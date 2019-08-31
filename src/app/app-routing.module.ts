@@ -7,23 +7,23 @@ const routes: Routes = [
   // 前台网站
   {
     path: 'home',
-    loadChildren: './routes/home/home.module#HomeModule',
+    loadChildren: () => import('./routes/home/home.module').then(m => m.HomeModule),
   },
   // 管理后台
   {
     path: 'admin',
-    loadChildren: './routes/admin/admin.module#AdminModule',
+    loadChildren: () => import('./routes/admin/admin.module').then(m => m.AdminModule),
     canLoad: [AuthGuard],
   },
   // passport
   {
     path: 'passport',
-    loadChildren: './layout/passport/passport.module#LayoutPassportModule',
+    loadChildren: () => import('./layout/passport/passport.module').then(m => m.LayoutPassportModule),
   },
   // exception
   {
     path: 'exception',
-    loadChildren: './layout/exception/exception.module#LayoutExceptionModule',
+    loadChildren: () => import('./layout/exception/exception.module').then(m => m.LayoutExceptionModule),
   },
   { path: '', redirectTo: configInc.router.defaultRoute, pathMatch: 'full' },
   { path: '**', redirectTo: configInc.router.defaultRoute },
