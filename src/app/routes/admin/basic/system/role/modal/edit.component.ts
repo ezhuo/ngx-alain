@@ -36,7 +36,7 @@ export class RoleEditComponent extends IndexControl
   }
 
   onSubmit($event: any) {
-    const formData = this.appBase.__formatSubmitData(
+    const formData = this.__formatSubmitData(
       $event.value,
       this.schemaData.edit,
     );

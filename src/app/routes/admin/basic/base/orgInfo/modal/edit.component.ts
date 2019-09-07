@@ -31,7 +31,7 @@ export class OrgInfoEditComponent extends IndexControl implements OnInit {
   }
 
   onSubmit($event: any) {
-    const formData = this.appBase.__formatSubmitData(
+    const formData = this.__formatSubmitData(
       $event.value,
       this.schemaData.edit,
     );

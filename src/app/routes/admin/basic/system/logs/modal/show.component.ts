@@ -23,6 +23,6 @@ export class LogsShowComponent extends IndexControl implements OnInit {
 
   ngOnInit() {
     super.ngOnInit();
-    this.schemaData.edit = this.appBase.__schemaFormSetTexts({}, []);
+    this.schemaData.edit = this.__schemaFormSetTexts({}, []);
   }
 }

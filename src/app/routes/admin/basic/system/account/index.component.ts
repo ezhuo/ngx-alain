@@ -82,7 +82,7 @@ export class AccountComponent extends IndexControl implements OnInit {
               widget: 'uploadx',
               urlReName: 'url',
               action: this.configSrv.api.upload,
-              change: this.appCase.nzUploadHandleChange,
+              change: this.nzUploadHandleChange,
               spanLabel: 3,
               spanControl: 21,
               grid: {
@@ -307,7 +307,7 @@ export class AccountComponent extends IndexControl implements OnInit {
               {
                 text: '删除',
                 click: (record, btnRes) =>
-                  this.appCase
+                  this
                     .deleteAlert(null, record)
                     .then(res => {
                       if (res.dismiss && res.dismiss == 'cancel') {

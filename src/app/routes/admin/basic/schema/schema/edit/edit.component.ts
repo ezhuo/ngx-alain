@@ -29,7 +29,7 @@ export class SchemaFormEditComponent extends IndexControl
 
   ngOnInit() {
     super.ngOnInit();
-    this.appBase.__formGroupFillData(this.validateForm, this.form.data);
+    this.__formGroupFillData(this.validateForm, this.form.data);
   }
 
   ngOnDestroy() {

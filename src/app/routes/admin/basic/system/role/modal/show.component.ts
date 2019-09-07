@@ -24,6 +24,6 @@ export class RoleShowComponent extends IndexControl implements OnInit {
     delete this.schemaData.edit.properties.login_pwd;
     delete this.schemaData.edit.properties.login_pwd2;
     this.form.data['org_id'] = this.form.data['org_name'];
-    this.schemaData.edit = this.appBase.__schemaFormSetTexts({}, []);
+    this.schemaData.edit = this.__schemaFormSetTexts({}, []);
   }
 }

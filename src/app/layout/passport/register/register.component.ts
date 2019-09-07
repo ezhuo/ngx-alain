@@ -9,7 +9,7 @@ import { InjectorControl } from '@core';
 })
 export class UserRegisterComponent extends InjectorControl
     implements OnInit, OnDestroy {
-    form: FormGroup;
+    _form: FormGroup;
     error = '';
     type = 0;
     loading = false;
@@ -25,7 +25,7 @@ export class UserRegisterComponent extends InjectorControl
     constructor(protected injector: Injector) {
         super(injector);
 
-        this.form = this.FormBuilder.group({
+        this._form = this.FormBuilder.group({
             mail: [null, [Validators.email]],
             password: [
                 null,
@@ -79,19 +79,19 @@ export class UserRegisterComponent extends InjectorControl
     // region: fields
 
     get mail() {
-        return this.form.controls.mail;
+        return this._form.controls.mail;
     }
     get password() {
-        return this.form.controls.password;
+        return this._form.controls.password;
     }
     get confirm() {
-        return this.form.controls.confirm;
+        return this._form.controls.confirm;
     }
     get mobile() {
-        return this.form.controls.mobile;
+        return this._form.controls.mobile;
     }
     get captcha() {
-        return this.form.controls.captcha;
+        return this._form.controls.captcha;
     }
 
     // endregion
@@ -113,11 +113,11 @@ export class UserRegisterComponent extends InjectorControl
 
     submit() {
         this.error = '';
-        for (const i in this.form.controls) {
-            this.form.controls[i].markAsDirty();
-            this.form.controls[i].updateValueAndValidity();
+        for (const i in this._form.controls) {
+            this._form.controls[i].markAsDirty();
+            this._form.controls[i].updateValueAndValidity();
         }
-        if (this.form.invalid) return;
+        if (this._form.invalid) return;
         // mock http
         this.loading = true;
         setTimeout(() => {

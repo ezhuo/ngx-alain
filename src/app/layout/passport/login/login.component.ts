@@ -12,7 +12,7 @@ import { ReuseTabService } from '@delon/abc';
 })
 export class UserLoginComponent extends InjectorControl
   implements OnInit, OnDestroy {
-  form: FormGroup = this.FormBuilder.group({
+  _form: FormGroup = this.FormBuilder.group({
     account: [null, [Validators.required, Validators.minLength(1)]],
     password: [null, Validators.required],
     mobile: [null, [Validators.required, Validators.pattern(/^1\d{10}$/)]],
@@ -62,16 +62,16 @@ export class UserLoginComponent extends InjectorControl
   // region: fields
 
   get account() {
-    return this.form.controls.account;
+    return this._form.controls.account;
   }
   get password() {
-    return this.form.controls.password;
+    return this._form.controls.password;
   }
   get mobile() {
-    return this.form.controls.mobile;
+    return this._form.controls.mobile;
   }
   get captcha() {
-    return this.form.controls.captcha;
+    return this._form.controls.captcha;
   }
   get loading() {
     if (!this.isLoading) return false;
@@ -139,7 +139,7 @@ export class UserLoginComponent extends InjectorControl
 
     if (this.type === 0) {
       this.isLoading = true;
-      const value = Object.assign(this.form.value, {
+      const value = Object.assign(this._form.value, {
         captchaParams: {
           key: this.captchaData.key,
           sensitive: this.captchaData.sensitive,

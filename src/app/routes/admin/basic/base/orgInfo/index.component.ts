@@ -82,7 +82,7 @@ export class OrgInfoComponent extends IndexControl implements OnInit {
             ui: {
               widget: 'uploadx',
               action: this.configSrv.api.upload,
-              change: this.appCase.nzUploadHandleChange,
+              change: this.nzUploadHandleChange,
               spanLabel: 3,
               spanControl: 21,
               grid: {
@@ -187,7 +187,7 @@ export class OrgInfoComponent extends IndexControl implements OnInit {
               spanControl: 21,
               changeOnSelect: true,
               asyncData: node => {
-                return this.appCase.nzCascaderLoadDataBySchema(node);
+                return this.nzCascaderLoadDataBySchema(node);
               },
               grid: {
                 span: 24,
@@ -201,7 +201,7 @@ export class OrgInfoComponent extends IndexControl implements OnInit {
               widget: 'uploadx',
               multiple: true,
               action: this.configSrv.api.upload,
-              change: this.appCase.nzUploadHandleChange,
+              change: this.nzUploadHandleChange,
               spanLabel: 3,
               spanControl: 21,
               debug: true,
@@ -290,7 +290,7 @@ export class OrgInfoComponent extends IndexControl implements OnInit {
               {
                 text: '删除',
                 click: (record, btnRes) =>
-                  this.appCase
+                  this
                     .deleteAlert(null, record)
                     .then(res => {
                       if (res.dismiss && res.dismiss == 'cancel') {

@@ -27,6 +27,6 @@ export class OrgInfoShowComponent extends IndexControl implements OnInit {
     this.form.data['parent_id'] = this.form.data['parent_name'];
     this.form.data['canton_fdn'] = this.form.data['canton_text_name'];
     delete this.schemaData.edit.properties.canton_fdn.ui['asyncData'];
-    this.schemaData.edit = this.appBase.__schemaFormSetTexts({}, []);
+    this.schemaData.edit = this.__schemaFormSetTexts({}, []);
   }
 }

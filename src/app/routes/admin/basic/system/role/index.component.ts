@@ -128,7 +128,7 @@ export class RoleComponent extends IndexControl implements OnInit {
               if (record.role_id < 10) {
                 this.sweetSrv.info('当前角色不允许删除！', 3000);
               } else
-                this.appCase
+                this
                   .deleteAlert(null, record)
                   .then(res => {
                     if (res.dismiss && res.dismiss == 'cancel') {

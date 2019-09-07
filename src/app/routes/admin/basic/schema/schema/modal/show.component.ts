@@ -23,7 +23,7 @@ export class SchemaShowComponent extends IndexControl implements OnInit {
     super.ngOnInit();
     console.log('ngOnInit', this);
 
-    this.schemaData.edit = this.appBase.__schemaFormSetTexts(
+    this.schemaData.edit = this.__schemaFormSetTexts(
       {
         properties: {
           agree: {

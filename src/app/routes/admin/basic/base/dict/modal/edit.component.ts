@@ -31,7 +31,7 @@ export class DictEditComponent extends IndexControl implements OnInit {
   }
 
   onSubmit($event: any) {
-    const formData: any = this.appBase.__formatSubmitData(
+    const formData: any = this.__formatSubmitData(
       $event.value,
       this.schemaData.edit,
     );

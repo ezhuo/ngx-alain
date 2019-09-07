@@ -43,7 +43,7 @@ export class AccountEditComponent extends IndexControl implements OnInit {
 
   onSubmit($event: any) {
     this.detectChanges();
-    const formData = this.appBase.__formatSubmitData(
+    const formData = this.__formatSubmitData(
       $event.value,
       this.schemaData.edit,
     );

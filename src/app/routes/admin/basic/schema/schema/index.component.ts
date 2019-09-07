@@ -213,7 +213,7 @@ export class SchemaDemoComponent extends IndexControl implements OnInit {
           ui: {
             widget: 'uploadx',
             action: this.configSrv.api.upload,
-            change: this.appCase.nzUploadHandleChange,
+            change: this.nzUploadHandleChange,
             options: {
               avatar: true,
             },
@@ -232,7 +232,7 @@ export class SchemaDemoComponent extends IndexControl implements OnInit {
             widget: 'cascader',
             changeOnSelect: true,
             asyncData: node => {
-              return this.appCase.nzCascaderLoadDataBySchema(node);
+              return this.nzCascaderLoadDataBySchema(node);
             },
             spanLabel: 2,
             spanControl: 22,
