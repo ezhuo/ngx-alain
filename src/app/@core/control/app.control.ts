@@ -257,10 +257,9 @@ export class AppControl extends InjectorControl implements OnInit, OnDestroy {
    * 写日志
    */
   protected __commonLogs = (content: string) => {
-    const bc = this;
-    bc.freeData.logs = bc.httpSrv
+    this.freeData.logs = this.httpSrv
       .post('/logs', {
-        title: bc.titleSrv.getTitle(),
+        title: this.titleSrv.getTitle(),
         content: content,
       })
       .toPromise()
