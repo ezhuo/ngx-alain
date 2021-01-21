@@ -60,7 +60,7 @@
     "sweetalert2": "^7.22.2",
     "ng2-ckeditor": "^1.2.1",
     "ngx-infinite-scroll": "^6.0.1",
-    "socket.io": "^2.1.1",
+    "socket.io": "^2.4.0",
     "web-animations-js": "^2.3.1",
     "intl": "^1.2.5",
     "classlist.js": "^1.1.20150312"
