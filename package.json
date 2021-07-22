@@ -105,7 +105,7 @@
     "stylelint-order": "^3.0.0",
     "webpack-bundle-analyzer": "^3.3.2",
     "antd-theme-generator": "^1.1.7",
-    "xlsx": "^0.14.4"
+    "xlsx": "^0.17.0"
   },
   "husky": {
     "hooks": {
