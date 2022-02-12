@@ -47,7 +47,7 @@
     "@antv/g2-plugin-slider": "^2.1.1",
     "@ngx-translate/core": "^11.0.1",
     "@ngx-translate/http-loader": "^4.0.0",
-    "ajv": "^6.10.2",
+    "ajv": "^6.12.3",
     "file-saver": "^2.0.2",
     "ng-zorro-antd": "^8.1.2",
     "ngx-countdown": "^3.2.0",
